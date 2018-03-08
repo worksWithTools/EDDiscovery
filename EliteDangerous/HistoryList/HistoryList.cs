@@ -235,6 +235,15 @@ namespace EliteDangerousCore
             }
         }
 
+
+        public HistoryEntry GetLastLoadGame
+        {
+            get
+            {
+                return historylist.FindLast(x => x.journalEntry.EventTypeID== JournalTypeEnum.LoadGame);
+            }
+        }
+
         public HistoryEntry GetLastHistoryEntry(Predicate<HistoryEntry> where)
         {
             return historylist.FindLast(where);

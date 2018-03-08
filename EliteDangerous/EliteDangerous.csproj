@@ -138,6 +138,9 @@
     <Compile Include="EliteDangerous\VisitingStarsCacheFolder.cs" />
     <Compile Include="HistoryList\HistoryEntry.cs" />
     <Compile Include="HistoryList\HistoryList.cs" />
+    <Compile Include="Inara\InaraClass.cs" />
+    <Compile Include="Inara\InaraEvent.cs" />
+    <Compile Include="Inara\InaraSync.cs" />
     <Compile Include="JournalEvents\JournalMaterialTrade.cs" />
     <Compile Include="JournalEvents\JournalPowerplay.cs" />
     <Compile Include="JournalEvents\JournalTechnologyBroker.cs" />

@@ -42,6 +42,7 @@ using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
 using EliteDangerous.CompanionAPI;
 using EDDiscovery.Icons;
+using EliteDangerous.Inara;
 
 namespace EDDiscovery
 {
@@ -479,6 +480,10 @@ namespace EDDiscovery
         {
             if (EDDConfig.AutoLoadPopOuts && EDDOptions.Instance.NoWindowReposition == false)
                 PopOuts.LoadSavedPopouts();  //moved from initial load so we don't open these before we can draw them properly
+
+
+            InaraSync.InitalSync(EDCommander.Current, history);
+
         }
 
         private void Controller_RefreshComplete()
