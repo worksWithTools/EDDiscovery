@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EliteDangerousCore.JournalEvents;
 
 namespace EliteDangerous.Inara
 {
@@ -64,8 +65,6 @@ namespace EliteDangerous.Inara
             InaraEvent ie = new InaraEvent(dt);
             ie.eventName = "setCommanderRankPilot";
 
-            JObject eventdata = new JObject();
-
             ie.eventData["rankName"] = rankName;
             ie.eventData["rankValue"] = rankvalue;
             ie.eventData["rankProgress"] = rankProgress;
@@ -73,5 +72,20 @@ namespace EliteDangerous.Inara
             return ie;
         }
 
+        public static InaraEvent setCommanderGameStatistics(DateTime eventTimeUTC, JournalStatistics stats)
+        {
+            InaraEvent ie = new InaraEvent(eventTimeUTC);
+            ie.eventName = "setCommanderGameStatistics";
+
+            JObject json = stats.GetJson();
+
+            json.Remove("timestamp");
+            json.Remove("event");
+
+            ie.eventData = json;
+
+            return ie;
+
+        }
     }
 }

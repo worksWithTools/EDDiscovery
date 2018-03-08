@@ -69,6 +69,13 @@ namespace EliteDangerous.Inara
                         lastrank = null;
                     }
                     break;
+
+                case JournalTypeEnum.Statistics:
+                    JournalStatistics stats = he.journalEntry as JournalStatistics;
+
+
+                    events.Add(InaraEvent.setCommanderGameStatistics(stats.EventTimeUTC, stats));
+                    break;
             }
 
 
