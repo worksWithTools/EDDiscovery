@@ -13,12 +13,19 @@ namespace EliteDangerous.Inara
         string eventName;
         DateTime eventTimestamp;
         int eventCustomID;
-        JObject eventData;
-
+        JObject eventData = null;
+ 
 
         public InaraEvent()
         {
             eventTimestamp = DateTime.Now;
+            eventData = new JObject();
+        }
+
+        public InaraEvent(DateTime dt)
+        {
+            eventTimestamp = dt;
+            eventData = new JObject();
         }
 
         public JObject ToJObject()
@@ -37,21 +44,31 @@ namespace EliteDangerous.Inara
 
         public static InaraEvent setCommanderCredits(DateTime dt, long commanderCredits, long commanderAssets, long commanderLoan)
         {
-            InaraEvent ie = new InaraEvent();
-
-            ie.eventTimestamp = dt;
+            InaraEvent ie = new InaraEvent(dt);
             ie.eventName = "setCommanderCredits";
+
+            ie.eventData["commanderCredits"] = commanderCredits;
+            if (commanderAssets != 0)
+                ie.eventData["commanderAssets"] = commanderAssets;
+
+            if (commanderLoan != 0)
+                ie.eventData["commanderLoan"] = commanderLoan;
+
+
+            return ie;
+        }
+
+
+        public static InaraEvent setCommanderRankPilot(DateTime dt, string rankName, int rankvalue, double rankProgress)
+        {
+            InaraEvent ie = new InaraEvent(dt);
+            ie.eventName = "setCommanderRankPilot";
 
             JObject eventdata = new JObject();
 
-            eventdata["commanderCredits"] = commanderCredits;
-            if (commanderAssets != 0)
-                eventdata["commanderAssets"] = commanderAssets;
-
-            if (commanderLoan != 0)
-                eventdata["commanderLoan"] = commanderLoan;
-
-            ie.eventData = eventdata;
+            ie.eventData["rankName"] = rankName;
+            ie.eventData["rankValue"] = rankvalue;
+            ie.eventData["rankProgress"] = rankProgress;
 
             return ie;
         }

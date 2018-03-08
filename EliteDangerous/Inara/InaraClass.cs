@@ -106,7 +106,7 @@ namespace EliteDangerousCore.Inara
                 JObject header = (JObject)result["header"];
 
 
-                if ((int)header["eventstatus"]==200)
+                if (header["eventStatus"].Int()==200)
                 {
                     return true;
                 }

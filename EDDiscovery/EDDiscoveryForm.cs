@@ -648,6 +648,11 @@ namespace EDDiscovery
                     }
                 }
 
+                if (EDCommander.Current.SyncToInara)
+                {
+                    InaraSync.SyncHistoryEntry(EDCommander.Current, he);
+                }
+
                 if (he.EntryType == JournalTypeEnum.Scan)
                 {
                     if (EDCommander.Current.SyncToEGO)
