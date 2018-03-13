@@ -81,6 +81,12 @@ namespace EliteDangerous.Inara
 
                     events.Add(InaraEvent.setCommanderGameStatistics(stats.EventTimeUTC, stats));
                     break;
+
+
+                case JournalTypeEnum.EngineerProgress:
+                    JournalEngineerProgress engprogress = he.journalEntry as JournalEngineerProgress;
+
+                    break;
             }
 
 

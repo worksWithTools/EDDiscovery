@@ -60,6 +60,7 @@ namespace EliteDangerousCore
         public bool EdsmSync;           // flag populated from journal entry when HE is made. Have we synced?
         public bool EDDNSync;           // flag populated from journal entry when HE is made. Have we synced?
         public bool EGOSync;            // flag populated from journal entry when HE is made. Have we synced?
+        public bool InaraSync;          // flag populated from journal entry when HE is made. Have we synced?
         public bool StartMarker;        // flag populated from journal entry when HE is made. Is this a system distance measurement system
         public bool StopMarker;         // flag populated from journal entry when HE is made. Is this a system distance measurement stop point
         public bool IsFSDJump { get { return EntryType == JournalTypeEnum.FSDJump; } }
@@ -282,6 +283,7 @@ namespace EliteDangerousCore
                 EdsmSync = je.SyncedEDSM,
                 EDDNSync = je.SyncedEDDN,
                 EGOSync = je.SyncedEGO,
+                InaraSync = je.SyncedInara,
                 StartMarker = je.StartMarker,
                 StopMarker = je.StopMarker,
                 EventSummary = summary,
@@ -538,6 +540,16 @@ namespace EliteDangerousCore
                 JournalEntry.UpdateSyncFlagBit(Journalid, SyncFlags.EGO, true, cn, txn);
             }
         }
+
+        public void SetInaraSync(SQLiteConnectionUser cn = null, DbTransaction txn = null)
+        {
+            InaraSync = true;
+            if (Journalid != 0)
+            {
+                JournalEntry.UpdateSyncFlagBit(Journalid, SyncFlags.Inara, true, cn, txn);
+            }
+        }
+
 
         public void SetFirstDiscover(bool firstdiscover, SQLiteConnectionUser cn = null, DbTransaction txnl = null)
         {

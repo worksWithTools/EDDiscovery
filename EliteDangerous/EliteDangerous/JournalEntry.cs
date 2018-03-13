@@ -224,6 +224,7 @@ namespace EliteDangerousCore
         EDSM = 0x01,
         EDDN = 0x02,
         EGO = 0x04,
+        Inara = 0x08,
         StartMarker = 0x0100,           // measure distance start pos marker
         StopMarker = 0x0200,            // measure distance stop pos marker
     };
@@ -250,6 +251,7 @@ namespace EliteDangerousCore
         public bool SyncedEDSM { get { return (Synced & (int)SyncFlags.EDSM) != 0; } }
         public bool SyncedEDDN { get { return (Synced & (int)SyncFlags.EDDN) != 0; } }
         public bool SyncedEGO { get { return (Synced & (int)SyncFlags.EGO) != 0; } }
+        public bool SyncedInara { get { return (Synced & (int)SyncFlags.Inara) != 0; } }
         public bool StartMarker { get { return (Synced & (int)SyncFlags.StartMarker) != 0; } }
         public bool StopMarker { get { return (Synced & (int)SyncFlags.StopMarker) != 0; } }
         private bool? beta;                        // True if journal entry is from beta
