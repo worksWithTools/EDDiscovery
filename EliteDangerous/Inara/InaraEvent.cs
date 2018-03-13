@@ -13,7 +13,7 @@ namespace EliteDangerous.Inara
     {
         string eventName;
         DateTime eventTimestamp;
-        int eventCustomID;
+        long eventCustomID;
         JObject eventData = null;
  
 
@@ -27,6 +27,13 @@ namespace EliteDangerous.Inara
         {
             eventTimestamp = dt;
             eventData = new JObject();
+        }
+
+        public InaraEvent(DateTime dt, long id)
+        {
+            eventTimestamp = dt;
+            eventData = new JObject();
+            eventCustomID = id;
         }
 
         public JObject ToJObject()
@@ -43,17 +50,19 @@ namespace EliteDangerous.Inara
         }
 
 
-        public static InaraEvent setCommanderCredits(DateTime dt, long commanderCredits, long commanderAssets, long commanderLoan)
+        public static InaraEvent setCommanderCredits(JournalLoadGame lg) //   DateTime dt, long commanderCredits, long commanderAssets, long commanderLoan)
         {
-            InaraEvent ie = new InaraEvent(dt);
+            InaraEvent ie = new InaraEvent(lg.EventTimeUTC, lg.Id);
             ie.eventName = "setCommanderCredits";
 
-            ie.eventData["commanderCredits"] = commanderCredits;
-            if (commanderAssets != 0)
-                ie.eventData["commanderAssets"] = commanderAssets;
+            
+            ie.eventData["commanderCredits"] = lg.Credits;
 
-            if (commanderLoan != 0)
-                ie.eventData["commanderLoan"] = commanderLoan;
+            //if (commanderAssets != 0)
+            //    ie.eventData["commanderAssets"] = commanderAssets;
+
+            if (lg.Loan != 0)
+                ie.eventData["commanderLoan"] = lg.Loan;
 
 
             return ie;

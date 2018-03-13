@@ -14,28 +14,30 @@ namespace EliteDangerous.Inara
     {
         static HistoryEntry lastrank;
 
-        //public static void InitalSync(EDCommander cmdr, HistoryList history)
-        //{
-        //    if (!cmdr.SyncToInara)
-        //        return;
+        public static void InitalSync(EDCommander cmdr, HistoryList history)
+        {
+            if (!cmdr.SyncToInara)
+                return;
 
-        //    HistoryEntry he = history.GetLastLoadGame;
+            HistoryEntry he = history.GetLastLoadGame;
 
-        //    if (he == null)
-        //        return;
+            if (he == null)
+                return;
 
-        //    JournalLoadGame lg = he.journalEntry as JournalLoadGame;
+            JournalLoadGame lg = he.journalEntry as JournalLoadGame;
 
-        //    InaraClass inara = new InaraClass(cmdr);
+            InaraClass inara = new InaraClass(cmdr);
 
-        //    List<InaraEvent> ievents = new List<InaraEvent>();
+            List<InaraEvent> ievents = new List<InaraEvent>();
 
-        //    InaraEvent ie = InaraEvent.setCommanderCredits(lg.EventTimeUTC, lg.Credits, 0, lg.Loan);
+            if (!lg.SyncedInara)
+            {
+                InaraEvent ie = InaraEvent.setCommanderCredits(lg);
+                ievents.Add(ie);
+                inara.SendEvents(ievents);
 
-        //    ievents.Add(ie);
-
-        //    inara.SendEvents(ievents);
-        //}
+            }
+        }
 
 
 
@@ -49,7 +51,7 @@ namespace EliteDangerous.Inara
             {
                 case JournalTypeEnum.LoadGame:
                     JournalLoadGame lg = he.journalEntry as JournalLoadGame;
-                    events.Add(InaraEvent.setCommanderCredits(lg.EventTimeUTC, lg.Credits, 0, lg.Loan));
+                    events.Add(InaraEvent.setCommanderCredits(lg));
                     break;
 
                 case JournalTypeEnum.Rank:
