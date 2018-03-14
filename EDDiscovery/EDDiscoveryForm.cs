@@ -482,7 +482,7 @@ namespace EDDiscovery
                 PopOuts.LoadSavedPopouts();  //moved from initial load so we don't open these before we can draw them properly
 
 
-            //InaraSync.InitalSync(EDCommander.Current, history);
+            InaraSync.InitalSync(EDCommander.Current, history);
 
         }
 

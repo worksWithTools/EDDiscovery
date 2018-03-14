@@ -222,6 +222,7 @@ namespace EDDiscovery.UserControls
             this.textMinRadius.BorderColor = System.Drawing.Color.Transparent;
             this.textMinRadius.BorderColorScaling = 0.5F;
             this.textMinRadius.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textMinRadius.ClearOnFirstChar = false;
             this.textMinRadius.ControlBackground = System.Drawing.SystemColors.Control;
             this.textMinRadius.DelayBeforeNotification = 500;
             this.textMinRadius.Format = "0.#######";
@@ -260,6 +261,7 @@ namespace EDDiscovery.UserControls
             this.textMaxRadius.BorderColor = System.Drawing.Color.Transparent;
             this.textMaxRadius.BorderColorScaling = 0.5F;
             this.textMaxRadius.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textMaxRadius.ClearOnFirstChar = false;
             this.textMaxRadius.ControlBackground = System.Drawing.SystemColors.Control;
             this.textMaxRadius.DelayBeforeNotification = 500;
             this.textMaxRadius.Format = "0.#######";

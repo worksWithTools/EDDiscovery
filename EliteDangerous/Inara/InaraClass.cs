@@ -75,7 +75,7 @@ namespace EliteDangerousCore.Inara
             return Header;
         }
 
-        public void SendEvents(List<InaraEvent> ievents)
+        public List<int> SendEvents(List<InaraEvent> ievents)
         {
             JObject data = new JObject();
 
@@ -88,16 +88,21 @@ namespace EliteDangerousCore.Inara
 
             data["events"] = events;
 
-            PostMessage(data);
+            return PostMessage(data);
 
 
         }
 
-
-        public bool PostMessage(JObject msg)
+        /// <summary>
+        /// Post a list of events to Inara site. 
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <returns>List with customID that ruturned OK from Inara.  Use this to Set Inara sync flag later. </returns>
+        public List<int> PostMessage(JObject msg)
         {
             try
             {
+                List<int> ListOkeventID = new List<int>();
                 BaseUtils.ResponseData resp = RequestPost(msg.ToString(), "");
 
                 JObject result = JObject.Parse(resp.Body);
@@ -108,19 +113,32 @@ namespace EliteDangerousCore.Inara
 
                 if (header["eventStatus"].Int()==200)
                 {
-                    return true;
+                    JArray results = (JArray)result["events"];
+
+                    if (results!=null)
+                    {
+                        foreach (JObject jo in results)
+                        {
+                            int id = jo["eventCustomID"].Int();
+                            if (jo["eventStatus"].Int() == 200 && id != 0)
+                                ListOkeventID.Add(id);
+                        }
+                    }
+
+
+                    return ListOkeventID;
                 }
                 else
                 {
                     System.Diagnostics.Trace.WriteLine($"Inara message post failed - status: {header["eventstatus"].ToNullSafeString()}\nInara Message: {msg.ToString().Replace(apiKey, "**********")}");
-                    return false;
+                    return null;
                 }
             }
             catch (System.Net.WebException ex)
             {
                 System.Net.HttpWebResponse response = ex.Response as System.Net.HttpWebResponse;
                 System.Diagnostics.Trace.WriteLine($"Inara message post failed - status: {response?.StatusCode.ToString() ?? ex.Status.ToString()} Inara Message: {msg.ToString().Replace(apiKey, "**********")}");
-                return false;
+                return null;
             }
         }
 

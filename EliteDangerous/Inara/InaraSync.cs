@@ -2,6 +2,7 @@
 using EliteDangerousCore.Inara;
 using EliteDangerousCore.JournalEvents;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,101 @@ namespace EliteDangerous.Inara
 {
     public class InaraSync
     {
+        static EDCommander CurrentCmdr;
         static HistoryEntry lastrank;
+        static ConcurrentQueue<InaraEvent> eventQueue = new ConcurrentQueue<InaraEvent>();
+        static ConcurrentQueue<int> journalIDQueue = new ConcurrentQueue<int>();
+        private bool flushEventue;
+        private static Thread ThreadEGOSync;
+        private static int _running = 0;
+        private static bool Exit = false;
+
+        private static void QueueEvent(EDCommander cmdr, InaraEvent ie)
+        {
+            // TODO Test if new comander
+            CurrentCmdr = cmdr;
+            eventQueue.Enqueue(ie);
+        }
+
+
+
+        public void Start()
+        {
+            if (Interlocked.CompareExchange(ref _running, 1, 0) == 0)
+            {
+                Exit = false;
+                ThreadEGOSync = new System.Threading.Thread(new System.Threading.ThreadStart(SyncThread));
+                ThreadEGOSync.Name = "Inara Sync";
+                ThreadEGOSync.IsBackground = true;
+                ThreadEGOSync.Start();
+            }
+        }
+
+
+        public static void StopSync()
+        {
+            Exit = true;
+
+        }
+
+
+        private void SyncThread()
+        {
+            List<InaraEvent> inaraevents = new List<InaraEvent>();
+
+            try
+            {
+                _running = 1;
+                //mainForm.LogLine("Starting EGO sync thread");
+
+
+
+                while (!Exit)
+                {
+
+                    while (eventQueue.TryDequeue(out InaraEvent ie))
+                    {
+                        inaraevents.Add(ie);
+                    }
+
+
+                    // Time to flush
+
+                    if (flushEventue)
+                    {
+                        flushEventue = false;
+                        InaraClass inara = new InaraClass(CurrentCmdr);
+                        List<int> jidList = inara.SendEvents(inaraevents);
+                        inaraevents.Clear();
+
+                        if (jidList != null)
+                            foreach (int jid in jidList)
+                                journalIDQueue.Enqueue(jid);
+                    }
+
+
+                  
+                    Thread.Sleep(100);   // Throttling 
+
+                }
+
+                //mainForm.LogLine("Inara sync thread exiting");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception ex:" + ex.Message);
+                //logger?.Invoke("Inara sync Exception " + ex.Message);
+            }
+            finally
+            {
+                _running = 0;
+            }
+        }
+
+
+
+
+
 
         public static void InitalSync(EDCommander cmdr, HistoryList history)
         {
@@ -26,21 +121,14 @@ namespace EliteDangerous.Inara
 
             JournalLoadGame lg = he.journalEntry as JournalLoadGame;
 
-            InaraClass inara = new InaraClass(cmdr);
 
-            List<InaraEvent> ievents = new List<InaraEvent>();
-
+          
             if (!lg.SyncedInara)
             {
                 InaraEvent ie = InaraEvent.setCommanderCredits(lg);
-                ievents.Add(ie);
-                inara.SendEvents(ievents);
-
+                QueueEvent(cmdr, ie); 
             }
         }
-
-
-
 
 
         static public bool SyncHistoryEntry(EDCommander cmdr, HistoryEntry he)
@@ -93,13 +181,11 @@ namespace EliteDangerous.Inara
 
 
             InaraClass inara = new InaraClass(cmdr);
-            if (events.Count>0)
-                inara.SendEvents(events);
+            if (events.Count > 0)
+                foreach (InaraEvent ie in events)
+                    QueueEvent(cmdr, ie);
 
             return true;
         }
-
-
-
     }
 }

@@ -55,7 +55,6 @@ namespace EliteDangerous.Inara
             InaraEvent ie = new InaraEvent(lg.EventTimeUTC, lg.Id);
             ie.eventName = "setCommanderCredits";
 
-            
             ie.eventData["commanderCredits"] = lg.Credits;
 
             //if (commanderAssets != 0)
