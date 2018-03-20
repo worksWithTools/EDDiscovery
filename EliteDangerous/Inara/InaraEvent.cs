@@ -69,10 +69,25 @@ namespace EliteDangerous.Inara
         }
 
 
-        public static InaraEvent setCommanderRankPilot(DateTime dt, string rankName, int rankvalue, double rankProgress)
+        public static InaraEvent setCommanderRankEngineer(JournalEngineerProgress ev)
         {
-            InaraEvent ie = new InaraEvent(dt);
+            InaraEvent ie = new InaraEvent(ev.EventTimeUTC, ev.Id);
+            ie.eventName = "setCommanderRankEngineer";
+
+            ie.eventData["engineerName"] = ev.Engineer;
+            ie.eventData["rankStage"] = ev.Progress;
+            ie.eventData["rankValue"] = ev.Rank;
+
+            return ie;
+        }
+
+
+        public static InaraEvent setCommanderRankPilot(long id, DateTime dt, string rankName, int rankvalue, double rankProgress)
+        {
+            InaraEvent ie = new InaraEvent(dt, id);
             ie.eventName = "setCommanderRankPilot";
+
+          
 
             ie.eventData["rankName"] = rankName;
             ie.eventData["rankValue"] = rankvalue;
