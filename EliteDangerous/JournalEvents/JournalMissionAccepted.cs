@@ -55,11 +55,13 @@ namespace EliteDangerousCore.JournalEvents
 
             TargetType = evt["TargetType"].Str();
             TargetTypeFriendly = JournalFieldNaming.GetBetterTargetTypeName(TargetType);    // remove $, underscore it
-            TargetTypeLocalised = evt["TargetType_Localised"].Str();
+            TargetTypeLocalised = evt["TargetType_Localised"].Str().Alt(TargetTypeFriendly);
+
             TargetFaction = evt["TargetFaction"].Str();
+
             Target = evt["Target"].Str();
             TargetFriendly = JournalFieldNaming.GetBetterTargetTypeName(Target);        // remove $, underscore it
-            TargetLocalised = evt["Target_localised"].Str();        // not all
+            TargetLocalised = evt["Target_localised"].Str().Alt(TargetFriendly);        // not all
 
             DestinationSystem = evt["DestinationSystem"].Str().Replace("$MISSIONUTIL_MULTIPLE_INNER_SEPARATOR;", ",");       // multi missions get this strange list;
             DestinationStation = evt["DestinationStation"].Str();
@@ -70,8 +72,8 @@ namespace EliteDangerousCore.JournalEvents
             MissionId = evt["MissionID"].Int();
 
             Commodity = JournalFieldNaming.FixCommodityName(evt["Commodity"].Str());        // instances of $_name, fix to fdname
-            CommodityLocalised = evt["Commodity_Localised"].Str();
             FriendlyCommodity = JournalFieldNaming.RMat(Commodity);
+            CommodityLocalised = evt["Commodity_Localised"].Str().Alt(FriendlyCommodity);
 
             Count = evt["Count"].IntNull();
             Expiry = evt["Expiry"].DateTimeUTC();
@@ -99,7 +101,8 @@ namespace EliteDangerousCore.JournalEvents
         public string Target { get; set; }
         public string TargetFriendly { get; set; }
         public string TargetLocalised { get; set; }     // not all.. only for radars etc.
-        public DateTime Expiry { get; set; }
+        public DateTime Expiry { get; set; }            // MARKED as 2000 if not there..
+        public bool ExpiryValid { get { return Expiry.Year >= 2014; } }
         public string Influence { get; set; }
         public string Reputation { get; set; }
         public int MissionId { get; set; }
@@ -123,7 +126,7 @@ namespace EliteDangerousCore.JournalEvents
             summary = EventTypeStr.SplitCapsWord();
 
             DateTime exp = Expiry;
-            if (exp != null)
+            if (exp != null && !EliteConfigInstance.InstanceConfig.DisplayUTC)
                 exp = exp.ToLocalTime();
 
             info = BaseUtils.FieldBuilder.Build("", Name, 
@@ -137,11 +140,11 @@ namespace EliteDangerousCore.JournalEvents
                                       "; (Wing)", Wing);
                         
 
-            detailed = BaseUtils.FieldBuilder.Build("Deliver:", CommodityLocalised.Alt(FriendlyCommodity), 
-                                           "Target:", TargetLocalised.Alt(TargetFriendly), 
+            detailed = BaseUtils.FieldBuilder.Build("Deliver:", CommodityLocalised, 
+                                           "Target:", TargetLocalised, 
                                            "Type:", TargetTypeFriendly,
                                            "Target Faction:", TargetFaction,
-                                           "Target Type:", TargetTypeLocalised.Alt(TargetTypeFriendly),
+                                           "Target Type:", TargetTypeLocalised,
                                            "Passengers:", PassengerCount);
         }
 
@@ -149,11 +152,11 @@ namespace EliteDangerousCore.JournalEvents
         {
             return BaseUtils.FieldBuilder.Build(  "Influence:", Influence,
                                         "Reputation:", Reputation,
-                                        "Deliver:", CommodityLocalised.Alt(FriendlyCommodity),
-                                        "Target:", TargetLocalised.Alt(TargetFriendly),
+                                        "Deliver:", CommodityLocalised,
+                                        "Target:", TargetLocalised,
                                         "Type:", TargetTypeFriendly,
                                         "Target Faction:", TargetFaction,
-                                        "Target Type:", TargetTypeLocalised.Alt(TargetTypeFriendly),
+                                        "Target Type:", TargetTypeLocalised,
                                         "Passengers:", PassengerCount);
 
         }
