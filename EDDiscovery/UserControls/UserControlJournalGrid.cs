@@ -118,7 +118,14 @@ namespace EDDiscovery.UserControls
             Display(discoveryform.history);
         }
 
+        int fdropdown, ftotalevents, ftotalfilters;     // filter totals
+
         private void Display(HistoryList hl)
+        {
+            Display(hl, false);
+        }
+
+        private void Display(HistoryList hl, bool disablesorting )
         {
             if (hl == null)     // just for safety
                 return;
@@ -127,16 +134,22 @@ namespace EDDiscovery.UserControls
 
             Tuple<long, int> pos = CurrentGridPosByJID();
 
+            SortOrder sortorder = dataGridViewJournal.SortOrder;
+            int sortcol = dataGridViewJournal.SortedColumn?.Index ?? -1;
+            if (sortcol >= 0 && disablesorting)
+            {
+                dataGridViewJournal.Columns[sortcol].HeaderCell.SortGlyphDirection = SortOrder.None;
+                sortcol = -1;
+            }
+
             var filter = (TravelHistoryFilter)comboBoxJournalWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
 
             List<HistoryEntry> result = filter.Filter(hl);
+            fdropdown = hl.Count() - result.Count();
 
-            int ftotal;
-            result = HistoryList.FilterByJournalEvent(result, SQLiteDBClass.GetSettingString(DbFilterSave, "All"), out ftotal);
-            toolTip.SetToolTip(buttonFilter, (ftotal > 0) ? ("Total filtered out " + ftotal) : "Filter out entries based on event type");
+            result = HistoryList.FilterByJournalEvent(result, SQLiteDBClass.GetSettingString(DbFilterSave, "All"), out ftotalevents);
+            result = FilterHelpers.FilterHistory(result, fieldfilter, discoveryform.Globals, out ftotalfilters);
 
-            result = FilterHelpers.FilterHistory(result, fieldfilter, discoveryform.Globals, out ftotal);
-            toolTip.SetToolTip(buttonField, (ftotal > 0) ? ("Total filtered out " + ftotal) : "Filter out entries matching the field selection");
 
             dataGridViewJournal.Rows.Clear();
             rowsbyjournalid.Clear();
@@ -148,6 +161,8 @@ namespace EDDiscovery.UserControls
 
             StaticFilters.FilterGridView(dataGridViewJournal, textBoxFilter.Text);
 
+            UpdateToolTipsForFilter();
+
             int rowno = FindGridPosByJID(pos.Item1,true);
 
             if (rowno >= 0)
@@ -157,8 +172,15 @@ namespace EDDiscovery.UserControls
 
             dataGridViewJournal.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time" : "Time";
 
+            if (sortcol >= 0)
+            {
+                dataGridViewJournal.Sort(dataGridViewJournal.Columns[sortcol], (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
+                dataGridViewJournal.Columns[sortcol].HeaderCell.SortGlyphDirection = sortorder;
+            }
+
             FireChangeSelection();
         }
+
 
         private void AddNewJournalRow(bool insert, HistoryEntry item)            // second part of add history row, adds item to view.
         {
@@ -188,7 +210,22 @@ namespace EDDiscovery.UserControls
 
         private void AddNewEntry(HistoryEntry he, HistoryList hl)               // add if in event filter, and not in field filter..
         {
-            if (he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")) && FilterHelpers.FilterHistory(he, fieldfilter, discoveryform.Globals))
+            bool add = he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All"));
+
+            if (!add)
+            {
+                ftotalevents++;
+                UpdateToolTipsForFilter();
+            }
+
+            if (add && !FilterHelpers.FilterHistory(he, fieldfilter, discoveryform.Globals))
+            {
+                add = false;
+                ftotalfilters++;
+                UpdateToolTipsForFilter();
+            }
+
+            if ( add )
             {
                 AddNewJournalRow(true, he);
 
@@ -228,6 +265,14 @@ namespace EDDiscovery.UserControls
                     FireChangeSelection();
                 }
             }
+        }
+
+        private void UpdateToolTipsForFilter()
+        {
+            string ms = " showing " + dataGridViewJournal.Rows.Count + " original " + (current_historylist?.Count() ?? 0);
+            comboBoxJournalWindow.SetTipDynamically(toolTip, fdropdown > 0 ? ("Filtered " + fdropdown + ms) : "Select the entries by age, " + ms);
+            toolTip.SetToolTip(buttonFilter, (ftotalevents > 0) ? ("Filtered " + ftotalevents + ms) : "Filter out entries based on event type, " + ms);
+            toolTip.SetToolTip(buttonField, (ftotalfilters > 0) ? ("Total filtered out " + ftotalfilters + ms) : "Filter out entries matching the field selection, " + ms);
         }
 
 	    #endregion
@@ -274,23 +319,16 @@ namespace EDDiscovery.UserControls
             Display(current_historylist);
         }
 
-        private void dataGridViewJournal_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            if (e.ColumnIndex != JournalHistoryColumns.Event)
-            {
-                DataGridViewSorter.DataGridSort(dataGridViewJournal, e.ColumnIndex);
-                FireChangeSelection();
-            }
-        }
-
         private void buttonField_Click(object sender, EventArgs e)
         {
             Conditions.ConditionFilterForm frm = new Conditions.ConditionFilterForm();
+            List<string> namelist = new List<string>() { "Note" };
+            namelist.AddRange(discoveryform.Globals.NameList);
             frm.InitFilter("Journal: Filter out fields",
                             Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location),
                             JournalEntry.GetListOfEventsWithOptMethod(false) ,
                             (s) => { return BaseUtils.FieldNames.GetPropertyFieldNames(JournalEntry.TypeOfJournalEntry(s)); },
-                            discoveryform.Globals.NameList, fieldfilter);
+                            namelist, fieldfilter);
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
             {
                 fieldfilter = frm.result;
@@ -316,6 +354,7 @@ namespace EDDiscovery.UserControls
             mapGotoStartoolStripMenuItem.Enabled = (rightclicksystem != null && rightclicksystem.System.HasCoordinate);
             viewOnEDSMToolStripMenuItem.Enabled = (rightclicksystem != null);
             sendUnsyncedScanToEDDNToolStripMenuItem.Enabled = (rightclicksystem != null && rightclicksystem.EntryType == JournalTypeEnum.Scan && !rightclicksystem.EDDNSync);
+            removeSortingOfColumnsToolStripMenuItem.Enabled = dataGridViewJournal.SortedColumn != null;
         }
 
         HistoryEntry rightclicksystem = null;
@@ -416,6 +455,11 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void removeSortingOfColumnsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Display(current_historylist, true);
+        }
+
         #endregion
 
 
@@ -454,52 +498,83 @@ namespace EDDiscovery.UserControls
 
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
             {
-                if (frm.SelectedIndex == 0)
+                if (frm.ExportAsJournals)
                 {
-                    BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
-                    grd.SetCSVDelimiter(frm.Comma);
-                    grd.GetLineStatus += delegate (int r)
-                    {
-                        if (r < dataGridViewJournal.Rows.Count)
+                    try
+                    { 
+                        using (StreamWriter writer = new StreamWriter(frm.Path))
                         {
-                            HistoryEntry he = dataGridViewJournal.Rows[r].Cells[JournalHistoryColumns.HistoryTag].Tag as HistoryEntry;
-                            return (dataGridViewJournal.Rows[r].Visible &&
-                                he.EventTimeLocal.CompareTo(frm.StartTime) >= 0 &&
-                                he.EventTimeLocal.CompareTo(frm.EndTime) <= 0) ? BaseUtils.CSVWriteGrid.LineStatus.OK : BaseUtils.CSVWriteGrid.LineStatus.Skip;
+                            foreach(DataGridViewRow dgvr in dataGridViewJournal.Rows)
+                            {
+                                HistoryEntry he = dgvr.Cells[JournalHistoryColumns.HistoryTag].Tag as HistoryEntry;
+                                if (dgvr.Visible && he.EventTimeLocal.CompareTo(frm.StartTime) >= 0 && he.EventTimeLocal.CompareTo(frm.EndTime) <= 0)
+                                {
+                                    string forExport = he.journalEntry.GetJson()?.ToString().Replace("\r\n", "");
+                                    forExport = System.Text.RegularExpressions.Regex.Replace(forExport, "(\"(?:[^\"\\\\]|\\\\.)*\")|\\s+", "$1");
+                                    writer.Write(forExport);
+                                    writer.WriteLine();
+                                }
+                            }
                         }
-                        else
-                            return BaseUtils.CSVWriteGrid.LineStatus.EOF;
-                    };
-
-                    grd.GetLine += delegate (int r)
-                    {
-                        HistoryEntry he = dataGridViewJournal.Rows[r].Cells[JournalHistoryColumns.HistoryTag].Tag as HistoryEntry;
-                        DataGridViewRow rw = dataGridViewJournal.Rows[r];
-                        if (frm.ExportAsJournals)
-                        {
-                            return new Object[] { he.journalEntry.GetJson()?.ToString() };
-                        }
-                        else
-                            return new Object[] { rw.Cells[0].Value, rw.Cells[2].Value, rw.Cells[3].Value };
-                    };
-
-                    grd.GetHeader += delegate (int c)
-                    {
-                        return (c < 3 && frm.IncludeHeader) ? dataGridViewJournal.Columns[c + ((c > 0) ? 1 : 0)].HeaderText : null;
-                    };
-
-                    if (grd.WriteCSV(frm.Path))
-                    {
                         if (frm.AutoOpen)
                             System.Diagnostics.Process.Start(frm.Path);
                     }
-                    else
-                        ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);   
+                    catch
+                    {
+                        ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    }
+                }
+                else
+                {
+                    if (frm.SelectedIndex == 0)
+                    {
+                        BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
+                        grd.SetCSVDelimiter(frm.Comma);
+                        grd.GetLineStatus += delegate (int r)
+                        {
+                            if (r < dataGridViewJournal.Rows.Count)
+                            {
+                                HistoryEntry he = dataGridViewJournal.Rows[r].Cells[JournalHistoryColumns.HistoryTag].Tag as HistoryEntry;
+                                return (dataGridViewJournal.Rows[r].Visible &&
+                                    he.EventTimeLocal.CompareTo(frm.StartTime) >= 0 &&
+                                    he.EventTimeLocal.CompareTo(frm.EndTime) <= 0) ? BaseUtils.CSVWriteGrid.LineStatus.OK : BaseUtils.CSVWriteGrid.LineStatus.Skip;
+                            }
+                            else
+                                return BaseUtils.CSVWriteGrid.LineStatus.EOF;
+                        };
+
+                        grd.GetLine += delegate (int r)
+                        {
+                            DataGridViewRow rw = dataGridViewJournal.Rows[r];
+                            return new Object[] { rw.Cells[0].Value, rw.Cells[2].Value, rw.Cells[3].Value };
+                        };
+
+                        grd.GetHeader += delegate (int c)
+                        {
+                            return (c < 3 && frm.IncludeHeader) ? dataGridViewJournal.Columns[c + ((c > 0) ? 1 : 0)].HeaderText : null;
+                        };
+
+                        if (grd.WriteCSV(frm.Path))
+                        {
+                            if (frm.AutoOpen)
+                                System.Diagnostics.Process.Start(frm.Path);
+                        }
+                        else
+                            ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);  
+                    }
                 }
             }
         }
 
         #endregion
+
+        private void dataGridViewJournal_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+        {
+            if (e.Column.Index == 0)
+            {
+                e.SortDataGridViewColumnDate();
+            }
+        }
 
         private void dataGridViewJournal_CellClick(object sender, DataGridViewCellEventArgs e)
         {

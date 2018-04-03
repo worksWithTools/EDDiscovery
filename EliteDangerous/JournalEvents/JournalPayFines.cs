@@ -29,19 +29,28 @@ namespace EliteDangerousCore.JournalEvents
         {
             Amount = evt["Amount"].Long();
             BrokerPercentage = evt["BrokerPercentage"].Double();
+            AllFines = evt["AllFines"].Bool();
+            Faction = evt["Faction"].Str();
+            Faction_Localised = evt["Faction_Localised"].Str().Alt(Faction);
+            ShipId = evt["ShipID"].Int();
         }
+
         public long Amount { get; set; }
         public double BrokerPercentage { get; set; }
+        public bool AllFines { get; set; }
+        public string Faction { get; set; } // may be blank
+        public string Faction_Localised { get; set; }       // may be blank
+        public int ShipId { get; set; }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
-            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, "Broker " + BrokerPercentage.ToString("0.0") + "%", -Amount);
+            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, (Faction_Localised.Length > 0 ? "Faction " + Faction_Localised : "") + " Broker " + BrokerPercentage.ToString("0.0") + "%", -Amount);
         }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("Cost:; cr;N0", Amount);
+            info = BaseUtils.FieldBuilder.Build("Cost:; cr;N0", Amount, "< To ", Faction_Localised);
             if (BrokerPercentage > 0)
                 info += ", Broker took " + BrokerPercentage.ToString("0") + "%";
             detailed = "";

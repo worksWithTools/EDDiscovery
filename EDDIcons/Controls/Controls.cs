@@ -155,6 +155,7 @@ namespace EDDiscovery.Icons
         #endregion
         #region EDDiscovery.UserControls.UserControlModules
         public static Image Modules_ShowOnCoriolis { get { return IconSet.GetIcon("Controls.Modules.ShowOnCoriolis"); } }
+        public static Image Modules_EDShipYard { get { return IconSet.GetIcon("Controls.Modules.EDShipYard"); } }
         #endregion
         #region EDDiscovery.UserControls.UserControlRoute
         public static Image Route_ExportToExcel { get { return IconSet.GetIcon("Controls.Route.ExportToExcel"); } }
@@ -215,6 +216,9 @@ namespace EDDiscovery.Icons
         public static Image UCContainer_Panels { get { return IconSet.GetIcon("Controls.UCContainer.Panels"); } }
         public static Image UCContainer_Remove { get { return IconSet.GetIcon("Controls.UCContainer.Remove"); } }
         public static Image UCContainer_Tile { get { return IconSet.GetIcon("Controls.UCContainer.Tile"); } }
+        #endregion
+        #region EDDiscovery.UserControls.UserControlPlot
+        public static Image Plot_Dots { get { return IconSet.GetIcon("Controls.Plot.Dots"); } }
         #endregion
         #region TabStrip
         public static Image TabStrip_ArrowLeft { get { return IconSet.GetIcon("Controls.TabStrip.ArrowLeft"); } }

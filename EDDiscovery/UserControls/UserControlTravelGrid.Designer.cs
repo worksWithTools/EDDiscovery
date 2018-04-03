@@ -45,22 +45,8 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             this.TopPanel = new System.Windows.Forms.Panel();
-            this.checkBoxMoveToTop = new ExtendedControls.CheckBoxCustom();
-            this.buttonExtExcel = new ExtendedControls.ButtonExt();
-            this.buttonField = new ExtendedControls.ButtonExt();
-            this.buttonFilter = new ExtendedControls.ButtonExt();
-            this.textBoxFilter = new ExtendedControls.TextBoxBorder();
             this.labelSearch = new System.Windows.Forms.Label();
-            this.comboBoxHistoryWindow = new ExtendedControls.ComboBoxCustom();
             this.labelTime = new System.Windows.Forms.Label();
-            this.dataViewScrollerPanel1 = new ExtendedControls.DataViewScrollerPanel();
-            this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
-            this.dataGridViewTravel = new System.Windows.Forms.DataGridView();
-            this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Icon = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.historyContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.mapGotoStartoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.starMapColourToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -80,13 +66,29 @@ namespace EDDiscovery.UserControls
             this.setNoteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.writeEventInfoToLogDebugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.writeJournalToLogtoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.runActionsAcrossSelectionToolSpeechStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyJournalEntryToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createEditBookmarkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.dataViewScrollerPanel1 = new ExtendedControls.DataViewScrollerPanel();
+            this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
+            this.dataGridViewTravel = new System.Windows.Forms.DataGridView();
+            this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Icon = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.checkBoxMoveToTop = new ExtendedControls.CheckBoxCustom();
+            this.buttonExtExcel = new ExtendedControls.ButtonExt();
+            this.buttonField = new ExtendedControls.ButtonExt();
+            this.buttonFilter = new ExtendedControls.ButtonExt();
+            this.textBoxFilter = new ExtendedControls.TextBoxBorder();
+            this.comboBoxHistoryWindow = new ExtendedControls.ComboBoxCustom();
+            this.removeSortingOfColumnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TopPanel.SuspendLayout();
+            this.historyContextMenu.SuspendLayout();
             this.dataViewScrollerPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTravel)).BeginInit();
-            this.historyContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // TopPanel
@@ -104,6 +106,315 @@ namespace EDDiscovery.UserControls
             this.TopPanel.Name = "TopPanel";
             this.TopPanel.Size = new System.Drawing.Size(870, 32);
             this.TopPanel.TabIndex = 27;
+            // 
+            // labelSearch
+            // 
+            this.labelSearch.AutoSize = true;
+            this.labelSearch.Location = new System.Drawing.Point(159, 7);
+            this.labelSearch.Name = "labelSearch";
+            this.labelSearch.Size = new System.Drawing.Size(41, 13);
+            this.labelSearch.TabIndex = 24;
+            this.labelSearch.Text = "Search";
+            // 
+            // labelTime
+            // 
+            this.labelTime.AutoSize = true;
+            this.labelTime.Location = new System.Drawing.Point(3, 7);
+            this.labelTime.Name = "labelTime";
+            this.labelTime.Size = new System.Drawing.Size(30, 13);
+            this.labelTime.TabIndex = 0;
+            this.labelTime.Text = "Time";
+            // 
+            // historyContextMenu
+            // 
+            this.historyContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.removeSortingOfColumnsToolStripMenuItem,
+            this.mapGotoStartoolStripMenuItem,
+            this.starMapColourToolStripMenuItem,
+            this.hideSystemToolStripMenuItem,
+            this.moveToAnotherCommanderToolStripMenuItem,
+            this.addToTrilaterationToolStripMenuItem,
+            this.viewOnEDSMToolStripMenuItem,
+            this.selectCorrectSystemToolStripMenuItem,
+            this.toolStripMenuItemStartStop,
+            this.removeJournalEntryToolStripMenuItem,
+            this.sendUnsyncedScanToEDDNToolStripMenuItem,
+            this.runActionsOnThisEntryToolStripMenuItem,
+            this.setNoteToolStripMenuItem,
+            this.writeEventInfoToLogDebugToolStripMenuItem,
+            this.writeJournalToLogtoolStripMenuItem,
+            this.runActionsAcrossSelectionToolSpeechStripMenuItem,
+            this.copyJournalEntryToClipboardToolStripMenuItem,
+            this.createEditBookmarkToolStripMenuItem});
+            this.historyContextMenu.Name = "historyContextMenu";
+            this.historyContextMenu.Size = new System.Drawing.Size(388, 422);
+            this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
+            // 
+            // mapGotoStartoolStripMenuItem
+            // 
+            this.mapGotoStartoolStripMenuItem.Name = "mapGotoStartoolStripMenuItem";
+            this.mapGotoStartoolStripMenuItem.Size = new System.Drawing.Size(387, 22);
+            this.mapGotoStartoolStripMenuItem.Text = "Go to star on 3D Map";
+            this.mapGotoStartoolStripMenuItem.Click += new System.EventHandler(this.mapGotoStartoolStripMenuItem_Click);
+            // 
+            // starMapColourToolStripMenuItem
+            // 
+            this.starMapColourToolStripMenuItem.Name = "starMapColourToolStripMenuItem";
+            this.starMapColourToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
+            this.starMapColourToolStripMenuItem.Text = "Star Map Colour...";
+            this.starMapColourToolStripMenuItem.Click += new System.EventHandler(this.starMapColourToolStripMenuItem_Click);
+            // 
+            // hideSystemToolStripMenuItem
+            // 
+            this.hideSystemToolStripMenuItem.Name = "hideSystemToolStripMenuItem";
+            this.hideSystemToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
+            this.hideSystemToolStripMenuItem.Text = "Hide Entries";
+            this.hideSystemToolStripMenuItem.Click += new System.EventHandler(this.hideSystemToolStripMenuItem_Click);
+            // 
+            // moveToAnotherCommanderToolStripMenuItem
+            // 
+            this.moveToAnotherCommanderToolStripMenuItem.Name = "moveToAnotherCommanderToolStripMenuItem";
+            this.moveToAnotherCommanderToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
+            this.moveToAnotherCommanderToolStripMenuItem.Text = "Move Entries to another Commander";
+            this.moveToAnotherCommanderToolStripMenuItem.Click += new System.EventHandler(this.moveToAnotherCommanderToolStripMenuItem_Click);
+            // 
+            // addToTrilaterationToolStripMenuItem
+            // 
+            this.addToTrilaterationToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.trilaterationToolStripMenuItem,
+            this.wantedSystemsToolStripMenuItem,
+            this.bothToolStripMenuItem,
+            this.routeToolStripMenuItem});
+            this.addToTrilaterationToolStripMenuItem.Name = "addToTrilaterationToolStripMenuItem";
+            this.addToTrilaterationToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
+            this.addToTrilaterationToolStripMenuItem.Text = "Add to ...";
+            // 
+            // trilaterationToolStripMenuItem
+            // 
+            this.trilaterationToolStripMenuItem.Name = "trilaterationToolStripMenuItem";
+            this.trilaterationToolStripMenuItem.Size = new System.Drawing.Size(276, 22);
+            this.trilaterationToolStripMenuItem.Text = "System on Trilateration Panel";
+            this.trilaterationToolStripMenuItem.Click += new System.EventHandler(this.trilaterationToolStripMenuItem_Click);
+            // 
+            // wantedSystemsToolStripMenuItem
+            // 
+            this.wantedSystemsToolStripMenuItem.Name = "wantedSystemsToolStripMenuItem";
+            this.wantedSystemsToolStripMenuItem.Size = new System.Drawing.Size(276, 22);
+            this.wantedSystemsToolStripMenuItem.Text = "Wanted Systems on Trilateration Panel";
+            this.wantedSystemsToolStripMenuItem.Click += new System.EventHandler(this.wantedSystemsToolStripMenuItem_Click);
+            // 
+            // bothToolStripMenuItem
+            // 
+            this.bothToolStripMenuItem.Name = "bothToolStripMenuItem";
+            this.bothToolStripMenuItem.Size = new System.Drawing.Size(276, 22);
+            this.bothToolStripMenuItem.Text = "Both of the above";
+            this.bothToolStripMenuItem.Click += new System.EventHandler(this.bothToolStripMenuItem_Click);
+            // 
+            // routeToolStripMenuItem
+            // 
+            this.routeToolStripMenuItem.Name = "routeToolStripMenuItem";
+            this.routeToolStripMenuItem.Size = new System.Drawing.Size(276, 22);
+            this.routeToolStripMenuItem.Text = "Expedition Panel";
+            this.routeToolStripMenuItem.Click += new System.EventHandler(this.routeToolStripMenuItem_Click);
+            // 
+            // viewOnEDSMToolStripMenuItem
+            // 
+            this.viewOnEDSMToolStripMenuItem.Name = "viewOnEDSMToolStripMenuItem";
+            this.viewOnEDSMToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
+            this.viewOnEDSMToolStripMenuItem.Text = "View on EDSM";
+            this.viewOnEDSMToolStripMenuItem.Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem_Click);
+            // 
+            // selectCorrectSystemToolStripMenuItem
+            // 
+            this.selectCorrectSystemToolStripMenuItem.Name = "selectCorrectSystemToolStripMenuItem";
+            this.selectCorrectSystemToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
+            this.selectCorrectSystemToolStripMenuItem.Text = "Assign new system";
+            this.selectCorrectSystemToolStripMenuItem.Click += new System.EventHandler(this.selectCorrectSystemToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItemStartStop
+            // 
+            this.toolStripMenuItemStartStop.Name = "toolStripMenuItemStartStop";
+            this.toolStripMenuItemStartStop.Size = new System.Drawing.Size(387, 22);
+            this.toolStripMenuItemStartStop.Text = "Set Start/Stop point for travel calculations";
+            this.toolStripMenuItemStartStop.Click += new System.EventHandler(this.toolStripMenuItemStartStop_Click);
+            // 
+            // removeJournalEntryToolStripMenuItem
+            // 
+            this.removeJournalEntryToolStripMenuItem.Name = "removeJournalEntryToolStripMenuItem";
+            this.removeJournalEntryToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
+            this.removeJournalEntryToolStripMenuItem.Text = "Remove Journal Entry";
+            this.removeJournalEntryToolStripMenuItem.Click += new System.EventHandler(this.removeJournalEntryToolStripMenuItem_Click);
+            // 
+            // sendUnsyncedScanToEDDNToolStripMenuItem
+            // 
+            this.sendUnsyncedScanToEDDNToolStripMenuItem.Name = "sendUnsyncedScanToEDDNToolStripMenuItem";
+            this.sendUnsyncedScanToEDDNToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
+            this.sendUnsyncedScanToEDDNToolStripMenuItem.Text = "Send unsynced scan to EDDN";
+            this.sendUnsyncedScanToEDDNToolStripMenuItem.Click += new System.EventHandler(this.sendUnsyncedScanToEDDNToolStripMenuItem_Click);
+            // 
+            // runActionsOnThisEntryToolStripMenuItem
+            // 
+            this.runActionsOnThisEntryToolStripMenuItem.Name = "runActionsOnThisEntryToolStripMenuItem";
+            this.runActionsOnThisEntryToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
+            this.runActionsOnThisEntryToolStripMenuItem.Text = "Run Actions on this entry";
+            this.runActionsOnThisEntryToolStripMenuItem.Click += new System.EventHandler(this.runActionsOnThisEntryToolStripMenuItem_Click);
+            // 
+            // setNoteToolStripMenuItem
+            // 
+            this.setNoteToolStripMenuItem.Name = "setNoteToolStripMenuItem";
+            this.setNoteToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
+            this.setNoteToolStripMenuItem.Text = "Set Note";
+            this.setNoteToolStripMenuItem.Click += new System.EventHandler(this.setNoteToolStripMenuItem_Click);
+            // 
+            // writeEventInfoToLogDebugToolStripMenuItem
+            // 
+            this.writeEventInfoToLogDebugToolStripMenuItem.Name = "writeEventInfoToLogDebugToolStripMenuItem";
+            this.writeEventInfoToLogDebugToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
+            this.writeEventInfoToLogDebugToolStripMenuItem.Text = "Write event info to Log (Debug)";
+            this.writeEventInfoToLogDebugToolStripMenuItem.Click += new System.EventHandler(this.writeEventInfoToLogDebugToolStripMenuItem_Click);
+            // 
+            // writeJournalToLogtoolStripMenuItem
+            // 
+            this.writeJournalToLogtoolStripMenuItem.Name = "writeJournalToLogtoolStripMenuItem";
+            this.writeJournalToLogtoolStripMenuItem.Size = new System.Drawing.Size(387, 22);
+            this.writeJournalToLogtoolStripMenuItem.Text = "Write Journal Entry to Log (Debug)";
+            this.writeJournalToLogtoolStripMenuItem.Click += new System.EventHandler(this.writeJournalToLogtoolStripMenuItem_Click);
+            // 
+            // runActionsAcrossSelectionToolSpeechStripMenuItem
+            // 
+            this.runActionsAcrossSelectionToolSpeechStripMenuItem.Name = "runActionsAcrossSelectionToolSpeechStripMenuItem";
+            this.runActionsAcrossSelectionToolSpeechStripMenuItem.Size = new System.Drawing.Size(387, 22);
+            this.runActionsAcrossSelectionToolSpeechStripMenuItem.Text = "Run actions across selection for speech debugging (Debug)";
+            this.runActionsAcrossSelectionToolSpeechStripMenuItem.Click += new System.EventHandler(this.runActionsAcrossSelectionToolStripMenuItem_Click);
+            // 
+            // copyJournalEntryToClipboardToolStripMenuItem
+            // 
+            this.copyJournalEntryToClipboardToolStripMenuItem.Name = "copyJournalEntryToClipboardToolStripMenuItem";
+            this.copyJournalEntryToClipboardToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
+            this.copyJournalEntryToClipboardToolStripMenuItem.Text = "Copy journal entry to clipboard";
+            this.copyJournalEntryToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copyJournalEntryToClipboardToolStripMenuItem_Click);
+            // 
+            // createEditBookmarkToolStripMenuItem
+            // 
+            this.createEditBookmarkToolStripMenuItem.Name = "createEditBookmarkToolStripMenuItem";
+            this.createEditBookmarkToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
+            this.createEditBookmarkToolStripMenuItem.Text = "Create/Edit Bookmark";
+            this.createEditBookmarkToolStripMenuItem.Click += new System.EventHandler(this.createEditBookmarkToolStripMenuItem_Click);
+            // 
+            // toolTip
+            // 
+            this.toolTip.AutoPopDelay = 30000;
+            this.toolTip.InitialDelay = 250;
+            this.toolTip.ReshowDelay = 100;
+            this.toolTip.ShowAlways = true;
+            // 
+            // dataViewScrollerPanel1
+            // 
+            this.dataViewScrollerPanel1.Controls.Add(this.vScrollBarCustom1);
+            this.dataViewScrollerPanel1.Controls.Add(this.dataGridViewTravel);
+            this.dataViewScrollerPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataViewScrollerPanel1.InternalMargin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.dataViewScrollerPanel1.Location = new System.Drawing.Point(0, 32);
+            this.dataViewScrollerPanel1.Name = "dataViewScrollerPanel1";
+            this.dataViewScrollerPanel1.ScrollBarWidth = 20;
+            this.dataViewScrollerPanel1.Size = new System.Drawing.Size(870, 578);
+            this.dataViewScrollerPanel1.TabIndex = 28;
+            this.dataViewScrollerPanel1.VerticalScrollBarDockRight = true;
+            // 
+            // vScrollBarCustom1
+            // 
+            this.vScrollBarCustom1.ArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.vScrollBarCustom1.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustom1.ArrowColorScaling = 0.5F;
+            this.vScrollBarCustom1.ArrowDownDrawAngle = 270F;
+            this.vScrollBarCustom1.ArrowUpDrawAngle = 90F;
+            this.vScrollBarCustom1.BorderColor = System.Drawing.Color.White;
+            this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.vScrollBarCustom1.HideScrollBar = true;
+            this.vScrollBarCustom1.LargeChange = 0;
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(847, 23);
+            this.vScrollBarCustom1.Maximum = -1;
+            this.vScrollBarCustom1.Minimum = 0;
+            this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustom1.Name = "vScrollBarCustom1";
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 555);
+            this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom1.SmallChange = 1;
+            this.vScrollBarCustom1.TabIndex = 4;
+            this.vScrollBarCustom1.Text = "vScrollBarCustom1";
+            this.vScrollBarCustom1.ThumbBorderColor = System.Drawing.Color.Yellow;
+            this.vScrollBarCustom1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustom1.ThumbColorScaling = 0.5F;
+            this.vScrollBarCustom1.ThumbDrawAngle = 0F;
+            this.vScrollBarCustom1.Value = -1;
+            this.vScrollBarCustom1.ValueLimited = -1;
+            // 
+            // dataGridViewTravel
+            // 
+            this.dataGridViewTravel.AllowUserToAddRows = false;
+            this.dataGridViewTravel.AllowUserToDeleteRows = false;
+            this.dataGridViewTravel.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewTravel.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewTravel.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ColumnTime,
+            this.Icon,
+            this.ColumnSystem,
+            this.ColumnDistance,
+            this.ColumnNote});
+            this.dataGridViewTravel.ContextMenuStrip = this.historyContextMenu;
+            this.dataGridViewTravel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridViewTravel.Location = new System.Drawing.Point(0, 0);
+            this.dataGridViewTravel.Name = "dataGridViewTravel";
+            this.dataGridViewTravel.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewTravel.Size = new System.Drawing.Size(847, 578);
+            this.dataGridViewTravel.TabIndex = 3;
+            this.dataGridViewTravel.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTravel_CellClick);
+            this.dataGridViewTravel.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTravel_CellDoubleClick);
+            this.dataGridViewTravel.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewTravel_RowPostPaint);
+            this.dataGridViewTravel.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewTravel_SortCompare);
+            this.dataGridViewTravel.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dataGridViewTravel_KeyDown);
+            this.dataGridViewTravel.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.dataGridViewTravel_KeyPress);
+            this.dataGridViewTravel.KeyUp += new System.Windows.Forms.KeyEventHandler(this.dataGridViewTravel_KeyUp);
+            this.dataGridViewTravel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewTravel_MouseDown);
+            // 
+            // ColumnTime
+            // 
+            this.ColumnTime.HeaderText = "Time";
+            this.ColumnTime.MinimumWidth = 50;
+            this.ColumnTime.Name = "ColumnTime";
+            this.ColumnTime.ReadOnly = true;
+            // 
+            // Icon
+            // 
+            this.Icon.FillWeight = 50F;
+            this.Icon.HeaderText = "Event";
+            this.Icon.MinimumWidth = 50;
+            this.Icon.Name = "Icon";
+            this.Icon.ReadOnly = true;
+            this.Icon.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ColumnSystem
+            // 
+            this.ColumnSystem.HeaderText = "Description";
+            this.ColumnSystem.MinimumWidth = 50;
+            this.ColumnSystem.Name = "ColumnSystem";
+            this.ColumnSystem.ReadOnly = true;
+            // 
+            // ColumnDistance
+            // 
+            this.ColumnDistance.FillWeight = 200F;
+            this.ColumnDistance.HeaderText = "Information";
+            this.ColumnDistance.MinimumWidth = 50;
+            this.ColumnDistance.Name = "ColumnDistance";
+            this.ColumnDistance.ReadOnly = true;
+            // 
+            // ColumnNote
+            // 
+            this.ColumnNote.HeaderText = "Note";
+            this.ColumnNote.MinimumWidth = 20;
+            this.ColumnNote.Name = "ColumnNote";
+            this.ColumnNote.ReadOnly = true;
             // 
             // checkBoxMoveToTop
             // 
@@ -182,15 +493,6 @@ namespace EDDiscovery.UserControls
             this.textBoxFilter.WordWrap = true;
             this.textBoxFilter.TextChanged += new System.EventHandler(this.textBoxFilter_TextChanged);
             // 
-            // labelSearch
-            // 
-            this.labelSearch.AutoSize = true;
-            this.labelSearch.Location = new System.Drawing.Point(159, 7);
-            this.labelSearch.Name = "labelSearch";
-            this.labelSearch.Size = new System.Drawing.Size(41, 13);
-            this.labelSearch.TabIndex = 24;
-            this.labelSearch.Text = "Search";
-            // 
             // comboBoxHistoryWindow
             // 
             this.comboBoxHistoryWindow.ArrowWidth = 1;
@@ -220,295 +522,12 @@ namespace EDDiscovery.UserControls
             this.comboBoxHistoryWindow.ValueMember = "";
             this.comboBoxHistoryWindow.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
             // 
-            // labelTime
+            // removeSortingOfColumnsToolStripMenuItem
             // 
-            this.labelTime.AutoSize = true;
-            this.labelTime.Location = new System.Drawing.Point(3, 7);
-            this.labelTime.Name = "labelTime";
-            this.labelTime.Size = new System.Drawing.Size(30, 13);
-            this.labelTime.TabIndex = 0;
-            this.labelTime.Text = "Time";
-            // 
-            // dataViewScrollerPanel1
-            // 
-            this.dataViewScrollerPanel1.Controls.Add(this.vScrollBarCustom1);
-            this.dataViewScrollerPanel1.Controls.Add(this.dataGridViewTravel);
-            this.dataViewScrollerPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataViewScrollerPanel1.InternalMargin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this.dataViewScrollerPanel1.Location = new System.Drawing.Point(0, 32);
-            this.dataViewScrollerPanel1.Name = "dataViewScrollerPanel1";
-            this.dataViewScrollerPanel1.ScrollBarWidth = 20;
-            this.dataViewScrollerPanel1.Size = new System.Drawing.Size(870, 578);
-            this.dataViewScrollerPanel1.TabIndex = 28;
-            this.dataViewScrollerPanel1.VerticalScrollBarDockRight = true;
-            // 
-            // vScrollBarCustom1
-            // 
-            this.vScrollBarCustom1.ArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.vScrollBarCustom1.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.vScrollBarCustom1.ArrowColorScaling = 0.5F;
-            this.vScrollBarCustom1.ArrowDownDrawAngle = 270F;
-            this.vScrollBarCustom1.ArrowUpDrawAngle = 90F;
-            this.vScrollBarCustom1.BorderColor = System.Drawing.Color.White;
-            this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.vScrollBarCustom1.HideScrollBar = true;
-            this.vScrollBarCustom1.LargeChange = 0;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(847, 21);
-            this.vScrollBarCustom1.Maximum = -1;
-            this.vScrollBarCustom1.Minimum = 0;
-            this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
-            this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
-            this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 557);
-            this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
-            this.vScrollBarCustom1.SmallChange = 1;
-            this.vScrollBarCustom1.TabIndex = 4;
-            this.vScrollBarCustom1.Text = "vScrollBarCustom1";
-            this.vScrollBarCustom1.ThumbBorderColor = System.Drawing.Color.Yellow;
-            this.vScrollBarCustom1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.vScrollBarCustom1.ThumbColorScaling = 0.5F;
-            this.vScrollBarCustom1.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom1.Value = -1;
-            this.vScrollBarCustom1.ValueLimited = -1;
-            // 
-            // dataGridViewTravel
-            // 
-            this.dataGridViewTravel.AllowUserToAddRows = false;
-            this.dataGridViewTravel.AllowUserToDeleteRows = false;
-            this.dataGridViewTravel.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridViewTravel.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewTravel.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ColumnTime,
-            this.Icon,
-            this.ColumnSystem,
-            this.ColumnDistance,
-            this.ColumnNote});
-            this.dataGridViewTravel.ContextMenuStrip = this.historyContextMenu;
-            this.dataGridViewTravel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridViewTravel.Location = new System.Drawing.Point(0, 0);
-            this.dataGridViewTravel.Name = "dataGridViewTravel";
-            this.dataGridViewTravel.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewTravel.Size = new System.Drawing.Size(847, 578);
-            this.dataGridViewTravel.TabIndex = 3;
-            this.dataGridViewTravel.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTravel_CellClick);
-            this.dataGridViewTravel.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTravel_CellDoubleClick);
-            this.dataGridViewTravel.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewTravel_ColumnHeaderMouseClick);
-            this.dataGridViewTravel.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewTravel_RowPostPaint);
-            this.dataGridViewTravel.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dataGridViewTravel_KeyDown);
-            this.dataGridViewTravel.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.dataGridViewTravel_KeyPress);
-            this.dataGridViewTravel.KeyUp += new System.Windows.Forms.KeyEventHandler(this.dataGridViewTravel_KeyUp);
-            this.dataGridViewTravel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewTravel_MouseDown);
-            // 
-            // ColumnTime
-            // 
-            this.ColumnTime.HeaderText = "Time";
-            this.ColumnTime.MinimumWidth = 50;
-            this.ColumnTime.Name = "ColumnTime";
-            this.ColumnTime.ReadOnly = true;
-            // 
-            // Icon
-            // 
-            this.Icon.FillWeight = 50F;
-            this.Icon.HeaderText = "Event";
-            this.Icon.MinimumWidth = 50;
-            this.Icon.Name = "Icon";
-            this.Icon.ReadOnly = true;
-            // 
-            // ColumnSystem
-            // 
-            this.ColumnSystem.HeaderText = "Description";
-            this.ColumnSystem.MinimumWidth = 50;
-            this.ColumnSystem.Name = "ColumnSystem";
-            this.ColumnSystem.ReadOnly = true;
-            // 
-            // ColumnDistance
-            // 
-            this.ColumnDistance.FillWeight = 200F;
-            this.ColumnDistance.HeaderText = "Information";
-            this.ColumnDistance.MinimumWidth = 50;
-            this.ColumnDistance.Name = "ColumnDistance";
-            this.ColumnDistance.ReadOnly = true;
-            // 
-            // ColumnNote
-            // 
-            this.ColumnNote.HeaderText = "Note";
-            this.ColumnNote.MinimumWidth = 20;
-            this.ColumnNote.Name = "ColumnNote";
-            this.ColumnNote.ReadOnly = true;
-            // 
-            // historyContextMenu
-            // 
-            this.historyContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mapGotoStartoolStripMenuItem,
-            this.starMapColourToolStripMenuItem,
-            this.hideSystemToolStripMenuItem,
-            this.moveToAnotherCommanderToolStripMenuItem,
-            this.addToTrilaterationToolStripMenuItem,
-            this.viewOnEDSMToolStripMenuItem,
-            this.selectCorrectSystemToolStripMenuItem,
-            this.toolStripMenuItemStartStop,
-            this.removeJournalEntryToolStripMenuItem,
-            this.sendUnsyncedScanToEDDNToolStripMenuItem,
-            this.runActionsOnThisEntryToolStripMenuItem,
-            this.setNoteToolStripMenuItem,
-            this.writeEventInfoToLogDebugToolStripMenuItem,
-            this.writeJournalToLogtoolStripMenuItem,
-            this.copyJournalEntryToClipboardToolStripMenuItem,
-            this.createEditBookmarkToolStripMenuItem});
-            this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(294, 378);
-            this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
-            // 
-            // mapGotoStartoolStripMenuItem
-            // 
-            this.mapGotoStartoolStripMenuItem.Name = "mapGotoStartoolStripMenuItem";
-            this.mapGotoStartoolStripMenuItem.Size = new System.Drawing.Size(293, 22);
-            this.mapGotoStartoolStripMenuItem.Text = "Go to star on 3D Map";
-            this.mapGotoStartoolStripMenuItem.Click += new System.EventHandler(this.mapGotoStartoolStripMenuItem_Click);
-            // 
-            // starMapColourToolStripMenuItem
-            // 
-            this.starMapColourToolStripMenuItem.Name = "starMapColourToolStripMenuItem";
-            this.starMapColourToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
-            this.starMapColourToolStripMenuItem.Text = "Star Map Colour...";
-            this.starMapColourToolStripMenuItem.Click += new System.EventHandler(this.starMapColourToolStripMenuItem_Click);
-            // 
-            // hideSystemToolStripMenuItem
-            // 
-            this.hideSystemToolStripMenuItem.Name = "hideSystemToolStripMenuItem";
-            this.hideSystemToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
-            this.hideSystemToolStripMenuItem.Text = "Hide Entries";
-            this.hideSystemToolStripMenuItem.Click += new System.EventHandler(this.hideSystemToolStripMenuItem_Click);
-            // 
-            // moveToAnotherCommanderToolStripMenuItem
-            // 
-            this.moveToAnotherCommanderToolStripMenuItem.Name = "moveToAnotherCommanderToolStripMenuItem";
-            this.moveToAnotherCommanderToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
-            this.moveToAnotherCommanderToolStripMenuItem.Text = "Move Entries to another Commander";
-            this.moveToAnotherCommanderToolStripMenuItem.Click += new System.EventHandler(this.moveToAnotherCommanderToolStripMenuItem_Click);
-            // 
-            // addToTrilaterationToolStripMenuItem
-            // 
-            this.addToTrilaterationToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.trilaterationToolStripMenuItem,
-            this.wantedSystemsToolStripMenuItem,
-            this.bothToolStripMenuItem,
-            this.routeToolStripMenuItem});
-            this.addToTrilaterationToolStripMenuItem.Name = "addToTrilaterationToolStripMenuItem";
-            this.addToTrilaterationToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
-            this.addToTrilaterationToolStripMenuItem.Text = "Add to ...";
-            // 
-            // trilaterationToolStripMenuItem
-            // 
-            this.trilaterationToolStripMenuItem.Name = "trilaterationToolStripMenuItem";
-            this.trilaterationToolStripMenuItem.Size = new System.Drawing.Size(276, 22);
-            this.trilaterationToolStripMenuItem.Text = "System on Trilateration Panel";
-            this.trilaterationToolStripMenuItem.Click += new System.EventHandler(this.trilaterationToolStripMenuItem_Click);
-            // 
-            // wantedSystemsToolStripMenuItem
-            // 
-            this.wantedSystemsToolStripMenuItem.Name = "wantedSystemsToolStripMenuItem";
-            this.wantedSystemsToolStripMenuItem.Size = new System.Drawing.Size(276, 22);
-            this.wantedSystemsToolStripMenuItem.Text = "Wanted Systems on Trilateration Panel";
-            this.wantedSystemsToolStripMenuItem.Click += new System.EventHandler(this.wantedSystemsToolStripMenuItem_Click);
-            // 
-            // bothToolStripMenuItem
-            // 
-            this.bothToolStripMenuItem.Name = "bothToolStripMenuItem";
-            this.bothToolStripMenuItem.Size = new System.Drawing.Size(276, 22);
-            this.bothToolStripMenuItem.Text = "Both of the above";
-            this.bothToolStripMenuItem.Click += new System.EventHandler(this.bothToolStripMenuItem_Click);
-            // 
-            // routeToolStripMenuItem
-            // 
-            this.routeToolStripMenuItem.Name = "routeToolStripMenuItem";
-            this.routeToolStripMenuItem.Size = new System.Drawing.Size(276, 22);
-            this.routeToolStripMenuItem.Text = "Expedition Panel";
-            this.routeToolStripMenuItem.Click += new System.EventHandler(this.routeToolStripMenuItem_Click);
-            // 
-            // viewOnEDSMToolStripMenuItem
-            // 
-            this.viewOnEDSMToolStripMenuItem.Name = "viewOnEDSMToolStripMenuItem";
-            this.viewOnEDSMToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
-            this.viewOnEDSMToolStripMenuItem.Text = "View on EDSM";
-            this.viewOnEDSMToolStripMenuItem.Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem_Click);
-            // 
-            // selectCorrectSystemToolStripMenuItem
-            // 
-            this.selectCorrectSystemToolStripMenuItem.Name = "selectCorrectSystemToolStripMenuItem";
-            this.selectCorrectSystemToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
-            this.selectCorrectSystemToolStripMenuItem.Text = "Assign new system";
-            this.selectCorrectSystemToolStripMenuItem.Click += new System.EventHandler(this.selectCorrectSystemToolStripMenuItem_Click);
-            // 
-            // toolStripMenuItemStartStop
-            // 
-            this.toolStripMenuItemStartStop.Name = "toolStripMenuItemStartStop";
-            this.toolStripMenuItemStartStop.Size = new System.Drawing.Size(293, 22);
-            this.toolStripMenuItemStartStop.Text = "Set Start/Stop point for travel calculations";
-            this.toolStripMenuItemStartStop.Click += new System.EventHandler(this.toolStripMenuItemStartStop_Click);
-            // 
-            // removeJournalEntryToolStripMenuItem
-            // 
-            this.removeJournalEntryToolStripMenuItem.Name = "removeJournalEntryToolStripMenuItem";
-            this.removeJournalEntryToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
-            this.removeJournalEntryToolStripMenuItem.Text = "Remove Journal Entry";
-            this.removeJournalEntryToolStripMenuItem.Click += new System.EventHandler(this.removeJournalEntryToolStripMenuItem_Click);
-            // 
-            // sendUnsyncedScanToEDDNToolStripMenuItem
-            // 
-            this.sendUnsyncedScanToEDDNToolStripMenuItem.Name = "sendUnsyncedScanToEDDNToolStripMenuItem";
-            this.sendUnsyncedScanToEDDNToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
-            this.sendUnsyncedScanToEDDNToolStripMenuItem.Text = "Send unsynced scan to EDDN";
-            this.sendUnsyncedScanToEDDNToolStripMenuItem.Click += new System.EventHandler(this.sendUnsyncedScanToEDDNToolStripMenuItem_Click);
-            // 
-            // runActionsOnThisEntryToolStripMenuItem
-            // 
-            this.runActionsOnThisEntryToolStripMenuItem.Name = "runActionsOnThisEntryToolStripMenuItem";
-            this.runActionsOnThisEntryToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
-            this.runActionsOnThisEntryToolStripMenuItem.Text = "Run Actions on this entry";
-            this.runActionsOnThisEntryToolStripMenuItem.Click += new System.EventHandler(this.runActionsOnThisEntryToolStripMenuItem_Click);
-            // 
-            // setNoteToolStripMenuItem
-            // 
-            this.setNoteToolStripMenuItem.Name = "setNoteToolStripMenuItem";
-            this.setNoteToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
-            this.setNoteToolStripMenuItem.Text = "Set Note";
-            this.setNoteToolStripMenuItem.Click += new System.EventHandler(this.setNoteToolStripMenuItem_Click);
-            // 
-            // writeEventInfoToLogDebugToolStripMenuItem
-            // 
-            this.writeEventInfoToLogDebugToolStripMenuItem.Name = "writeEventInfoToLogDebugToolStripMenuItem";
-            this.writeEventInfoToLogDebugToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
-            this.writeEventInfoToLogDebugToolStripMenuItem.Text = "Write event info to Log (Debug)";
-            this.writeEventInfoToLogDebugToolStripMenuItem.Click += new System.EventHandler(this.writeEventInfoToLogDebugToolStripMenuItem_Click);
-            // 
-            // writeJournalToLogtoolStripMenuItem
-            // 
-            this.writeJournalToLogtoolStripMenuItem.Name = "writeJournalToLogtoolStripMenuItem";
-            this.writeJournalToLogtoolStripMenuItem.Size = new System.Drawing.Size(293, 22);
-            this.writeJournalToLogtoolStripMenuItem.Text = "Write Journal Entry to Log (Debug)";
-            this.writeJournalToLogtoolStripMenuItem.Click += new System.EventHandler(this.writeJournalToLogtoolStripMenuItem_Click);
-            // 
-            // copyJournalEntryToClipboardToolStripMenuItem
-            // 
-            this.copyJournalEntryToClipboardToolStripMenuItem.Name = "copyJournalEntryToClipboardToolStripMenuItem";
-            this.copyJournalEntryToClipboardToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
-            this.copyJournalEntryToClipboardToolStripMenuItem.Text = "Copy journal entry to clipboard";
-            this.copyJournalEntryToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copyJournalEntryToClipboardToolStripMenuItem_Click);
-            // 
-            // createEditBookmarkToolStripMenuItem
-            // 
-            this.createEditBookmarkToolStripMenuItem.Name = "createEditBookmarkToolStripMenuItem";
-            this.createEditBookmarkToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
-            this.createEditBookmarkToolStripMenuItem.Text = "Create/Edit Bookmark";
-            this.createEditBookmarkToolStripMenuItem.Click += new System.EventHandler(this.createEditBookmarkToolStripMenuItem_Click);
-            // 
-            // toolTip
-            // 
-            this.toolTip.AutoPopDelay = 30000;
-            this.toolTip.InitialDelay = 250;
-            this.toolTip.ReshowDelay = 100;
-            this.toolTip.ShowAlways = true;
+            this.removeSortingOfColumnsToolStripMenuItem.Name = "removeSortingOfColumnsToolStripMenuItem";
+            this.removeSortingOfColumnsToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
+            this.removeSortingOfColumnsToolStripMenuItem.Text = "Remove Sorting of Columns";
+            this.removeSortingOfColumnsToolStripMenuItem.Click += new System.EventHandler(this.removeSortingOfColumnsToolStripMenuItem_Click);
             // 
             // UserControlTravelGrid
             // 
@@ -520,9 +539,9 @@ namespace EDDiscovery.UserControls
             this.Size = new System.Drawing.Size(870, 610);
             this.TopPanel.ResumeLayout(false);
             this.TopPanel.PerformLayout();
+            this.historyContextMenu.ResumeLayout(false);
             this.dataViewScrollerPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTravel)).EndInit();
-            this.historyContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -553,11 +572,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemStartStop;
         private System.Windows.Forms.ToolStripMenuItem removeJournalEntryToolStripMenuItem;
         private System.Windows.Forms.ToolTip toolTip;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTime;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Icon;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnSystem;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDistance;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNote;
         private ExtendedControls.ButtonExt buttonField;
         private System.Windows.Forms.ToolStripMenuItem sendUnsyncedScanToEDDNToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem runActionsOnThisEntryToolStripMenuItem;
@@ -568,5 +582,12 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.CheckBoxCustom checkBoxMoveToTop;
         private System.Windows.Forms.ToolStripMenuItem createEditBookmarkToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem writeJournalToLogtoolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem runActionsAcrossSelectionToolSpeechStripMenuItem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Icon;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnSystem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDistance;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNote;
+        private System.Windows.Forms.ToolStripMenuItem removeSortingOfColumnsToolStripMenuItem;
     }
 }
