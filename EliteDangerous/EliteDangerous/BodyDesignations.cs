@@ -1934,6 +1934,19 @@ namespace EliteDangerousCore
             { "CD-43 11917", new Dictionary<string, string> {
                 { "Ares", "CD-43 11917 1" }
             } },
+            { "Hypuae Aim ZP-R b48-0", new Dictionary<string, string>
+            {
+                { "Travis Green", "Hypuae Aim ZP-R b48-0 1" }
+            } },
+            { "HR 7291", new Dictionary<string, string>
+            {
+                { "Rick's Retreat", "HR 7291 7 d" },
+                { "Annette's Paradise", "HR 7291 7 e" }
+            } },
+            { "Pepper", new Dictionary<string, string>
+            {
+                { "Pepper", "Pepper A 1" }
+            } },
         };
 
         public struct DesigMap
@@ -1968,6 +1981,22 @@ namespace EliteDangerousCore
                 { 1, new DesigMap("m Centauri", "m Centauri A", true) },
                 { 2, new DesigMap("M Centauri", "m Centauri B", true) }
             } },
+            { "39 Omicron Ophiuchi", new Dictionary<int, DesigMap>
+            {
+                { 1, new DesigMap("39 Omicron Ophiuchi", "39 Omicron Ophiuchi A") },
+                { 2, new DesigMap("39 Omicron Ophiuchi", "39 Omicron Ophiuchi B") }
+            } },
+            { "74 Psi-1 Piscium", new Dictionary<int, DesigMap>
+            {
+                { 1, new DesigMap("74 Psi-1 Piscium", "74 Psi-1 Piscium A") },
+                { 2, new DesigMap("74 Psi-1 Piscium", "74 Psi-1 Piscium B") }
+            } },
+            { "UCAC3 70-2386", new Dictionary<int, DesigMap>
+            {
+                { 1, new DesigMap("UCAC3 70-2386", "UCAC3 70-2386 A") },
+                { 2, new DesigMap("UCAC3 70-2386", "UCAC3 70-2386 B") }
+            } },
+
         };
     }
 }
