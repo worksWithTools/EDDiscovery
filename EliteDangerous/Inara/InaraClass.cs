@@ -75,7 +75,7 @@ namespace EliteDangerousCore.Inara
             return Header;
         }
 
-        public List<int> SendEvents(List<InaraEvent> ievents)
+        public List<long> SendEvents(List<InaraEvent> ievents)
         {
             JObject data = new JObject();
 
@@ -98,11 +98,11 @@ namespace EliteDangerousCore.Inara
         /// </summary>
         /// <param name="msg"></param>
         /// <returns>List with customID that ruturned OK from Inara.  Use this to Set Inara sync flag later. </returns>
-        public List<int> PostMessage(JObject msg)
+        public List<long> PostMessage(JObject msg)
         {
             try
             {
-                List<int> ListOkeventID = new List<int>();
+                List<long> ListOkeventID = new List<long>();
                 BaseUtils.ResponseData resp = RequestPost(msg.ToString(), "");
 
                 JObject result = JObject.Parse(resp.Body);
@@ -119,7 +119,7 @@ namespace EliteDangerousCore.Inara
                     {
                         foreach (JObject jo in results)
                         {
-                            int id = jo["eventCustomID"].Int();
+                            long id = jo["eventCustomID"].Long();
                             if (jo["eventStatus"].Int() == 200 && id != 0)
                                 ListOkeventID.Add(id);
                         }

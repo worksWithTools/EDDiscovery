@@ -16,27 +16,59 @@ namespace EliteDangerous.Inara
         static EDCommander CurrentCmdr;
         static HistoryEntry lastrank;
         static ConcurrentQueue<InaraEvent> eventQueue = new ConcurrentQueue<InaraEvent>();
-        static ConcurrentQueue<int> journalIDQueue = new ConcurrentQueue<int>();
-        private bool flushEventue;
+        static ConcurrentQueue<long> journalIDQueue = new ConcurrentQueue<long>();
+        static private bool flushEventQueue;
         private static Thread ThreadEGOSync;
         private static int _running = 0;
         private static bool Exit = false;
 
         private static void QueueEvent(EDCommander cmdr, InaraEvent ie)
         {
-            // TODO Test if new comander
-            CurrentCmdr = cmdr;
+            lock (eventQueue)
+            {
+                if (CurrentCmdr == null)
+                    CurrentCmdr = cmdr;
+
+                if (CurrentCmdr.Nr != cmdr.Nr)
+                {
+                    FlushQueue(true);
+                    CurrentCmdr = cmdr;
+                }
+
+            }
             eventQueue.Enqueue(ie);
+            
+        }
+
+        /// <summary>
+        /// Flush eventqueue
+        /// </summary>
+        /// <param name="wait">if true wait intill flushed.</param>
+        public static void FlushQueue(bool wait)
+        {
+            flushEventQueue = true;
+
+            if (wait)
+            {
+                Start();
+
+                while (flushEventQueue)
+                {
+                    Thread.Sleep(10);
+                }
+
+            }
+
         }
 
 
 
-        public void Start()
+        public static void Start()
         {
             if (Interlocked.CompareExchange(ref _running, 1, 0) == 0)
             {
                 Exit = false;
-                ThreadEGOSync = new System.Threading.Thread(new System.Threading.ThreadStart(SyncThread));
+                ThreadEGOSync = new System.Threading.Thread(new System.Threading.ThreadStart(InaraSync.SyncThread));
                 ThreadEGOSync.Name = "Inara Sync";
                 ThreadEGOSync.IsBackground = true;
                 ThreadEGOSync.Start();
@@ -51,34 +83,42 @@ namespace EliteDangerous.Inara
         }
 
 
-        private void SyncThread()
+        private static void SyncThread()
         {
             List<InaraEvent> inaraevents = new List<InaraEvent>();
 
             try
             {
+                DateTime firstqueuetime=default(DateTime);
                 _running = 1;
                 //mainForm.LogLine("Starting EGO sync thread");
-
-
 
                 while (!Exit)
                 {
 
                     while (eventQueue.TryDequeue(out InaraEvent ie))
                     {
+                        if (inaraevents.Count == 0)  // First in queue set time
+                            firstqueuetime = DateTime.UtcNow;
                         inaraevents.Add(ie);
                     }
 
 
-                    // Time to flush
+                    // Time to flush?
+                    if (inaraevents.Count > 0 && DateTime.UtcNow.Subtract(firstqueuetime).TotalSeconds > 10)
+                        flushEventQueue = true;
 
-                    if (flushEventue)
+                    if (inaraevents.Count > 50)
+                        flushEventQueue = true;
+
+
+                    if (flushEventQueue)
                     {
-                        flushEventue = false;
+                        flushEventQueue = false;
                         InaraClass inara = new InaraClass(CurrentCmdr);
-                        List<int> jidList = inara.SendEvents(inaraevents);
+                        List<long> jidList = inara.SendEvents(inaraevents);
                         inaraevents.Clear();
+
 
                         if (jidList != null)
                             foreach (int jid in jidList)
@@ -86,8 +126,23 @@ namespace EliteDangerous.Inara
                     }
 
 
-                  
-                    Thread.Sleep(100);   // Throttling 
+                    // Uppdate journalids
+                    while (journalIDQueue.TryDequeue(out long JournalID))
+                    {
+                        try
+                        {
+                            JournalEntry.UpdateSyncFlagBit(JournalID, SyncFlags.Inara, true);
+
+                        }
+                        catch (Exception ex)
+                        {
+                            System.Diagnostics.Trace.WriteLine("Inara.UpdateSyncFlagBit exception ex:" + ex.Message);
+                            //logger?.Invoke("Inara sync Exception " + ex.Message);
+                        }
+                    }
+
+
+                    Thread.Sleep(20);   // Throttling 
 
                 }
 
