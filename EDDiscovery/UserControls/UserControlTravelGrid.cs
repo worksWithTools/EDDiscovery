@@ -114,6 +114,7 @@ namespace EDDiscovery.UserControls
 #if !DEBUG
             writeEventInfoToLogDebugToolStripMenuItem.Visible = false;
             writeJournalToLogtoolStripMenuItem.Visible = false;
+            runActionsAcrossSelectionToolSpeechStripMenuItem.Visible = false;
 #endif
 
             searchtimer = new Timer() { Interval = 500 };
@@ -145,25 +146,38 @@ namespace EDDiscovery.UserControls
             HistoryChanged(discoveryform.history);
         }
 
+        int fdropdown, ftotalevents, ftotalfilters;     // filter totals
         public void HistoryChanged(HistoryList hl)           // on History change
+        {
+            HistoryChanged(hl, false);
+        }
+
+        public void HistoryChanged(HistoryList hl, bool disablesorting)           // on History change
         {
             if (hl == null)     // just for safety
                 return;
 
             current_historylist = hl;
+
             Tuple<long, int> pos = CurrentGridPosByJID();
+
+            SortOrder sortorder = dataGridViewTravel.SortOrder;
+            int sortcol = dataGridViewTravel.SortedColumn?.Index ?? -1;
+            if (sortcol >= 0 && disablesorting)
+            {
+                dataGridViewTravel.Columns[sortcol].HeaderCell.SortGlyphDirection = SortOrder.None;
+                sortcol = -1;
+            }
 
             var filter = (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
 
             List<HistoryEntry> result = filter.Filter(hl);
+            fdropdown = hl.Count() - result.Count();
 
-            int ftotal;
-            result = HistoryList.FilterByJournalEvent(result, SQLiteDBClass.GetSettingString(DbFilterSave, "All"), out ftotal);
-            toolTip.SetToolTip(buttonFilter, (ftotal > 0) ? ("Total filtered out " + ftotal) : "Filter out entries based on event type");
+            result = HistoryList.FilterByJournalEvent(result, SQLiteDBClass.GetSettingString(DbFilterSave, "All"), out ftotalevents);
+            result = FilterHelpers.FilterHistory(result, fieldfilter, discoveryform.Globals, out ftotalfilters);
 
-            result = FilterHelpers.FilterHistory(result, fieldfilter, discoveryform.Globals, out ftotal);
-            toolTip.SetToolTip(buttonField, (ftotal > 0) ? ("Total filtered out " + ftotal) : "Filter out entries matching the field selection");
-
+            
             dataGridViewTravel.Rows.Clear();
             rowsbyjournalid.Clear();
 
@@ -173,6 +187,8 @@ namespace EDDiscovery.UserControls
             }
 
             StaticFilters.FilterGridView(dataGridViewTravel, textBoxFilter.Text);
+
+            UpdateToolTipsForFilter();
 
             int rowno = FindGridPosByJID(pos.Item1, true);     // find row.. must be visible..  -1 if not found/not visible
 
@@ -190,12 +206,32 @@ namespace EDDiscovery.UserControls
 
             dataGridViewTravel.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time" : "Time";
 
+            if (sortcol >= 0)
+            {
+                dataGridViewTravel.Sort(dataGridViewTravel.Columns[sortcol], (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
+                dataGridViewTravel.Columns[sortcol].HeaderCell.SortGlyphDirection = sortorder;
+            }
+
             FireChangeSelection();      // and since we repainted, we should fire selection, as we in effect may have selected a new one
         }
 
         private void AddNewEntry(HistoryEntry he, HistoryList hl)           // on new entry from discovery system
         {
-            bool add = WouldAddEntry(he);
+            bool add = he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All"));
+
+            if (!add)                   // filtered out, update filter total and display
+            {
+                ftotalevents++;
+                UpdateToolTipsForFilter();
+            }
+
+            if (add && !FilterHelpers.FilterHistory(he, fieldfilter, discoveryform.Globals))
+            {
+                add = false;
+                ftotalfilters++;
+                UpdateToolTipsForFilter();
+            }
+            
             if (add)
                 AddNewHistoryRow(true, he);
 
@@ -279,9 +315,20 @@ namespace EDDiscovery.UserControls
 #endif
         }
 
-        public bool WouldAddEntry(HistoryEntry he)                  // do we filter? if its not in the journal event filter, or it is in the field filter
+        private void UpdateToolTipsForFilter()
         {
-            return he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")) && FilterHelpers.FilterHistory(he, fieldfilter, discoveryform.Globals);
+            string ms = " showing " + dataGridViewTravel.Rows.Count + " original " + (current_historylist?.Count()??0);
+            comboBoxHistoryWindow.SetTipDynamically(toolTip, fdropdown > 0 ? ("Filtered " + fdropdown + ms) : "Select the entries by age, " + ms);
+            toolTip.SetToolTip(buttonFilter, (ftotalevents > 0) ? ("Filtered " + ftotalevents + ms) : "Filter out entries based on event type, " + ms);
+            toolTip.SetToolTip(buttonField, (ftotalfilters > 0) ? ("Total filtered out " + ftotalfilters + ms) : "Filter out entries matching the field selection, " + ms);
+        }
+
+        private void dataGridViewTravel_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+        {
+            if ( e.Column.Index == 0 )
+            {
+                e.SortDataGridViewColumnDate();
+            }
         }
 
         Tuple<long, int> CurrentGridPosByJID()          // Returns JID, column index.  JID = -1 if cell is not defined
@@ -317,15 +364,6 @@ namespace EDDiscovery.UserControls
             if (current_historylist != null)
             {
                 HistoryChanged(current_historylist);        // fires lots of events
-            }
-        }
-
-        private void dataGridViewTravel_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            if (e.ColumnIndex != TravelHistoryColumns.Icon)
-            {
-                DataGridViewSorter.DataGridSort(dataGridViewTravel, e.ColumnIndex);
-                FireChangeSelection();
             }
         }
 
@@ -600,6 +638,12 @@ namespace EDDiscovery.UserControls
             viewOnEDSMToolStripMenuItem.Enabled = (rightclicksystem != null);
             removeJournalEntryToolStripMenuItem.Enabled = (rightclicksystem != null);
             sendUnsyncedScanToEDDNToolStripMenuItem.Enabled = (rightclicksystem != null && rightclicksystem.EntryType == JournalTypeEnum.Scan && !rightclicksystem.EDDNSync);
+            removeSortingOfColumnsToolStripMenuItem.Enabled = dataGridViewTravel.SortedColumn != null;
+        }
+
+        private void removeSortingOfColumnsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            HistoryChanged(current_historylist, true);
         }
 
         private void mapGotoStartoolStripMenuItem_Click(object sender, EventArgs e)
@@ -935,10 +979,52 @@ namespace EDDiscovery.UserControls
             if (rightclicksystem != null && rightclicksystem.journalEntry != null)
             {
                 Newtonsoft.Json.Linq.JObject jo = rightclicksystem.journalEntry.GetJson();
-                string json = jo?.ToString();
+                string json = jo?.ToString(Newtonsoft.Json.Formatting.None);
                 if (json != null)
                 {
                     Clipboard.SetText(json);
+                }
+            }
+        }
+
+        private void runActionsAcrossSelectionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string laststring = "";
+            string lasttype = "";
+            int lasttypecount = 0;
+
+            discoveryform.DEBUGGETAC.AsyncMode = false;     // to force it to do all the action code before returning..
+
+            if (dataGridViewTravel.SelectedRows.Count > 0)
+            {
+                List<DataGridViewRow> rows = (from DataGridViewRow x in dataGridViewTravel.SelectedRows where x.Visible orderby x.Index select x).ToList();
+                foreach (DataGridViewRow rw in rows)
+                {
+                    HistoryEntry he = rw.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry;
+                    // System.Diagnostics.Debug.WriteLine("Row " + rw.Index + " " + he.EventSummary + " " + he.EventDescription);
+
+
+                    bool same = he.journalEntry.EventTypeStr.Equals(lasttype);
+                    if (!same || lasttypecount < 10)
+                    {
+                        lasttype = he.journalEntry.EventTypeStr;
+                        lasttypecount = (same) ? ++lasttypecount : 0;
+
+                        discoveryform.DEBUGGETAC.SetPeristentGlobal("GlobalSaySaid", "");
+                        Conditions.ConditionFunctionHandlers.SetRandom(new Random(rw.Index + 1));
+                        discoveryform.ActionRunOnEntry(he, Actions.ActionEventEDList.UserRightClick(he));
+
+                        Newtonsoft.Json.Linq.JObject jo = he.journalEntry.GetJson();
+                        string json = jo?.ToString(Newtonsoft.Json.Formatting.None);
+
+                        string s = discoveryform.DEBUGGETAC.Globals["GlobalSaySaid"];
+
+                        if (s.Length > 0 && !s.Equals(laststring))
+                        {
+                            System.Diagnostics.Debug.WriteLine("Call ts(j='" + json.Replace("'", "\\'") + "',s='" + s.Replace("'", "\\'") + "',r=" + (rw.Index + 1).ToStringInvariant() + ")");
+                            laststring = s;
+                        }
+                    }
                 }
             }
         }
@@ -988,17 +1074,19 @@ namespace EDDiscovery.UserControls
 
         private void EventFilterChanged(object sender, EventArgs e)
         {
-            HistoryChanged(current_historylist);
+            HistoryChanged(current_historylist,true);
         }
 
         private void buttonField_Click(object sender, EventArgs e)
         {
             Conditions.ConditionFilterForm frm = new Conditions.ConditionFilterForm();
+            List<string> namelist = new List<string>() { "Note" };
+            namelist.AddRange(discoveryform.Globals.NameList);
             frm.InitFilter("History: Filter out fields",
                             System.Drawing.Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location),
                             JournalEntry.GetListOfEventsWithOptMethod(false),
                             (s) => { return BaseUtils.FieldNames.GetPropertyFieldNames(JournalEntry.TypeOfJournalEntry(s)); },
-                            discoveryform.Globals.NameList, fieldfilter);
+                            namelist, fieldfilter);
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
             {
                 fieldfilter = frm.result;

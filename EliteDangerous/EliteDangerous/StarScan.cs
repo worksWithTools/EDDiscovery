@@ -32,6 +32,7 @@ namespace EliteDangerousCore
         Dictionary<string, List<SystemNode>> scandataByName = new Dictionary<string, List<SystemNode>>();
         private static Dictionary<string, Dictionary<string, string>> planetDesignationMap = new Dictionary<string, Dictionary<string, string>>(StringComparer.InvariantCultureIgnoreCase);
         private static Dictionary<string, Dictionary<string, string>> starDesignationMap = new Dictionary<string, Dictionary<string, string>>(StringComparer.InvariantCultureIgnoreCase);
+        private static Dictionary<string, Dictionary<int, BodyDesignations.DesigMap>> bodyIdDesignationMap = new Dictionary<string, Dictionary<int, BodyDesignations.DesigMap>>(StringComparer.InvariantCultureIgnoreCase);
         private static Dictionary<string, List<JournalScan>> primaryStarScans = new Dictionary<string, List<JournalScan>>(StringComparer.InvariantCultureIgnoreCase);
 
         public class SystemNode
@@ -251,7 +252,7 @@ namespace EliteDangerousCore
         // used by historylist directly for a single update during play, in foreground..  Also used by above.. so can be either in fore/back
         public bool AddBodyToBestSystem(IBodyNameAndID je, int startindex, List<HistoryEntry> hl, out HistoryEntry he, out JournalLocOrJump jl)
         {
-            if (je.Body == null || je.BodyType == "Station")
+            if (je.Body == null || je.BodyType == "Station" || je.BodyType == "PlanetaryRing" || je.BodyType == "SmallBody")
             {
                 he = null;
                 jl = null;
@@ -509,7 +510,7 @@ namespace EliteDangerousCore
                         elements = new List<string> { "Main Star", elements[0] + " " + elements[1], elements[2] + " " + elements[3] };
                         isbeltcluster = true;
                     }
-                    else if (elements.Count == 5 && elements[0].Length == 1 &&
+                    else if (elements.Count == 5 && elements[0].Length >= 1 &&
                             elements[1].Length == 1 && char.IsLetter(elements[1][0]) &&
                             elements[2].Equals("belt", StringComparison.InvariantCultureIgnoreCase) &&
                             elements[3].Equals("cluster", StringComparison.InvariantCultureIgnoreCase))
@@ -563,7 +564,7 @@ namespace EliteDangerousCore
                         elements = new List<string> { "Main Star", elements[0] + " " + elements[1], elements[2] + " " + elements[3] };
                         isbeltcluster = true;
                     }
-                    else if (elements.Count == 5 && elements[0].Length == 1 &&
+                    else if (elements.Count == 5 && elements[0].Length >= 1 &&
                             elements[1].Length == 1 && char.IsLetter(elements[1][0]) &&
                             elements[2].Equals("belt", StringComparison.InvariantCultureIgnoreCase) &&
                             elements[3].Equals("cluster", StringComparison.InvariantCultureIgnoreCase))
@@ -820,9 +821,14 @@ namespace EliteDangerousCore
                     ScanNode belt;
                     string beltname = ring.Name;
                     string stardesig = sc.BodyDesignation ?? sc.BodyName;
+
                     if (beltname.StartsWith(stardesig, StringComparison.InvariantCultureIgnoreCase))
                     {
                         beltname = beltname.Substring(stardesig.Length).Trim();
+                    }
+                    else if (stardesig.ToLowerInvariant() == "lave" && beltname.ToLowerInvariant() == "castellan belt")
+                    {
+                        beltname = "A Belt";
                     }
 
                     if (node.children == null || !node.children.TryGetValue(beltname, out belt))
@@ -834,6 +840,7 @@ namespace EliteDangerousCore
                         {
                             ownname = beltname,
                             fullname = node.fullname + " " + beltname,
+                            customname = ring.Name,
                             ScanData = null,
                             BeltData = ring,
                             children = null,
@@ -843,6 +850,8 @@ namespace EliteDangerousCore
 
                         node.children.Add(beltname, belt);
                     }
+
+                    belt.BeltData = ring;
                 }
             }
         }
@@ -907,6 +916,12 @@ namespace EliteDangerousCore
         private string GetBodyDesignation(JournalScan je, string system)
         {
             Dictionary<string, Dictionary<string, string>> desigmap = je.IsStar ? starDesignationMap : planetDesignationMap;
+            int bodyid = je.BodyID ?? -1;
+
+            if (je.BodyID != null && bodyIdDesignationMap.ContainsKey(system) && bodyIdDesignationMap[system].ContainsKey(bodyid) && bodyIdDesignationMap[system][bodyid].NameEquals(je.BodyName))
+            {
+                return bodyIdDesignationMap[system][bodyid].Designation;
+            }
 
             // Special case for m Centauri
             if (je.IsStar && system.ToLowerInvariant() == "m centauri")
@@ -918,6 +933,22 @@ namespace EliteDangerousCore
                 else if (je.BodyName == "M Centauri")
                 {
                     return "m Centauri B";
+                }
+            }
+
+            // Special case for 9 Aurigae
+            if (je.IsStar && system.ToLowerInvariant() == "9 Aurigae")
+            {
+                if (je.BodyName == "9 Aurigae C")
+                {
+                    if (je.nSemiMajorAxis > 1e13)
+                    {
+                        return "9 Aurigae D";
+                    }
+                    else
+                    {
+                        return "9 Aurigae C";
+                    }
                 }
             }
 
@@ -962,6 +993,12 @@ namespace EliteDangerousCore
             string system = je.StarSystem;
             string bodyname = je.Body;
             bool isstar = je.BodyType == "Star";
+            int bodyid = je.BodyID ?? -1;
+
+            if (je.BodyID != null && bodyIdDesignationMap.ContainsKey(system) && bodyIdDesignationMap[system].ContainsKey(bodyid) && bodyIdDesignationMap[system][bodyid].NameEquals(bodyname))
+            {
+                return bodyIdDesignationMap[system][bodyid].Designation;
+            }
 
             Dictionary<string, Dictionary<string, string>> desigmap = isstar ? starDesignationMap : planetDesignationMap;
 
@@ -976,6 +1013,11 @@ namespace EliteDangerousCore
                 {
                     return "m Centauri B";
                 }
+            }
+            // Special case for Castellan Belt
+            else if (system.ToLowerInvariant() == "lave" && bodyname.StartsWith("Castellan Belt ", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return "Lave A Belt " + bodyname.Substring("Castellan Belt ".Length);
             }
 
             if (desigmap.ContainsKey(system) && desigmap[system].ContainsKey(bodyname))
@@ -1105,6 +1147,19 @@ namespace EliteDangerousCore
                     foreach (var bkvp in skvp.Value)
                     {
                         planetDesignationMap[skvp.Key][bkvp.Key] = bkvp.Value;
+                    }
+                }
+
+                foreach (var skvp in BodyDesignations.ByBodyId)
+                {
+                    if (!bodyIdDesignationMap.ContainsKey(skvp.Key))
+                    {
+                        bodyIdDesignationMap[skvp.Key] = new Dictionary<int, BodyDesignations.DesigMap>();
+                    }
+
+                    foreach (var bkvp in skvp.Value)
+                    {
+                        bodyIdDesignationMap[skvp.Key][bkvp.Key] = bkvp.Value;
                     }
                 }
             }

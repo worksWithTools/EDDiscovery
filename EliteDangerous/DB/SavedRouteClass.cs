@@ -13,6 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EMK.LightGeometry;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -261,114 +262,174 @@ namespace EliteDangerousCore.DB
             }
         }
 
-        public double CumulativeDistance()
+        public List<ISystem> KnownSystemList()          // list of known system only.  ID holds original index of entry from Systems
         {
-            ISystem last = null;
-            double distance = 0;
-
+            List<ISystem> list = new List<ISystem>();
             for (int i = 0; i < Systems.Count; i++)
             {
-                ISystem s = SystemClassDB.GetSystem(Systems[i]);
+                ISystem s = SystemCache.FindSystem(Systems[i]);
                 if (s != null)
                 {
-                    if (last != null)
-                        distance += s.Distance(last);
-
-                    last = s;
+                    s.ID = i;
+                    list.Add(s);
                 }
             }
+
+            return list;
+        }
+
+
+        public double CumulativeDistance(ISystem start = null, List<ISystem> knownsystems = null)   // optional first system to measure from
+        {
+            if ( knownsystems == null )
+                knownsystems = KnownSystemList();
+
+            double distance = 0;
+            int i = 0;
+
+            if ( start != null)
+            {
+                i = knownsystems.FindIndex(x => x.Name.Equals(start.Name, StringComparison.InvariantCultureIgnoreCase));
+                if (i == -1)
+                    return -1;
+            }
+
+            for (i++; i < knownsystems.Count; i++)                          // from 1, or 1 past found, to end, accumulate distance
+                distance += knownsystems[i].Distance(knownsystems[i-1]);
 
             return distance;
         }
 
-        public ISystem PosAlongRoute(double percentage)             // go along route and give me a co-ord along it..
+
+        public ISystem PosAlongRoute(double percentage, int error = 0)             // go along route and give me a co-ord along it..
         {
-            double dist = CumulativeDistance() * percentage / 100.0;
+            List<ISystem> knownsystems = KnownSystemList();
 
-            ISystem last = null;
+            double totaldist = CumulativeDistance(null,knownsystems);
+            double distleft = totaldist * percentage / 100.0;
 
-            for (int i = 0; i < Systems.Count; i++)
+            if (knownsystems.Count < 2)     // need a path
+                return null;
+
+            Point3D syspos = null;
+            string name = "";
+
+            if (percentage < 0 || percentage > 100)                         // not on route, interpolate to/from
             {
-                ISystem s = SystemClassDB.GetSystem(Systems[i]);
-                if (s != null)
-                {
-                    if (last != null)
-                    {
-                        double d = s.Distance(last);
+                int i = (percentage < 0) ? 0 : knownsystems.Count - 2;      // take first two, or last two.
 
-                        if (dist < d)
-                        {
-                            d = dist / d;
-
-                            return new SystemClass("WP" + (i).ToString() + "-" + "WP" + (i + 1).ToString() + "-" + d.ToString("#.00"), last.X + (s.X - last.X) * d, last.Y + (s.Y - last.Y) * d, last.Z + (s.Z - last.Z) * d);
-                        }
-
-                        dist -= d;
-                    }
-
-                    last = s;
-                }
-            }
-
-            return last;
-        }
-
-        // given the system list, which is the next waypoint to go to.  return the system (or null if not available or past end) and the waypoint.. (0 based)
-
-        public Tuple<ISystem, int> ClosestTo(ISystem sys)
-        {
-            double dist = Double.MaxValue;
-            ISystem found = null;
-            int closest = -1;
-
-            List<ISystem> list = new List<ISystem>();
-
-            for (int i = 0; i < Systems.Count; i++)
-            {
-                ISystem s = SystemClassDB.GetSystem(Systems[i]);
-
-                if (s != null)
-                {
-                    double sd = s.Distance(sys);
-                    if (sd < dist)
-                    {
-                        dist = sd;
-                        closest = i;
-                        found = s;
-                    }
-                }
-                list.Add(s);
-            }
-
-
-            if (found != null)
-            {
-                //System.Diagnostics.Debug.WriteLine("Found at " + closest + " System " + found.name + " " + found.x + " " + found.y + " " + found.z + " dist " + dist);
-
-                if (closest > 0)
-                {
-                    int lastentry = closest - 1;
-                    while (lastentry >= 0 && list[lastentry] == null)       // go and find the last one which had a position..
-                        lastentry--;
-
-                    if (lastentry >= 0 && list[lastentry] != null)      // found it, so work out using distance if we are closest to last or past it
-                    {
-                        double distlasttoclosest = list[closest].Distance(list[lastentry]);     // last->closest vs
-                        double distlasttocur = sys.Distance(list[lastentry]);                   // last->cur position
-
-                        if (distlasttocur > distlasttoclosest - 0.1)   // past current because the distance last->cur > last->closest waypoint
-                        {
-                            return new Tuple<ISystem, int>(closest < Systems.Count - 1 ? list[closest + 1] : null, closest + 1); // en-route to this. may be null
-                        }
-                        else
-                            return new Tuple<ISystem, int>(found, closest); // en-route to this
-                    }
-                }
-
-                return new Tuple<ISystem, int>(found, closest);
+                Point3D pos1 = P3D(knownsystems[i]);
+                Point3D pos2 = P3D(knownsystems[i + 1]);
+                double p12dist = pos1.Distance(pos2);
+                double pospath = (percentage > 100) ? (1.0 + (percentage - 100) * totaldist / p12dist / 100.0) : (percentage * totaldist / p12dist / 100.0);
+                syspos = pos1.PointAlongPath(pos2, pospath );       // amplify percentage by totaldist/this path dist
+                name = "System at " + percentage.ToString("N1");
             }
             else
+            {
+                for (int i = 1; i < knownsystems.Count; i++)
+                {
+                    double d = knownsystems[i].Distance(knownsystems[i - 1]);
+
+                    if (distleft<d || (i==knownsystems.Count-1))        // if left, OR last system (allows for some rounding errors on floats)
+                    {
+                        d = distleft / d;
+                        //System.Diagnostics.Debug.WriteLine(percentage + " " + d + " last:" + last.X + " " + last.Y + " " + last.Z + " s:" + s.X + " " + s.Y + " " + s.Z);
+                        name = "WP" + knownsystems[i - 1].ID.ToString() + "-" + "WP" + knownsystems[i].ID.ToString() + "-" + d.ToString("#.00");
+                        syspos = new Point3D(knownsystems[i - 1].X + (knownsystems[i].X - knownsystems[i - 1].X) * d, knownsystems[i - 1].Y + (knownsystems[i].Y - knownsystems[i - 1].Y) * d, knownsystems[i - 1].Z + (knownsystems[i].Z - knownsystems[i - 1].Z) * d);
+                        break;
+                    }
+
+                    distleft -= d;
+                }
+            }
+
+            if (error > 0)
+                return new SystemClass(name, syspos.X + rnd.Next(error), syspos.Y + rnd.Next(error), syspos.Z + rnd.Next(error));
+            else
+                return new SystemClass(name, syspos.X, syspos.Y, syspos.Z);
+        }
+
+        Random rnd = new Random();
+
+        // given the system list, which is the next waypoint to go to.  return the system (or null if not available or past end) and the waypoint.. (0 based) and the distance on the path left..
+
+        public class ClosestInfo
+        {
+            public ISystem system;
+            public int waypoint;                    // index of Systems
+            public double deviation;                // -1 if not on path
+            public double cumulativewpdist;         // distance after the WP, 0 means no more WPs after this
+            public double disttowaypoint;           // distance to WP
+            public ClosestInfo( ISystem s, int w, double dv, double wdl, double dtwp) { system = s; waypoint = w; deviation = dv; cumulativewpdist = wdl; disttowaypoint = dtwp; }
+        }
+
+        static Point3D P3D(ISystem s)
+        {
+            return new Point3D(s.X, s.Y, s.Z);
+        }
+
+        public ClosestInfo ClosestTo(ISystem currentsystem)
+        {
+            Point3D currentsystemp3d = P3D(currentsystem);
+
+            List<ISystem> knownsystems = KnownSystemList();
+
+            if (knownsystems.Count < 1)     // need at least one
                 return null;
+
+            double mininterceptdist = Double.MaxValue;
+            int interceptendpoint = -1;
+
+            double closesttodist = Double.MaxValue;
+            int closestto = -1;
+
+            for (int i = 0; i < knownsystems.Count; i++)
+            {
+                if (i > 0)
+                {
+                    Point3D lastp3d = P3D(knownsystems[i - 1]);
+                    Point3D top3d = P3D(knownsystems[i]);
+
+                    double distbetween = lastp3d.Distance(top3d);
+
+                    double interceptpercent = lastp3d.InterceptPercentageDistance(top3d, currentsystemp3d, out double dist);       //dist to intercept point on line note.
+                    //System.Diagnostics.Debug.WriteLine("From " + knownsystems[i - 1].ToString() + " to " + knownsystems[i].ToString() + " Percent " + interceptpercent + " Distance " + dist);
+
+                    // allow a little margin in the intercept point for randomness, must be min dist, and not stupidly far.
+                    if (interceptpercent >= -0.01 && interceptpercent < 1.01 && dist < mininterceptdist && dist < distbetween)
+                    {
+                        interceptendpoint = i;
+                        mininterceptdist = dist;
+                    }
+                }
+
+                double disttofirstpoint = currentsystemp3d.Distance(P3D(knownsystems[i]));
+
+                if (disttofirstpoint < closesttodist)
+                {
+                    closesttodist = disttofirstpoint;
+                    closestto = i;
+                }
+            }
+
+            int topos = interceptendpoint;     // default value
+
+            if (topos == -1)        // if not on path
+            {
+                topos = closestto;
+                mininterceptdist = -1;
+                //System.Diagnostics.Debug.WriteLine("Not on path, closest to" + knownsystems[closestto].ToString());
+            }
+            else
+            { 
+                //System.Diagnostics.Debug.WriteLine("Lies on line to WP" + interceptendpoint + " " + knownsystems[interceptendpoint].ToString());
+            }
+
+            double distto = currentsystemp3d.Distance(P3D(knownsystems[topos]));
+            double cumldist = CumulativeDistance(knownsystems[topos], knownsystems);
+
+            return new ClosestInfo(knownsystems[topos], (int)knownsystems[topos].ID, mininterceptdist, cumldist, distto);
         }
 
         // Given a set of expedition files, update the DB.  Add any new ones, and make sure the EDSM marker is on.
@@ -394,31 +455,39 @@ namespace EliteDangerousCore.DB
 
                         foreach (SavedRouteClass newentry in array)
                         {
-                            newentry.StartDate = newentry.StartDate.Value.ToLocalTime();      // supplied, and respected by JSON, as zulu time. the stupid database holds local times. Convert.
-                            newentry.EndDate = newentry.EndDate.Value.ToLocalTime();
+                            if (newentry.StartDate.HasValue)
+                                newentry.StartDate = newentry.StartDate.Value.ToLocalTime();      // supplied, and respected by JSON, as zulu time. the stupid database holds local times. Convert.
+                            if (newentry.EndDate.HasValue)
+                                newentry.EndDate = newentry.EndDate.Value.ToLocalTime();
 
                             SavedRouteClass storedentry = stored.Find(x => x.Name.Equals(newentry.Name));
 
                             if (newentry.Systems.Count == 0)              // no systems, means delete the database entry.. use with caution
                             {
-                                if ( storedentry != null )                  // if we have it in the DB, delete it
+                                if (storedentry != null)                // if we have it in the DB, delete it
+                                {
                                     storedentry.Delete();
+                                    changed = true;
+                                }
                             }
                             else
                             {
+                                newentry.EDSM = true;       // if we need to use newentry, then it must be marked as an EDSM one..
+
                                 if (storedentry != null)  // if stored already..
                                 {
                                     if (!storedentry.Systems.SequenceEqual(newentry.Systems)) // systems changed, we need to reset..
                                     {
+                                        bool wasDel = storedentry.Deleted;
                                         storedentry.Delete();   // delete the old one.. systems may be in a different order, and there is no ordering except by ID in the DB
-                                        newentry.EDSM = true;
+                                        newentry.Deleted = wasDel;
                                         newentry.Add();        // add to db..
-                                        changed = true;
+                                        changed = changed || !wasDel;   // If it was marked deleted, don't report it as being changed.
                                     }
-                                    else if (storedentry.EndDate == null || storedentry.StartDate == null || storedentry.EndDate.Value != newentry.EndDate.Value || storedentry.StartDate.Value != newentry.StartDate.Value)    // times change, just update
+                                    else if (storedentry.EndDate != newentry.EndDate || storedentry.StartDate != newentry.StartDate)    // times change, just update
                                     {
-                                        storedentry.StartDate = newentry.StartDate.Value;      // update time and date but keep the expedition ID
-                                        storedentry.EndDate = newentry.EndDate.Value;
+                                        storedentry.StartDate = newentry.StartDate;             // update time and date but keep the expedition ID
+                                        storedentry.EndDate = newentry.EndDate;
                                         storedentry.EDSM = true;
                                         storedentry.Update();
                                         changed = true;
@@ -432,7 +501,6 @@ namespace EliteDangerousCore.DB
                                 }
                                 else
                                 {                   // not there, add it..
-                                    newentry.EDSM = true;
                                     newentry.Add();        // add to db..
                                     changed = true;
                                 }
@@ -449,16 +517,16 @@ namespace EliteDangerousCore.DB
 
         public void TestHarness()       // fly the route and debug the closestto.. keep this for testing
         {
-            for (double percent = 0; percent < 110; percent += 1)
+            for (double percent = -10; percent < 110; percent += 0.1)
             {
-                ISystem cursys = PosAlongRoute(percent);
+                ISystem cursys = PosAlongRoute(percent,100);
                 System.Diagnostics.Debug.WriteLine(Environment.NewLine + "Sys {0} {1} {2} {3}", cursys.X, cursys.Y, cursys.Z, cursys.Name);
 
-                Tuple<ISystem, int> closest = ClosestTo(cursys);
+                ClosestInfo closest = ClosestTo(cursys);
 
                 if (closest != null)
                 {
-                    System.Diagnostics.Debug.WriteLine("Next {0} {1} {2} {3}, index {4}", closest.Item1?.X, closest.Item1?.Y, closest.Item1?.Z, closest.Item1?.Name, closest.Item2);
+                    System.Diagnostics.Debug.WriteLine("Next {0} {1} {2} {3}, index {4} dev {5} dist to wp {6} cumul left {7}", closest.system?.X, closest.system?.Y, closest.system?.Z, closest.system?.Name, closest.waypoint, closest.deviation , closest.disttowaypoint, closest.cumulativewpdist);
                 }
             }
         }

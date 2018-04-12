@@ -36,6 +36,7 @@ namespace EliteDangerousCore.JournalEvents
             Ship = JournalFieldNaming.GetBetterShipName(evt["Ship"].Str());
             ShipId = evt["ShipID"].Int();
             ModuleItems = evt["Items"]?.ToObjectProtected<ModuleItem[]>();
+            MarketID = evt["MarketID"].LongNull();
 
             if ( ModuleItems != null )
             {
@@ -50,10 +51,11 @@ namespace EliteDangerousCore.JournalEvents
         public string Ship { get; set; }
         public string ShipFD { get; set; }
         public int ShipId { get; set; }
+        public long? MarketID { get; set; }
 
         public ModuleItem[] ModuleItems { get; set; }
 
-        public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
+        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
         {
             shp.MassModuleStore(this);
         }

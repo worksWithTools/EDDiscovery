@@ -34,14 +34,17 @@ namespace EliteDangerousCore.JournalEvents
 
             SellItem = JournalFieldNaming.GetBetterItemNameEvents(evt["SellItem"].Str());
             SellItemFD = JournalFieldNaming.NormaliseFDItemName(evt["SellItem"].Str());
-            SellItemLocalised = evt["SellItem_Localised"].Str();
+            SellItemLocalised = evt["SellItem_Localised"].Str().Alt(SellItem);
 
             SellPrice = evt["SellPrice"].Long();
 
             ShipFD = evt["Ship"].Str();
             Ship = JournalFieldNaming.GetBetterShipName(evt["Ship"].Str());
             ShipId = evt["ShipID"].Int();
+
+            MarketID = evt["MarketID"].LongNull();
         }
+
         public string Slot { get; set; }
         public string SlotFD { get; set; }
         public string SellItem { get; set; }
@@ -51,6 +54,7 @@ namespace EliteDangerousCore.JournalEvents
         public string Ship { get; set; }
         public string ShipFD { get; set; }
         public int ShipId { get; set; }
+        public long? MarketID { get; set; }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
@@ -59,14 +63,14 @@ namespace EliteDangerousCore.JournalEvents
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, s + " on " + Ship, SellPrice);
         }
 
-        public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
+        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
         {
             shp.ModuleSell(this);
         }
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("", SellItemLocalised.Alt(SellItem), "< from ", Slot, "Price:; cr;N0", SellPrice);
+            info = BaseUtils.FieldBuilder.Build("", SellItemLocalised, "< from ", Slot, "Price:; cr;N0", SellPrice);
             detailed = "";
         }
 

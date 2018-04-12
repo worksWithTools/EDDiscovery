@@ -681,6 +681,9 @@ namespace ExtendedControls
             {
                 myControl.ForeColor = currentsettings.colors[Settings.CI.label];
                 myControl.Font = fnt;
+
+                if ( myControl is LabelExt )
+                    (myControl as LabelExt).TextBackColor = currentsettings.colors[Settings.CI.form];
             }
             else if (myControl is GroupBoxCustom)
             {
@@ -920,6 +923,12 @@ namespace ExtendedControls
             else if ( myControl is CompositeButton )
             {
                 return;     // no themeing of it or sub controls
+            }
+            else if (myControl is TreeView)
+            {
+                TreeView ctrl = myControl as TreeView;
+                ctrl.ForeColor = currentsettings.colors[Settings.CI.textbox_fore];
+                ctrl.BackColor = currentsettings.colors[Settings.CI.textbox_back];
             }
             else
             {

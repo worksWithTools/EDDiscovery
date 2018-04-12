@@ -47,10 +47,15 @@ namespace BaseUtils
 
         static public string Build(params System.Object[] values)
         {
-            return Build(System.Globalization.CultureInfo.CurrentCulture, values);
+            return Build(System.Globalization.CultureInfo.CurrentCulture, ", ", values);
         }
 
-        static public string Build(System.Globalization.CultureInfo ct, params System.Object[] values)
+        static public string BuildSetPad(string padchars, params System.Object[] values)
+        {
+            return Build(System.Globalization.CultureInfo.CurrentCulture, padchars, values);
+        }
+
+        static public string Build(System.Globalization.CultureInfo ct, string padchars, params System.Object[] values)
         {
             System.Text.StringBuilder sb = new System.Text.StringBuilder(64);
 
@@ -67,13 +72,13 @@ namespace BaseUtils
                 }
                 else if ( first is string )     // normal, string
                 {
-                    System.Diagnostics.Debug.Assert(i + 2 <= values.Length);
+                    System.Diagnostics.Debug.Assert(i + 2 <= values.Length,"Field Builder missing parameter");
 
                     string[] fieldnames = ((string)first).Split(';');
                     object value = values[i + 1];
                     i += 2;
 
-                    string pad = ", ";
+                    string pad = padchars;
                     if (fieldnames[0].Length > 0 && fieldnames[0][0] == '<')
                     {
                         fieldnames[0] = fieldnames[0].Substring(1);

@@ -17,14 +17,14 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Conditions
 {
     public class ConditionVariables
     {
         private Dictionary<string, string> values = new Dictionary<string, string>();
+
+        #region Init
 
         public ConditionVariables()
         {
@@ -37,7 +37,7 @@ namespace Conditions
 
         public ConditionVariables(ConditionVariables other, ConditionVariables other2)      // other can be null, other2 must not be
         {
-            if ( other == null )
+            if (other == null)
                 values = new Dictionary<string, string>(other2.values);
             else
             {
@@ -58,7 +58,7 @@ namespace Conditions
             FromString(s, fm);
         }
 
-        public ConditionVariables(string s, string value)     
+        public ConditionVariables(string s, string value)
         {
             values[s] = value;
         }
@@ -66,13 +66,23 @@ namespace Conditions
         public ConditionVariables(string[] s) // name,value,name,value..
         {
             System.Diagnostics.Debug.Assert(s.Length % 2 == 0);
-            for (int i = 0; i < s.Length; i+=2)
-                values[s[i]] = s[i+1];
+            for (int i = 0; i < s.Length; i += 2)
+                values[s[i]] = s[i + 1];
         }
 
-        public string this[string s] { get { return values[s]; } set { values[s] = value; } }       // can be set NULL
+        public ConditionVariables(ConditionVariables other, string name, string value)
+        {
+            values = new Dictionary<string, string>(other.values);
+            values[name] = value;
+        }
+
+        #endregion
+
+        #region Read/Set
 
         public int Count { get { return values.Count; } }
+
+        public string this[string s] { get { return values[s]; } set { values[s] = value; } }       // can be set NULL
 
         public IEnumerable<string> NameEnumuerable { get { return values.Keys; } }
         public List<string> NameList { get { return values.Keys.ToList(); } }
@@ -85,6 +95,35 @@ namespace Conditions
         {
             if (values.ContainsKey(name))
                 values.Remove(name);
+        }
+
+        public void Add(List<ConditionVariables> varlist)
+        {
+            if (varlist != null)
+                foreach (ConditionVariables d in varlist)
+                    Add(d);
+        }
+
+        public void Add(ConditionVariables[] varlist)
+        {
+            if (varlist != null)
+                foreach (ConditionVariables d in varlist)
+                    Add(d);
+        }
+
+        public void Add(ConditionVariables d)
+        {
+            if (d != null)
+                Add(d.values);
+        }
+
+        public void Add(Dictionary<string, string> list)
+        {
+            if (list != null)
+            {
+                foreach (KeyValuePair<string, string> v in list)
+                    values[v.Key] = v.Value;
+            }
         }
 
         public int GetInt(string name, int def = 0)     // get or default
@@ -100,14 +139,14 @@ namespace Conditions
         {
             if (values.ContainsKey(name))
             {
-                if ( !checklen || values[name].Length>0 )
+                if (!checklen || values[name].Length > 0)
                     return values[name];
             }
 
             return def;
         }
 
-        public void SetOrRemove(bool add, string name,  string value)     // Set it, or remove it
+        public void SetOrRemove(bool add, string name, string value)     // Set it, or remove it
         {
             if (add)
                 values[name] = value;
@@ -115,9 +154,46 @@ namespace Conditions
                 values.Remove(name);
         }
 
+        public string AddToVar(string name, int add, int initial)       // DOES NOT set anything.. looks up a value and returns +add to it if its numeric.
+        {
+            if (values.ContainsKey(name))
+            {
+                int i;
+                if (values[name].InvariantParse(out i))
+                {
+                    return (i + add).ToString(System.Globalization.CultureInfo.InvariantCulture);
+                }
+            }
+
+            return initial.ToString();
+        }
+
+        // return a list just with the names matching filter, or filter*
+
+        public ConditionVariables FilterVars(string filter)
+        {
+            int wildcard = filter.IndexOf('*');
+            if (wildcard >= 0)
+                filter = filter.Substring(0, wildcard);
+
+            ConditionVariables ret = new ConditionVariables();
+
+            foreach (KeyValuePair<string, string> k in values)
+            {
+                if ((wildcard >= 0 && k.Key.StartsWith(filter)) || k.Key.Equals(filter))
+                    ret[k.Key] = k.Value;
+            }
+
+            return ret;
+        }
+
+        #endregion
+
+        #region Input/Output
+
         // Print vars, if altops is passed in, you can output using alternate operators
 
-        public string ToString(Dictionary<string, string> altops = null, string pad = "", string separ = ",", string prefix = "" , bool bracket = false, bool comma = true , bool space = true )
+        public string ToString(Dictionary<string, string> altops = null, string pad = "", string separ = ",", string prefix = "", bool bracket = false, bool comma = true, bool space = true)
         {
             string s = "";
             foreach (KeyValuePair<string, string> v in values)
@@ -127,7 +203,7 @@ namespace Conditions
 
                 string vs = v.Value.QuoteString(comma: comma, bracket: bracket, space: space);
 
-                if ( altops == null )
+                if (altops == null)
                     s += prefix + v.Key + pad + "=" + pad + vs;
                 else
                 {
@@ -148,11 +224,25 @@ namespace Conditions
         }
 
         // FromMode controls where its stopped. 
-        // namelimit limits allowable names
-        // fixnamecase means make sure its in Titlecase
         // altops enables operators other than = to be used (set/let only) 
 
-        public bool FromString(BaseUtils.StringParser p, FromMode fm, Dictionary<string,string> altops = null )
+        public bool FromString(BaseUtils.StringParser p, FromMode fm, Dictionary<string, string> altops = null)
+        {
+            Dictionary<string, string> newvars = ReadFromString(p, fm, altops);
+            if (newvars != null)
+                values = newvars;
+            return (newvars != null);
+        }
+
+        public bool AddFromString(BaseUtils.StringParser p, FromMode fm, Dictionary<string, string> altops = null)
+        {
+            Dictionary<string, string> newvars = ReadFromString(p, fm, altops);
+            if (newvars != null)
+                Add(newvars);
+            return (newvars != null);
+        }
+
+        private Dictionary<string, string> ReadFromString(BaseUtils.StringParser p, FromMode fm, Dictionary<string, string> altops = null)
         {
             Dictionary<string, string> newvars = new Dictionary<string, string>();
 
@@ -161,7 +251,7 @@ namespace Conditions
                 string varname = p.NextQuotedWord( "= ");
 
                 if (varname == null)
-                    return false;
+                    return null;
 
                 if (altops!=null)            // with extended ops, the ops are returned in the altops function, one per variable found
                 {                           // used only with let and set..
@@ -197,28 +287,24 @@ namespace Conditions
                 }
 
                 if (!p.IsCharMoveOn('='))
-                    return false;
+                    return null;
 
                 string value = (fm == FromMode.OnePerLine) ? p.NextQuotedWordOrLine() : p.NextQuotedWord((fm == FromMode.MultiEntryComma) ? ", " : ",) "); 
 
                 if (value == null)
-                    return false;
+                    return null;
 
                 newvars[varname] = value;
 
                 if (fm == FromMode.MultiEntryCommaBracketEnds && p.PeekChar() == ')')        // bracket, stop don't remove.. outer bit wants to check its there..
-                {
-                    values = newvars;
-                    return true;
-                }
+                    return newvars;
                 else if (fm == FromMode.OnePerLine && !p.IsEOL)        // single entry, must be eol now
-                    return false;
+                    return null;
                 else if (!p.IsEOL && !p.IsCharMoveOn(','))   // if not EOL, but not comma, incorrectly formed list
-                    return false;
+                    return null;
             }
 
-            values = newvars;
-            return true;
+            return newvars;
         }
 
         public JArray ToJSONObject()
@@ -243,6 +329,10 @@ namespace Conditions
                 values[(string)jo["var"]] = (string)jo["value"];
             }
         }
+
+        #endregion
+
+        #region Pack support
 
         static public string flagRunAtRefresh = "RunAtRefresh;";            // ACTION DATA Flags, stored with action program name in events to configure it
 
@@ -279,80 +369,11 @@ namespace Conditions
             }
         }
 
-        public void Add(List<ConditionVariables> varlist)
-        {
-            foreach (ConditionVariables d in varlist)
-            {
-                if (d != null)
-                {
-                    foreach (KeyValuePair<string, string> v in d.values)   // plus event vars
-                        values[v.Key] = v.Value;
-                }
-            }
-        }
-
-        public void Add(ConditionVariables d)
-        {
-            if (d != null)
-            {
-                foreach (KeyValuePair<string, string> v in d.values)   // plus event vars
-                    values[v.Key] = v.Value;
-            }
-        }
-
-        public ConditionVariables FilterVars(string filter)
-        {
-            int wildcard = filter.IndexOf('*');
-            if (wildcard >= 0)
-                filter = filter.Substring(0, wildcard);
-
-            ConditionVariables ret = new ConditionVariables();
-
-            foreach (KeyValuePair<string, string> k in values)
-            {
-                if ((wildcard >= 0 && k.Key.StartsWith(filter)) || k.Key.Equals(filter))
-                    ret[k.Key] = k.Value;
-            }
-
-            return ret;
-        }
-
-        // all variables, expand out thru macro expander.  does not alter these ones
-        public ConditionVariables ExpandAll(ConditionFunctions e, ConditionVariables vars, out string errlist)
-        {
-            errlist = null;
-
-            ConditionVariables exp = new ConditionVariables();
-
-            foreach( KeyValuePair<string,string> k in values)
-            {
-                if (e.ExpandString(values[k.Key], out errlist) == ConditionFunctions.ExpandResult.Failed)
-                    return null;
-
-                exp[k.Key] = errlist;
-            }
-
-            errlist = null;
-            return exp;
-        }
-
-        public string AddToVar(string name, int add, int initial)       // DOES NOT set anything..
-        {
-            if (values.ContainsKey(name))
-            {
-                int i;
-                if (values[name].InvariantParse(out i))
-                {
-                    return (i + add).ToString(System.Globalization.CultureInfo.InvariantCulture);
-                }
-            }
-
-            return initial.ToString();
-        }
+        #endregion
 
         #region Object values to this class
 
-        public bool GetValuesIndicated(Object o)                                            // get the ones set up in the class
+        public bool GetValuesIndicated(Object o)                                            // For all in the Values list, fill in data given from fields in O
         {
             Type jtype = o.GetType();
 
@@ -376,7 +397,6 @@ namespace Conditions
 
             return true;
         }
-
 
         public void AddPropertiesFieldsOfClass( Object o, string prefix , Type[] propexcluded , int maxdepth )      // get all data in the class
         {

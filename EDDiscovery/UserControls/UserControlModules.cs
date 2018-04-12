@@ -48,7 +48,7 @@ namespace EDDiscovery.UserControls
             dataGridViewModules.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
             dataGridViewModules.RowTemplate.Height = 26;
 
-            buttonExtCoriolis.Visible = false;
+            buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = buttonExtConfigure.Visible = false;
 
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange; ;
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
@@ -84,11 +84,13 @@ namespace EDDiscovery.UserControls
             comboBoxShips.Items.Clear();
             comboBoxShips.Items.Add("Travel History Entry");
             comboBoxShips.Items.Add("Stored Modules");
-            foreach ( string id in shm.Ships.Keys)
-            {
-                ShipInformation sm = shm.Ships[id];
-                comboBoxShips.Items.Add(sm.ShipNameIdentType);
-            }
+
+            var now = (from x1 in shm.Ships where x1.Value.Sold == false && x1.Value.StoredAtSystem == null select x1.Value.ShipNameIdentType).ToList();
+            comboBoxShips.Items.AddRange(now);
+            var stored = (from x1 in shm.Ships where x1.Value.Sold == false && x1.Value.StoredAtSystem != null select x1.Value.ShipNameIdentType).ToList();
+            comboBoxShips.Items.AddRange(stored);
+            var sold = (from x1 in shm.Ships where x1.Value.Sold == true select x1.Value.ShipNameIdentType).ToList();
+            comboBoxShips.Items.AddRange(sold);
 
             if (cursel == "")
                 cursel = SQLiteDBClass.GetSettingString(DbShipSave, "");
@@ -107,6 +109,8 @@ namespace EDDiscovery.UserControls
         }
 
         HistoryEntry last_he = null;
+        ShipInformation last_si = null;
+
         private void Display(HistoryEntry he, HistoryList hl)
         {
             if ( comboBoxShips.Items.Count == 0 )
@@ -123,9 +127,14 @@ namespace EDDiscovery.UserControls
 
             dataGridViewModules.Rows.Clear();
 
-            LabelVehicleText.Visible = false;
             labelVehicle.Visible = false;
-            buttonExtCoriolis.Visible = false;
+            buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = buttonExtConfigure.Visible = false;
+
+            last_si = null;     // no ship info
+
+            dataGridViewModules.Columns[2].HeaderText = "Slot";
+            dataGridViewModules.Columns[3].HeaderText = "Info";
+            dataGridViewModules.Columns[6].HeaderText = "Value";
 
             if (comboBoxShips.Text.Contains("Stored"))
             {
@@ -133,62 +142,163 @@ namespace EDDiscovery.UserControls
                 {
                     ModulesInStore mi = last_he.StoredModules;
                     labelVehicle.Text = "";
-                    int i = 1;
-                    foreach(EliteDangerousCore.JournalEvents.JournalLoadout.ShipModule sm in mi.StoredModules )
-                    {
-                        object[] rowobj = { i.ToString(), sm.Item, sm.LocalisedItem.ToNullSafeString() };
-                        dataGridViewModules.Rows.Add(rowobj);
-                        i++;
-                    }
+
+                    foreach (ModulesInStore.StoredModule sm in mi.StoredModules)
+                        AddStoredModule(sm);
+
+                    dataGridViewModules.Columns[2].HeaderText = "System";
+                    dataGridViewModules.Columns[3].HeaderText = "Tx Time";
+                    dataGridViewModules.Columns[6].HeaderText = "Cost";
                 }
             }
             else if (comboBoxShips.Text.Contains("Travel") || comboBoxShips.Text.Length == 0)  // second is due to the order History gets called vs this on start
             {
                 if (last_he != null && last_he.ShipInformation != null)
                 {
-                    Display(last_he.ShipInformation);
+                    DisplayShip(last_he.ShipInformation);
                 }
             }
             else
             {
                 ShipInformation si = discoveryform.history.shipinformationlist.GetShipByNameIdentType(comboBoxShips.Text);
                 if (si != null)
-                    Display(si);
+                    DisplayShip(si);
             }
 
             dataGridViewModules.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
             dataGridViewModules.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
         }
 
-        private void Display(ShipInformation si)
+        private void DisplayShip(ShipInformation si)    
         {
+            //System.Diagnostics.Debug.WriteLine("HE " + last_he.Indexno);
+            last_si = si;
+
             foreach (string key in si.Modules.Keys)
             {
-                EliteDangerousCore.JournalEvents.JournalLoadout.ShipModule sm = si.Modules[key];
-
-                string ammo = "";
-                if (sm.AmmoHopper.HasValue)
-                {
-                    ammo = sm.AmmoHopper.Value.ToString();
-                    if (sm.AmmoClip.HasValue)
-                        ammo += "/" + sm.AmmoClip.ToString();
-                }
-
-                string value = (sm.Value.HasValue && sm.Value.Value > 0) ? sm.Value.Value.ToString(System.Globalization.CultureInfo.InvariantCulture) : "";
-
-                string eng = "";
-                if (sm.Engineering != null)
-                    eng = sm.Engineering.FriendlyBlueprintName;
-
-                object[] rowobj = { sm.Slot, sm.Item, sm.LocalisedItem.ToNullSafeString() , ammo, eng , value, sm.PE() };
-                // debug object[] rowobj = { sm.Slot+":" + sm.SlotFD, sm.Item + ":" + sm.ItemFD, sm.LocalisedItem.ToNullSafeString() , ammo, blueprint , value, sm.PE() };
-                dataGridViewModules.Rows.Add(rowobj);
-
+                EliteDangerousCore.ShipModule sm = si.Modules[key];
+                AddModuleLine(sm);
             }
 
-            LabelVehicleText.Visible = labelVehicle.Visible = true;
-            labelVehicle.Text = si.ShipFullInfo();
-            buttonExtCoriolis.Visible = si.CheckMinimumJSONModules();
+            double hullmass = si.HullMass();
+            double modulemass = si.ModuleMass();
+
+            EliteDangerousCalculations.FSDSpec fsdspec = si.GetFSDSpec();
+            if (fsdspec != null)
+            {
+                EliteDangerousCalculations.FSDSpec.JumpInfo ji = fsdspec.GetJumpInfo(0, modulemass + hullmass, si.FuelCapacity, si.FuelCapacity / 2);
+                AddInfoLine("FSD Avg Jump", ji.avgsinglejumpnocargo.ToStringInvariant("N2") + "ly", "Half tank, no cargo", fsdspec.ToString());
+                DataGridViewRow rw = dataGridViewModules.Rows[dataGridViewModules.Rows.Count - 1];
+                AddInfoLine("FSD Max Range", ji.maxjumprange.ToStringInvariant("N2") + "ly", "Full Tank, no cargo", fsdspec.ToString());
+                AddInfoLine("FSD Maximum Fuel per jump", fsdspec.MaxFuelPerJump.ToStringInvariant()+"t","", fsdspec.ToString());
+            }
+
+            if (si.HullValue > 0)
+                AddValueLine("Hull Value", si.HullValue);
+            if (si.ModulesValue > 0)
+                AddValueLine("Modules Value", si.ModulesValue);
+            if (si.HullValue > 0 && si.ModulesValue > 0)
+                AddValueLine("Total Cost", si.HullValue + si.ModulesValue);
+            if (si.Rebuy > 0)
+                AddValueLine("Rebuy Cost", si.Rebuy);
+
+            AddMassLine("Mass Hull", hullmass.ToStringInvariant("N1") + "t");
+            AddMassLine("Mass Unladen", (hullmass + modulemass).ToStringInvariant("N1") + "t");
+            AddMassLine("Mass Modules", modulemass.ToStringInvariant("N1") + "t");
+
+            AddInfoLine("Manufacturer", si.Manufacturer);
+
+            if ( si.FuelCapacity > 0 )
+                AddInfoLine("Fuel Capacity", si.FuelCapacity.ToStringInvariant("N1") + "t");
+            if ( si.FuelLevel > 0 )
+                AddInfoLine("Fuel Level", si.FuelLevel.ToStringInvariant("N1") + "t");
+
+            double fuelwarn = si.FuelWarningPercent;
+            AddInfoLine("Fuel Warning %", fuelwarn > 0 ? fuelwarn.ToStringInvariant("N1") + "%" : "Off");
+
+            AddInfoLine("Pad Size", si.PadSize);
+            AddInfoLine("Main Thruster Speed", si.Speed.ToStringInvariant("0.#"));
+            AddInfoLine("Main Thruster Boost", si.Boost.ToStringInvariant("0.#"));
+
+            if (si.InTransit)
+                AddInfoLine("In Transit to ", (si.StoredAtSystem??"Unknown") + ":" + (si.StoredAtStation ?? "Unknown"));
+            else if ( si.StoredAtSystem != null )
+                AddInfoLine("Stored at", si.StoredAtSystem + ":" + (si.StoredAtStation ?? "Unknown"));
+
+            int cc = si.CargoCapacity();
+            if ( cc > 0 )
+                AddInfoLine("Cargo Capacity", cc.ToStringInvariant("N0") + "t");
+
+            labelVehicle.Visible = true;
+            labelVehicle.Text = si.ShipFullInfo(cargo: false, fuel: false);
+            buttonExtConfigure.Visible = true;
+            buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = si.CheckMinimumJSONModules();
+        }
+
+        void AddModuleLine(ShipModule sm)
+        {
+            string ammo = "";
+            if (sm.AmmoHopper.HasValue)
+            {
+                ammo = sm.AmmoHopper.Value.ToString();
+                if (sm.AmmoClip.HasValue)
+                    ammo += "/" + sm.AmmoClip.ToString();
+            }
+
+            string value = (sm.Value.HasValue && sm.Value.Value > 0) ? sm.Value.Value.ToStringInvariant("N0") : "";
+
+            string typename = sm.LocalisedItem;
+            if (typename.IsEmpty())
+                typename = EliteDangerousCore.ShipModuleData.IsVanity(sm.Item) ? "Vanity" : "Module";
+
+            object[] rowobj = { typename,
+                                sm.Item, sm.Slot, ammo,
+                                sm.Mass > 0 ? (sm.Mass.ToStringInvariant()+"t") : "",
+                                sm.Engineering?.FriendlyBlueprintName ?? "",
+                                value, sm.PE() };
+
+            dataGridViewModules.Rows.Add(rowobj);
+
+            if ( sm.Engineering != null )
+            {
+                string text = sm.Engineering.ToString();
+                EliteDangerousCalculations.FSDSpec spec = sm.GetFSDSpec();
+                if (spec != null)
+                    text += spec.ToString();
+
+                dataGridViewModules.Rows[dataGridViewModules.Rows.Count - 1].Cells[5].ToolTipText = text;
+            }
+        }
+
+        void AddStoredModule(ModulesInStore.StoredModule sm)
+        {
+            object[] rowobj = { sm.Name_Localised.Alt(sm.Name), sm.Name,
+                                sm.StarSystem.Alt("In Transit"), sm.TransferTimeString ,
+                                sm.Mass > 0 ? (sm.Mass.ToStringInvariant()+"t") : "",
+                                sm.EngineerModifications.Alt(""),
+                                sm.TransferCost>0 ? sm.TransferCost.ToStringInvariant("N0") : "",
+                                "" };
+            dataGridViewModules.Rows.Add(rowobj);
+        }
+
+        void AddValueLine(string s, long v, string opt = "")
+        {
+            object[] rowobj = { s, opt, "", "", "", "", v.ToString("N0"), "" };
+            dataGridViewModules.Rows.Add(rowobj);
+        }
+
+        void AddInfoLine(string s, string v, string opt = "", string tooltip = "")
+        {
+            object[] rowobj = { s, v.AppendPrePad(opt), "", "", "", "","", "" };
+            dataGridViewModules.Rows.Add(rowobj);
+            if (!string.IsNullOrEmpty(tooltip))
+                dataGridViewModules.Rows[dataGridViewModules.Rows.Count - 1].Cells[0].ToolTipText = tooltip;
+        }
+
+        void AddMassLine(string m, string v, string opt = "")
+        {
+            object[] rowobj = { m, opt, "", "", v, "","", "" };
+            dataGridViewModules.Rows.Add(rowobj);
         }
 
         #endregion
@@ -228,84 +338,123 @@ namespace EDDiscovery.UserControls
                 if (last_he != null && last_he.ShipInformation != null)
                     si = last_he.ShipInformation;
             }
-            else 
+            else
                 si = discoveryform.history.shipinformationlist.GetShipByNameIdentType(comboBoxShips.Text);
-                     
+
             if (si != null)
             {
                 string errstr;
-                string s = si.ToJSON(out errstr);
+                string s = si.ToJSONCoriolis(out errstr);
 
                 if (errstr.Length > 0)
                     ExtendedControls.MessageBoxTheme.Show(FindForm(), errstr + Environment.NewLine + "This is probably a new or powerplay module" + Environment.NewLine + "Report to EDD Team by Github giving the full text above", "Unknown Module Type");
 
-                string uri = null;
+                string uri = Properties.Resources.URLCoriolis + "data=" + BaseUtils.HttpUriEncode.URIGZipBase64Escape(s) + "&bn=" + Uri.EscapeDataString(si.Name);
 
-                var bytes = Encoding.UTF8.GetBytes(s);
-                using (MemoryStream indata = new MemoryStream(bytes))
+                if (!BaseUtils.BrowserInfo.LaunchBrowser(uri))
                 {
-                    using (MemoryStream outdata = new MemoryStream())
-                    {
-                        using (System.IO.Compression.GZipStream gzipStream = new System.IO.Compression.GZipStream(outdata, System.IO.Compression.CompressionLevel.Optimal, true))
-                            indata.CopyTo(gzipStream);      // important to clean up gzip otherwise all the data is not written.. using
-
-                        uri += Properties.Resources.URLCoriolis + "data=" + Uri.EscapeDataString(Convert.ToBase64String(outdata.ToArray()));
-                        uri += "&bn=" + Uri.EscapeDataString(si.Name);
-
-                        string browser = BaseUtils.BrowserInfo.GetDefault();
-
-                        if ( browser != null )
-                        {
-                            string path = BaseUtils.BrowserInfo.GetPath(browser);
-
-                            if (path != null)
-                            {
-                                try
-                                {
-                                    System.Diagnostics.ProcessStartInfo p = new System.Diagnostics.ProcessStartInfo(path, uri);
-                                    p.UseShellExecute = false;
-                                    System.Diagnostics.Process.Start(p);
-                                    return;
-                                }
-                                catch (Exception ex)
-                                {
-                                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "Unable to launch browser" + ex.Message, "Browser Launch Error");
-                                }
-                            }
-                        }
-                         
-                    }
+                    ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
+                    info.Info("Cannot launch browser, use this JSON for manual Coriolis import", Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location),
+                                    s, new int[] { 0, 100 });
+                    info.ShowDialog(FindForm());
                 }
+            }
+        }
 
-                ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
-                info.Info("Cannot launch browser, use this JSON for manual Coriolis import", Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location), 
-                                s, new int[] { 0, 100 });
-                info.ShowDialog(FindForm());
+        private void buttonExtEDShipyard_Click(object sender, EventArgs e)
+        {
+            ShipInformation si = null;
+
+            if (comboBoxShips.Text.Contains("Travel") || comboBoxShips.Text.Length == 0)  // second is due to the order History gets called vs this on start
+            {
+                if (last_he != null && last_he.ShipInformation != null)
+                    si = last_he.ShipInformation;
+            }
+            else
+                si = discoveryform.history.shipinformationlist.GetShipByNameIdentType(comboBoxShips.Text);
+
+            if (si != null)
+            {
+                string s = si.ToJSONLoadout();
+
+                string uri = Properties.Resources.URLEDShipyard + "#/I=" + BaseUtils.HttpUriEncode.URIGZipBase64Escape(s);
+
+                //File.WriteAllText(@"c:\code\out.txt", uri);
+
+                if (!BaseUtils.BrowserInfo.LaunchBrowser(uri))
+                {
+                    ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
+                    info.Info("Cannot launch browser, use this JSON for manual ED Shipyard import", Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location),
+                                    s, new int[] { 0, 100 });
+                    info.ShowDialog(FindForm());
+                }
+            }
+        }
+
+        private void buttonExtConfigure_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Debug.Assert(last_si != null);           // must be set for this configure button to be visible
+
+            ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
+
+            int width = 430;
+            int ctrlleft = 150;
+
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Fuel Warning:", new Point(10, 40), new Size(140, 24), ""));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("FuelWarning", typeof(ExtendedControls.NumberBoxDouble), last_si.FuelWarningPercent.ToStringInvariant(), new Point(ctrlleft, 40), new Size(width - ctrlleft - 20, 24), "Enter fuel warning level in % (0 = off, 1-100%)") { numberboxdoubleminimum = 0, numberboxdoublemaximum = 100, numberboxformat = "0.##" });
+
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ButtonExt), "OK", new Point(width - 100, 70), new Size(80, 24), "Press to Accept"));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ButtonExt), "Cancel", new Point(width - 200, 70), new Size(80, 24), "Press to Cancel"));
+
+            f.Trigger += (dialogname, controlname, tag) =>
+            {
+                if ( controlname == "OK" )
+                {
+                    double? v3 = f.GetDouble("FuelWarning");
+                    if ( v3.HasValue)
+                    {
+                        f.DialogResult = DialogResult.OK;
+                        f.Close();
+                    }
+                    else
+                        ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "A Value is not valid", "Warning - Value", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else if ( controlname == "Cancel")
+                {
+                    f.DialogResult = DialogResult.Cancel;
+                    f.Close();
+                }
+            };
+
+            DialogResult res = f.ShowDialog(this.FindForm(), this.FindForm().Icon, new Size(width, 110), new Point(-999, -999), "Ship Configure");
+
+            if (res == DialogResult.OK)
+            {
+                last_si.FuelWarningPercent = f.GetDouble("FuelWarning").Value;
+                Display();
             }
         }
 
         private void dataGridViewModules_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
-            if (e.Column.Index == 5)
+            if (e.Column.Index == 4 || e.Column.Index == 6)
+                e.SortDataGridViewColumnNumeric("t");
+        }
+
+        private void dataGridViewModules_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
             {
-                double v1;
-                double v2;
-                bool v1hasval = Double.TryParse(e.CellValue1?.ToString().Replace("cr", ""), out v1);
-                bool v2hasval = Double.TryParse(e.CellValue2?.ToString().Replace("cr", ""), out v2);
-
-                if (v1hasval)
+                string tt = dataGridViewModules.Rows[e.RowIndex].Cells[e.ColumnIndex].ToolTipText;
+                if (!string.IsNullOrEmpty(tt))
                 {
-                    if (v2hasval)
-                        e.SortResult = v1.CompareTo(v2);
-                    else
-                        e.SortResult = 1;
+                    Form mainform = FindForm();
+                    ExtendedControls.InfoForm frm = new ExtendedControls.InfoForm();
+                    frm.Info("Module Information", mainform.Icon, tt, themeit: true);
+                    frm.Size = new Size(600, 400);
+                    frm.StartPosition = FormStartPosition.CenterParent;
+                    frm.Show(mainform);
                 }
-                else if (v2hasval)
-                    e.SortResult = -1;
-                else
-                    return;
-
-                e.Handled = true;
             }
         }
     }

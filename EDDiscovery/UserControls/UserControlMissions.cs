@@ -121,14 +121,12 @@ namespace EDDiscovery.UserControls
                 var totalReward = 0;
                 foreach (MissionState ms in mcurrent)
                 {
-
-
                     object[] rowobj = { JournalFieldNaming.ShortenMissionName(ms.Mission.Name) ,
                                         EDDiscoveryForm.EDDConfig.DisplayUTC ? ms.Mission.EventTimeUTC : ms.Mission.EventTimeLocal,
                                         EDDiscoveryForm.EDDConfig.DisplayUTC ? ms.Mission.Expiry : ms.Mission.Expiry.ToLocalTime(),
                                         ms.OriginatingSystem + ":" + ms.OriginatingStation,
                                         ms.Mission.Faction,
-                                        ms.Mission.DestinationSystem + ((ms.Mission.DestinationStation.Length>0) ? ":" +ms.Mission.DestinationStation :""),
+                                        ms.DestinationSystemStation(),
                                         ms.Mission.TargetFaction,
                                         ms.Mission.Reward.GetValueOrDefault().ToString("N0"),
                                         ms.Info()
@@ -143,8 +141,12 @@ namespace EDDiscovery.UserControls
                     dataGridViewCurrent.Rows[rowno].Tag = ms;
                 }
 
+                int count = mcurrent.Count();
 
-                cColValue.HeaderText = (totalReward!=0) ? $"Reward (cr)\nTotal: {totalReward:N0}" : "Reward (cr)";
+                cColName.HeaderText = (count > 0) ? (count.ToStringInvariant() + (count > 1 ? " Missions" : " Mission")) : "Name";
+                cColValue.HeaderText = (totalReward != 0) ? $"Value (cr):\n{totalReward:N0}" : "Value (cr)";
+
+//                cColValue.HeaderText = (count>0) ? (count.ToStringInvariant() + (count > 1 ? " Missions" : " Mission") + (totalReward>0 ? $", {totalReward:N0}" : "")) : "Value";
 
                 List<MissionState> mprev = (from MissionState ms in ml.Missions.Values where !ms.InProgressDateTime(hetime) orderby ms.Mission.EventTimeUTC descending select ms).ToList();
 
@@ -174,10 +176,10 @@ namespace EDDiscovery.UserControls
 
                             object[] rowobj = { JournalFieldNaming.ShortenMissionName(ms.Mission.Name) ,
                                         EDDiscoveryForm.EDDConfig.DisplayUTC ? ms.Mission.EventTimeUTC : ms.Mission.EventTimeLocal,
-                                        EDDiscoveryForm.EDDConfig.DisplayUTC ? ms.Mission.Expiry : ms.Mission.Expiry.ToLocalTime(),
+                                        EDDiscoveryForm.EDDConfig.DisplayUTC ? ms.MissionEndTime : ms.MissionEndTime.ToLocalTime(),
                                         ms.OriginatingSystem + ":" + ms.OriginatingStation,
                                         ms.Mission.Faction,
-                                        ms.Mission.DestinationSystem + ((ms.Mission.DestinationStation.Length>0) ? ":" +ms.Mission.DestinationStation :""),
+                                        ms.DestinationSystemStation(),
                                         ms.Mission.TargetFaction,
                                         ms.StateText,
                                         ms.Info()
@@ -242,27 +244,7 @@ namespace EDDiscovery.UserControls
         private void dataGridViewPrevious_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
             if (e.Column.Index == 7)
-            {
-                double v1;
-                double v2;
-                bool v1hasval = Double.TryParse(e.CellValue1?.ToString().Replace("cr", ""), out v1);
-                bool v2hasval = Double.TryParse(e.CellValue2?.ToString().Replace("cr", ""), out v2);
-
-                if (v1hasval)
-                {
-                    if (v2hasval)
-                        e.SortResult = v1.CompareTo(v2);
-                    else
-                        e.SortResult = 1;
-                }
-                else if (v2hasval)
-                    e.SortResult = -1;
-                else
-                    return;
-
-                e.Handled = true;
-            }
-
+                e.SortDataGridViewColumnDate();
         }
     }
 }

@@ -188,7 +188,7 @@ public static class ControlHelpersStaticFunc
         }
     }
 
-    static public Point PositionWithinScreen(this Control p, int x, int y)
+    static public Point PositionWithinScreen(this Control p, int x, int y)      // clamp to withing screen of control
     {
         Screen scr = Screen.FromControl(p);
         Rectangle scrb = scr.Bounds;
@@ -196,6 +196,12 @@ public static class ControlHelpersStaticFunc
         x = Math.Min(Math.Max(x, scrb.Left), scrb.Right - p.Width);
         y = Math.Min(Math.Max(y, scrb.Top), scrb.Bottom - p.Height);
         return new Point(x, y);
+    }
+
+    static public Point PositionWithinRectangle(this Point p, Size ps, Rectangle other)      // clamp to within client rectangle of another
+    {
+        return new Point(Math.Min(p.X, other.Width - ps.Width),                   // respecting size, ensure we are within the rectangle of another
+                                Math.Min(p.Y, other.Height - ps.Height));
     }
 
     static public void SplitterDistance(this SplitContainer sp, double value)           // set the splitter distance from a double value.. safe from exceptions.
@@ -223,5 +229,65 @@ public static class ControlHelpersStaticFunc
         double v = (double)sp.SplitterDistance / (double)a;
         //System.Diagnostics.Debug.WriteLine($"SplitContainer {sp.Name} {sp.DisplayRectangle} {sp.SplitterDistance} Get SplitterDistance {a} -> {v:N2}");
         return v;
+    }
+
+    static public void SortDataGridViewColumnNumeric(this DataGridViewSortCompareEventArgs e, string removetext= null)
+    {
+        string s1 = e.CellValue1?.ToString();
+        string s2 = e.CellValue2?.ToString();
+
+        if (removetext != null)
+        {
+            if ( s1 != null )
+                s1 = s1.Replace(removetext, "");
+            if ( s2 != null )
+                s2 = s2.Replace(removetext, "");
+        }
+
+        double v1=0, v2=0;
+
+        bool v1hasval = s1 != null && Double.TryParse(s1, out v1);
+        bool v2hasval = s2 != null && Double.TryParse(s2, out v2);
+
+        if (!v1hasval)
+        {
+            e.SortResult = 1;
+        }
+        else if (!v2hasval)
+        {
+            e.SortResult = -1;
+        }
+        else
+        {
+            e.SortResult = v1.CompareTo(v2);
+        }
+
+        e.Handled = true;
+    }
+
+    static public void SortDataGridViewColumnDate(this DataGridViewSortCompareEventArgs e)
+    {
+        string s1 = e.CellValue1?.ToString();
+        string s2 = e.CellValue2?.ToString();
+
+        DateTime v1 = DateTime.MinValue, v2 = DateTime.MinValue;
+
+        bool v1hasval = s1!=null && DateTime.TryParse(e.CellValue1?.ToString(), out v1);
+        bool v2hasval = s2!=null && DateTime.TryParse(e.CellValue2?.ToString(), out v2);
+
+        if (!v1hasval)
+        {
+            e.SortResult = 1;
+        }
+        else if (!v2hasval)
+        {
+            e.SortResult = -1;
+        }
+        else
+        {
+            e.SortResult = v1.CompareTo(v2);
+        }
+
+        e.Handled = true;
     }
 }

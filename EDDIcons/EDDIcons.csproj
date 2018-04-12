@@ -662,5 +662,12 @@
     <EmbeddedResource Include="Panels\LocalMap.png" />
     <EmbeddedResource Include="Journal\CargoDepot.png" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\Modules\EDShipYard.png" />
+    <EmbeddedResource Include="Controls\Modules\Configure.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\Plot\Dots.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

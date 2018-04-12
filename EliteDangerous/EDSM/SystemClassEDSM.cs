@@ -31,6 +31,9 @@ namespace EliteDangerousCore.EDSM
 {
     public static class SystemClassEDSM
     {
+        private static DateTime ED21date = new DateTime(2016, 5, 26);
+        private static DateTime ED23date = new DateTime(2017, 4, 11);
+
         public static void CheckSystemAliases()
         {
             using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
@@ -406,7 +409,7 @@ namespace EliteDangerousCore.EDSM
 
                                         if (coords != null)
                                         {
-                                            DateTime updatedate = jo.date;
+                                            DateTime updatedate = DateTime.SpecifyKind(jo.date, DateTimeKind.Utc);
 
                                             if (updatedate > maxdate)                                   // even if we reject it due to grid id, keep last date up to date
                                                 maxdate = updatedate;
@@ -684,7 +687,14 @@ namespace EliteDangerousCore.EDSM
                 if (PendingClose())     
                     return updates;
 
-                DateTime enddate = lastrecordtime + TimeSpan.FromHours(12);
+                int hourstofetch = 6;
+
+                if (lastrecordtime < ED21date.AddHours(-48))
+                    hourstofetch = 48;
+                else if (lastrecordtime < ED23date.AddHours(-12))
+                    hourstofetch = 12;
+
+                DateTime enddate = lastrecordtime + TimeSpan.FromHours(hourstofetch);
                 if (enddate > DateTime.UtcNow)
                     enddate = DateTime.UtcNow;
 
@@ -695,7 +705,7 @@ namespace EliteDangerousCore.EDSM
                 string json = null;
                 try
                 {
-                    json = edsm.RequestSystems(lastrecordtime, enddate);
+                    json = edsm.RequestSystems(lastrecordtime, enddate, timeout: 20000);
                 }
                 catch (WebException ex)
                 {

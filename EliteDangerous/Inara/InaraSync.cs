@@ -208,17 +208,17 @@ namespace EliteDangerous.Inara
                         JournalRank rank = lastrank.journalEntry as JournalRank;
                         JournalProgress progress = he.journalEntry as JournalProgress;
 
-                        events.Add(InaraEvent.setCommanderRankPilot(progress.EventTimeUTC, "Combat", (int)rank.Combat, progress.Combat / 100.0));
-                        events.Add(InaraEvent.setCommanderRankPilot(progress.EventTimeUTC, "Trade", (int)rank.Trade, progress.Trade / 100.0));
-                        events.Add(InaraEvent.setCommanderRankPilot(progress.EventTimeUTC, "Explore", (int)rank.Explore, progress.Explore / 100.0));
-                        events.Add(InaraEvent.setCommanderRankPilot(progress.EventTimeUTC, "Empire", (int)rank.Empire, progress.Empire / 100.0));
-                        events.Add(InaraEvent.setCommanderRankPilot(progress.EventTimeUTC, "Federation", (int)rank.Federation, progress.Federation / 100.0));
-                        events.Add(InaraEvent.setCommanderRankPilot(progress.EventTimeUTC, "CQC", (int)rank.CQC, progress.CQC / 100.0));
-
+                        events.Add(InaraEvent.setCommanderRankPilot(progress.Id, progress.EventTimeUTC, "Combat", (int)rank.Combat, progress.Combat / 100.0));
+                        events.Add(InaraEvent.setCommanderRankPilot(progress.Id, progress.EventTimeUTC, "Trade", (int)rank.Trade, progress.Trade / 100.0));
+                        events.Add(InaraEvent.setCommanderRankPilot(progress.Id, progress.EventTimeUTC, "Explore", (int)rank.Explore, progress.Explore / 100.0));
+                        events.Add(InaraEvent.setCommanderRankPilot(progress.Id, progress.EventTimeUTC, "Empire", (int)rank.Empire, progress.Empire / 100.0));
+                        events.Add(InaraEvent.setCommanderRankPilot(progress.Id, progress.EventTimeUTC, "Federation", (int)rank.Federation, progress.Federation / 100.0));
+                        events.Add(InaraEvent.setCommanderRankPilot(progress.Id, progress.EventTimeUTC, "CQC", (int)rank.CQC, progress.CQC / 100.0));
 
                         lastrank = null;
                     }
                     break;
+
 
                 case JournalTypeEnum.Statistics:
                     JournalStatistics stats = he.journalEntry as JournalStatistics;
@@ -231,6 +231,7 @@ namespace EliteDangerous.Inara
                 case JournalTypeEnum.EngineerProgress:
                     JournalEngineerProgress engprogress = he.journalEntry as JournalEngineerProgress;
 
+                    events.Add(InaraEvent.setCommanderRankEngineer(engprogress));
                     break;
             }
 

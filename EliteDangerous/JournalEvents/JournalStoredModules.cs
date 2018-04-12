@@ -18,23 +18,9 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //    When written: when opening outfitting
-    //Parameters:
-    //•	MarketID
-    //• StationName
-    //• StarSystem
-    //•	Items: Array of records
-    //o   StorageSlot
-    //o   Name
-    //o   Name_Localised
-    //o   StarSystem
-    //o   MarketID
-    //o   TransferCost
-    //o   TransferTime
-    //o   EngineerModifications(only present if modified)
-
+   
     [JournalEntryType(JournalTypeEnum.StoredModules)]
-    public class JournalStoredModules : JournalEntry
+    public class JournalStoredModules : JournalEntry, IShipInformation
     {
         public JournalStoredModules(JObject evt) : base(evt, JournalTypeEnum.StoredModules)
         {
@@ -42,16 +28,12 @@ namespace EliteDangerousCore.JournalEvents
             StarSystem = evt["StarSystem"].Str();
             MarketID = evt["MarketID"].LongNull();
 
-            ModuleItems = evt["Items"]?.ToObjectProtected<StoredModuleItem[]>();
+            ModuleItems = evt["Items"]?.ToObjectProtected<ModulesInStore.StoredModule[]>();
 
             if (ModuleItems != null)
             {
-                foreach (StoredModuleItem i in ModuleItems)
-                {
-                    i.Name = JournalFieldNaming.GetBetterItemNameEvents(i.Name);
-                    i.TransferTimeSpan = new System.TimeSpan((int)(i.TransferTime / 60 / 60), (int)((i.TransferTime / 60) % 60), (int)(i.TransferTime % 60));
-                    i.TransferTimeString = i.TransferTimeSpan.ToString();
-                }
+                foreach (ModulesInStore.StoredModule i in ModuleItems)
+                    i.Normalise();
             }
         }
 
@@ -59,7 +41,12 @@ namespace EliteDangerousCore.JournalEvents
         public string StarSystem { get; set; }
         public long? MarketID { get; set; }
 
-        public StoredModuleItem[] ModuleItems { get; set; }
+        public ModulesInStore.StoredModule[] ModuleItems { get; set; }
+
+        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
+        {
+            shp.UpdateStoredModules(this);
+        }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
@@ -68,32 +55,13 @@ namespace EliteDangerousCore.JournalEvents
             detailed = "";
 
             if (ModuleItems != null)
-                foreach (StoredModuleItem m in ModuleItems)
+            {
+                foreach (ModulesInStore.StoredModule m in ModuleItems)
                 {
                     detailed = detailed.AppendPrePad(BaseUtils.FieldBuilder.Build("", m.Name, "< at ", m.StarSystem, "Transfer Cost:; cr;N0", m
                                 .TransferCost, "Time:", m.TransferTimeString, "Value:; cr;N0", m.TransferCost, ";(Hot)", m.Hot), System.Environment.NewLine);
                 }
-
-        }
-
-        public class StoredModuleItem
-        {
-            public int StorageSlot;
-            public string Name;
-            public string Name_Localised;
-            public string StarSystem;
-            public long MarketID;
-            public long TransferCost;
-            public int TransferTime;
-            public string EngineerModifications;
-            public double Quality;
-            public int Level;
-            public bool Hot;
-            public bool InTransit;
-            public int BuyPrice;
-
-            public System.TimeSpan TransferTimeSpan;        // computed
-            public string TransferTimeString; // computed
+            }
         }
     }
 }

@@ -66,6 +66,7 @@ namespace EDDiscovery.Forms
             Plot,                   // 33
             PanelSelector,          // 34
             BookmarkManager,
+            CombatPanel,
             // ****** ADD More here DO NOT REORDER *****
         };
 
@@ -80,6 +81,7 @@ namespace EDDiscovery.Forms
             { new PanelInfo( PanelIDs.Materials, typeof(UserControlMaterials) , "Materials", "Materials", "Materials count" ) },
             { new PanelInfo( PanelIDs.Commodities, typeof(UserControlCommodities), "Commodities", "Commodities", "Commodity count") },
             { new PanelInfo( PanelIDs.Ledger, typeof(UserControlLedger), "Ledger", "Ledger", "Ledger of cash related entries") },
+            { new PanelInfo( PanelIDs.CombatPanel, typeof(UserControlCombatPanel), "Combat", "Combat", "Display combat statistics", transparent:false)},
             { new PanelInfo( PanelIDs.Journal, typeof(UserControlJournalGrid), "Journal", "JournalHistory", "Journal grid view") },
             { new PanelInfo( PanelIDs.TravelGrid, typeof(UserControlTravelGrid), "Travel History", "TravelHistory", "History grid view") },
             { new PanelInfo( PanelIDs.StarList, typeof(UserControlStarList), "Star List", "StarList", "Visited star list", transparent: false) },
@@ -91,7 +93,7 @@ namespace EDDiscovery.Forms
             { new PanelInfo( PanelIDs.Scan, typeof(UserControlScan), "Scan", "Scan", "Scan data on system", transparent: false) },
             { new PanelInfo( PanelIDs.ScanGrid, typeof(UserControlScanGrid), "Scan Grid", "ScanGrid", "Scan data on system in a grid", transparent: false) },
             { new PanelInfo( PanelIDs.EstimatedValues, typeof(UserControlEstimatedValues),"Estimated Values", "EstimatedValues", "Estimated scan values of bodies in system", transparent: false) },
-            { new PanelInfo( PanelIDs.Modules, typeof(UserControlModules), "Loadout", "Modules", "Ship loadout for current ships and stored modules") },
+            { new PanelInfo( PanelIDs.Modules, typeof(UserControlModules), "Ships/Loadout", "Modules", "Ships and their loadouts plus stored modules") },
             { new PanelInfo( PanelIDs.LocalMap, typeof(UserControlLocalMap), "Local Map", "LocalMap", "3D Map of systems in range", transparent: false) },
             { new PanelInfo( PanelIDs.Plot, typeof(UserControlPlot), "2D Plot", "Plot", "2D Plot of systems in range", transparent: false) },
             { new PanelInfo( PanelIDs.Exploration, typeof(UserControlExploration), "Exploration", "Exploration", "Exploration Information") },
