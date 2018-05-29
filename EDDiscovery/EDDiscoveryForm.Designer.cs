@@ -109,8 +109,6 @@ namespace EDDiscovery
             this.panel_eddiscovery = new System.Windows.Forms.Panel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.tabControlMain = new EDDiscovery.MajorTabControl();
-            this.tabPageTravelHistory = new System.Windows.Forms.TabPage();
-            this.travelHistoryControl = new EDDiscovery.UserControls.UserControlHistory();
             this.contextMenuStripTabs = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -120,8 +118,6 @@ namespace EDDiscovery
             this.statusStrip1.SuspendLayout();
             this.notifyIconContextMenuStrip1.SuspendLayout();
             this.panelToolBar.SuspendLayout();
-            this.tabControlMain.SuspendLayout();
-            this.tabPageTravelHistory.SuspendLayout();
             this.contextMenuStripTabs.SuspendLayout();
             this.panelMenuTop.SuspendLayout();
             this.SuspendLayout();
@@ -608,6 +604,7 @@ namespace EDDiscovery
             this.panelToolBar.RolledUpHeight = 5;
             this.panelToolBar.RollUpAnimationTime = 500;
             this.panelToolBar.RollUpDelay = 1000;
+            this.panelToolBar.SecondHiddenMarkerWidth = 0;
             this.panelToolBar.ShowHiddenMarker = true;
             this.panelToolBar.Size = new System.Drawing.Size(984, 32);
             this.panelToolBar.TabIndex = 1;
@@ -620,6 +617,7 @@ namespace EDDiscovery
             this.comboBoxCommander.BorderColor = System.Drawing.Color.White;
             this.comboBoxCommander.ButtonColorScaling = 0.5F;
             this.comboBoxCommander.DataSource = null;
+            this.comboBoxCommander.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxCommander.DisplayMember = "";
             this.comboBoxCommander.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxCommander.DropDownHeight = 400;
@@ -631,13 +629,14 @@ namespace EDDiscovery
             this.comboBoxCommander.Name = "comboBoxCommander";
             this.comboBoxCommander.ScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.comboBoxCommander.ScrollBarColor = System.Drawing.Color.LightGray;
-            this.comboBoxCommander.ScrollBarWidth = 16;
+            this.comboBoxCommander.ScrollBarWidth = 13;
             this.comboBoxCommander.SelectedIndex = -1;
             this.comboBoxCommander.SelectedItem = null;
             this.comboBoxCommander.SelectedValue = null;
             this.comboBoxCommander.Size = new System.Drawing.Size(149, 21);
             this.comboBoxCommander.TabIndex = 3;
             this.comboBoxCommander.Text = "Cmdr";
+            this.comboBoxCommander.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.toolTip.SetToolTip(this.comboBoxCommander, "Select the commander to view");
             this.comboBoxCommander.ValueMember = "";
             this.comboBoxCommander.SelectedIndexChanged += new System.EventHandler(this.comboBoxCommander_SelectedIndexChanged);
@@ -746,7 +745,6 @@ namespace EDDiscovery
             // tabControlMain
             // 
             this.tabControlMain.AllowDragReorder = true;
-            this.tabControlMain.Controls.Add(this.tabPageTravelHistory);
             this.tabControlMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlMain.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.tabControlMain.Location = new System.Drawing.Point(0, 56);
@@ -769,25 +767,6 @@ namespace EDDiscovery
             this.tabControlMain.TextSelectedColor = System.Drawing.SystemColors.ControlText;
             this.toolTip.SetToolTip(this.tabControlMain, "Right click to add/remove tabs, Left click drag to reorder");
             this.tabControlMain.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tabControlMain_MouseClick);
-            // 
-            // tabPageTravelHistory
-            // 
-            this.tabPageTravelHistory.Controls.Add(this.travelHistoryControl);
-            this.tabPageTravelHistory.Location = new System.Drawing.Point(4, 22);
-            this.tabPageTravelHistory.Name = "tabPageTravelHistory";
-            this.tabPageTravelHistory.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageTravelHistory.Size = new System.Drawing.Size(976, 457);
-            this.tabPageTravelHistory.TabIndex = 0;
-            this.tabPageTravelHistory.Text = "History";
-            this.tabPageTravelHistory.UseVisualStyleBackColor = true;
-            // 
-            // travelHistoryControl
-            // 
-            this.travelHistoryControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.travelHistoryControl.Location = new System.Drawing.Point(3, 3);
-            this.travelHistoryControl.Name = "travelHistoryControl";
-            this.travelHistoryControl.Size = new System.Drawing.Size(970, 451);
-            this.travelHistoryControl.TabIndex = 0;
             // 
             // contextMenuStripTabs
             // 
@@ -858,8 +837,6 @@ namespace EDDiscovery
             this.statusStrip1.PerformLayout();
             this.notifyIconContextMenuStrip1.ResumeLayout(false);
             this.panelToolBar.ResumeLayout(false);
-            this.tabControlMain.ResumeLayout(false);
-            this.tabPageTravelHistory.ResumeLayout(false);
             this.contextMenuStripTabs.ResumeLayout(false);
             this.panelMenuTop.ResumeLayout(false);
             this.panelMenuTop.PerformLayout();
@@ -931,8 +908,6 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripMenuItem exportVistedStarsListToEliteDangerousToolStripMenuItem;
         private ExtendedControls.ButtonExt buttonExtPopOut;
         private EDDiscovery.MajorTabControl tabControlMain;
-        private System.Windows.Forms.TabPage tabPageTravelHistory;
-        private UserControls.UserControlHistory travelHistoryControl;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripTabs;
         private System.Windows.Forms.ToolStripMenuItem addTabToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem removeTabToolStripMenuItem;

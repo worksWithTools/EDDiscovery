@@ -58,6 +58,18 @@ namespace EliteDangerousCore.EDDN
             return header;
         }
 
+        static public bool IsEDDNMessage( JournalTypeEnum EntryType, DateTime EventTimeUTC )
+        {
+            DateTime ed22 = new DateTime(2016, 10, 25, 12, 0, 0);
+            if ((EntryType == JournalTypeEnum.Scan ||
+                 EntryType == JournalTypeEnum.Docked ||
+                 EntryType == JournalTypeEnum.FSDJump ||
+                 EntryType == JournalTypeEnum.Location ||
+                 EntryType == JournalTypeEnum.Market ||
+                 EntryType == JournalTypeEnum.Shipyard ||
+                 EntryType == JournalTypeEnum.Outfitting) && EventTimeUTC > ed22) return true;
+            else return false;
+        }
 
         private string GetEDDNJournalSchemaRef()
         {
@@ -190,7 +202,7 @@ namespace EliteDangerousCore.EDDN
 
         public JObject CreateEDDNJournalMessage(JournalOutfitting journal, double x, double y, double z, long? systemAddress)
         {
-            if (journal.ModuleItems == null)
+            if (journal.ItemList.Items == null)
                 return null;
 
             JObject msg = new JObject();
@@ -213,7 +225,7 @@ namespace EliteDangerousCore.EDDN
 
         public JObject CreateEDDNOutfittingMessage(JournalOutfitting journal, ISystem system = null)
         {
-            if (journal.ModuleItems == null)
+            if (journal.ItemList.Items == null)
                 return null;
 
             JObject msg = new JObject();
@@ -224,10 +236,10 @@ namespace EliteDangerousCore.EDDN
             JObject message = new JObject
             {
                 ["timestamp"] = journal.EventTimeUTC.ToString("yyyy-MM-ddTHH:mm:ss'Z'"),
-                ["systemName"] = journal.StarSystem,
-                ["stationName"] = journal.StationName,
+                ["systemName"] = journal.ItemList.StarSystem,
+                ["stationName"] = journal.ItemList.StationName,
                 ["marketId"] = journal.MarketID,
-                ["modules"] = new JArray(journal.ModuleItems.Select(m => JournalFieldNaming.NormaliseFDItemName(m.FDName)))
+                ["modules"] = new JArray(journal.ItemList.Items.Select(m => JournalFieldNaming.NormaliseFDItemName(m.FDName)))
             };
 
             //if (systemAddress != null)
@@ -239,7 +251,7 @@ namespace EliteDangerousCore.EDDN
 
         public JObject CreateEDDNJournalMessage(JournalShipyard journal, double x, double y, double z, long? systemAddress)
         {
-            if (journal.ShipyardItems == null)
+            if (journal.Yard.Ships == null)
                 return null;
 
             JObject msg = new JObject();
@@ -262,7 +274,7 @@ namespace EliteDangerousCore.EDDN
 
         public JObject CreateEDDNShipyardMessage(JournalShipyard journal, ISystem system = null)
         {
-            if (journal.ShipyardItems == null)
+            if (journal.Yard.Ships == null)
                 return null;
 
             JObject msg = new JObject();
@@ -273,10 +285,10 @@ namespace EliteDangerousCore.EDDN
             JObject message = new JObject
             {
                 ["timestamp"] = journal.EventTimeUTC.ToString("yyyy-MM-ddTHH:mm:ss'Z'"),
-                ["systemName"] = journal.StarSystem,
-                ["stationName"] = journal.StationName,
+                ["systemName"] = journal.Yard.StarSystem,
+                ["stationName"] = journal.Yard.StationName,
                 ["marketId"] = journal.MarketID,
-                ["ships"] = new JArray(journal.ShipyardItems.Select(m => m.FDShipType))
+                ["ships"] = new JArray(journal.Yard.Ships.Select(m => m.FDShipType))
             };
 
             //if (systemAddress != null)

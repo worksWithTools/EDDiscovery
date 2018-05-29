@@ -1,4 +1,22 @@
-﻿using EliteDangerousCore.JournalEvents;
+﻿/*
+ * Copyright © 2016 EDDiscovery development team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ * 
+ * EDDiscovery is not affiliated with Frontier Developments plc.
+ *
+ * Data courtesy of Coriolis.IO https://github.com/EDCD/coriolis , data is intellectual property and copyright of Frontier Developments plc ('Frontier', 'Frontier Developments') and are subject to their terms and conditions.
+ */
+
+using EliteDangerousCore.JournalEvents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -68,6 +86,8 @@ namespace EliteDangerousCore
 
             ShipInformation newsm = null;       // if we change anything, we need a new clone..
 
+            Dictionary<string, ShipModule> moduleSlots = sm.Modules.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
             foreach (ShipModule m in modulelist)
             {
                 if (!sm.Contains(m.Slot) || !sm.Same(m))  // no slot, or not the same data.. (ignore localised item)
@@ -86,6 +106,27 @@ namespace EliteDangerousCore
 
                     newsm.SetModule(m);                   // update entry only.. rest will still point to same entries
                 }
+
+                moduleSlots.Remove(m.Slot);
+            }
+
+            // Remove modules not in loadout
+            if (moduleSlots.Count != 0)
+            {
+                List<ShipModule> modulesToRemove = moduleSlots.Values.ToList();
+
+                if (newsm == null)
+                {
+                    newsm = sm.ShallowClone();
+                }
+
+                foreach (ShipModule m in modulesToRemove)
+                {
+                    System.Diagnostics.Trace.WriteLine($"Warning: Module {m.Item} in slot {m.Slot} is missing from loadout");
+                    newsm = newsm.RemoveModule(m.Slot, m.Item);
+                }
+
+                Ships[sid] = newsm;
             }
         }
 
@@ -228,7 +269,7 @@ namespace EliteDangerousCore
             }
         }
 
-        public void StoredShips(JournalStoredShips.StoredShipInformation[] ships)
+        public void StoredShips(StoredShipInformation[] ships)
         {
             foreach (var i in ships)
             {
@@ -435,110 +476,4 @@ namespace EliteDangerousCore
     }
 
 
-    public class ModulesInStore
-    {
-        public class StoredModule               // storage used by journal event..
-        {
-            public int StorageSlot;
-            public string Name;
-            public string Name_Localised;
-            public string StarSystem;       // not while in transit
-            public long MarketID;       // not while in transit
-            public long TransferCost;   // not while in transit
-            public int TransferTime;    // not while in transit
-            public string EngineerModifications;    // null if none present
-            public double Quality;      // may not be there
-            public int Level;           // may not be there
-            public bool Hot;
-            public bool InTransit;
-            public int BuyPrice;
-
-            public System.TimeSpan TransferTimeSpan;        // computed
-            public string TransferTimeString; // computed, empty if not in tranfer (time<=0)
-
-            public double Mass
-            {
-                get
-                {
-                    ShipModuleData.ShipModule smd = ShipModuleData.Instance.GetModuleProperties(Name);
-                    return smd?.mass ?? 0;
-                }
-            }
-
-            public void Normalise()
-            {
-                Name = JournalFieldNaming.GetBetterItemNameEvents(Name);
-                Name_Localised = Name_Localised.Alt(Name);
-                TransferTimeSpan = new System.TimeSpan((int)(TransferTime / 60 / 60), (int)((TransferTime / 60) % 60), (int)(TransferTime % 60));
-                TransferTimeString = TransferTime > 0 ? TransferTimeSpan.ToString() : "";
-            }
-
-            public StoredModule(string item, string item_localised)
-            {
-                Name = item;
-                Name_Localised = item_localised.Alt(Name);
-                //System.Diagnostics.Debug.WriteLine("Store module '" + item + "' '" + item_localised + "'");
-            }
-
-            public StoredModule()
-            {
-            }
-        }
-
-        public List<StoredModule> StoredModules { get; private set; }       // by STORE id
-
-        public ModulesInStore()
-        {
-            StoredModules = new List<StoredModule>();
-        }
-
-        public ModulesInStore(List<StoredModule> list)
-        {
-            StoredModules = new List<StoredModule>(list);
-        }
-
-        public ModulesInStore StoreModule(string item, string itemlocalised)
-        {
-            ModulesInStore mis = this.ShallowClone();
-            mis.StoredModules.Add(new StoredModule(item, itemlocalised));
-            return mis;
-        }
-
-        public ModulesInStore StoreModule(JournalMassModuleStore.ModuleItem[] items, Dictionary<string, string> itemlocalisation)
-        {
-            ModulesInStore mis = this.ShallowClone();
-            foreach (var it in items)
-            {
-                string local = itemlocalisation.ContainsKey(it.Name) ? itemlocalisation[it.Name] : "";
-                mis.StoredModules.Add(new StoredModule(it.Name, local));
-            }
-            return mis;
-        }
-
-        public ModulesInStore RemoveModule(string item)
-        {
-            int index = StoredModules.FindIndex(x => x.Name.Equals(item, StringComparison.InvariantCultureIgnoreCase));  // if we have an item of this name
-            if (index != -1)
-            {
-                //System.Diagnostics.Debug.WriteLine("Remove module '" + item + "'  '" + StoredModules[index].Name_Localised + "'");
-                ModulesInStore mis = this.ShallowClone();
-                mis.StoredModules.RemoveAt(index);
-                return mis;
-            }
-            else
-                return this;
-        }
-
-        public ModulesInStore UpdateStoredModules(StoredModule[] newlist)
-        {
-            ModulesInStore mis = new ModulesInStore(newlist.ToList());      // copy constructor ..
-            return mis;
-        }
-
-        public ModulesInStore ShallowClone()          // shallow clone.. does not clone the ship modules, just the dictionary
-        {
-            ModulesInStore mis = new ModulesInStore(this.StoredModules);
-            return mis;
-        }
-    }
 }

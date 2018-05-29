@@ -28,9 +28,18 @@ namespace EliteDangerousCore.JournalEvents
         public JournalLoadGame(JObject evt ) : base(evt, JournalTypeEnum.LoadGame)
         {
             LoadGameCommander = evt["Commander"].Str();
-            Ship = JournalFieldNaming.GetBetterShipName(evt["Ship"].Str());
-            ShipFD = JournalFieldNaming.NormaliseFDShipName(evt["Ship"].Str());
-            ShipId = evt["ShipID"].Int();
+            ShipFD = evt["Ship"].Str();
+            if (ShipFD.Length > 0)      // Vega logs show no ship on certain logs.. handle it to prevent warnings.
+            {
+                ShipFD = JournalFieldNaming.NormaliseFDShipName(ShipFD);
+                Ship = JournalFieldNaming.GetBetterShipName(ShipFD);
+                ShipId = evt["ShipID"].Int();
+            }
+            else
+            {       // leave ShipFD as blank.
+                Ship = "Unknown";
+            }
+
             StartLanded = evt["StartLanded"].Bool();
             StartDead = evt["StartDead"].Bool();
             GameMode = evt["GameMode"].Str();
@@ -64,9 +73,9 @@ namespace EliteDangerousCore.JournalEvents
 
         public bool? Horizons { get; set; }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("Cmdr ", LoadGameCommander, "Ship:", Ship, "Name:", ShipName, "Ident:", ShipIdent, "Credits:;;N0", Credits);
             detailed = BaseUtils.FieldBuilder.Build("Mode:", GameMode , "Group:" , Group , "Not Landed;Landed" , StartLanded , "Fuel Level:;;0.0", FuelLevel , "Capacity:;;0.0" , FuelCapacity);
         }

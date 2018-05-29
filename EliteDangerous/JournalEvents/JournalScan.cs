@@ -51,6 +51,7 @@ namespace EliteDangerousCore.JournalEvents
     //•	RotationPeriod (seconds)
     //•	Rings [ array of info ] - if rings present
     //•	ReserveLevel: (Pristine/Major/Common/Low/Depleted) – if rings present
+    //•	Composition
     //
     // Rings properties
     //•	Name
@@ -108,6 +109,8 @@ namespace EliteDangerousCore.JournalEvents
         public EDAtmosphereProperty AtmosphereProperty;             // Atomsphere -> Property (None, Rich, Thick , Thin, Hot)
         public bool HasAtmosphericComposition { get { return AtmosphereComposition != null && AtmosphereComposition.Any(); } }
         public Dictionary<string, double> AtmosphereComposition { get; set; }
+        public Dictionary<string, double> PlanetComposition { get; set; }
+        public bool HasPlanetaryComposition { get { return PlanetComposition != null && PlanetComposition.Any(); }}
         public string Volcanism { get; set; }                       // direct from journal
         public EDVolcanism VolcanismID { get; }                     // Volcanism -> ID (Water_Magma, Nitrogen_Magma etc)
         public bool HasMeaningfulVolcanism { get { return VolcanismID != EDVolcanism.None && VolcanismID != EDVolcanism.Unknown; } }
@@ -119,7 +122,10 @@ namespace EliteDangerousCore.JournalEvents
         public double? nMassEM { get; set; }                        // direct, not in description of event, mass in EMs
         public bool HasMaterials { get { return Materials != null && Materials.Any(); } }
         public Dictionary<string, double> Materials { get; set; }
+
         public bool IsEDSMBody { get; private set; }
+        public string EDSMDiscoveryCommander { get; private set; }      // may be null if not known
+        public DateTime EDSMDiscoveryUTC { get; private set; }
 
         public EDReserve ReserveLevel { get; set; }
         public string ReserveLevelStr
@@ -309,7 +315,16 @@ namespace EliteDangerousCore.JournalEvents
                 }
             }
 
-            IsEDSMBody = evt["EDDFromEDSMBodie"].Bool(false);
+            JToken composition = evt["Composition"];
+
+            if (composition != null)
+            {
+                PlanetComposition = new Dictionary<string, double>();
+                foreach (JProperty jp in composition)
+                {
+                    PlanetComposition[jp.Name] = (double)jp.Value;
+                }
+            }
 
             EstimatedValue = CalculateEstimatedValue();
 
@@ -322,12 +337,25 @@ namespace EliteDangerousCore.JournalEvents
                     Parents.Add(new BodyParent { Type = prop.Name, BodyID = prop.Value.Int() });
                 }
             }
-        }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)  //V
+            // EDSM bodies fields
+
+            IsEDSMBody = evt["EDDFromEDSMBodie"].Bool(false);           // Bodie? Who is bodie?  Did you mean Body Finwen ;-)
+
+            JToken discovery = evt["discovery"];
+            if (discovery != null)
+            {
+                EDSMDiscoveryCommander = discovery["commander"].StrNull();
+                EDSMDiscoveryUTC = discovery["date"].DateTimeUTC();
+            }
+
+    }
+
+
+    public override string FillSummary { get { return "Scan of " + BodyName; } }
+
+        public override void FillInformation(out string info, out string detailed)  //V
         {
-            summary = $"Scan of {BodyName}";
-
             if (IsStar)
             {
                 double? r = nRadius;
@@ -364,7 +392,7 @@ namespace EliteDangerousCore.JournalEvents
             throw new NotImplementedException();
         }
 
-        public string DisplayString(int indent = 0, bool includefront = true)
+        public string DisplayString(int indent = 0, bool includefront = true , MaterialCommoditiesList historicmatlist = null, MaterialCommoditiesList currentmatlist = null)
         {
             string inds = new string(' ', indent);
 
@@ -374,7 +402,7 @@ namespace EliteDangerousCore.JournalEvents
 
             if (includefront)
             {
-                scanText.AppendFormat("{0}\n\n", BodyName);
+                scanText.AppendFormat("{0} {1}\n\n", BodyName, IsEDSMBody ? " (EDSM)" : "");
 
                 if (IsStar)
                 {
@@ -390,16 +418,20 @@ namespace EliteDangerousCore.JournalEvents
                     }
                 }
 
-                if (HasAtmosphericComposition)
-                {
-                    scanText.Append("\n" + DisplayAtmosphere(2) + "\n");
-                }
-
                 if (IsLandable)
                     scanText.AppendFormat(", Landable");
 
                 scanText.AppendFormat("\n");
 
+                if (HasAtmosphericComposition)
+                    scanText.Append("\n" + DisplayAtmosphere(2));
+                    
+                if (HasPlanetaryComposition)
+                    scanText.Append("\n" + DisplayComposition(2));
+
+                if (HasPlanetaryComposition || HasAtmosphericComposition)
+                    scanText.Append("\n\n");
+                                
                 if (nAge.HasValue)
                     scanText.AppendFormat("Age: {0} million years\n", nAge.Value.ToString("N0"));
 
@@ -502,7 +534,7 @@ namespace EliteDangerousCore.JournalEvents
 
             if (HasMaterials)
             {
-                scanText.Append("\n" + DisplayMaterials(2) + "\n");
+                scanText.Append("\n" + DisplayMaterials(2, historicmatlist , currentmatlist) + "\n");
             }
 
             string habzonestring = HabZoneString();
@@ -514,6 +546,9 @@ namespace EliteDangerousCore.JournalEvents
 
             if (EstimatedValue > 0)
                 scanText.AppendFormat("\nEstimated value: {0:N0}", EstimatedValue);
+
+            if (EDSMDiscoveryCommander != null)
+                scanText.AppendFormat("\n\nDiscovered by " + EDSMDiscoveryCommander + " on " + EDSMDiscoveryUTC.ToStringZulu());
 
             return scanText.ToNullSafeString().Replace("\n", "\n" + inds);
         }
@@ -546,24 +581,52 @@ namespace EliteDangerousCore.JournalEvents
                 return null;
         }
 
-        public string DisplayMaterials(int indent = 0)
+        // optionally, show material counts at the historic point and current.
+        public string DisplayMaterials(int indent = 0, MaterialCommoditiesList historicmatlist = null, MaterialCommoditiesList currentmatlist = null)
         {
             StringBuilder scanText = new StringBuilder();
-            string indents = new string(' ', indent);
 
-            scanText.Append("Materials:\n");
-            foreach (KeyValuePair<string, double> mat in Materials)
+            if (HasMaterials)
             {
-                MaterialCommodityDB mc = MaterialCommodityDB.GetCachedMaterial(mat.Key);
-                if (mc != null)
-                    scanText.AppendFormat(indents + "{0} ({1}) {2} {3}%\n", mc.name, mc.shortname, mc.type, mat.Value.ToString("N1"));
-                else
-                    scanText.AppendFormat(indents + "{0} {1}%\n", System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(mat.Key.ToLower()),
-                                                                mat.Value.ToString("N1"));
+                string indents = new string(' ', indent);
+
+                scanText.Append("Materials:\n");
+                foreach (KeyValuePair<string, double> mat in Materials)
+                {
+                    scanText.Append(indents + DisplayMaterial(mat.Key, mat.Value, historicmatlist, currentmatlist));
+                }
+
+                if (scanText.Length > 0 && scanText[scanText.Length - 1] == '\n')
+                    scanText.Remove(scanText.Length - 1, 1);
             }
 
-            if (scanText.Length > 0 && scanText[scanText.Length - 1] == '\n')
-                scanText.Remove(scanText.Length - 1, 1);
+            return scanText.ToNullSafeString();
+        }
+
+        public string DisplayMaterial(string name, double percent, MaterialCommoditiesList historicmatlist = null, MaterialCommoditiesList currentmatlist = null)
+        {
+            StringBuilder scanText = new StringBuilder();
+
+            MaterialCommodityDB mc = MaterialCommodityDB.GetCachedMaterial(name);
+
+            if (mc != null && (historicmatlist != null || currentmatlist != null))
+            {
+                MaterialCommodities historic = historicmatlist?.Find(mc.name);
+                MaterialCommodities current = ReferenceEquals(historicmatlist,currentmatlist) ? null : currentmatlist?.Find(mc.name);
+                int? limit = MaterialCommodityDB.MaterialLimit(mc);
+
+                string matinfo = historic?.count.ToString() ?? "0";
+                if (limit != null)
+                    matinfo += "/" + limit.Value.ToString();
+
+                if (current != null && (historic == null || historic.count != current.count) )
+                    matinfo += " Cur " + current.count.ToString();
+
+                scanText.AppendFormat("{0} ({1}) {2} {3}% {4}\n", mc.name, mc.shortname, mc.type, percent.ToString("N1"), matinfo);
+            }
+            else
+                scanText.AppendFormat("{0} {1}%\n", System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(name.ToLower()),
+                                                            percent.ToString("N1"));
 
             return scanText.ToNullSafeString();
         }
@@ -577,6 +640,24 @@ namespace EliteDangerousCore.JournalEvents
             foreach (KeyValuePair<string, double> comp in AtmosphereComposition)
             {
                 scanText.AppendFormat(indents + indents + "{0} - {1}%\n", comp.Key, comp.Value.ToString("N2"));
+            }
+
+            if (scanText.Length > 0 && scanText[scanText.Length - 1] == '\n')
+                scanText.Remove(scanText.Length - 1, 1);
+
+            return scanText.ToNullSafeString();
+        }
+
+        public string DisplayComposition(int indent = 0)
+        {
+            StringBuilder scanText = new StringBuilder();
+            string indents = new string(' ', indent);
+
+            scanText.Append(indents + "Planetary Composition:\n");
+            foreach (KeyValuePair<string, double> comp in PlanetComposition)
+            {
+                if (comp.Value > 0)
+                    scanText.AppendFormat(indents + indents + "{0} - {1}%\n", comp.Key, (comp.Value * 100).ToString("N2"));
             }
 
             if (scanText.Length > 0 && scanText[scanText.Length - 1] == '\n')
@@ -670,6 +751,17 @@ namespace EliteDangerousCore.JournalEvents
 
             return AtmosphereComposition[c];
 
+        }
+
+        public double? GetCompositionPercent(string c)
+        {
+            if (!HasPlanetaryComposition)
+                return null;
+
+            if (!PlanetComposition.ContainsKey(c))
+                return 0.0;
+
+            return PlanetComposition[c] * 100;
         }
 
         public bool IsStarNameRelated(string starname, string designation = null)

@@ -117,14 +117,9 @@ namespace EDDiscovery
         private bool AddImages()
         {
             fgeimages = new List<Map2d>();
-            string datapath = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Maps");
-            if (Directory.Exists(datapath))
-            {
-                fgeimages = Map2d.LoadImages(datapath);
-                return fgeimages.Count > 0;
-            }
-            else
-                return false;
+            string datapath = EDDOptions.Instance.MapsAppDirectory();
+            fgeimages = Map2d.LoadImages(datapath);
+            return fgeimages.Count > 0;
         }
 
         private void DrawTravelHistory()
@@ -133,21 +128,23 @@ namespace EDDiscovery
 
             int currentcmdr = EDCommander.CurrentCmdrID;
 
-            var history = from systems in syslist where systems.EventTimeLocal > start && systems.EventTimeLocal<endDate && systems.System.HasCoordinate == true  orderby systems.EventTimeUTC  select systems;
-            List<HistoryEntry> listHistory = history.ToList();
+            List<HistoryEntry> jumps = (from systems in syslist where systems.EventTimeLocal > start && systems.EventTimeLocal < endDate && systems.IsLocOrJump orderby systems.EventTimeUTC select systems).ToList();
+
+            Color drawcolour = Color.Green;
 
             using (Graphics gfx = Graphics.FromImage(imageViewer.Image))
             {
-                if (listHistory.Count > 1)
+                for (int ii = 0; ii < jumps.Count-1; ii++)
                 {
-                    for (int ii = 1; ii < listHistory.Count; ii++)
+                    if (jumps[ii].IsFSDJump)
                     {
-                        Color a = Color.FromArgb(listHistory[ii].MapColour);
-                        Color b = (a.IsFullyTransparent()) ? Color.FromArgb(255, a) : a;
-
-                        using (Pen pen = new Pen(b, 2))
-                            DrawLine(gfx, pen, listHistory[ii - 1].System, listHistory[ii].System);
+                        drawcolour = Color.FromArgb((jumps[ii].journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump).MapColor);
+                        if (drawcolour.GetBrightness() < 0.05)
+                            drawcolour = Color.Red;
                     }
+
+                    using (Pen pen = new Pen(drawcolour, 2))
+                        DrawLine(gfx, pen, jumps[ii].System, jumps[ii+1].System);
                 }
 
                 if (DisplayTestGrid)

@@ -64,7 +64,6 @@ namespace EDDiscovery.UserControls
 
             SetCheckBoxes();
 
-            uctg.OnTravelSelectionChanged += Display;
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -72,6 +71,19 @@ namespace EDDiscovery.UserControls
             uctg.OnTravelSelectionChanged -= Display;
             uctg = thc;
             uctg.OnTravelSelectionChanged += Display;
+        }
+
+        public override void LoadLayout()
+        {
+            uctg.OnTravelSelectionChanged += Display;
+            DGVLoadColumnLayout(dataGridViewMC, DbColumnSave);
+        }
+
+        public override void Closing()
+        {
+            DGVSaveColumnLayout(dataGridViewMC, DbColumnSave);
+
+            uctg.OnTravelSelectionChanged -= Display;
         }
 
         void SetCheckBoxes()
@@ -117,7 +129,7 @@ namespace EDDiscovery.UserControls
 
                     if (materials)
                     {
-                        rowobj = new[] { m.name, m.shortname, m.category, m.type, m.count.ToString() };
+                        rowobj = new[] { m.name, m.shortname, m.category, m.type, $"{m.count.ToString()}/{(MaterialCommodityDB.MaterialLimit(m.type)??0).ToString()}" };
                     }
                     else
                     {
@@ -149,21 +161,6 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        #region Layout
-
-        public override void LoadLayout()
-        {
-            DGVLoadColumnLayout(dataGridViewMC, DbColumnSave);
-        }
-
-        public override void Closing()
-        {
-            DGVSaveColumnLayout(dataGridViewMC, DbColumnSave);
-
-            uctg.OnTravelSelectionChanged -= Display;
-        }
-
-        #endregion
 
         private void checkBoxClear_CheckStateChanged(object sender, EventArgs e)
         {
@@ -180,9 +177,9 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewMC_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
-            if ((materials && e.Column.Index == 4) || (!materials && (e.Column.Index == 2 || e.Column.Index == 3)))
+            if ((materials && e.Column.Index == 4) || (!materials && e.Column.Index == 3))
             {
-                e.SortDataGridViewColumnDate();
+                e.SortDataGridViewColumnNumeric();
             }
         }
     }

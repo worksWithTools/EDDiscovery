@@ -29,7 +29,6 @@ namespace EliteDangerousCore
         public string type { get; set; }                    // and its type, for materials its rarity, for commodities its group ("Metals" etc).
         public string shortname { get; set; }               // short abv. name
         public Color colour { get; set; }                   // colour if its associated with one
-        public int flags { get; set; }                      // now out of date.. keep for now to limit code changes
 
         public static string CommodityCategory = "Commodity";
         public static string MaterialRawCategory = "Raw";
@@ -44,10 +43,18 @@ namespace EliteDangerousCore
         public static string MaterialFreqCommon = "Common";
         public static string MaterialFreqVeryCommon = "Very Common";
 
+        public const int VeryCommonCap = 300;
+        public const int CommonCap = 250;
+        public const int StandardCap = 200;
+        public const int RareCap = 150;
+        public const int VeryRareCap = 100;
+
+        // name key is lower case normalised
         private static Dictionary<string, MaterialCommodityDB> cachelist = new Dictionary<string, MaterialCommodityDB>();
 
         public static MaterialCommodityDB GetCachedMaterial(string fdname)
         {
+            fdname = fdname.ToLower();
             return cachelist.ContainsKey(fdname) ? cachelist[fdname] : null;
         }
 
@@ -62,7 +69,7 @@ namespace EliteDangerousCore
         {
         }
 
-        public MaterialCommodityDB(string cs, string n, string fd, string t, string shortn, Color cl, int fl)
+        public MaterialCommodityDB(string cs, string n, string fd, string t, string shortn, Color cl)
         {
             category = cs;
             name = n;
@@ -70,9 +77,24 @@ namespace EliteDangerousCore
             type = t;
             shortname = shortn;
             colour = cl;
-            flags = fl;
         }
 
+        public static int? MaterialLimit(string type)
+        {
+            if (type == MaterialFreqVeryCommon) return VeryCommonCap;
+            if (type == MaterialFreqCommon) return CommonCap;
+            if (type == MaterialFreqStandard) return StandardCap;
+            if (type == MaterialFreqRare) return RareCap;
+            if (type == MaterialFreqVeryRare) return VeryRareCap;
+            return null;
+        }
+
+        public static int? MaterialLimit(MaterialCommodityDB mat)
+        {
+            if (string.IsNullOrEmpty(mat?.type)) return null;
+            return MaterialLimit(mat.type);
+        }
+        
         public void SetCache()
         {
             cachelist[this.fdname.ToLower()] = this;
@@ -82,7 +104,7 @@ namespace EliteDangerousCore
         {
             if (!cachelist.ContainsKey(fdname.ToLower()))
             {
-                MaterialCommodityDB mcdb = new MaterialCommodityDB(cat, fdname.SplitCapsWordFull(), fdname, "", "", Color.Green, 0);
+                MaterialCommodityDB mcdb = new MaterialCommodityDB(cat, fdname.SplitCapsWordFull(), fdname, "", "", Color.Green);
                 mcdb.SetCache();
                 System.Diagnostics.Debug.WriteLine("Material not present: " + cat + "," + fdname );
             }
@@ -167,9 +189,17 @@ namespace EliteDangerousCore
         private static bool Add(string catname, Color colour, string aliasname, string typeofit, string shortname = "", string fdName = "")
         {
             string fdn = (fdName.Length > 0) ? fdName : aliasname.FDName();
-            MaterialCommodityDB mc = new MaterialCommodityDB(catname, aliasname, fdn, typeofit, shortname, colour, 0);
+            MaterialCommodityDB mc = new MaterialCommodityDB(catname, aliasname, fdn, typeofit, shortname, colour);
             mc.SetCache();
             return true;
+        }
+
+        public static bool IsJumponium(string name)
+        {
+            name = name.ToLower();
+            return (name.Contains("arsenic") || name.Contains("cadmium") || name.Contains("carbon")
+                || name.Contains("germanium") || name.Contains("niobium") || name.Contains("polonium")
+                || name.Contains("vanadium") || name.Contains("yttrium"));
         }
 
         public static void SetUpInitialTable()
@@ -205,8 +235,7 @@ namespace EliteDangerousCore
             AddRaw("Tellurium", MaterialFreqRare, "Te");
             AddRaw("Ruthenium", MaterialFreqRare, "Ru");
             AddRaw("Polonium", MaterialFreqRare, "Po");
-
-            AddRaw("Antimony", MaterialFreqVeryRare, "Sb");
+            AddRaw("Antimony", MaterialFreqRare, "Sb");
 
             AddCommodity("Explosives;Hydrogen Fuel;Hydrogen Peroxide;Liquid Oxygen;Mineral Oil;Nerve Agents;Pesticides;Surface Stabilisers;Synthetic Reagents;Water", "Chemicals");
 
@@ -440,9 +469,7 @@ namespace EliteDangerousCore
             AddEnc("Strange Wake Solutions", MaterialFreqStandard, "SWS", "wakesolutions");
             AddEnc("Unexpected Emission Data", MaterialFreqStandard, "UED", "emissiondata");
             AddEnc("Untypical Shield Scans", MaterialFreqStandard, "USS", "shielddensityreports");
-            AddEnc("Classified Scan Fragment", MaterialFreqStandard, "CFSD", "classifiedscandata");
             AddEnc("Abnormal Compact Emissions Data", MaterialFreqStandard, "CED", "compactemissionsdata");
-            AddEnc("Modified Embedded Firmware", MaterialFreqStandard, "EFW", "embeddedfirmware");
             AddEnc("Pattern Alpha Obelisk Data", MaterialFreqStandard, "PAOD", "ancientbiologicaldata");
             AddEnc("Ship Flight Data", MaterialFreqStandard, "SFD");     // from INARA - FDName needs checking
             // rare data
@@ -456,6 +483,8 @@ namespace EliteDangerousCore
             AddEnc("Guardian Weapon Blueprint Segment", MaterialFreqRare, "GWBS");  // from INARA - FDName needs checking
             AddEnc("Guardian Module Blueprint Segment", MaterialFreqRare, "GMBS", "guardian_moduleblueprint");
             // very rare data
+            AddEnc("Classified Scan Fragment", MaterialFreqVeryRare, "CFSD", "classifiedscandata");
+            AddEnc("Modified Embedded Firmware", MaterialFreqVeryRare, "EFW", "embeddedfirmware");
             AddEnc( "Adaptive Encryptors Capture", MaterialFreqVeryRare, "AEC", "adaptiveencryptors");
             AddEnc( "Datamined Wake Exceptions", MaterialFreqVeryRare, "DWEx", "dataminedwake");
             AddEnc( "Peculiar Shield Frequency Data", MaterialFreqVeryRare, "PSFD", "shieldfrequencydata");
@@ -470,7 +499,7 @@ namespace EliteDangerousCore
             AddManu("Mechanical Scrap", MaterialFreqVeryCommon, "MS");
             AddManu("Salvaged Alloys", MaterialFreqVeryCommon, "SAll");
             AddManu("Worn Shield Emitters", MaterialFreqVeryCommon, "WSE");
-            AddManu("Thermic Alloys", MaterialFreqVeryCommon, "ThA");
+            AddManu( "Tempered Alloys", MaterialFreqVeryCommon, "TeA");
             AddManu("Guardian Sentinel Wreckage Components", MaterialFreqVeryCommon, "GSWC", "guardian_sentinel_wreckagecomponents");
             AddManu("Guardian Power Cell", MaterialFreqVeryCommon, "GPCe", "guardian_powercell");
             // common manufactured
@@ -511,8 +540,8 @@ namespace EliteDangerousCore
             AddManu( "Polymer Capacitors", MaterialFreqRare, "PCa");
             AddManu( "Proto Light Alloys", MaterialFreqRare, "PLA");
             AddManu( "Refined Focus Crystals", MaterialFreqRare, "RFC");
-            AddManu( "Tempered Alloys", MaterialFreqRare, "TeA");
             AddManu( "Proprietary Composites", MaterialFreqRare, "FPC", "fedproprietarycomposites");
+            AddManu("Thermic Alloys", MaterialFreqRare, "ThA");
             // very rare manufactured
             AddManu( "Core Dynamics Composites", MaterialFreqVeryRare, "FCC", "fedcorecomposites");
             AddManu( "Biotech Conductors", MaterialFreqVeryRare, "BiC");

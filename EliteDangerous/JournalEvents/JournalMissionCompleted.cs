@@ -37,7 +37,8 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalMissionCompleted(JObject evt) : base(evt, JournalTypeEnum.MissionCompleted)
         {
-            Name = JournalFieldNaming.GetBetterMissionName(evt["Name"].Str());
+            FDName = evt["Name"].Str();
+            Name = JournalFieldNaming.GetBetterMissionName(FDName);
             Faction = evt["Faction"].Str();
 
             Commodity = JournalFieldNaming.FixCommodityName(evt["Commodity"].Str());             // evidence of $_name problem, fix to fdname
@@ -88,6 +89,7 @@ namespace EliteDangerousCore.JournalEvents
         }
 
         public string Name { get; set; }
+        public string FDName { get; set; }
         public string Faction { get; set; }
 
         public string Commodity { get; set; }               // FDNAME, leave, evidence of the $_name problem
@@ -147,9 +149,9 @@ namespace EliteDangerousCore.JournalEvents
             mlist.Completed(this);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)  //V
+        public override void FillInformation(out string info, out string detailed)  //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("", Name,
                                         "< from ", Faction,
                                         "Reward:; cr;N0", Reward,
@@ -234,7 +236,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             public string Name; // fdname
             public string FriendlyName; // our conversion
-            public string Name_Localised;       // may be null
+            public string Name_Localised;       // may be null on reading
             public string Category; // may be null
             public string Category_Localised; // may be null
             public int Count;
@@ -244,6 +246,12 @@ namespace EliteDangerousCore.JournalEvents
                 Name = JournalFieldNaming.FDNameTranslation(Name);
                 FriendlyName = JournalFieldNaming.RMat(Name);
                 Name_Localised = Name_Localised.Alt(FriendlyName);
+
+                if (Category != null)
+                {
+                    Category = JournalFieldNaming.NormaliseMaterialCategory(Category);
+                    Category_Localised = Category_Localised.Alt(Category);
+                }
             }
         }
 

@@ -391,7 +391,6 @@ namespace EDDiscovery.UserControls
             this.textBoxDefaultZoom.SelectionStart = 0;
             this.textBoxDefaultZoom.Size = new System.Drawing.Size(51, 20);
             this.textBoxDefaultZoom.TabIndex = 6;
-            this.textBoxDefaultZoom.Text = "0";
             this.textBoxDefaultZoom.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip.SetToolTip(this.textBoxDefaultZoom, "Set the zoom level of the map. 1 is normal");
             this.textBoxDefaultZoom.Value = 0D;
@@ -410,7 +409,7 @@ namespace EDDiscovery.UserControls
             this.textBoxHomeSystem.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.textBoxHomeSystem.DropDownBorderColor = System.Drawing.Color.Green;
             this.textBoxHomeSystem.DropDownHeight = 200;
-            this.textBoxHomeSystem.DropDownItemHeight = 20;
+            this.textBoxHomeSystem.DropDownItemHeight = 13;
             this.textBoxHomeSystem.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
             this.textBoxHomeSystem.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.textBoxHomeSystem.DropDownScrollBarColor = System.Drawing.Color.LightGray;

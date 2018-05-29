@@ -33,6 +33,7 @@ namespace EDDiscovery
         public bool ActionButton { get; private set; }
         public bool NoLoad { get; private set; }
         public bool NoTheme { get; set; }
+        public bool TabsReset { get; set; }
         public bool NoSystemsLoad { get; private set; }
         public bool NoSound { get; private set; }
         public bool No3DMap { get; private set; }
@@ -43,6 +44,25 @@ namespace EDDiscovery
         public bool DontAskGithubForPacks { get; private set; }
         public bool DisableBetaCommanderCheck { get; private set; }
         public bool ForceBetaOnCommander { get; private set; }
+
+        public string SubAppDirectory(string subfolder)     // ensures its there.. name without \ slashes
+        {
+            string path = Path.Combine(EDDOptions.Instance.AppDataDirectory, subfolder);
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+            return path;
+        }
+
+        public string ExploreAppDirectory() { return SubAppDirectory("Exploration"); }
+        public string ExpeditionsAppDirectory() { return SubAppDirectory("Expeditions"); }
+        public string ActionsAppDirectory() { return SubAppDirectory("Actions"); }
+        public string VideosAppDirectory() { return SubAppDirectory("Videos"); }
+        public string SoundsAppDirectory() { return SubAppDirectory("Sounds"); }
+        public string IconsAppDirectory() { return SubAppDirectory("Icons"); }
+        public string MapsAppDirectory() { return SubAppDirectory("Maps"); }
+        public string LogAppDirectory() { return SubAppDirectory("Log"); }
+        public string FlightsAppDirectory() { return SubAppDirectory("Flights"); }
+        public string ThemeAppDirectory() { return SubAppDirectory("Theme"); }
 
         private string AppFolder { get; set; }      // internal to use.. for -appfolder option
         private bool StoreDataInProgramDirectory { get; set; }  // internal to us, to indicate portable
@@ -238,6 +258,7 @@ namespace EDDiscovery
                         ForceBetaOnCommander = true;
                         break;
                     case "notheme": NoTheme = true; break;
+                    case "tabsreset": TabsReset = true; break;
                     case "nosound": NoSound = true; break;
                     case "no3dmap": No3DMap = true; break;
                     case "notitleinfo": DisableShowDebugInfoInTitle = true; break;

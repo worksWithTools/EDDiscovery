@@ -26,18 +26,20 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalMissionFailed(JObject evt ) : base(evt, JournalTypeEnum.MissionFailed)
         {
-            Name = JournalFieldNaming.GetBetterMissionName(evt["Name"].Str());
+            FDName = evt["Name"].Str();
+            Name = JournalFieldNaming.GetBetterMissionName(FDName);
             MissionId = evt["MissionID"].Int();
             Fine = evt["Fine"].LongNull();
         }
 
         public string Name { get; set; }
+        public string FDName { get; set; }
         public int MissionId { get; set; }
         public long? Fine { get; set; }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("", Name,"Fine:",Fine);
             detailed = "";
         }

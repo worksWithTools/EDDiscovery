@@ -36,11 +36,11 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalEngineerCraftBase(JObject evt, JournalTypeEnum en) : base(evt, en)
         {
-            Slot = JournalFieldNaming.GetBetterSlotName(evt["Slot"].Str());
             SlotFD = JournalFieldNaming.NormaliseFDSlotName(evt["Slot"].Str());
+            Slot = JournalFieldNaming.GetBetterSlotName(SlotFD);
 
-            Module = JournalFieldNaming.GetBetterItemNameEvents(evt["Module"].Str());
             ModuleFD = JournalFieldNaming.NormaliseFDItemName(evt["Module"].Str());
+            Module = JournalFieldNaming.GetBetterItemName(ModuleFD);
 
             Engineering = new ShipModule.EngineeringData(evt);
             
@@ -100,9 +100,9 @@ namespace EliteDangerousCore.JournalEvents
             }
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("In ", Slot , "" , Module, "By ", Engineering.Engineer, "Blueprint ", Engineering.FriendlyBlueprintName, "Level ", Engineering.Level);
 
             detailed = "";

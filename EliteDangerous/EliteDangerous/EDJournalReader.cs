@@ -31,13 +31,12 @@ namespace EliteDangerousCore
 
     public class EDJournalReader : LogReaderBase
     {
-        // Close Quarters Combat
-        public bool CQC { get; set; }
-
-        // Time and timezone
-        public DateTime LastLogTime { get; set; }
-        public TimeZoneInfo TimeZone { get; set; }
-        public TimeSpan TimeZoneOffset { get; set; }
+        JournalEvents.JournalShipyard lastshipyard = null;
+        JournalEvents.JournalStoredShips laststoredships = null;
+        JournalEvents.JournalStoredModules laststoredmodules = null;
+        JournalEvents.JournalOutfitting lastoutfitting = null;
+        JournalEvents.JournalMarket lastmarket = null;
+        const int timelimit = 5 * 60;   //seconds.. 5 mins between logs. Note if we undock, we reset the counters.
 
         private Queue<JournalReaderEntry> StartEntries = new Queue<JournalReaderEntry>();
 
@@ -48,9 +47,6 @@ namespace EliteDangerousCore
         public EDJournalReader(TravelLogUnit tlu) : base(tlu)
         {
         }
-
-        // Journal ID
-        public int JournalId { get { return (int)TravelLogUnit.id; } }
 
         private JournalReaderEntry ProcessLine(string line, bool resetOnError)
         {
@@ -93,6 +89,8 @@ namespace EliteDangerousCore
                 return null;
             }
 
+            bool toosoon = false;
+
             if (je.EventTypeID == JournalTypeEnum.Fileheader)
             {
                 JournalEvents.JournalFileheader header = (JournalEvents.JournalFileheader)je;
@@ -122,23 +120,23 @@ namespace EliteDangerousCore
                     newname = "[BETA] " + newname;
                 }
 
-                EDCommander _commander = EDCommander.GetCommander(newname);
+                EDCommander commander = EDCommander.GetCommander(newname);
 
-                if (_commander == null )
+                if (commander == null )
                 {
-                    _commander = EDCommander.GetAll().FirstOrDefault();
-                    if (EDCommander.NumberOfCommanders == 1 && _commander != null && _commander.Name == "Jameson (Default)")
+                    commander = EDCommander.GetListCommanders().FirstOrDefault();
+                    if (EDCommander.NumberOfCommanders == 1 && commander != null && commander.Name == "Jameson (Default)")
                     {
-                        _commander.Name = newname;
-                        _commander.EdsmName = newname;
-                        EDCommander.Update(new List<EDCommander> { _commander }, false);
+                        commander.Name = newname;
+                        commander.EdsmName = newname;
+                        EDCommander.Update(new List<EDCommander> { commander }, false);
                     }
                     else
-                        _commander = EDCommander.Create(newname, null, EDJournalClass.GetDefaultJournalDir().Equals(TravelLogUnit.Path) ? "" : TravelLogUnit.Path);
+                        commander = EDCommander.Create(newname, null, EDJournalClass.GetDefaultJournalDir().Equals(TravelLogUnit.Path) ? "" : TravelLogUnit.Path);
 
                 }
 
-                cmdrid = _commander.Nr;
+                cmdrid = commander.Nr;
 
                 if (!TravelLogUnit.CommanderId.HasValue)
                 {
@@ -159,50 +157,92 @@ namespace EliteDangerousCore
                     return null;
             }
 
+            if (je is JournalEvents.JournalShipyard)                // when going into shipyard
+            {
+                toosoon = lastshipyard != null && lastshipyard.Yard.Equals((je as JournalEvents.JournalShipyard).Yard);
+                lastshipyard = je as JournalEvents.JournalShipyard;
+            }
+            else if (je is JournalEvents.JournalStoredShips)        // when going into shipyard
+            {
+                toosoon = laststoredships != null && CollectionStaticHelpers.Equals(laststoredships.ShipsHere, (je as JournalEvents.JournalStoredShips).ShipsHere) &&
+                    CollectionStaticHelpers.Equals(laststoredships.ShipsRemote, (je as JournalEvents.JournalStoredShips).ShipsRemote);
+                laststoredships = je as JournalEvents.JournalStoredShips;
+            }
+            else if (je is JournalEvents.JournalStoredModules)      // when going into outfitting
+            {
+                toosoon = laststoredmodules != null && CollectionStaticHelpers.Equals(laststoredmodules.ModuleItems, (je as JournalEvents.JournalStoredModules).ModuleItems);
+                laststoredmodules = je as JournalEvents.JournalStoredModules;
+            }
+            else if (je is JournalEvents.JournalOutfitting)         // when doing into outfitting
+            {
+                toosoon = lastoutfitting != null && lastoutfitting.ItemList.Equals((je as JournalEvents.JournalOutfitting).ItemList);
+                lastoutfitting = je as JournalEvents.JournalOutfitting;
+            }
+            else if (je is JournalEvents.JournalMarket)
+            {
+                toosoon = lastmarket != null && lastmarket.Equals(je as JournalEvents.JournalMarket);
+                lastmarket = je as JournalEvents.JournalMarket;
+            }
+            else if (je is JournalEvents.JournalUndocked || je is JournalEvents.JournalLoadGame)             // undocked, Load Game, repeats are cleared
+            {
+                lastshipyard = null;
+                laststoredmodules = null;
+                lastoutfitting = null;
+                laststoredmodules = null;
+                laststoredships = null;
+            }
+
+            if (toosoon)                                                // if seeing repeats, remove
+            {
+                System.Diagnostics.Debug.WriteLine("**** Remove as dup " + je.EventTypeStr);
+                return null;
+            }
+
             je.TLUId = (int)TravelLogUnit.id;
             je.CommanderId = cmdrid;
 
             return new JournalReaderEntry { JournalEntry = je, Json = jo };
         }
 
-        private bool ReadJournalLog(out JournalReaderEntry jent, bool resetOnError = false)
+        // function needs to report two things, list of JREs (may be empty) and if it read something, bool.. hence form changed
+        // bool reporting we have performed any sort of action is important.. it causes the TLU pos to be updated above even if we have junked all the events or delayed them
+
+        public bool ReadJournal(out List<JournalReaderEntry> jent, bool resetOnError = false)      // True if anything was processed, even if we rejected it
         {
-            if (StartEntries.Count != 0 && this.TravelLogUnit.CommanderId != null && this.TravelLogUnit.CommanderId >= 0)
-            {
-                jent = StartEntries.Dequeue();
-                jent.JournalEntry.CommanderId = (int)TravelLogUnit.CommanderId;
-                return true;
-            }
+            jent = new List<JournalReaderEntry>();
 
-            while (ReadLine(out jent, l => ProcessLine(l, resetOnError)))
-            {
-                if (jent == null)
-                    continue;
+            bool readanything = false;
 
-                if ((this.TravelLogUnit.CommanderId == null || this.TravelLogUnit.CommanderId < 0) && jent.JournalEntry.EventTypeID != JournalTypeEnum.LoadGame)
+            while (ReadLine(out JournalReaderEntry newentry, l => ProcessLine(l, resetOnError)))
+            {
+                readanything = true;
+
+                if (newentry != null)                           // if we got a record back, we may not because it may not be valid or be rejected..
                 {
-                    StartEntries.Enqueue(jent);
-                    continue;
+                    // if we don't have a commander yet, we need to queue it until we have one, since every entry needs a commander
+
+                    if ((this.TravelLogUnit.CommanderId == null || this.TravelLogUnit.CommanderId < 0) && newentry.JournalEntry.EventTypeID != JournalTypeEnum.LoadGame)
+                    {
+                        //System.Diagnostics.Debug.WriteLine("*** Delay " + newentry.JournalEntry.EventTypeStr);
+                        StartEntries.Enqueue(newentry);         // queue..
+                    }
+                    else
+                    {
+                        while (StartEntries.Count != 0)     // we have a commander, anything queued up, play that in first.
+                        {
+                            var dentry = StartEntries.Dequeue();
+                            dentry.JournalEntry.CommanderId = (int)TravelLogUnit.CommanderId;
+                            //System.Diagnostics.Debug.WriteLine("*** UnDelay " + dentry.JournalEntry.EventTypeStr);
+                            jent.Add(dentry);
+                        }
+
+                        //System.Diagnostics.Debug.WriteLine("*** Send  " + newentry.JournalEntry.EventTypeStr);
+                        jent.Add(newentry);                     // and store in new entry
+                    }
                 }
-
-                //System.Diagnostics.Trace.WriteLine(string.Format("Read line {0} from {1}", line, this.FileName));
-
-                return true;
             }
 
-            jent = null;
-            return false;
-        }
-
-        public IEnumerable<JournalReaderEntry> ReadJournalLog(bool continueOnError = false)
-        {
-            JournalReaderEntry entry;
-            bool resetOnError = false;
-            while (ReadJournalLog(out entry, resetOnError: resetOnError))
-            {
-                yield return entry;
-                resetOnError = !continueOnError;
-            }
+            return readanything;
         }
     }
 }

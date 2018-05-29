@@ -41,7 +41,10 @@ namespace EliteDangerousCore.JournalEvents
 
             if (MaterialList != null)
                 foreach (Materials m in MaterialList)
+                {
                     m.FriendlyName = JournalFieldNaming.RMat(m.Name);
+                    m.Category = JournalFieldNaming.NormaliseMaterialCategory(m.Category);
+                }
 
             string oldentry = evt["ItemUnlocked"].StrNull();        // 3.02 journal entry
             if (ItemsUnlocked == null && oldentry != null)
@@ -75,9 +78,9 @@ namespace EliteDangerousCore.JournalEvents
             public int Count;
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("Type:", BrokerType);
 
             if (ItemsUnlocked != null)

@@ -16,25 +16,16 @@
 using EliteDangerousCore.EDDN;
 using EliteDangerousCore.EDSM;
 using EDDiscovery.Forms;
-using BaseUtils.Win32Constants;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Configuration;
 using System.Data;
-using System.Data.Common;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using EliteDangerousCore;
@@ -58,7 +49,8 @@ namespace EDDiscovery
         static public EDDConfig EDDConfig { get { return EDDConfig.Instance; } }
         public EDDTheme theme { get { return EDDTheme.Instance; } }
 
-        public UserControls.UserControlHistory TravelControl { get { return travelHistoryControl; } }
+        public UserControls.IHistoryCursor PrimaryCursor { get { return tabControlMain.PrimaryTab.GetTravelGrid; } }
+        public UserControls.UserControlContainerSplitter PrimarySplitter { get { return tabControlMain.PrimaryTab; } }
         
         public ScreenShots.ScreenShotConverter screenshotconverter;
 
@@ -83,6 +75,9 @@ namespace EDDiscovery
         public event Action<List<string>> OnNewStarsForExpedition;      // add stars to expedition 
         public event Action<List<string>, bool> OnNewStarsForTrilat;      // add stars to trilat (false distance, true wanted)
         public event Action OnAddOnsChanged;                            // add on changed
+        public event Action<int,string> OnEDSMSyncComplete;             // EDSM Sync has completed with this list of stars are newly created
+        public event Action<int> OnEDDNSyncComplete;                    // Sync has completed
+        public event Action<int,string> OnEGOSyncComplete;              // EGO Sync has completed with records on this list of stars
 
         #endregion
 
@@ -179,8 +174,52 @@ namespace EDDiscovery
             Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Creating major tabs Now");
             MaterialCommodityDB.SetUpInitialTable();
 
+
+            // Tab reset Setup
+
+            if (EDDOptions.Instance.TabsReset)
+            {
+                SQLiteConnectionUser.DeleteKey("GridControlWindows%");              // these hold the grid/splitter control values for all windows
+                SQLiteConnectionUser.DeleteKey("SplitterControlWindows%");          // wack them so they start empty.
+                SQLiteConnectionUser.DeleteKey("SavedPanelInformation.%");          // and delete the pop out history
+            }
+
+            //Make sure the primary splitter is set up.. and rational
+
+            string primarycontrolname = "SplitterControlWindows";                   // primary name for first splitter
+
+            {
+                string splitctrl = SQLiteConnectionUser.GetSettingString(primarycontrolname, "");
+
+                if (splitctrl == "" || !splitctrl.Contains("'0,1006'"))   // never set, or wiped, or does not have TG in it, reset.. if previous system had the IDs, use them, else use defaults
+                {
+                    string typeprefix = EDDOptions.Instance.TabsReset ? "?????" : "TravelControl";      // if we have a tab reset, look up a nonsense name, to give default
+
+                    int enum_bottom = SQLiteDBClass.GetSettingInt(typeprefix + "BottomTab", (int)(PanelInformation.PanelIDs.Scan));
+                    int enum_bottomright = SQLiteDBClass.GetSettingInt(typeprefix + "BottomRightTab", (int)(PanelInformation.PanelIDs.Log));
+                    int enum_middleright = SQLiteDBClass.GetSettingInt(typeprefix + "MiddleRightTab", (int)(PanelInformation.PanelIDs.StarDistance));
+                    int enum_topright = SQLiteDBClass.GetSettingInt(typeprefix + "TopRightTab", (int)(PanelInformation.PanelIDs.SystemInformation));
+
+                    string ctrl = "V(0.75, H(0.6, U'0,1006',U'1," + enum_bottom.ToStringInvariant() + "')," +
+                                    "H(0.5, U'2," + enum_topright.ToStringInvariant() + "', " +
+                                    "H(0.25,U'3," + enum_middleright.ToStringInvariant() + "',U'4," + enum_bottomright + "')) )";
+
+                    SQLiteConnectionUser.PutSettingString(primarycontrolname, ctrl);
+                }
+            }
+
             tabControlMain.MinimumTabWidth = 32;
-            tabControlMain.CreateTabs(this);
+            tabControlMain.CreateTabs(this, EDDOptions.Instance.TabsReset, "0, -1,0, 26,0, 27,0, 29,0, 34,0");      // numbers from popouts, which are FIXED!
+
+            if (tabControlMain.PrimaryTab == null || tabControlMain.PrimaryTab.GetTravelGrid == null )  // double check we have a primary tab and tg..
+            {
+                MessageBox.Show("Tab setup failure: Primary tab or TG failed to load." + Environment.NewLine +
+                                "This is a abnormal condition - please problem to EDD Team on discord or github." + Environment.NewLine +
+                                "Report this code : " + (tabControlMain.PrimaryTab == null) + " " + SQLiteConnectionUser.GetSettingString(primarycontrolname, "Not Present") + Environment.NewLine +
+                                "To try and clear it, hold down shift and then launch the program." + Environment.NewLine + 
+                                "Click on Reset tabs, then Run program, which may clear the problem." );
+                Application.Exit();
+            }
 
             PanelInformation.PanelIDs[] pids = PanelInformation.GetPanelIDs();      // only user panels
 
@@ -223,6 +262,36 @@ namespace EDDiscovery
             notifyIcon1.Visible = EDDConfig.UseNotifyIcon;
 
             SetUpLogging();
+
+            EDSMJournalSync.SentEvents = (count,list) =>              // Sync thread finishing, transfers to this thread, then runs the callback and the action..
+            {
+                this.BeginInvoke((MethodInvoker)delegate
+                {
+                    System.Diagnostics.Debug.Assert(Application.MessageLoop);
+                    OnEDSMSyncComplete?.Invoke(count,list);
+                    ActionRun(Actions.ActionEventEDList.onEDSMSync, null, new Conditions.ConditionVariables(new string[] { "EventStarList", list, "EventCount", count.ToStringInvariant() }));
+                });
+            };
+
+            EDDNSync.SentEvents = (count) =>              // Sync thread finishing, transfers to this thread, then runs the callback and the action..
+            {
+                this.BeginInvoke((MethodInvoker)delegate
+                {
+                    System.Diagnostics.Debug.Assert(Application.MessageLoop);
+                    OnEDDNSyncComplete?.Invoke(count);
+                    ActionRun(Actions.ActionEventEDList.onEDDNSync, null, new Conditions.ConditionVariables(new string[] { "EventCount", count.ToStringInvariant() }));
+                });
+            };
+
+            EliteDangerousCore.EGO.EGOSync.SentEvents = (count,list) =>              // Sync thread finishing, transfers to this thread, then runs the callback and the action..
+            {
+                this.BeginInvoke((MethodInvoker)delegate
+                {
+                    System.Diagnostics.Debug.Assert(Application.MessageLoop);
+                    OnEGOSyncComplete?.Invoke(count,list);
+                    ActionRun(Actions.ActionEventEDList.onEGOSync, null, new Conditions.ConditionVariables(new string[] { "EventStarList", list, "EventCount", count.ToStringInvariant() }));
+                });
+            };
 
             Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Finish ED Init");
 
@@ -394,7 +463,7 @@ namespace EDDiscovery
 
         private bool IsNonRemovableTab(int n)
         {
-            bool uch = tabControlMain.TabPages[n].Controls[0] is UserControls.UserControlHistory;
+            bool uch = Object.ReferenceEquals(tabControlMain.TabPages[n].Controls[0], tabControlMain.PrimaryTab);
             bool sel = tabControlMain.TabPages[n].Controls[0] is UserControls.UserControlPanelSelector;
             return uch || sel;
         }
@@ -530,12 +599,6 @@ namespace EDDiscovery
 
             if (Capi.LoggedIn)
             {
-                // Remove 17/1/2018 told capi bug was over
-                //if (Controller.history != null && Controller.history.Count > 0 && Controller.history.GetLast.ContainsRares())
-                //{
-                    //LogLine("Not performing Companion API get due to carrying rares");
-                //}
-
                     try
                     {
                         Capi.GetProfile();
@@ -563,11 +626,7 @@ namespace EDDiscovery
             {
                 if (Capi.IsCommanderLoggedin(EDCommander.Current.Name))
                 {
-                    //if (he.ContainsRares())
-                    //{
-                    //    LogLine("Not performing Companion API get due to carrying rares");
-                    //}
-                    //else
+                    // hang over from rares indenting.
                     {
                         System.Diagnostics.Debug.WriteLine("Commander " + EDCommander.Current.Name + " in CAPI");
                         try
@@ -580,22 +639,18 @@ namespace EDDiscovery
                             if (!Capi.Profile.Cmdr.docked)
                             {
                                 LogLineHighlight("CAPI not docked. Server API lagging!");
-                                // Todo add a retry later...
                             }
                             else if (!dockevt.StarSystem.Equals(Capi.Profile.CurrentStarSystem.name))
                             {
                                 LogLineHighlight("CAPI profileSystemRequired is " + dockevt.StarSystem + ", profile station is " + Capi.Profile.CurrentStarSystem.name);
-                                // Todo add a retry later...
                             }
                             else if (!dockevt.StationName.Equals(Capi.Profile.StarPort.name))
                             {
                                 LogLineHighlight("CAPI profileStationRequired is " + dockevt.StationName + ", profile station is " + Capi.Profile.StarPort.name);
-                                // Todo add a retry later...
                             }
                             else if (!dockevt.StationName.Equals(market.name))
                             {
                                 LogLineHighlight("CAPI stationname  " + dockevt.StationName + ",´market station is " + market.name);
-                                // Todo add a retry later...
                             }
                             else
                             {
@@ -606,7 +661,7 @@ namespace EDDiscovery
                                     OnNewCompanionAPIData?.Invoke(Capi, he);
 
                                     if (EDCommander.Current.SyncToEddn)
-                                        SendPricestoEDDN(he, market);
+                                        SendPricestoEDDN(he, market);           // synchronous, but only done on docking, not worried.
 
                                 }
                             }
@@ -619,36 +674,22 @@ namespace EDDiscovery
                 }
             }
 
-            // Moved from travel history control
-
-            try
-            {   // try is a bit old, probably do not need it.
                 if (he.IsFSDJump)
                 {
                     int count = history.GetVisitsCount(he.System.Name);
                     LogLine(string.Format("Arrived at system {0} Visit No. {1}", he.System.Name, count));
-
                     System.Diagnostics.Trace.WriteLine("Arrived at system: " + he.System.Name + " " + count + ":th visit.");
                 }
 
                 if (EDCommander.Current.SyncToEdsm)
                 {
                     EDSMJournalSync.SendEDSMEvents(LogLine, he);
-
-                    if (he.EntryType == JournalTypeEnum.FSDJump)
-                    {
-                        ActionRunOnEntry(he, Actions.ActionEventEDList.onEDSMSync);
                     }
-                }
 
-                if (he.ISEDDNMessage && he.AgeOfEntry() < TimeSpan.FromDays(1.0))
+            if (EDDNClass.IsEDDNMessage(he.EntryType,he.EventTimeUTC) && he.AgeOfEntry() < TimeSpan.FromDays(1.0) && EDCommander.Current.SyncToEddn == true)
                 {
-                    if (EDCommander.Current.SyncToEddn == true)
-                    {
                         EDDNSync.SendEDDNEvents(LogLine, he);
-                        ActionRunOnEntry(he, Actions.ActionEventEDList.onEDDNSync);
                     }
-                }
 
                 if (EDCommander.Current.SyncToInara)
                 {
@@ -656,20 +697,11 @@ namespace EDDiscovery
                 }
 
                 if (he.EntryType == JournalTypeEnum.Scan)
+            if (he.EntryType == JournalTypeEnum.Scan && EDCommander.Current.SyncToEGO)
                 {
-                    if (EDCommander.Current.SyncToEGO)
-                    {
-                        EDDiscoveryCore.EGO.EGOSync.SendEGOEvents(LogLine, he);
-                        ActionRunOnEntry(he, Actions.ActionEventEDList.onEGOSync);
+                EliteDangerousCore.EGO.EGOSync.SendEGOEvents(LogLine, he);
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception NewPosition: " + ex.Message);
-                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-            }
-        }
 
         private void Controller_NewUIEvent(UIEvent uievent)      
         {
@@ -794,7 +826,7 @@ namespace EDDiscovery
         private void sendUnsyncedEGOScansToolStripMenuItem_Click(object sender, EventArgs e)
         {
             List<HistoryEntry> hlsyncunsyncedlist = Controller.history.FilterByScanNotEGOSynced;        // first entry is oldest
-            EDDiscoveryCore.EGO.EGOSync.SendEGOEvents(LogLine, hlsyncunsyncedlist);
+            EliteDangerousCore.EGO.EGOSync.SendEGOEvents(LogLine, hlsyncunsyncedlist);
         }
 
         private void frontierForumThreadToolStripMenuItem_Click(object sender, EventArgs e)
@@ -840,7 +872,7 @@ namespace EDDiscovery
 
         private void show3DMapsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Open3DMap(travelHistoryControl.GetTravelHistoryCurrent);
+            Open3DMap(PrimaryCursor.GetCurrentHistoryEntry);
         }
 
         private void forceEDDBUpdateToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1359,8 +1391,7 @@ namespace EDDiscovery
         {
             comboBoxCommander.Enabled = false;
             comboBoxCommander.Items.Clear();            // comboBox is nicer with items
-            comboBoxCommander.Items.Add("Hidden Log");
-            comboBoxCommander.Items.AddRange((from EDCommander c in EDCommander.GetList() select c.Name).ToList());
+            comboBoxCommander.Items.AddRange((from EDCommander c in EDCommander.GetListInclHidden() select c.Name).ToList());
             if (history.CommanderId == -1)
             {
                 comboBoxCommander.SelectedIndex = 0;
@@ -1379,22 +1410,17 @@ namespace EDDiscovery
         {
             if (comboBoxCommander.SelectedIndex >= 0 && comboBoxCommander.Enabled)     // DONT trigger during LoadCommandersListBox
             {
-                if (comboBoxCommander.SelectedIndex == 0)
-                    Controller.RefreshHistoryAsync(currentcmdr: -1);                                   // which will cause DIsplay to be called as some point
-                else
-                {
-                    var itm = (from EDCommander c in EDCommander.GetList() where c.Name.Equals(comboBoxCommander.Text) select c).ToList();
+                var itm = (from EDCommander c in EDCommander.GetListInclHidden() where c.Name.Equals(comboBoxCommander.Text) select c).ToList();
 
                     EDCommander.CurrentCmdrID = itm[0].Nr;
                     Controller.RefreshHistoryAsync(currentcmdr: EDCommander.CurrentCmdrID);                                   // which will cause DIsplay to be called as some point
                 }
-            }
 
         }
 
         private void buttonExt3dmap_Click(object sender, EventArgs e)
         {
-            Open3DMap(travelHistoryControl.GetTravelHistoryCurrent);
+            Open3DMap(PrimaryCursor.GetCurrentHistoryEntry);
         }
 
         private void buttonExt2dmap_Click(object sender, EventArgs e)

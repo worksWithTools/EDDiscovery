@@ -36,7 +36,14 @@ namespace EliteDangerousCore.JournalEvents
         public class Material
         {
             public string Name { get; set; }        //FDNAME
+            public string FriendlyName { get; set; }        //friendly
             public int Count { get; set; }
+
+            public void Normalise()
+            {
+                Name = JournalFieldNaming.FDNameTranslation(Name);
+                FriendlyName = JournalFieldNaming.RMat(Name);
+            }
         }
 
         public JournalMaterials(JObject evt) : base(evt, JournalTypeEnum.Materials)
@@ -58,13 +65,13 @@ namespace EliteDangerousCore.JournalEvents
             if (a != null)
             {
                 foreach (Material m in a)
-                    m.Name = JournalFieldNaming.FDNameTranslation(m.Name);
+                    m.Normalise();
             }
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)  //V
+        public override void FillInformation(out string info, out string detailed)  //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = "";
             detailed = "";
             if (Raw != null && Raw.Length>0)
@@ -95,7 +102,7 @@ namespace EliteDangerousCore.JournalEvents
             foreach (Material m in mat)
             {
                 sb.Append(Environment.NewLine);
-                sb.Append(BaseUtils.FieldBuilder.Build(" ", JournalFieldNaming.RMat(m.Name), "; items", m.Count));
+                sb.Append(BaseUtils.FieldBuilder.Build(" ", m.FriendlyName, "; items", m.Count));
             }
             return sb.ToString();
         }

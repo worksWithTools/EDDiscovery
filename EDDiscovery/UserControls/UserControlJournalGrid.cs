@@ -184,11 +184,10 @@ namespace EDDiscovery.UserControls
 
         private void AddNewJournalRow(bool insert, HistoryEntry item)            // second part of add history row, adds item to view.
         {
-            string detail = "";
-            if (item.EventDescription.Length > 0)
-                detail = item.EventDescription;
-            if (item.EventDetailedInfo.Length > 0)
-                detail += ((detail.Length > 0) ? Environment.NewLine : "") + item.EventDetailedInfo;
+            item.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
+
+            string detail = EventDescription;
+            detail = detail.AppendPrePad(EventDetailedInfo.LineLimit(15,Environment.NewLine + "..."), Environment.NewLine);
 
             var rw = dataGridViewJournal.RowTemplate.Clone() as DataGridViewRow;
             rw.CreateCells(dataGridViewJournal, EDDiscoveryForm.EDDConfig.DisplayUTC ? item.EventTimeUTC : item.EventTimeLocal, "", item.EventSummary, detail);
@@ -355,10 +354,13 @@ namespace EDDiscovery.UserControls
             viewOnEDSMToolStripMenuItem.Enabled = (rightclicksystem != null);
             sendUnsyncedScanToEDDNToolStripMenuItem.Enabled = (rightclicksystem != null && rightclicksystem.EntryType == JournalTypeEnum.Scan && !rightclicksystem.EDDNSync);
             removeSortingOfColumnsToolStripMenuItem.Enabled = dataGridViewJournal.SortedColumn != null;
+            jumpToEntryToolStripMenuItem.Enabled = dataGridViewJournal.Rows.Count > 0;
         }
 
         HistoryEntry rightclicksystem = null;
         int rightclickrow = -1;
+        HistoryEntry leftclicksystem = null;
+        int leftclickrow = -1;
 
         private void dataGridViewJournal_MouseDown(object sender, MouseEventArgs e)
         {
@@ -366,6 +368,11 @@ namespace EDDiscovery.UserControls
             {
                 rightclicksystem = null;
                 rightclickrow = -1;
+            }
+            if (e.Button == MouseButtons.Left)         // right click on travel map, get in before the context menu
+            {
+                leftclicksystem = null;
+                leftclickrow = -1;
             }
 
             if (dataGridViewJournal.SelectedCells.Count < 2 || dataGridViewJournal.SelectedRows.Count == 1)      // if single row completely selected, or 1 cell or less..
@@ -381,8 +388,32 @@ namespace EDDiscovery.UserControls
                         rightclickrow = hti.RowIndex;
                         rightclicksystem = (HistoryEntry)dataGridViewJournal.Rows[hti.RowIndex].Cells[JournalHistoryColumns.HistoryTag].Tag;
                     }
+                    if (e.Button == MouseButtons.Left)         // right click on travel map, get in before the context menu
+                    {
+                        leftclickrow = hti.RowIndex;
+                        leftclicksystem = (HistoryEntry)dataGridViewJournal.Rows[hti.RowIndex].Cells[JournalHistoryColumns.HistoryTag].Tag;
+                    }
                 }
             }
+        }
+
+        private void dataGridViewJournal_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (leftclickrow >= 0)                                                   // Click expands it..
+            {
+                ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
+                leftclicksystem.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
+                string infodetailed = EventDescription.AppendPrePad(EventDetailedInfo, Environment.NewLine);
+                info.Info("Journal Record: " + (EDDiscoveryForm.EDDConfig.DisplayUTC ? leftclicksystem.EventTimeUTC : leftclicksystem.EventTimeLocal) + ": " + leftclicksystem.EventSummary,
+                    FindForm().Icon, infodetailed);
+                info.Size = new Size(1200, 800);
+                info.ShowDialog(FindForm());
+            }
+        }
+
+        private void dataGridViewJournal_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            FireChangeSelection();
         }
 
         private void mapGotoStartoolStripMenuItem_Click(object sender, EventArgs e)
@@ -489,6 +520,23 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void jumpToEntryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int curi = rightclicksystem != null ? (EDDConfig.Instance.OrderRowsInverted ? rightclicksystem.Indexno : (discoveryform.history.Count - rightclicksystem.Indexno + 1)) : 0;
+            int selrow = dataGridViewJournal.JumpToDialog(this.FindForm(), curi, r =>
+            {
+                HistoryEntry he = r.Cells[JournalHistoryColumns.HistoryTag].Tag as HistoryEntry;
+                return EDDConfig.Instance.OrderRowsInverted ? he.Indexno : (discoveryform.history.Count - he.Indexno + 1);
+            });
+
+            if (selrow >= 0)
+            {
+                dataGridViewJournal.ClearSelection();
+                dataGridViewJournal.Rows[selrow].Selected = true;
+            }
+        }
+
+
         #region Excel
 
         private void buttonExtExcel_Click(object sender, EventArgs e)
@@ -574,11 +622,6 @@ namespace EDDiscovery.UserControls
             {
                 e.SortDataGridViewColumnDate();
             }
-        }
-
-        private void dataGridViewJournal_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            FireChangeSelection();
         }
 
         public void FireChangeSelection()

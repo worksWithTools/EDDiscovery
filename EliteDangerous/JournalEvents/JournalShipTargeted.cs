@@ -35,9 +35,12 @@ namespace EliteDangerousCore.JournalEvents
         {
             TargetLocked = evt["TargetLocked"].Bool();
 
-            Ship = evt["Ship"].StrNull();
-            if (Ship != null)
-                Ship = JournalFieldNaming.GetBetterShipName(Ship);
+            ShipFD = evt["Ship"].StrNull();
+            if (ShipFD != null)
+            {
+                ShipFD = JournalFieldNaming.NormaliseFDShipName(ShipFD);
+                Ship = JournalFieldNaming.GetBetterShipName(ShipFD);
+            }
             Ship_Localised = evt["Ship_Localised"].Str().Alt(Ship);
 
             ScanStage = evt["ScanStage"].IntNull();         
@@ -52,15 +55,13 @@ namespace EliteDangerousCore.JournalEvents
             Bounty = evt["Bounty"].IntNull();
             SubSystem = evt["SubSystem"].StrNull();
             SubSystemHealth = evt["SubSystemHealth"].DoubleNull();
-
-            if (Ship != null)
-                Ship = JournalFieldNaming.GetBetterShipName(Ship);
         }
 
         public bool TargetLocked { get; set; }          // if false, no info below
         public int? ScanStage { get; set; }             // targetlocked= true, 0/1/2/3
 
         public string Ship { get; set; }                // 0 null
+        public string ShipFD { get; set; }                // 0 null
         public string Ship_Localised { get; set; }      // 0 will be empty
         public string PilotName { get; set; }           // 1 null
         public string PilotName_Localised { get; set; } // 1 will be empty 
@@ -73,9 +74,9 @@ namespace EliteDangerousCore.JournalEvents
         public string SubSystem { get; set; }           // 3 null
         public double? SubSystemHealth { get; set; }    // 3 null
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             if (TargetLocked)
             {
                 if (ScanStage == null)

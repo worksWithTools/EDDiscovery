@@ -186,7 +186,7 @@ namespace EliteDangerousCore
 
         public EliteDangerousCalculations.FSDSpec GetFSDSpec()          // may be null due to not having the info
         {
-            ShipModule fsd = GetModule("FrameShiftDrive");
+            ShipModule fsd = GetModule("Frame Shift Drive");
             return fsd?.GetFSDSpec() ?? null;
         }
 
@@ -197,8 +197,8 @@ namespace EliteDangerousCore
 
         public double HullMass()
         {
-            ShipModuleData.ShipInfo md = ShipModuleData.Instance.GetShipProperty(ShipFD, "HullMass");
-            return md != null ? (md as ShipModuleData.ShipInfoInt).value : 0;
+            ShipModuleData.ShipInfo md = ShipModuleData.Instance.GetShipProperty(ShipFD, ShipModuleData.ShipPropID.HullMass);
+            return md != null ? (md as ShipModuleData.ShipInfoDouble).Value : 0;
         }
 
         public double FuelWarningPercent
@@ -211,8 +211,8 @@ namespace EliteDangerousCore
         {
             get
             {
-                ShipModuleData.ShipInfo md = ShipModuleData.Instance.GetShipProperty(ShipFD, "Manu");
-                return md != null ? (md as ShipModuleData.ShipInfoString).str : "Unknown";
+                ShipModuleData.ShipInfo md = ShipModuleData.Instance.GetShipProperty(ShipFD, ShipModuleData.ShipPropID.Manu);
+                return md != null ? (md as ShipModuleData.ShipInfoString).Value : "Unknown";
             }
         }
 
@@ -220,8 +220,8 @@ namespace EliteDangerousCore
         {
             get
             {
-                ShipModuleData.ShipInfo md = ShipModuleData.Instance.GetShipProperty(ShipFD, "Boost");
-                double v = md != null ? (md as ShipModuleData.ShipInfoInt).value : 0;
+                ShipModuleData.ShipInfo md = ShipModuleData.Instance.GetShipProperty(ShipFD, ShipModuleData.ShipPropID.Boost);
+                double v = md != null ? (md as ShipModuleData.ShipInfoInt).Value : 0;
                 ShipModule.EngineeringData ed = GetEngineering("Main Thrusters"); // aka "MainEngines" in fd speak, but we use a slot naming conversion
                 ed?.EngineerThrusters(ref v);
                 return v;
@@ -232,8 +232,8 @@ namespace EliteDangerousCore
         {
             get
             {
-                ShipModuleData.ShipInfo md = ShipModuleData.Instance.GetShipProperty(ShipFD, "Speed");
-                double v = md != null ? (md as ShipModuleData.ShipInfoInt).value : 0;
+                ShipModuleData.ShipInfo md = ShipModuleData.Instance.GetShipProperty(ShipFD, ShipModuleData.ShipPropID.Speed);
+                double v = md != null ? (md as ShipModuleData.ShipInfoInt).Value : 0;
                 ShipModule.EngineeringData ed = GetEngineering("Main Thrusters");
                 ed?.EngineerThrusters(ref v);
                 return v;
@@ -244,12 +244,12 @@ namespace EliteDangerousCore
         {
             get
             {
-                ShipModuleData.ShipInfo md = ShipModuleData.Instance.GetShipProperty(ShipFD, "Class");
+                ShipModuleData.ShipInfo md = ShipModuleData.Instance.GetShipProperty(ShipFD, ShipModuleData.ShipPropID.Class);
                 if (md == null)
                     return "Unknown";
                 else
                 {
-                    int i = (md as ShipModuleData.ShipInfoInt).value;
+                    int i = (md as ShipModuleData.ShipInfoInt).Value;
                     if (i == 1)
                         return "Small";
                     else if (i == 2)
@@ -418,6 +418,7 @@ namespace EliteDangerousCore
             {
                 ShipInformation sm = this.ShallowClone();
                 sm.Modules[slot] = new ShipModule(slot, slotfd, item, itemfd, itemlocalised);
+                //System.Diagnostics.Debug.WriteLine("Slot add " + slot);
 
                 if (item.Contains("Fuel Tank") && item.IndexOf("Class ") != -1)
                 {
@@ -437,6 +438,7 @@ namespace EliteDangerousCore
             {
                 ShipInformation sm = this.ShallowClone();
                 sm.Modules.Remove(slot);
+                //System.Diagnostics.Debug.WriteLine("Slot remove " + slot);
 
                 if (item.Contains("Fuel Tank") && item.IndexOf("Class ") != -1)
                 {
@@ -460,6 +462,7 @@ namespace EliteDangerousCore
                     if (sm == null)
                         sm = this.ShallowClone();
 
+                    //System.Diagnostics.Debug.WriteLine("Slot mass remove " + it.Slot + " Exists " + sm.Modules.ContainsKey(it.Slot));
                     sm.Modules.Remove(it.Slot);
 
                     if (it.Name.Contains("Fuel Tank") && it.Name.IndexOf("Class ") != -1)
@@ -575,43 +578,69 @@ namespace EliteDangerousCore
 
         public string ToJSONCoriolis(out string errstring)
         {
-            JObject jo = new JObject();
-
-            jo["name"] = ShipFD;
-
-            JObject mlist = new JObject();
-
             errstring = "";
 
+            JObject jo = new JObject();
+
+            jo["event"] = "Loadout";
+            jo["Ship"] = ShipFD;
+
+            JArray mlist = new JArray();
             foreach (ShipModule sm in Modules.Values)
             {
                 JObject module = new JObject();
 
-                int edid = ShipModuleData.Instance.CalcID(sm.ItemFD, ShipFD);
+                ShipModuleData.ShipModule si = ShipModuleData.Instance.GetItemProperties(sm.ItemFD);
 
-                if (edid == 0)      // 0 is error
+                if (si.ModuleID == 0)
                 {
                     errstring += sm.Item + ":" + sm.ItemFD + Environment.NewLine;
                 }
                 else
                 {
-                    if (edid > 0)   // -1 is no EDID
-                        module["id"] = edid;
+                    module["Item"] = sm.ItemFD;
+                    module["Slot"] = sm.SlotFD;
+                    module["On"] = sm.Enabled.HasValue ? sm.Enabled : true;
+                    module["Priority"] = sm.Priority.HasValue ? sm.Priority : 0;
 
-                    module["name"] = sm.ItemFD;
-                    module["on"] = sm.Enabled.HasValue ? sm.Enabled : true;
-                    module["priority"] = sm.Priority.HasValue ? sm.Priority : 0;
+                    if (sm.Engineering != null)
+                        module["Engineering"] = ToJsonCoriolisEngineering(sm);
 
-                    JObject minfo = new JObject();
-                    minfo["module"] = module;
-
-                    mlist[sm.SlotFD] = minfo;
+                    mlist.Add(module);
                 }
             }
 
-            jo["modules"] = mlist;
+            jo["Modules"] = mlist;
+
+            System.Diagnostics.Debug.WriteLine("Export " + jo.ToString(Newtonsoft.Json.Formatting.Indented));
 
             return jo.ToString(Newtonsoft.Json.Formatting.Indented);
+        }
+
+        private JObject ToJsonCoriolisEngineering(ShipModule module)
+        {
+            JObject engineering = new JObject();
+
+            engineering["BlueprintID"] = module.Engineering.BlueprintID;
+            engineering["BlueprintName"] = module.Engineering.BlueprintName;
+            engineering["Level"] = module.Engineering.Level;
+            engineering["Quality"] = module.Engineering.Quality;
+
+            JArray modifiers = new JArray();
+            foreach (ShipModule.EngineeringModifiers modifier in module.Engineering.Modifiers)
+            {
+                JObject jmodifier = new JObject();
+                jmodifier["Label"] = modifier.Label;
+                jmodifier["Value"] = modifier.Value;
+                jmodifier["OriginalValue"] = modifier.OriginalValue;
+                jmodifier["LessIsGood"] = modifier.LessIsGood;
+                modifiers.Add(jmodifier);
+            }
+
+
+            engineering["Modifiers"] = modifiers;
+            engineering["ExperimentalEffect"] = module.Engineering.ExperimentalEffect;
+            return engineering;
         }
 
         public string ToJSONLoadout()

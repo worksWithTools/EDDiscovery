@@ -23,9 +23,9 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalScientificResearch(JObject evt) : base(evt, JournalTypeEnum.ScientificResearch)
         {
-            Name = evt["Name"].Str();
+            Name = JournalFieldNaming.FDNameTranslation(evt["Name"].Str());
             Count = evt["Count"].Int();
-            Category = evt["Category"].Str();
+            Category = JournalFieldNaming.NormaliseMaterialCategory(evt["Category"].Str());
             MarketID = evt["MarketID"].LongNull();
         }
 
@@ -34,9 +34,9 @@ namespace EliteDangerousCore.JournalEvents
         public string Category { get; set; }
         public long? MarketID { get; set; }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("",Name, "Count:",  Count , "Category:", Category);
             detailed = "";
         }

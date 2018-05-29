@@ -65,6 +65,8 @@ namespace EliteDangerousCore
     {
         private List<MaterialCommodities> list;
 
+        // static BaseUtils.LogToFile log = new BaseUtils.LogToFile("c:\\code"); // debug
+
         public MaterialCommoditiesList()
         {
             list = new List<MaterialCommodities>();
@@ -79,7 +81,6 @@ namespace EliteDangerousCore
         {
             MaterialCommoditiesList mcl = new MaterialCommoditiesList();
 
-            mcl.list = new List<MaterialCommodities>(list.Count);
             list.ForEach(item =>
             {
                 bool commodity = item.category.Equals(MaterialCommodities.CommodityCategory);
@@ -90,6 +91,10 @@ namespace EliteDangerousCore
 
             return mcl;
         }
+
+        public List<MaterialCommodities> List { get { return list; } }
+
+        public MaterialCommodities Find(string name) { return list.Find(x => x.name.Equals(name, StringComparison.InvariantCultureIgnoreCase)); }
 
         public List<MaterialCommodities> Sort(bool commodity)
         {
@@ -148,6 +153,9 @@ namespace EliteDangerousCore
                 MaterialCommodityDB mcdb = MaterialCommodityDB.EnsurePresent(cat,fdname, conn);    // get a MCDB of this
                 MaterialCommodities mc = new MaterialCommodities(mcdb);        // make a new entry
                 list.Add(mc);
+
+                //log.WriteLine("MC Made:" + cat + " " + fdname + " >> " + mc.fdname + mc.name );
+
                 return mc;
             }
         }
@@ -156,7 +164,7 @@ namespace EliteDangerousCore
         public void Change(string cat, string fdname, int num, long price, SQLiteConnectionUser conn, bool ignorecatonsearch = false)
         {
             MaterialCommodities mc = GetNewCopyOf(cat, fdname, conn, ignorecatonsearch);
-
+       
             double costprev = mc.count * mc.price;
             double costnew = num * price;
             mc.count = Math.Max(mc.count + num, 0);
@@ -164,7 +172,7 @@ namespace EliteDangerousCore
             if (mc.count > 0 && num > 0)      // if bought (defensive with mc.count)
                 mc.price = (costprev + costnew) / mc.count;       // price is now a combination of the current cost and the new cost. in case we buy in tranches
 
-            //System.Diagnostics.Debug.WriteLine("Mat:" + cat + " " + fdname + " " + num + " " + mc.count);
+            //log.WriteLine("MC Change:" + cat + " " + fdname + " " + num + " " + mc.count);
         }
 
         public void Craft(string fdname, int num)
@@ -176,7 +184,8 @@ namespace EliteDangerousCore
                 MaterialCommodities mc = new MaterialCommodities(list[index]);      // new clone of
                 list[index] = mc;       // replace ours with new one
                 mc.count = Math.Max(mc.count - num, 0);
-                //System.Diagnostics.Debug.WriteLine("craft:" + fdname + " " + num + " " + mc.count);
+
+                //log.WriteLine("MC Craft:" + fdname + " " + num + " " + mc.count);
             }
         }
 
@@ -185,19 +194,20 @@ namespace EliteDangerousCore
             list.RemoveAll(x => x.category.Equals(MaterialCommodities.CommodityCategory));      // empty the list of all commodities
         }
 
-        public void Set(string cat, string fdname, int num, double price, SQLiteConnectionUser conn, bool ignorecatonsearch = false)
+        public void Set(string cat, string fdname, int num, double price, SQLiteConnectionUser conn)
         {
-            MaterialCommodities mc = GetNewCopyOf(cat, fdname, conn, ignorecatonsearch);
+            MaterialCommodities mc = GetNewCopyOf(cat, fdname, conn);
 
             mc.count = num;
             if (price > 0)
                 mc.price = price;
 
-            //System.Diagnostics.Debug.WriteLine("Set:" + cat + " " + fdname + " " + num + " " + mc.count);
+            //log.WriteLine("MC Set:" + cat + " " + fdname + " " + num + " " + mc.count);
         }
 
         public void Clear(bool commodity)
         {
+            //log.Write("MC Clear");
             for (int i = 0; i < list.Count; i++)
             {
                 MaterialCommodities mc = list[i];
@@ -205,9 +215,10 @@ namespace EliteDangerousCore
                 {
                     list[i] = new MaterialCommodities(list[i]);     // new clone of it we can change..
                     list[i].count = 0;  // and clear it
-                    //System.Diagnostics.Debug.WriteLine("Clear:" + mc.fdname);
+                    //log.Write(mc.fdname + ",");
                 }
             }
+            //log.Write("", true);
         }
 
         static public MaterialCommoditiesList Process(JournalEntry je, MaterialCommoditiesList oldml, SQLiteConnectionUser conn,
@@ -225,179 +236,5 @@ namespace EliteDangerousCore
 
             return newmc;
         }
-
-
-        #region Synthesis
-
-        public class Recipe
-        {
-            public string name;
-            public string ingredientsstring;
-            public string[] ingredients;
-            public int[] count;
-
-            public Recipe(string n, string indg)
-            {
-                name = n;
-                ingredientsstring = indg;
-                string[] ilist = indg.Split(',');
-                ingredients = new string[ilist.Length];
-                count = new int[ilist.Length];
-                for (int i = 0; i < ilist.Length; i++)
-                {
-                    //Thanks to 10Fe and 10 Ni to synthesise a limpet we can no longer assume the first character is a number and the rest is the material
-                    //Maybe worth changing the class to pass ingredients and numbers as separate lists but not today...
-                    string s = new string(ilist[i].TakeWhile(c => !Char.IsLetter(c)).ToArray());
-                    ingredients[i] = ilist[i].Substring(s.Length);
-                    count[i] = int.Parse(s);
-                }
-            }
-        }
-
-        public class SynthesisRecipe : Recipe
-        {
-            public string level;
-
-            public SynthesisRecipe(string n, string l, string indg)
-                : base(n, indg)
-            {
-                level = l;
-            }
-        }
-
-        public class EngineeringRecipe : Recipe
-        {
-            public string level;
-            public string modulesstring;
-            public string[] modules;
-            public string engineersstring;
-            public string[] engineers;
-
-            public EngineeringRecipe(string n, string indg, string mod, string lvl, string engnrs)
-                : base(n, indg)
-            {
-                level = lvl;
-                modulesstring = mod;
-                modules = mod.Split(',');
-                engineersstring = engnrs;
-                engineers = engnrs.Split(',');
-            }
-        }
-
-        public class TechBrokerUnlockRecipe : Recipe
-        {
-            public TechBrokerUnlockRecipe(string n, string indg)
-                : base(n, indg)
-            { }
-        }
-
-        static public void ResetUsed(List<MaterialCommodities> mcl)
-        {
-            for (int i = 0; i < mcl.Count; i++)
-                mcl[i].scratchpad = mcl[i].count;
-        }
-        
-        //return maximum can make, how many made, needed string.
-        static public Tuple<int, int, string> HowManyLeft(List<MaterialCommodities> list, Recipe r, int tomake = 0 )
-        {
-            int max = int.MaxValue;
-            StringBuilder needed = new StringBuilder(64);
-
-            for (int i = 0; i < r.ingredients.Length; i++)
-            {
-                string ingredient = r.ingredients[i];
-
-                int mi = list.FindIndex(x => x.shortname.Equals(ingredient));
-                int got = (mi >= 0) ? list[mi].scratchpad : 0;
-                int sets = got / r.count[i];
-
-                max = Math.Min(max, sets);
-
-                int need = r.count[i] * tomake;
-
-                if (got < need )
-                {
-                    string dispName;
-                    if (mi > 0)
-                    { dispName = (list[mi].category == MaterialCommodityDB.MaterialEncodedCategory || list[mi].category == MaterialCommodityDB.MaterialManufacturedCategory) ? " " + list[mi].name : list[mi].shortname; }
-                    else
-                    {
-                        MaterialCommodityDB db = MaterialCommodityDB.GetCachedMaterialByShortName(ingredient);
-                        dispName = (db.category == MaterialCommodityDB.MaterialEncodedCategory || db.category == MaterialCommodityDB.MaterialManufacturedCategory) ? " " + db.name : db.shortname;
-                    }
-                    string s = (need - got).ToStringInvariant() + dispName;
-                    if (needed.Length == 0)
-                        needed.Append("Need:" + s);
-                    else
-                        needed.Append("," + s);
-                }
-            }
-
-            int made = 0;
-
-            if (max > 0 && tomake > 0)             // if we have a set, and use it up
-            {
-                made = Math.Min(max, tomake);                // can only make this much
-                StringBuilder usedstr = new StringBuilder(64);
-
-                for (int i = 0; i < r.ingredients.Length; i++)
-                {
-                    int mi = list.FindIndex(x => x.shortname.Equals(r.ingredients[i]));
-                    System.Diagnostics.Debug.Assert(mi != -1);
-                    int used = r.count[i] * made;
-                    list[mi].scratchpad -= used;
-                    string dispName = (list[mi].category == MaterialCommodityDB.MaterialEncodedCategory || list[mi].category == MaterialCommodityDB.MaterialManufacturedCategory) ? " " + list[mi].name : list[mi].shortname;
-                    usedstr.AppendPrePad(used.ToStringInvariant() + dispName, ",");
-                }
-
-                needed.AppendPrePad("Used: " + usedstr.ToString(), ", ");
-            }
-
-            return new Tuple<int,int,string>(max, made, needed.ToNullSafeString());
-        }
-
-        static public List<MaterialCommodities> GetShoppingList(List<Tuple<Recipe,int>> target, List<MaterialCommodities> list)
-        {
-            List<MaterialCommodities> shoppingList = new List<MaterialCommodities>();
-
-            foreach (Tuple<Recipe, int> want in target)
-            {
-                Recipe r = want.Item1;
-                int wanted = want.Item2;
-                for (int i = 0; i < r.ingredients.Length; i++)
-                {
-                    string ingredient = r.ingredients[i];
-                    int mi = list.FindIndex(x => x.shortname.Equals(ingredient));
-                    int got = (mi >= 0) ? list[mi].scratchpad : 0;
-                    int need = r.count[i] * wanted;
-
-                    if (got < need)
-                    {
-                        int shopentry = shoppingList.FindIndex(x => x.shortname.Equals(ingredient));
-                        if (shopentry >= 0)
-                            shoppingList[shopentry].scratchpad += (need - got);
-                        else
-                        {
-                            MaterialCommodityDB db = MaterialCommodityDB.GetCachedMaterialByShortName(ingredient);
-                            if (db != null)       // MUST be there, its well know, but will check..
-                            {
-                                MaterialCommodities mc = new MaterialCommodities(db);        // make a new entry
-                                mc.scratchpad = (need - got);
-                                shoppingList.Add(mc);
-                            }
-                        }
-                        if (mi >= 0) list[mi].scratchpad = 0;
-                    }
-                    else
-                    {
-                        if (mi >= 0) list[mi].scratchpad -= need;
-                    }
-                }
-            }
-            return shoppingList;
-        }
-
-        #endregion
     }
-
 }

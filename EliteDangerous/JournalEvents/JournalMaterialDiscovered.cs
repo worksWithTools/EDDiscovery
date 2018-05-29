@@ -28,8 +28,8 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalMaterialDiscovered(JObject evt ) : base(evt, JournalTypeEnum.MaterialDiscovered)
         {
-            Category = evt["Category"].Str();
-            Name = evt["Name"].Str();
+            Category = JournalFieldNaming.NormaliseMaterialCategory(evt["Category"].Str());
+            Name = JournalFieldNaming.FDNameTranslation(evt["Name"].Str());     // pre-mangle to latest names, in case we are reading old journal records
             FriendlyName = JournalFieldNaming.RMat(Name);
             DiscoveryNumber = evt["DiscoveryNumber"].Int();
         }
@@ -39,9 +39,9 @@ namespace EliteDangerousCore.JournalEvents
         public string FriendlyName { get; set; }
         public int DiscoveryNumber { get; set; }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("", FriendlyName);
             if (DiscoveryNumber > 0)
                 info += ", Discovery " + DiscoveryNumber.ToStringInvariant();

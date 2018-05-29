@@ -224,7 +224,7 @@ namespace EDDiscovery.UserControls
         private void dataGridViewCombat_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
             if (e.Column.Index == 3)        
-                e.SortDataGridViewColumnDate();
+                e.SortDataGridViewColumnNumeric();
         }
 
 
@@ -254,7 +254,7 @@ namespace EDDiscovery.UserControls
 
             if ( current != null )
             {
-                System.Diagnostics.Debug.WriteLine("Filter {0} {1}", current.StartTime.ToStringZulu(), current.EndTime.ToStringZulu());
+                //System.Diagnostics.Debug.WriteLine("Filter {0} {1}", current.StartTime.ToStringZulu(), current.EndTime.ToStringZulu());
                 List<HistoryEntry> hel;
 
                 if (current.Type == FilterEntry.EntryType.Lastdock)
@@ -278,7 +278,7 @@ namespace EDDiscovery.UserControls
 
                 foreach ( HistoryEntry he in hel )
                 {
-                    System.Diagnostics.Debug.WriteLine("{0} {1} {2}", he.EventTimeUTC.ToStringZulu(), he.EventSummary, he.EventDescription);
+                    //System.Diagnostics.Debug.WriteLine("Combat Add {0} {1} {2}", he.EventTimeUTC.ToStringZulu(), he.EventSummary, he.EventDescription);
                     AddToGrid(he);
                 }
             }
@@ -321,8 +321,11 @@ namespace EDDiscovery.UserControls
             if (CreateEntry(he, out string summarycol, out string descriptioncol, out string rewardcol))
             {
                 var rw = dataGridViewCombat.RowTemplate.Clone() as DataGridViewRow;
+                he.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
+
                 rw.CreateCells(dataGridViewCombat, EDDiscoveryForm.EDDConfig.DisplayUTC ? he.EventTimeUTC : he.EventTimeLocal,
-                    he.EventSummary, he.EventDescription, rewardcol);
+                    he.EventSummary, EventDescription, rewardcol);
+
                 rw.Tag = he;
 
                 if (ins)
@@ -348,8 +351,11 @@ namespace EDDiscovery.UserControls
         bool CreateEntry( HistoryEntry he, out string summarycol, out string descriptioncol, out string rewardcol )
         {
             rewardcol = "";
+
+            he.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
+
             summarycol = he.EventSummary;
-            descriptioncol = he.EventDescription;
+            descriptioncol = EventDescription;
 
             MissionState ml = current.MissionKey != null && he.MissionList.Missions.ContainsKey(current.MissionKey) ? he.MissionList.Missions[current.MissionKey] : null;
 
@@ -505,7 +511,7 @@ namespace EDDiscovery.UserControls
 
         private void SelectInitial()
         {
-            string sel = SQLiteConnectionUser.GetSettingString(DbSave + "Selected", "");
+            string sel = SQLiteConnectionUser.GetSettingString(DbSave + "Selected", "Since Last Dock");
 
             if (!sel.IsEmpty())
             {
@@ -676,7 +682,8 @@ namespace EDDiscovery.UserControls
                 int ch = dataGridViewCombat.Rows[leftclickrow].Height;
                 bool toexpand = (ch <= DefaultRowHeight);
 
-                string infotext = leftclicksystem.EventDescription + ((toexpand && leftclicksystem.EventDetailedInfo.Length > 0) ? (Environment.NewLine + leftclicksystem.EventDetailedInfo) : "");
+                leftclicksystem.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
+                string infotext = EventDescription + ((toexpand && EventDetailedInfo.Length > 0) ? (Environment.NewLine + EventDetailedInfo) : "");
 
                 int h = DefaultRowHeight;
 

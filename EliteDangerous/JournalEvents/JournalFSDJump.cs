@@ -13,9 +13,11 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EliteDangerousCore.DB;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -124,6 +126,14 @@ Examples of trending states:
             MapColor = jm.Int(EliteDangerousCore.EliteConfigInstance.InstanceConfig.DefaultMapColour);
             if (jm.Empty())
                 evt["EDDMapColor"] = EliteDangerousCore.EliteConfigInstance.InstanceConfig.DefaultMapColour;      // new entries get this default map colour if its not already there
+
+            EDSMFirstDiscover = evt["EDD_EDSMFirstDiscover"].Bool(false);
+        }
+
+        public JournalFSDJump(DateTime utc, ISystem sys, int colour, bool first, int synced) : base(utc, sys, synced, JournalTypeEnum.FSDJump)
+        {
+            MapColor = colour;
+            EDSMFirstDiscover = first;
         }
 
         public double JumpDist { get; set; }
@@ -133,10 +143,12 @@ Examples of trending states:
         public int BoostValue { get; set; }
         public int MapColor { get; set; }
         public bool RealJournalEvent { get; private set; } // True if real ED 2.2+ journal event and not pre 2.2 imported.
+        public bool EDSMFirstDiscover { get; set; }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)  //V
+        public override string FillSummary { get { return "Jump to " + StarSystem; } }
+
+        public override void FillInformation(out string info, out string detailed)  //V
         {
-            summary = "Jump to " + StarSystem;
             info = "";
             if (JumpDist > 0)
                 info += JumpDist.ToString("0.00") + " ly";
@@ -182,5 +194,45 @@ Examples of trending states:
         {
             shp.FSDJump(this);
         }
+
+        public void UpdateMapColour(int mapcolour)
+        {
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+            {
+                JObject jo = GetJson(Id, cn);
+
+                if (jo != null)
+                {
+                    jo["EDDMapColor"] = mapcolour;
+                    UpdateJsonEntry(jo, cn);
+                    MapColor = mapcolour;
+                }
+            }
+        }
+
+        public void UpdateFirstDiscover(bool value, SQLiteConnectionUser cn = null, DbTransaction txnl = null)
+        {
+            JObject jo = cn == null ? GetJson(Id) : GetJson(Id,cn,txnl);
+
+            if (jo != null)
+            {
+                jo["EDD_EDSMFirstDiscover"] = value;
+                UpdateJsonEntry(jo, cn, txnl);
+                EDSMFirstDiscover = value;
+            }
+        }
+
+        public JObject CreateFSDJournalEntryJson()          // minimal version, not the whole schebang
+        {
+            JObject jo = new JObject();
+            jo["timestamp"] = EventTimeUTC.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'");
+            jo["event"] = "FSDJump";
+            jo["StarSystem"] = StarSystem;
+            jo["StarPos"] = new JArray(StarPos.X, StarPos.Y, StarPos.Z);
+            jo["EDDMapColor"] = MapColor;
+            jo["EDD_EDSMFirstDiscover"] = EDSMFirstDiscover;
+            return jo;
+        }
+
     }
 }

@@ -32,20 +32,21 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalModuleStore(JObject evt) : base(evt, JournalTypeEnum.ModuleStore)
         {
-            Slot = JournalFieldNaming.GetBetterSlotName(evt["Slot"].Str());
             SlotFD = JournalFieldNaming.NormaliseFDSlotName(evt["Slot"].Str());
-            ShipFD = evt["Ship"].Str();
-            Ship = JournalFieldNaming.GetBetterShipName(evt["Ship"].Str());
+            Slot = JournalFieldNaming.GetBetterSlotName(SlotFD);
+
+            ShipFD = JournalFieldNaming.NormaliseFDShipName(evt["Ship"].Str());
+            Ship = JournalFieldNaming.GetBetterShipName(ShipFD);
             ShipId = evt["ShipID"].Int();
 
-            StoredItem = JournalFieldNaming.GetBetterItemNameEvents(evt["StoredItem"].Str());
             StoredItemFD = JournalFieldNaming.NormaliseFDItemName(evt["StoredItem"].Str());
+            StoredItem = JournalFieldNaming.GetBetterItemName(StoredItemFD);
             StoredItemLocalised = evt["StoredItem_Localised"].Str().Alt(StoredItem);
 
             EngineerModifications = evt["EngineerModifications"].StrNull().SplitCapsWordFull();
 
-            ReplacementItem = JournalFieldNaming.GetBetterItemNameEvents(evt["ReplacementItem"].Str());
             ReplacementItemFD = JournalFieldNaming.NormaliseFDItemName(evt["ReplacementItem"].Str());
+            ReplacementItem = JournalFieldNaming.GetBetterItemName(ReplacementItemFD);
             ReplacementItemLocalised = evt["ReplacementItem_Localised"].Str().Alt(ReplacementItem);
 
             Cost = evt["Cost"].LongNull();
@@ -86,9 +87,9 @@ namespace EliteDangerousCore.JournalEvents
             shp.ModuleStore(this);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)  //V
+        public override void FillInformation(out string info, out string detailed)  //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("", StoredItemLocalised, "< from ", Slot , ";Hot!", Hot, "Cost:" , Cost);
             if (ReplacementItem.Length > 0)
                 info = ", " + BaseUtils.FieldBuilder.Build("Replaced by:", ReplacementItemLocalised);

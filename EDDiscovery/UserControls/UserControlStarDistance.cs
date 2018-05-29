@@ -54,22 +54,23 @@ namespace EDDiscovery.UserControls
         {
             computer = new StarDistanceComputer();
 
-            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
-
             textMinRadius.ValueNoChange = SQLiteConnectionUser.GetSettingDouble(DbSave + "Min", defaultMinRadius);
             textMaxRadius.ValueNoChange = SQLiteConnectionUser.GetSettingDouble(DbSave + "Max", defaultMaxRadius);
             textMinRadius.SetComparitor(textMaxRadius, -2);     // need to do this after values are set
             textMaxRadius.SetComparitor(textMinRadius, 2);
 
             checkBoxCube.Checked = SQLiteConnectionUser.GetSettingBool(DbSave + "Behaviour", false);
-
-
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
         {
             uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
             uctg = thc;
+            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
+        }
+
+        public override void LoadLayout()
+        {
             uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
         }
 
@@ -213,23 +214,26 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewNearest_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
-            if (colDistance.Equals(e.Column) || colVisited.Equals(e.Column))
-                e.SortDataGridViewColumnDate();
+            if (e.Column.Index >= 1)
+                e.SortDataGridViewColumnNumeric();
         }
 
         private void checkBoxCube_CheckedChanged(object sender, EventArgs e)
         {
-            KickComputation(last_he);
+            if (this.IsHandleCreated)
+                KickComputation(last_he);
         }
 
         private void textMinRadius_ValueChanged(object sender, EventArgs e)
         {
-            KickComputation(last_he);
+            if (this.IsHandleCreated)
+                KickComputation(last_he);
         }
 
         private void textMaxRadius_ValueChanged(object sender, EventArgs e)
         {
-            KickComputation(last_he);
+            if (this.IsHandleCreated)
+                KickComputation(last_he);
         }
     }
 }

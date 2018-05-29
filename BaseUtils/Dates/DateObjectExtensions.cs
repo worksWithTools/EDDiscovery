@@ -148,14 +148,26 @@ public static class ObjectExtensionsDates
 
     public static string ToStringZulu(this DateTime dt)     // zulu warrior format web style
     {
-        //return dt.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'");
-        return dt.ToString("O");
+        if (dt.Millisecond != 0)
+            return dt.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'");
+        else
+            return dt.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'");
+
     }
 
     public static string SecondsToString(this int s)
     {
         TimeSpan ts = new TimeSpan(0, 0, s);
         return ts.ToString();
+    }
+
+    public static string SecondsToWeeksDaysHoursMinutesSeconds(this int seconds)
+    {
+        TimeSpan s = TimeSpan.FromSeconds(seconds);
+        int days = s.Days % 7;
+        int weeks = (s.Days - days) / 7;
+        return (weeks>0 ? $"{weeks} weeks " : "" ) + (days>0 ? $"{days} days " : "") + 
+                          $"{s.Hours} hours" + (weeks==0 ? $" {s.Minutes} minutes {s.Seconds} seconds" : "");
     }
 }
 

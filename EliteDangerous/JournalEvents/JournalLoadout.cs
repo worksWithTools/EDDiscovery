@@ -28,8 +28,8 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalLoadout(JObject evt) : base(evt, JournalTypeEnum.Loadout)
         {
-            Ship = JournalFieldNaming.GetBetterShipName(evt["Ship"].Str());
             ShipFD = JournalFieldNaming.NormaliseFDShipName(evt["Ship"].Str());
+            Ship = JournalFieldNaming.GetBetterShipName(ShipFD);
             ShipId = evt["ShipID"].Int();
             ShipName = evt["ShipName"].Str();
             ShipIdent = evt["ShipIdent"].Str();
@@ -52,10 +52,13 @@ namespace EliteDangerousCore.JournalEvents
                         engineering = new ShipModule.EngineeringData(jeng);
                     }
 
-                    ShipModule module = new ShipModule( JournalFieldNaming.GetBetterSlotName(jo["Slot"].Str()),
-                                                        JournalFieldNaming.NormaliseFDSlotName(jo["Slot"].Str()),
-                                                        JournalFieldNaming.GetBetterItemNameEvents(jo["Item"].Str()),
-                                                        JournalFieldNaming.NormaliseFDItemName(jo["Item"].Str()),
+                    string slotfdname = JournalFieldNaming.NormaliseFDSlotName(jo["Slot"].Str());
+                    string itemfdname = JournalFieldNaming.NormaliseFDItemName(jo["Item"].Str());
+
+                    ShipModule module = new ShipModule( JournalFieldNaming.GetBetterSlotName(slotfdname),
+                                                        slotfdname,
+                                                        JournalFieldNaming.GetBetterItemName(itemfdname),
+                                                        itemfdname,
                                                         jo["On"].BoolNull(),
                                                         jo["Priority"].IntNull(),
                                                         jo["AmmoInClip"].IntNull(),
@@ -87,9 +90,9 @@ namespace EliteDangerousCore.JournalEvents
             shp.Loadout(ShipId, Ship, ShipFD, ShipName, ShipIdent, ShipModules, HullValue?? 0, ModulesValue ?? 0, Rebuy ?? 0);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("Ship:", Ship, "Name:", ShipName, "Ident:", ShipIdent, "Modules:", ShipModules.Count , "Hull:; cr;N0", HullValue , "Modules:; cr;N0" , ModulesValue , "Rebuy:; cr;N0", Rebuy);
             detailed = "";
 

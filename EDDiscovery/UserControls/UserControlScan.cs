@@ -63,13 +63,13 @@ namespace EDDiscovery.UserControls
             checkBoxMaterialsRare.Checked = SQLiteDBClass.GetSettingBool(DbSave + "MaterialsRare", false);
             checkBoxMoons.Checked = SQLiteDBClass.GetSettingBool(DbSave + "Moons", true);
             checkBoxEDSM.Checked = SQLiteDBClass.GetSettingBool(DbSave + "EDSM", false);
+            checkBoxCustomHideFullMats.Checked = SQLiteDBClass.GetSettingBool(DbSave + "MaterialsFull", false);
             chkShowOverlays.Checked = SQLiteDBClass.GetSettingBool(DbSave + "BodyOverlays", false);
             progchange = false;
 
             int size = SQLiteDBClass.GetSettingInt(DbSave + "Size", 64);
             SetSizeCheckBoxes(size);
 
-            uctg.OnTravelSelectionChanged += Display;
             discoveryform.OnNewEntry += NewEntry;
 
             imagebox.ClickElement += ClickElement;
@@ -79,6 +79,11 @@ namespace EDDiscovery.UserControls
         {
             uctg.OnTravelSelectionChanged -= Display;
             uctg = thc;
+            uctg.OnTravelSelectionChanged += Display;
+        }
+
+        public override void LoadLayout()
+        {
             uctg.OnTravelSelectionChanged += Display;
         }
 
@@ -384,7 +389,7 @@ namespace EDDiscovery.UserControls
 
             if (sc != null && (!sc.IsEDSMBody || checkBoxEDSM.Checked))     // if got one, and its our scan, or we are showing EDSM
             {
-                tip = sc.DisplayString();
+                tip = sc.DisplayString(historicmatlist:last_he.MaterialCommodity , currentmatlist:discoveryform.history.GetLast?.MaterialCommodity);
 
                 if (sc.IsStar && toplevel)
                 {
@@ -533,20 +538,32 @@ namespace EDDiscovery.UserControls
 
             bool noncommon = checkBoxMaterialsRare.Checked;
 
-            string matclicktext = sn.DisplayMaterials(2);
+            string matclicktext = sn.DisplayMaterials(2, last_he.MaterialCommodity, discoveryform.history.GetLast?.MaterialCommodity);
 
             foreach (KeyValuePair<string, double> sd in sn.Materials)
             {
-                string abv = sd.Key.Substring(0, 1);
-                string tooltip = sd.Key;
+                string tooltip = sn.DisplayMaterial(sd.Key, sd.Value, last_he.MaterialCommodity, discoveryform.history.GetLast?.MaterialCommodity);
+
                 Color fillc = Color.Yellow;
+                string abv = sd.Key.Substring(0, 1);
 
                 MaterialCommodityDB mc = MaterialCommodityDB.GetCachedMaterial(sd.Key);
+
                 if (mc != null)
                 {
                     abv = mc.shortname;
                     fillc = mc.colour;
-                    tooltip = mc.name + " (" + mc.shortname + ") " + mc.type + " " + sd.Value.ToString("0.0") + "%";
+
+                    if (checkBoxCustomHideFullMats.Checked)                 // check full
+                    {
+                        int? limit = MaterialCommodityDB.MaterialLimit(mc);
+                        MaterialCommodities matnow = last_he.MaterialCommodity.Find(mc.name);
+
+                        // debug if (matnow != null && mc.shortname == "Fe")  matnow.count = 10000;
+                            
+                        if (matnow != null && matnow.count >= limit)        // and limit
+                            continue;
+                    }
 
                     if (noncommon && mc.type.IndexOf("common", StringComparison.InvariantCultureIgnoreCase) >= 0)
                         continue;
@@ -588,8 +605,6 @@ namespace EDDiscovery.UserControls
                                     string ttext, int labelhoff, bool fromEDSM, bool imgowned = true)
         {
             //System.Diagnostics.Debug.WriteLine("    " + label + " " + postopright + " size " + size + " hoff " + labelhoff + " laby " + (postopright.Y + size.Height + labelhoff));
-            if (fromEDSM)
-                ttext = "From EDSM" + Environment.NewLine + ttext;
 
             PictureBoxHotspot.ImageElement ie = new PictureBoxHotspot.ImageElement(new Rectangle(postopright.X, postopright.Y, size.Width, size.Height), i, ttext, ttext, imgowned);
 
@@ -681,6 +696,16 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void checkBoxCustomHideFullMats_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!progchange)
+            {
+                SQLiteDBClass.PutSettingBool(DbSave + "MaterialsFull", checkBoxCustomHideFullMats.Checked);
+                DrawSystem();
+            }
+
+        }
+
         private void checkBoxMoons_CheckedChanged(object sender, EventArgs e)
         {
             if (!progchange)
@@ -767,8 +792,6 @@ namespace EDDiscovery.UserControls
             PositionInfo();
         }
 
-
-
         void HideInfo()
         {
             rtbNodeInfo.Visible = false;
@@ -785,7 +808,7 @@ namespace EDDiscovery.UserControls
 
                 int h = Math.Min(rtbNodeInfo.EstimateVerticalSizeFromText(), panelStars.Height - 20);
 
-                rtbNodeInfo.Size = new Size(panelStars.Width * 6 / 16, h);
+                rtbNodeInfo.Size = new Size(panelStars.Width * 7 / 16, h);
                 rtbNodeInfo.PerformLayout();    // not sure why i need this..
             }
         }
@@ -804,7 +827,7 @@ namespace EDDiscovery.UserControls
             Forms.ExportForm frm = new Forms.ExportForm();
             frm.Init(new string[] { "All", "Stars only",
                                     "Planets only", //2
-                                    "Exploration List stars", //3
+                                    "Exploration List Stars", //3
                                     "Exploration List Planets", //4
                                     "Sold Exploration Data", // 5
                                         });
@@ -875,26 +898,15 @@ namespace EDDiscovery.UserControls
                             }
                             else
                             {
-                                string explorepath = System.IO.Path.Combine(EDDOptions.Instance.AppDataDirectory, "Exploration");
-                                if (!System.IO.Directory.Exists(explorepath))
-                                    System.IO.Directory.CreateDirectory(explorepath);
+                                ExplorationSetClass currentExplorationSet = new ExplorationSetClass();
 
-                                OpenFileDialog dlg = new OpenFileDialog();
-                                dlg.InitialDirectory = explorepath;
-                                dlg.DefaultExt = "json";
-                                dlg.AddExtension = true;
-                                dlg.Filter = "Explore file| *.json";
+                                string file = currentExplorationSet.DialogLoad(FindForm());
 
-                                scans = new List<JournalScan>();
-
-                                if (dlg.ShowDialog(FindForm()) == DialogResult.OK)
+                                if (file != null)
                                 {
+                                    scans = new List<JournalScan>();
 
-                                    ExplorationSetClass _currentExplorationSet = new ExplorationSetClass();
-                                    _currentExplorationSet.Clear();
-                                    _currentExplorationSet.Load(dlg.FileName);
-
-                                    foreach (string system in _currentExplorationSet.Systems)
+                                    foreach (string system in currentExplorationSet.Systems)
                                     {
                                         List<long> edsmidlist = SystemClassDB.GetEdsmIdsFromName(system);
 
@@ -959,6 +971,9 @@ namespace EDDiscovery.UserControls
                                     writer.Write(csv.Format("SurfacePressure"));
                                     writer.Write(csv.Format("Landable"));
                                     writer.Write(csv.Format("EarthMasses"));
+                                    writer.Write(csv.Format("IcePercent"));
+                                    writer.Write(csv.Format("RockPercent"));
+                                    writer.Write(csv.Format("MetalPercent"));
                                 }
                                 // Common orbital param
                                 writer.Write(csv.Format("SemiMajorAxis"));
@@ -1055,6 +1070,9 @@ namespace EDDiscovery.UserControls
                                     writer.Write(csv.Format(scan.nSurfacePressure.HasValue ? scan.nSurfacePressure.Value : 0));
                                     writer.Write(csv.Format(scan.nLandable.HasValue ? scan.nLandable.Value : false));
                                     writer.Write(csv.Format((scan.nMassEM.HasValue) ? scan.nMassEM.Value : 0));
+                                    writer.Write(csv.Format(scan.GetCompositionPercent("Ice")));
+                                    writer.Write(csv.Format(scan.GetCompositionPercent("Rock")));
+                                    writer.Write(csv.Format(scan.GetCompositionPercent("Metal")));
                                 }
                                 // Common orbital param
                                 writer.Write(csv.Format(scan.nSemiMajorAxis.HasValue ? scan.nSemiMajorAxis.Value : 0));

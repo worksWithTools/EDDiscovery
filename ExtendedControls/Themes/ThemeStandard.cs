@@ -179,6 +179,7 @@ namespace ExtendedControls
         public double Opacity { get { return currentsettings.formopacity; } set { SetCustom(); currentsettings.formopacity = value; } }
         public string FontName { get { return currentsettings.fontname; } set { SetCustom(); currentsettings.fontname = value; } }
         public float FontSize { get { return currentsettings.fontsize; } set { SetCustom(); currentsettings.fontsize = value; } }
+        public int ItemHeightForFont() { return (int)(6+currentsettings.fontsize); }
 
         public void SetCustom()
         { currentsettings.name = "Custom"; }                                // set so custom..
@@ -199,8 +200,11 @@ namespace ExtendedControls
             }
         }
 
+        private const int StandardFontSize = 10;
+
         public Font GetFontMaxSized(float size) { return new Font(currentsettings.fontname, Math.Min(currentsettings.fontsize, size)); }
         public Font GetFontAtSize(float size) { return new Font(currentsettings.fontname, size); }
+        public Font GetFontStandardFontSize() { return new Font(currentsettings.fontname, StandardFontSize); }
 
         public Settings currentsettings;           // if name = custom, then its not a standard theme..
         protected List<Settings> themelist;
@@ -370,9 +374,11 @@ namespace ExtendedControls
                                                false, 95, "Microsoft Sans Serif", 8.25F));
         }
 
+        // Note user controls need the Font applied to them, generally done outside of this class, to size their controls properly.  See popout control
+
         public bool ApplyToFormStandardFontSize(Form form)
         {
-            return ApplyToForm(form, GetFontAtSize(10));
+            return ApplyToForm(form, GetFontAtSize(StandardFontSize));
         }
 
         public bool ApplyToForm(Form form, float fontsize)
@@ -408,18 +414,18 @@ namespace ExtendedControls
                 UpdateColorControls(parent, c, fnt, 0);
         }
 
-        private void UpdateColorControls(Control parent, Control myControl, Font fnt, int level)
+        private void UpdateColorControls(Control parent, Control myControl, Font fnt, int level)    // parent can be null
         {
 #if DEBUG
-            //string pad = "                             ".Substring(0, level);
-            //System.Diagnostics.Debug.WriteLine(pad + level + ":" + parent.Name.ToString() + ":" + myControl.Name.ToString() + " " + myControl.ToString());
+            //System.Diagnostics.Debug.WriteLine("                             ".Substring(0, level) + level + ":" + parent?.Name.ToString() + ":" + myControl.Name.ToString() + " " + myControl.ToString() + " " + fnt.ToString());
 #endif
             float mouseoverscaling = 1.3F;
             float mouseselectedscaling = 1.5F;
 
             Type controltype = myControl.GetType();
-            Type parentcontroltype = parent.GetType();
-            if (!parentcontroltype.Namespace.Equals("ExtendedControls") && (controltype.Name.Equals("Button") || controltype.Name.Equals("RadioButton") || controltype.Name.Equals("GroupBox") ||
+            string parentnamespace = parent?.GetType().Namespace ?? "NoParent";
+
+            if (!parentnamespace.Equals("ExtendedControls") && (controltype.Name.Equals("Button") || controltype.Name.Equals("RadioButton") || controltype.Name.Equals("GroupBox") ||
                 controltype.Name.Equals("CheckBox") || controltype.Name.Equals("TextBox") ||
                 controltype.Name.Equals("ComboBox") || (controltype.Name.Equals("RichTextBox")))
                 )
@@ -497,6 +503,7 @@ namespace ExtendedControls
                     actb.DropDownScrollBarButtonColor = currentsettings.colors[Settings.CI.textbox_scrollbutton];
                     actb.DropDownScrollBarColor = currentsettings.colors[Settings.CI.textbox_sliderback];
                     actb.DropDownMouseOverBackgroundColor = currentsettings.colors[Settings.CI.button_back].Multiply(mouseoverscaling);
+                    actb.DropDownItemHeight = ItemHeightForFont();
 
                     if (currentsettings.buttonstyle.Equals(ButtonStyles[0]))
                         actb.FlatStyle = FlatStyle.System;
@@ -597,6 +604,9 @@ namespace ExtendedControls
                     ctrl.ScrollBarButtonColor = currentsettings.colors[Settings.CI.textbox_scrollbutton];
                     ctrl.ScrollBarColor = currentsettings.colors[Settings.CI.textbox_sliderback];
 
+                    if (ctrl.ImageItems == null)        // ones with images are not auto set..
+                        ctrl.ItemHeight = ItemHeightForFont();
+
                     if (currentsettings.buttonstyle.Equals(ButtonStyles[1])) // flat
                         ctrl.FlatStyle = FlatStyle.Flat;
                     else
@@ -611,7 +621,7 @@ namespace ExtendedControls
                 PanelSelectionList ctrl = (PanelSelectionList)myControl;
                 ctrl.ForeColor = currentsettings.colors[Settings.CI.button_text];
                 ctrl.SelectionMarkColor = ctrl.ForeColor;
-
+                ctrl.ItemHeight = ItemHeightForFont();
                 ctrl.BackColor = ctrl.SelectionBackColor = currentsettings.colors[Settings.CI.button_back];
                 ctrl.BorderColor = currentsettings.colors[Settings.CI.button_border];
                 ctrl.MouseOverBackgroundColor = currentsettings.colors[Settings.CI.button_back].Multiply(mouseoverscaling);
@@ -642,6 +652,8 @@ namespace ExtendedControls
                         ctrl.FlatStyle = FlatStyle.Flat;
                     else
                         ctrl.FlatStyle = FlatStyle.Popup;
+
+                    ctrl.ItemHeight = ItemHeightForFont();
                 }
 
                 myControl.Font = fnt;
@@ -914,11 +926,13 @@ namespace ExtendedControls
             else if (myControl is TabStrip)
             {
                 TabStrip ts = myControl as TabStrip;
+                //System.Diagnostics.Debug.WriteLine("*************** TAB Strip themeing" + myControl.Name + " " + myControl.Tag);
                 ts.DropDownBackgroundColor = currentsettings.colors[Settings.CI.button_back];
                 ts.DropDownBorderColor = currentsettings.colors[Settings.CI.textbox_border];
                 ts.DropDownScrollBarButtonColor = currentsettings.colors[Settings.CI.textbox_scrollbutton];
                 ts.DropDownScrollBarColor = currentsettings.colors[Settings.CI.textbox_sliderback];
                 ts.DropDownMouseOverBackgroundColor = currentsettings.colors[Settings.CI.button_back].Multiply(mouseoverscaling);
+                ts.EmptyColor = currentsettings.colors[Settings.CI.button_back];
             }
             else if ( myControl is CompositeButton )
             {
@@ -932,7 +946,7 @@ namespace ExtendedControls
             }
             else
             {
-                if (!parentcontroltype.Namespace.Equals("ExtendedControls"))
+                if (!parentnamespace.Equals("ExtendedControls"))
                 {
                     //Console.WriteLine("THEME: Unhandled control " + controltype.Name + ":" + myControl.Name + " from " + parent.Name);
                 }

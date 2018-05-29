@@ -59,6 +59,18 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry += NewEntry;
         }
 
+        public override void LoadLayout()
+        {
+            DGVLoadColumnLayout(dataGridViewLedger, DbColumnSave);
+        }
+
+        public override void Closing()
+        {
+            DGVSaveColumnLayout(dataGridViewLedger, DbColumnSave);
+            discoveryform.OnHistoryChange -= Redisplay;
+            discoveryform.OnNewEntry -= NewEntry;
+        }
+
         #endregion
 
         #region Display
@@ -143,22 +155,6 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        #region Layout
-
-        public override void LoadLayout()
-        {
-            DGVLoadColumnLayout(dataGridViewLedger, DbColumnSave);
-        }
-
-        public override void Closing()
-        {
-            DGVSaveColumnLayout(dataGridViewLedger, DbColumnSave);
-            discoveryform.OnHistoryChange -= Redisplay;
-            discoveryform.OnNewEntry -= NewEntry;
-        }
-
-        #endregion
-
         private void buttonFilter_Click(object sender, EventArgs e)
         {
             Button b = sender as Button;
@@ -238,8 +234,10 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewLedger_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
-            if (e.Column.Index >= 3)
+            if (e.Column.Index == 0)
                 e.SortDataGridViewColumnDate();
+            else if (e.Column.Index >= 3)
+                e.SortDataGridViewColumnNumeric();
         }
     }
 }

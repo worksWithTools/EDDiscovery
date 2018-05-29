@@ -13,6 +13,8 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+
+using EliteDangerousCore;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 
@@ -39,22 +41,9 @@ namespace EliteDangerousCore.JournalEvents
 
         public void Rescan(JObject evt)
         {
-            StationName = evt["StationName"].Str();
-            StarSystem = evt["StarSystem"].Str();
+            ItemList = new Outfitting(evt["StationName"].Str(), evt["StarSystem"].Str(), EventTimeUTC, evt["Items"]?.ToObjectProtected<Outfitting.OutfittingItem[]>());
             MarketID = evt["MarketID"].LongNull();
             Horizons = evt["Horizons"].BoolNull();
-            AllowCobraMkIV = evt["AllowCobraMkIV"].BoolNull();
-
-            ModuleItems = evt["Items"]?.ToObjectProtected<OutfittingModuleItem[]>();
-
-            if ( ModuleItems != null )
-            {
-                foreach (OutfittingModuleItem i in ModuleItems)
-                {
-                    i.FDName = i.Name;
-                    i.Name = JournalFieldNaming.GetBetterItemNameEvents(i.Name);
-                }
-            }
         }
 
         public bool ReadAdditionalFiles(string directory, ref JObject jo)
@@ -68,39 +57,29 @@ namespace EliteDangerousCore.JournalEvents
             return jnew != null;
         }
 
-        public string StationName { get; set; }
-        public string StarSystem { get; set; }
+        public Outfitting ItemList;
+
         public long? MarketID { get; set; }
         public bool? Horizons { get; set; }
         public bool? AllowCobraMkIV { get; set; }
 
-        public OutfittingModuleItem[] ModuleItems { get; set; }
-
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = "";
             detailed = "";
 
-            if (ModuleItems != null)
+            if (ItemList.Items != null)
             {
-                info = ModuleItems.Length.ToString() + " items available";
+                info = ItemList.Items.Length.ToString() + " items available";
                 int itemno = 0;
-                foreach (OutfittingModuleItem m in ModuleItems)
+                foreach (Outfitting.OutfittingItem m in ItemList.Items)
                 {
                     detailed = detailed.AppendPrePad(m.Name + ":" + m.BuyPrice.ToString("N0"), (itemno % 3 < 2) ? ", " : System.Environment.NewLine);
                     itemno++;
                 }
             }
                 
-        }
-
-        public class OutfittingModuleItem
-        {
-            public long id;
-            public string Name;
-            public string FDName;
-            public long BuyPrice;
         }
     }
 }

@@ -64,7 +64,6 @@ namespace EDDiscovery.UserControls
             textMinRadius.SetComparitor(textMaxRadius, -2);     // need to do this after values are set
             textMaxRadius.SetComparitor(textMinRadius, 2);
 
-            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
             slidetimer = new System.Windows.Forms.Timer();
             slidetimer.Interval = 500;
             slidetimer.Tick += Slidetimer_Tick;
@@ -79,9 +78,11 @@ namespace EDDiscovery.UserControls
             uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
             uctg = thc;
             uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
+        }
 
-            //RefreshMap();
-            //ControlReset(chartMap);
+        public override void LoadLayout()
+        {
+            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
         }
 
         public override void Closing()
@@ -253,12 +254,14 @@ namespace EDDiscovery.UserControls
 
         private void textMinRadius_ValueChanged(object sender, EventArgs e)
         {
-            KickComputation(last_he ?? uctg.GetCurrentHistoryEntry);
+            if (this.IsHandleCreated)
+                KickComputation(last_he ?? uctg.GetCurrentHistoryEntry);
         }
 
         private void textMaxRadius_ValueChanged(object sender, EventArgs e)
         {
-            KickComputation(last_he ?? uctg.GetCurrentHistoryEntry);
+            if (this.IsHandleCreated)
+                KickComputation(last_he ?? uctg.GetCurrentHistoryEntry);
         }
 
         private void RefreshMap()
@@ -677,7 +680,7 @@ namespace EDDiscovery.UserControls
         private void aboutToolStripAbout_Click(object sender, EventArgs e)
         {
             ExtendedControls.InfoForm frm = new ExtendedControls.InfoForm();
-            frm.Info("Map Help", FindForm().Icon, EDDiscovery.Properties.Resources.mapuc, new int[1] { 300 }, true);
+            frm.Info("Map Help", FindForm().Icon, EDDiscovery.Properties.Resources.mapuc, new int[1] { 300 });
             frm.StartPosition = FormStartPosition.CenterParent;
             frm.Show(FindForm());
         }

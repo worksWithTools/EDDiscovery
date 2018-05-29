@@ -25,15 +25,15 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using EliteDangerousCore.JournalEvents;
-using static EDDiscovery.UserControls.Recipes;
+using static EliteDangerousCore.MaterialCommodityDB;
 
 namespace EDDiscovery.UserControls
 {
     public partial class UserControlShoppingList : UserControlCommonBase
     {
-        private List<Tuple<MaterialCommoditiesList.Recipe, int>> EngineeringWanted = new List<Tuple<MaterialCommoditiesList.Recipe, int>>();
-        private List<Tuple<MaterialCommoditiesList.Recipe, int>> SynthesisWanted = new List<Tuple<MaterialCommoditiesList.Recipe, int>>();
-        private List<MaterialCommoditiesList.Recipe> TechBrokerWanted = new List<MaterialCommoditiesList.Recipe>();
+        private List<Tuple<Recipes.Recipe, int>> EngineeringWanted = new List<Tuple<Recipes.Recipe, int>>();
+        private List<Tuple<Recipes.Recipe, int>> SynthesisWanted = new List<Tuple<Recipes.Recipe, int>>();
+        private List<Recipes.Recipe> TechBrokerWanted = new List<Recipes.Recipe>();
         private RecipeFilterSelector tbs;
         private bool showMaxInjections;
         private bool showPlanetMats;
@@ -47,12 +47,7 @@ namespace EDDiscovery.UserControls
         private string DBShowSystemAvailability { get { return "ShoppingListSystemAvailability" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DBUseEDSMForSystemAvailability { get { return "ShoppingListUseEDSM" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DBTechBrokerFilterSave { get { return "ShoppingListTechBrokerFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        const int VeryCommonCap = 300;
-        const int CommonCap = 250;
-        const int StandardCap = 200;
-        const int RareCap = 150;
-        const int VeryRareCap = 100;
-
+        
         #region Init
 
         public UserControlShoppingList()
@@ -64,11 +59,11 @@ namespace EDDiscovery.UserControls
         {
             //Can use display number for it, because their names for db save are unique between engineering and synthesis.
             userControlEngineering.isEmbedded = true;
-            userControlEngineering.Init(discoveryform, uctg, displaynumber);
+            userControlEngineering.Init(discoveryform, displaynumber);
             useHistoric = userControlEngineering.isHistoric;
 
             userControlSynthesis.isEmbedded = true;
-            userControlSynthesis.Init(discoveryform, uctg, displaynumber);
+            userControlSynthesis.Init(discoveryform, displaynumber);
 
             // so the way it works, if the panels ever re-display (for whatever reason) they tell us, and we redisplay
 
@@ -82,9 +77,16 @@ namespace EDDiscovery.UserControls
             userControlSynthesis.OnDisplayComplete += Synthesis_OnWantedChange;
             userControlEngineering.OnDisplayComplete += Engineering_OnWantedChange;
 
-            List<string> techBrokerList = TechBrokerUnlocks.Select(r => r.name).ToList();
+            List<string> techBrokerList = Recipes.TechBrokerUnlocks.Select(r => r.name).ToList();
             tbs = new RecipeFilterSelector(techBrokerList);
             tbs.Changed += TechBrokerSelectionChanged;
+        }
+
+        public override void SetCursor(IHistoryCursor cur)
+        {
+            base.SetCursor(cur);
+            userControlEngineering.SetCursor(cur);
+            userControlSynthesis.SetCursor(cur);
         }
 
         public override void Closing()
@@ -116,6 +118,12 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
+        public override void LoadLayout()
+        {
+            userControlEngineering.LoadLayout();
+            userControlSynthesis.LoadLayout();
+        }
+
         public override Color ColorTransparency { get { return Color.Green; } }
         public override void SetTransparency(bool on, Color curcol)
         {
@@ -125,13 +133,13 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
-        private void Engineering_OnWantedChange(List<Tuple<MaterialCommoditiesList.Recipe, int>> wanted)
+        private void Engineering_OnWantedChange(List<Tuple<Recipes.Recipe, int>> wanted)
         {
             EngineeringWanted = wanted;
             Display();
         }
 
-        private void Synthesis_OnWantedChange(List<Tuple<MaterialCommoditiesList.Recipe, int>> wanted)
+        private void Synthesis_OnWantedChange(List<Tuple<Recipes.Recipe, int>> wanted)
         {
             SynthesisWanted = wanted;
             Display();
@@ -144,22 +152,22 @@ namespace EDDiscovery.UserControls
             if (EngineeringWanted != null && SynthesisWanted != null && last_he != null)    // if we have all the ingredients (get it!)
             {
                 List<MaterialCommodities> mcl = last_he.MaterialCommodity.Sort(false);
-                MaterialCommoditiesList.ResetUsed(mcl);
+                Recipes.ResetUsed(mcl);
                 Color textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
                 Color backcolour = this.BackColor;
-                List<Tuple<MaterialCommoditiesList.Recipe, int>> totalWanted = EngineeringWanted.Concat(SynthesisWanted).ToList();
+                List<Tuple<Recipes.Recipe, int>> totalWanted = EngineeringWanted.Concat(SynthesisWanted).ToList();
                 string techBrokers = SQLiteDBClass.GetSettingString(DBTechBrokerFilterSave, "None");
                 if (techBrokers != "None")
                 {
                     List<string> techBrokerList = techBrokers.Split(';').ToList<string>();
-                    foreach (MaterialCommoditiesList.Recipe r in TechBrokerUnlocks)
+                    foreach (Recipes.Recipe r in Recipes.TechBrokerUnlocks)
                     {
                         if (techBrokers == "All" || techBrokerList.Contains(r.name))
-                            totalWanted.Add(new Tuple<MaterialCommoditiesList.Recipe, int>(r, 1));
+                            totalWanted.Add(new Tuple<Recipes.Recipe, int>(r, 1));
                     }
                 }
 
-                List<MaterialCommodities> shoppinglist = MaterialCommoditiesList.GetShoppingList(totalWanted, mcl);
+                List<MaterialCommodities> shoppinglist = Recipes.GetShoppingList(totalWanted, mcl);
                 JournalScan sd = null;
                 StarScan.SystemNode last_sn = null;
 
@@ -197,11 +205,11 @@ namespace EDDiscovery.UserControls
                         wantedList.Append($"  {c.scratchpad} {c.name}{present}");
                         int? onHand = mcl.Where(m => m.shortname == c.shortname).FirstOrDefault()?.count;
                         int totalReq = c.scratchpad + (onHand.HasValue ? onHand.Value : 0);
-                        if ((c.type == MaterialCommodityDB.MaterialFreqVeryCommon && totalReq > VeryCommonCap) ||
-                            (c.type == MaterialCommodityDB.MaterialFreqCommon && totalReq > CommonCap) ||
-                            (c.type == MaterialCommodityDB.MaterialFreqStandard && totalReq > StandardCap) ||
-                            (c.type == MaterialCommodityDB.MaterialFreqRare && totalReq > RareCap) ||
-                            (c.type == MaterialCommodityDB.MaterialFreqVeryRare && totalReq > VeryRareCap))
+                        if ((c.type == MaterialFreqVeryCommon && totalReq > VeryCommonCap) ||
+                            (c.type == MaterialFreqCommon && totalReq > CommonCap) ||
+                            (c.type == MaterialFreqStandard && totalReq > StandardCap) ||
+                            (c.type == MaterialFreqRare && totalReq > RareCap) ||
+                            (c.type == MaterialFreqVeryRare && totalReq > VeryRareCap))
                         {
                             capExceededMats.Add(c.name);
                         }
@@ -247,10 +255,10 @@ namespace EDDiscovery.UserControls
 
                 if (showMaxInjections)
                 {
-                    MaterialCommoditiesList.ResetUsed(mcl);
-                    Tuple<int, int, string> basic = MaterialCommoditiesList.HowManyLeft(mcl, SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Basic"));
-                    Tuple<int, int, string> standard = MaterialCommoditiesList.HowManyLeft(mcl, SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Standard"));
-                    Tuple<int, int, string> premium = MaterialCommoditiesList.HowManyLeft(mcl, SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Premium"));
+                    Recipes.ResetUsed(mcl);
+                    Tuple<int, int, string> basic = Recipes.HowManyLeft(mcl, Recipes.SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Basic"));
+                    Tuple<int, int, string> standard = Recipes.HowManyLeft(mcl, Recipes.SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Standard"));
+                    Tuple<int, int, string> premium = Recipes.HowManyLeft(mcl, Recipes.SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Premium"));
                     wantedList.Append($"\nMax FSD Injections\n   {basic.Item1} Basic\n   {standard.Item1} Standard\n   {premium.Item1} Premium");
                 }
 
@@ -260,13 +268,8 @@ namespace EDDiscovery.UserControls
                     foreach (KeyValuePair<string, double> mat in sd.Materials)
                     {
                         int? onHand = mcl.Where(m => m.fdname == mat.Key).FirstOrDefault()?.count;
-                        MaterialCommodityDB md =  MaterialCommodityDB.GetCachedMaterial(mat.Key);
-                        int max;
-                        if (md.type == MaterialCommodityDB.MaterialFreqVeryCommon)  max = VeryCommonCap;
-                        else if (md.type == MaterialCommodityDB.MaterialFreqCommon)  max = CommonCap;
-                        else if (md.type == MaterialCommodityDB.MaterialFreqStandard)  max = StandardCap;
-                        else if (md.type == MaterialCommodityDB.MaterialFreqRare)  max = RareCap;
-                        else max = VeryRareCap;
+                        MaterialCommodityDB md =  GetCachedMaterial(mat.Key);
+                        int max = MaterialLimit(md).Value;
                         wantedList.AppendFormat("   {0} {1}% ({2}/{3})\n", System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(mat.Key.ToLower(System.Globalization.CultureInfo.InvariantCulture)),
                                                                         mat.Value.ToString("N1"), (onHand.HasValue ? onHand.Value : 0), max);
                     }

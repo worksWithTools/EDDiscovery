@@ -1,0 +1,249 @@
+﻿/*
+ * Copyright © 2016 - 2017 EDDiscovery development team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ * 
+ * EDDiscovery is not affiliated with Frontier Developments plc.
+ */
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using EDDiscovery.Controls;
+using System.IO;
+using EliteDangerousCore;
+using EliteDangerousCore.DB;
+
+namespace EDDiscovery.UserControls
+{
+    public partial class UserControlOutfitting : UserControlCommonBase
+    {
+        private string DbColumnSave { get { return ("OutfittingGrid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
+        private string DbYardSave { get { return "OutfittingSelect" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+
+        #region Init
+
+        public UserControlOutfitting()
+        {
+            InitializeComponent();
+            var corner = dataGridViewOutfitting.TopLeftHeaderCell; // work around #1487
+        }
+
+        public override void Init()
+        {
+            dataGridViewOutfitting.MakeDoubleBuffered();
+            dataGridViewOutfitting.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
+            dataGridViewOutfitting.RowTemplate.Height = 26;
+
+            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange; ;
+            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
+        }
+
+        public override void ChangeCursorType(IHistoryCursor thc)
+        {
+            uctg.OnTravelSelectionChanged -= Display;
+            uctg = thc;
+            uctg.OnTravelSelectionChanged += Display;
+        }
+
+        public override void LoadLayout()
+        {
+            uctg.OnTravelSelectionChanged += Display;
+            DGVLoadColumnLayout(dataGridViewOutfitting, DbColumnSave);
+        }
+
+        public override void Closing()
+        {
+            DGVSaveColumnLayout(dataGridViewOutfitting, DbColumnSave);
+            uctg.OnTravelSelectionChanged -= Display;
+            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
+            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
+        }
+
+
+
+        #endregion
+
+        #region Display
+
+        private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
+        {
+            Discoveryform_OnHistoryChange(hl);
+        }
+
+        private void Discoveryform_OnHistoryChange(HistoryList hl)
+        {
+            UpdateComboBox(hl);
+        }
+
+        private void UpdateComboBox(HistoryList hl)
+        {
+            OutfittingList ofl = hl.outfitting;
+            string cursel = comboBoxYards.Text;
+
+            comboBoxYards.Items.Clear();
+            comboBoxYards.Items.Add("Travel History Entry");
+
+            comboBoxYards.Items.AddRange(ShipModuleData.Instance.GetAllModTypes());
+
+            var list = (from x in ofl.GetFilteredList() select x.Ident(EDDiscoveryForm.EDDConfig.DisplayUTC)).ToList();
+            comboBoxYards.Items.AddRange(list);
+
+            if (cursel == "")
+                cursel = SQLiteDBClass.GetSettingString(DbYardSave, "");
+
+            if (cursel == "" || !comboBoxYards.Items.Contains(cursel))
+                cursel = "Travel History Entry";
+
+            comboBoxYards.Enabled = false;
+            comboBoxYards.SelectedItem = cursel;
+            comboBoxYards.Enabled = true;
+        }
+
+        public override void InitialDisplay()
+        {
+            Display(uctg.GetCurrentHistoryEntry, discoveryform.history);
+        }
+
+        HistoryEntry last_he = null;
+
+        private void Display(HistoryEntry he, HistoryList hl)
+        {
+            if ( comboBoxYards.Items.Count == 0 )
+                UpdateComboBox(hl);
+
+            last_he = he;
+            Display();
+        }
+
+        private void Display()
+        {
+            DataGridViewColumn sortcol = dataGridViewOutfitting.SortedColumn != null ? dataGridViewOutfitting.SortedColumn : dataGridViewOutfitting.Columns[0];
+            SortOrder sortorder = dataGridViewOutfitting.SortOrder;
+
+            dataGridViewOutfitting.Rows.Clear();
+
+            labelYard.Visible = false;
+
+            Outfitting yard = null;
+
+            if (comboBoxYards.Text.Contains("Travel") || comboBoxYards.Text.Length == 0)  // second is due to the order History gets called vs this on start
+            {
+                HistoryEntry lastshipyard = discoveryform.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.Outfitting, last_he);
+                if (lastshipyard != null)
+                    yard = (lastshipyard.journalEntry as EliteDangerousCore.JournalEvents.JournalOutfitting).ItemList;
+            }
+            else
+            {
+                yard = discoveryform.history.outfitting.GetFilteredList().Find(x => x.Ident(EDDiscoveryForm.EDDConfig.DisplayUTC).Equals(comboBoxYards.Text));
+            }
+
+            if (yard != null)
+            {
+                DisplayYard(yard);
+            }
+            else
+            {
+                List<Tuple<Outfitting, List<Outfitting.OutfittingItem>>> itemlist = discoveryform.history.outfitting.GetItemTypeLocationsFromYardsWithoutRepeat(comboBoxYards.Text,nolocrepeats:true);
+                if ( itemlist.Count > 0 )
+                    DisplayItems(itemlist, comboBoxYards.Text);
+            }
+
+            dataGridViewOutfitting.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
+            dataGridViewOutfitting.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
+        }
+
+        private void DisplayItems(List<Tuple<Outfitting, List<Outfitting.OutfittingItem>>> itemlist, string moduletype)
+        {
+            ISystem cursys = discoveryform.history.CurrentSystem;
+
+            foreach (var yard in itemlist)
+            {
+                double distance = discoveryform.history.DistanceCurrentTo(yard.Item1.StarSystem);
+                string dte = EDDiscoveryForm.EDDConfig.DisplayUTC ? yard.Item1.Datetime.ToString() : yard.Item1.Datetime.ToLocalTime().ToString();
+                string yardname = yard.Item1.Location;
+
+                foreach (var item in yard.Item2)
+                {
+                    string itemname = item.Name.StartsWith(item.ModType) ? item.Name.Mid(item.ModType.Length+1) : item.Name;
+                    ShipModuleData.ShipModule sm = ShipModuleData.Instance.GetItemProperties(item.FDName);
+                    itemname = itemname.AppendPrePad(sm.InfoMassPower(true), ", ");
+
+                    object[] rowobj = { dte, yardname, itemname, (distance > -1) ? (distance.ToString("N1") + "ly") : "Unknown", item.BuyPrice.ToString("N1") + "cr" };
+                    dataGridViewOutfitting.Rows.Add(rowobj);
+                }
+            }
+
+            labelYard.Text = moduletype + " locations";
+            labelYard.Visible = true;
+            Col1.HeaderText = "Date";
+            Col2.HeaderText = "Yard";
+            Col3.HeaderText = "Item";
+            Col4.HeaderText = "Distance";
+            ColPrice.HeaderText = "Price";
+        }
+
+        private void DisplayYard(Outfitting yard)
+        {
+            foreach (var i in yard.Items)
+            {
+                ShipModuleData.ShipModule sm = ShipModuleData.Instance.GetItemProperties(i.FDName);
+                //string namepart = i.Name.Left("Class", StringComparison.InvariantCultureIgnoreCase, true), classpart = i.Name.Mid("Class", StringComparison.InvariantCultureIgnoreCase, false);
+
+                string info = sm.InfoMassPower(false);
+
+                object[] rowobj = { i.ModType, i.Name, info, sm.Mass.ToString("0.#t"),i.BuyPrice.ToString("N1") + "cr" };
+                dataGridViewOutfitting.Rows.Add(rowobj);
+            }
+
+            double distance = discoveryform.history.DistanceCurrentTo(yard.StarSystem);
+
+            labelYard.Text = yard.Ident(EDDiscoveryForm.EDDConfig.DisplayUTC) + (distance > -1 ? (" @ " + distance.ToString("N1") + "ly") : "");
+            labelYard.Visible = true;
+
+            Col1.HeaderText = "Type";
+            Col2.HeaderText = "Item";
+            Col3.HeaderText = "Info";
+            Col4.HeaderText = "Mass";
+        }
+ 
+        #endregion
+
+
+        private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBoxYards.Enabled)
+            {
+                SQLiteDBClass.PutSettingString(DbYardSave, comboBoxYards.Text);
+                Display();
+            }
+        }
+
+        private void dataGridView_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+        {
+            string name = e.Column.HeaderText;
+            if (name == "Date")
+                e.SortDataGridViewColumnDate();
+            else if (name == "Distance")
+                e.SortDataGridViewColumnNumeric("ly");
+            else if (name == "Price")
+                e.SortDataGridViewColumnNumeric("cr");
+            else if (name == "Mass")
+                e.SortDataGridViewColumnNumeric("t");
+        }
+
+    }
+}

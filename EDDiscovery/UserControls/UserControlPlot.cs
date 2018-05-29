@@ -34,6 +34,8 @@ using EliteDangerousCore.JournalEvents;
 using OxyPlot;
 using OxyPlot.Series;
 using OxyPlot.WindowsForms;
+using OxyPlot.Axes;
+
 namespace EDDiscovery.UserControls
 {
     public partial class UserControlPlot : UserControlCommonBase
@@ -57,7 +59,6 @@ namespace EDDiscovery.UserControls
         public double prevX = 0.0;
         public double prevY = 0.0;
         public double prevZ = 0.0;
-        private string dataOutputDir;
 
         public override void Init()
         {
@@ -71,22 +72,22 @@ namespace EDDiscovery.UserControls
             comboBoxView.Items.Add("Front");
             comboBoxView.Items.Add("Side");
             comboBoxView.Items.Add("Grid");
-            //comboBoxView.Items.Add("Report");
             comboBoxView.Items.DefaultIfEmpty("Top");
             comboBoxView.SelectedItem = SQLiteConnectionUser.GetSettingString(DbSave + "PlotOrientation", "Top");
             comboBoxView.Enabled = true;
 
-            // retrieve the path for export plots and reports
-            dataOutputDir = SQLiteDBClass.GetSettingString("ImageHandlerOutputDir", dataOutputDir);
-
             computer = new StarDistanceComputer();
-            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
         {
             uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
             uctg = thc;
+            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
+        }
+
+        public override void LoadLayout()
+        {
             uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
         }
 
@@ -150,20 +151,25 @@ namespace EDDiscovery.UserControls
 
         private void FillPlot(BaseUtils.SortedListDoubleDuplicate<ISystem> csl, ISystem currentSystem)
         {
-            // debug
-            //debugView.AppendText("Plot started.");
-
             SetControlText("2D Plot of systems in range from " + currentSystem.Name);
 
             var pointSize = 4;
 
             // initializing the plot
-            var modelTop = new PlotModel { Title = "Plot around " + currentSystem.Name };
-            var modelFront = new PlotModel { Title = "Plot around " + currentSystem.Name };
-            var modelSide = new PlotModel { Title = "Plot around " + currentSystem.Name };
+            var modelTop = new PlotModel { };
+            var modelFront = new PlotModel { };
+            var modelSide = new PlotModel { };
+
             this.plotViewTop.Model = modelTop;
             this.plotViewFront.Model = modelFront;
             this.plotViewSide.Model = modelSide;
+
+            modelTop.Axes.Add(new LinearAxis { Position = AxisPosition.Bottom, TicklineColor = OxyColors.BlueViolet });
+            modelTop.Axes.Add(new LinearAxis { Position = AxisPosition.Left, TicklineColor = OxyColors.BlueViolet});
+            modelFront.Axes.Add(new LinearAxis { Position = AxisPosition.Bottom, TicklineColor = OxyColors.BlueViolet });
+            modelFront.Axes.Add(new LinearAxis { Position = AxisPosition.Left, TicklineColor = OxyColors.BlueViolet });
+            modelSide.Axes.Add(new LinearAxis { Position = AxisPosition.Bottom, TicklineColor = OxyColors.BlueViolet });
+            modelSide.Axes.Add(new LinearAxis { Position = AxisPosition.Left, TicklineColor = OxyColors.BlueViolet });
 
             // Define defaults properties of the series for the Top view
             var currentSeriesTop = new ScatterSeries { MarkerType = MarkerType.Circle, MarkerSize = pointSize, MarkerFill = OxyColors.Red };
@@ -313,12 +319,14 @@ namespace EDDiscovery.UserControls
 
         private void textMinRadius_ValueChanged(object sender, EventArgs e)
         {
-            KickComputation(uctg.GetCurrentHistoryEntry);
+            if (this.IsHandleCreated)
+                KickComputation(uctg.GetCurrentHistoryEntry);
         }
 
         private void textMaxRadius_ValueChanged(object sender, EventArgs e)
         {
-            KickComputation(uctg.GetCurrentHistoryEntry);
+            if (this.IsHandleCreated)
+                KickComputation(uctg.GetCurrentHistoryEntry);
         }
 
         private void comboBoxView_SelectedIndexChanged(object sender, EventArgs e)
@@ -360,59 +368,44 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void checkBoxDotSize_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void dataGridList_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
             if (sysName.Equals(e.Column) && sysX.Equals(e.Column) && sysY.Equals(e.Column) && sysZ.Equals(e.Column))
                 e.SortDataGridViewColumnDate();
         }
 
-        private void comboBoxView_EnabledChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void comboBoxView_TextChanged(object sender, EventArgs e)
+         private void comboBoxView_TextChanged(object sender, EventArgs e)
         {
             string s = comboBoxView.SelectedItem.ToString();
             if (s == "Top")
             {
                 dataGridList.Visible = false;
-                buttonExportPNG.Enabled = true;
                 reportView.Visible = false;
             }
             if (s == "Front")
             {
                 dataGridList.Visible = false;
-                buttonExportPNG.Enabled = true;
                 reportView.Visible = false;
             }
             if (s == "Side")
             {
                 dataGridList.Visible = false;
-                buttonExportPNG.Enabled = true;
                 reportView.Visible = false;
             }
             if (s == "Grid")
             {
                 dataGridList.Visible = true;
-                buttonExportPNG.Enabled = true;
                 reportView.Visible = false;
             }
             if (s == "Report")
             {
                 dataGridList.Visible = false;
-                buttonExportPNG.Enabled = true;
                 reportView.Visible = true;
             }
         }
 
         string OutPath = "";
-
+        
         private void SelectFolder()
         {            
             using (var folderDialog = new FolderBrowserDialog())
@@ -434,19 +427,19 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void buttonExportToImage_Click(object sender, EventArgs e)
+        private void pNGToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SelectFolder();
-                        
+
             try
             {
+                // Export to PNG
                 var pngExporter = new PngExporter { Width = 900, Height = 900, Background = OxyColors.White };
 
                 string FileNameTop = Path.Combine(OutPath, DateTime.Now.ToString("yyyyMMddHHmmss_") + currentSystemName + "_Top".AddSuffixToFilename(".png"));
                 string FileNameFront = Path.Combine(OutPath, DateTime.Now.ToString("yyyyMMddHHmmss_") + currentSystemName + "_Front".AddSuffixToFilename(".png"));
                 string FileNameSide = Path.Combine(OutPath, DateTime.Now.ToString("yyyyMMddHHmmss_") + currentSystemName + "_Side".AddSuffixToFilename(".png"));
-
-                // Export Plots view as PNG
+                                
                 pngExporter.ExportToFile(plotViewTop.Model, FileNameTop);
                 pngExporter.ExportToFile(plotViewFront.Model, FileNameFront);
                 pngExporter.ExportToFile(plotViewSide.Model, FileNameSide);
@@ -457,12 +450,78 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void buttonExtReport_Click(object sender, EventArgs e)
+        private void pDFToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SelectFolder();
 
             try
-            {   
+            {
+                // Export to PDF
+                string FileNameTop = Path.Combine(OutPath, DateTime.Now.ToString("yyyyMMddHHmmss_") + currentSystemName + "_Top".AddSuffixToFilename(".pdf"));
+                string FileNameFront = Path.Combine(OutPath, DateTime.Now.ToString("yyyyMMddHHmmss_") + currentSystemName + "_Front".AddSuffixToFilename(".pdf"));
+                string FileNameSide = Path.Combine(OutPath, DateTime.Now.ToString("yyyyMMddHHmmss_") + currentSystemName + "_Side".AddSuffixToFilename(".pdf"));
+                             
+                using (var stream = File.Create(FileNameTop))
+                {
+                    var pdfExporter = new PdfExporter { Width = 900, Height = 900 };
+                    pdfExporter.Export(plotViewTop.Model, stream);
+                }
+                using (var stream = File.Create(FileNameFront))
+                {
+                    var pdfExporter = new PdfExporter { Width = 900, Height = 900 };
+                    pdfExporter.Export(plotViewFront.Model, stream);
+                }
+                using (var stream = File.Create(FileNameSide))
+                {
+                    var pdfExporter = new PdfExporter { Width = 900, Height = 900 };
+                    pdfExporter.Export(plotViewSide.Model, stream);
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
+        private void sVGToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SelectFolder();
+
+            try
+            {
+                // Export to SVG
+                string FileNameTop = Path.Combine(OutPath, DateTime.Now.ToString("yyyyMMddHHmmss_") + currentSystemName + "_Top".AddSuffixToFilename(".svg"));
+                string FileNameFront = Path.Combine(OutPath, DateTime.Now.ToString("yyyyMMddHHmmss_") + currentSystemName + "_Front".AddSuffixToFilename(".svg"));
+                string FileNameSide = Path.Combine(OutPath, DateTime.Now.ToString("yyyyMMddHHmmss_") + currentSystemName + "_Side".AddSuffixToFilename(".svg"));
+
+                using (var stream = File.Create(FileNameTop))
+                {
+                    var exporter = new OxyPlot.SvgExporter { Width = 600, Height = 400 };
+                    exporter.Export(plotViewTop.Model, stream);
+                }
+                using (var stream = File.Create(FileNameFront))
+                {
+                    var exporter = new OxyPlot.SvgExporter { Width = 600, Height = 400 };
+                    exporter.Export(plotViewFront.Model, stream);
+                }
+                using (var stream = File.Create(FileNameSide))
+                {
+                    var exporter = new OxyPlot.SvgExporter { Width = 600, Height = 400 };
+                    exporter.Export(plotViewSide.Model, stream);
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
+        private void tXTToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SelectFolder();
+
+            try
+            {
                 // Save a Report                                
                 string FileNameReport = Path.Combine(OutPath, DateTime.Now.ToString("yyyyMMddHHmmss_") + currentSystemName + "_Report".AddSuffixToFilename(".txt"));
                 File.WriteAllText(FileNameReport, reportView.Text);

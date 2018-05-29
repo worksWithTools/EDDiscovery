@@ -33,6 +33,8 @@ namespace EliteDangerousCore
         public Ledger cashledger { get; private set; } = new Ledger();       // and the ledger..
         public ShipInformationList shipinformationlist { get; private set; } = new ShipInformationList();     // ship info
         private MissionListAccumulator missionlistaccumulator = new MissionListAccumulator(); // and mission list..
+        public ShipYardList shipyards = new ShipYardList(); // yards in space (not meters)
+        public OutfittingList outfitting = new OutfittingList();
         public StarScan starscan { get; private set; } = new StarScan();                                           // and the results of scanning
         public int CommanderId { get; private set; }
 
@@ -55,6 +57,8 @@ namespace EliteDangerousCore
             shipinformationlist = other.shipinformationlist;
             CommanderId = other.CommanderId;
             missionlistaccumulator = other.missionlistaccumulator;
+            shipyards = other.shipyards;
+            outfitting = other.outfitting;
         }
 
         public int Count { get { return historylist.Count; } }
@@ -231,6 +235,13 @@ namespace EliteDangerousCore
         public bool IsCurrentlyLanded { get { HistoryEntry he = GetLast; return (he != null) ? he.IsLanded : false; } }     //safe methods
         public bool IsCurrentlyDocked { get { HistoryEntry he = GetLast; return (he != null) ? he.IsDocked : false; } }
         public ISystem CurrentSystem { get { HistoryEntry he = GetLast; return (he != null) ? he.System : null; } }  // current system
+
+        public double DistanceCurrentTo(string system)          // from current, if we have one, to system, if its found.
+        {
+            ISystem cursys = CurrentSystem;
+            ISystem other = SystemCache.FindSystem(system);
+            return cursys != null ? cursys.Distance(other) : -1;  // current can be null, shipsystem can be null, cursys can not have co-ord, -1 if failed.
+        }
 
         public HistoryEntry GetLastFSD
         {
@@ -746,25 +757,17 @@ namespace EliteDangerousCore
             {
                 if (hs == he)
                 {
-                    if (he.StartMarker)
+                    if (he.StartMarker || he.StopMarker)
                     {
-                        JournalEntry.UpdateSyncFlagBit(hs.Journalid, SyncFlags.StartMarker, false);
-                        he.StartMarker = false;
-                    }
-                    else if (he.StopMarker)
-                    {
-                        JournalEntry.UpdateSyncFlagBit(hs.Journalid, SyncFlags.StopMarker, false);
-                        he.StopMarker = false;
+                        hs.journalEntry.UpdateSyncFlagBit(SyncFlags.StartMarker, false, SyncFlags.StopMarker, false);
                     }
                     else if (started == false)
                     {
-                        JournalEntry.UpdateSyncFlagBit(hs.Journalid, SyncFlags.StartMarker, true);
-                        he.StartMarker = true;
+                        hs.journalEntry.UpdateSyncFlagBit(SyncFlags.StartMarker, true, SyncFlags.StopMarker, false);
                     }
                     else
                     {
-                        JournalEntry.UpdateSyncFlagBit(hs.Journalid, SyncFlags.StopMarker, true);
-                        he.StopMarker = true;
+                        hs.journalEntry.UpdateSyncFlagBit(SyncFlags.StartMarker, false, SyncFlags.StopMarker, true);
                     }
 
                     break;
@@ -806,11 +809,16 @@ namespace EliteDangerousCore
                 cashledger.Process(je, conn);
                 he.Credits = cashledger.CashTotal;
 
+                shipyards.Process(je, conn);
+                outfitting.Process(je, conn);
+
                 Tuple<ShipInformation, ModulesInStore> ret = shipinformationlist.Process(je, conn,he.WhereAmI,he.System);
                 he.ShipInformation = ret.Item1;
                 he.StoredModules = ret.Item2;
 
                 he.MissionList = missionlistaccumulator.Process(je, he.System, he.WhereAmI, conn);
+
+                
             }
 
             historylist.Add(he);
@@ -849,11 +857,9 @@ namespace EliteDangerousCore
                                     bool Keepuievents = true)
         {
             HistoryList hist = new HistoryList();
-            EDCommander cmdr = null;
 
             if (CurrentCommander >= 0)
             {
-                cmdr = EDCommander.GetCommander(CurrentCommander);
                 journalmonitor.ParseJournalFiles(() => cancelRequested(), (p, s) => reportProgress(p, s), forceReload: ForceJournalReload);   // Parse files stop monitor..
 
                 if (NetLogPath != null)
@@ -878,7 +884,7 @@ namespace EliteDangerousCore
                 {
                     if (MergeEntries(jprev, je))        // if we merge.. we may have updated info, so reprint.
                     {
-                        jprev.FillInformation(out prev.EventSummary, out prev.EventDescription, out prev.EventDetailedInfo);    // need to keep this up to date..
+                        //jprev.FillInformation(out prev.EventSummary, out prev.EventDescription, out prev.EventDetailedInfo);    // need to keep this up to date..
                         continue;
                     }
 
@@ -889,7 +895,7 @@ namespace EliteDangerousCore
                     }
 
                     bool journalupdate = false;
-                    HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, out journalupdate, conn, cmdr);
+                    HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, out journalupdate, conn);
 
                     prev = he;
                     jprev = je;
@@ -929,6 +935,8 @@ namespace EliteDangerousCore
                 }
             }
 
+            reportProgress(-1, "Done");
+
             // now database has been updated due to initial fill, now fill in stuff which needs the user database
 
             hist.CommanderId = CurrentCommander;
@@ -960,7 +968,10 @@ namespace EliteDangerousCore
                     cashledger.Process(je, conn);            // update the ledger     
                     he.Credits = cashledger.CashTotal;
 
-                    Tuple<ShipInformation, ModulesInStore> ret = shipinformationlist.Process(je, conn,he.WhereAmI, he.System);  // the ships
+                    shipyards.Process(je, conn);
+                    outfitting.Process(je, conn);
+
+                    Tuple<ShipInformation, ModulesInStore> ret = shipinformationlist.Process(je, conn, he.WhereAmI, he.System);  // the ships
                     he.ShipInformation = ret.Item1;
                     he.StoredModules = ret.Item2;
 

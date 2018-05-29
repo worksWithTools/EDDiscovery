@@ -27,11 +27,13 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalRepair(JObject evt ) : base(evt, JournalTypeEnum.Repair)
         {
-            Item = JournalFieldNaming.GetBetterItemNameEvents(evt["Item"].Str());
+            ItemFD = JournalFieldNaming.NormaliseFDItemName(evt["Item"].Str());
+            Item = JournalFieldNaming.GetBetterItemName(ItemFD);
             ItemLocalised = evt["Item_Localised"].Str().Alt(Item);
             Cost = evt["Cost"].Long();
         }
 
+        public string ItemFD { get; set; }
         public string Item { get; set; }
         public string ItemLocalised { get; set; }
         public long Cost { get; set; }
@@ -41,9 +43,9 @@ namespace EliteDangerousCore.JournalEvents
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Item, -Cost);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("",ItemLocalised, "Cost:; cr;N0" , Cost );
             detailed = "";
         }

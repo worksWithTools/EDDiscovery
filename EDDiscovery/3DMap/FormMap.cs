@@ -209,6 +209,8 @@ namespace EDDiscovery
             discoveryForm.OnHistoryChange += UpdateSystemListHC;   // refresh, update the system list..
             discoveryForm.OnNewEntry -= UpdateSystemList;   // any new entries, update the system list..
             discoveryForm.OnNewEntry += UpdateSystemList;
+            discoveryForm.PrimaryCursor.OnTravelSelectionChanged -= PrimaryCursor_OnTravelSelectionChanged;
+            discoveryForm.PrimaryCursor.OnTravelSelectionChanged += PrimaryCursor_OnTravelSelectionChanged;
         }
 
         public ToolStripMenuItem AddGalMapButton( string name, Object tt, bool? checkedbut)
@@ -232,6 +234,11 @@ namespace EDDiscovery
             _plannedRoute = plannedr;
             GenerateDataSetsRouteTri();
             RequestPaint();
+        }
+
+        private void PrimaryCursor_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl)
+        {
+            UpdateHistorySystem(he.System);
         }
 
         public void UpdateHistorySystem(ISystem historysel)
@@ -1397,8 +1404,7 @@ namespace EDDiscovery
             if (helpDialog == null)
             {
                 helpDialog = new ExtendedControls.InfoForm() { TopMost = this.TopMost };
-                helpDialog.Info("3D Map Help", Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location),
-                            Properties.Resources.maphelp3d, new int[] { 50, 200, 400 });
+                helpDialog.Info("3D Map Help", FindForm().Icon, Properties.Resources.maphelp3d, new int[] { 50, 200, 400 });
                 helpDialog.Show();
                 helpDialog.Disposed += (s, ea) => helpDialog = null;
             }
@@ -2274,12 +2280,7 @@ namespace EDDiscovery
 
         private void LoadMapImages()
         {
-            string datapath = System.IO.Path.Combine(EDDOptions.Instance.AppDataDirectory, "Maps");
-            if (System.IO.Directory.Exists(datapath))
-            {
-                fgeimages = BaseUtils.Map2d.LoadImages(datapath);
-            }
-
+            fgeimages = BaseUtils.Map2d.LoadImages(EDDOptions.Instance.MapsAppDirectory());
             dropdownMapNames.DropDownItems.Clear();
 
             foreach (var img in fgeimages)

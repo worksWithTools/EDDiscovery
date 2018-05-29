@@ -29,17 +29,17 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalModuleSell(JObject evt ) : base(evt, JournalTypeEnum.ModuleSell)
         {
-            Slot = JournalFieldNaming.GetBetterSlotName(evt["Slot"].Str());
             SlotFD = JournalFieldNaming.NormaliseFDSlotName(evt["Slot"].Str());
+            Slot = JournalFieldNaming.GetBetterSlotName(SlotFD);
 
-            SellItem = JournalFieldNaming.GetBetterItemNameEvents(evt["SellItem"].Str());
             SellItemFD = JournalFieldNaming.NormaliseFDItemName(evt["SellItem"].Str());
+            SellItem = JournalFieldNaming.GetBetterItemName(SellItemFD);
             SellItemLocalised = evt["SellItem_Localised"].Str().Alt(SellItem);
 
             SellPrice = evt["SellPrice"].Long();
 
-            ShipFD = evt["Ship"].Str();
-            Ship = JournalFieldNaming.GetBetterShipName(evt["Ship"].Str());
+            ShipFD = JournalFieldNaming.NormaliseFDShipName(evt["Ship"].Str());
+            Ship = JournalFieldNaming.GetBetterShipName(ShipFD);
             ShipId = evt["ShipID"].Int();
 
             MarketID = evt["MarketID"].LongNull();
@@ -67,9 +67,9 @@ namespace EliteDangerousCore.JournalEvents
         {
             shp.ModuleSell(this);
         }
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("", SellItemLocalised, "< from ", Slot, "Price:; cr;N0", SellPrice);
             detailed = "";
         }
