@@ -310,11 +310,11 @@ namespace EliteDangerousCore
                     }
                     else
                     {
-                        _commandersDict[maxnr + 1] = new EDCommander(maxnr + 1, "Jameson (Default)", "", false, false, false, false, "", "", false, "");
+                        commandersDict[maxnr + 1] = new EDCommander(maxnr + 1, "Jameson (Default)", "", false, false, false, false, "", "", false, "");
                     }
                 }
 
-                EDCommander hidden = new EDCommander(-1, "Hidden Log", "", false, false, false, false, "", "", "");     // -1 is the hidden commander, add to list to make it
+                EDCommander hidden = new EDCommander(-1, "Hidden Log", "", false, false, false, false, "", "", false, "");     // -1 is the hidden commander, add to list to make it
                 commandersDict[-1] = hidden;        // so we give back a valid entry when its selected
             }
 

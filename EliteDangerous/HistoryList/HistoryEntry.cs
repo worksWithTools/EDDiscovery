@@ -474,29 +474,13 @@ namespace EliteDangerousCore
 
         public void SetInaraSync(SQLiteConnectionUser cn = null, DbTransaction txn = null)
         {
-            InaraSync = true;
+            //InaraSync = true;
             if (Journalid != 0)
             {
-                JournalEntry.UpdateSyncFlagBit(Journalid, SyncFlags.Inara, true, cn, txn);
+                journalEntry.UpdateSyncFlagBit(SyncFlags.Inara, true, SyncFlags.NoBit, false, cn, txn);
             }
         }
 
-
-        public void SetFirstDiscover(bool firstdiscover, SQLiteConnectionUser cn = null, DbTransaction txnl = null)
-        {
-            IsEDSMFirstDiscover = firstdiscover;
-            if (journalEntry != null)
-            {
-                JournalLocOrJump jl = journalEntry as JournalLocOrJump;
-                if (jl != null)
-                {
-                    Newtonsoft.Json.Linq.JObject jo = jl.GetJson();
-                    jo["EDD_EDSMFirstDiscover"] = firstdiscover;
-                    jl.UpdateJsonEntry(jo, cn, txnl);
-                    jl.EDSMFirstDiscover = firstdiscover;
-                }
-            }
-        }
 
         public bool IsJournalEventInEventFilter(string[] events)
         {
