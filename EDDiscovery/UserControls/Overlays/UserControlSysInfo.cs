@@ -554,7 +554,7 @@ namespace EDDiscovery.UserControls
 
                     int bitno = Lines[r].Items[c]-1;    // stored +1
 
-                    if (bitno >= 0)
+                    if (bitno >= 0 && bitno < toolstriplist.Length )
                     {
                         bool ison = (Selection & (1 << bitno)) != 0;
 
