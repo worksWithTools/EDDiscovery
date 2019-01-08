@@ -116,7 +116,7 @@ namespace EDDiscovery
                 if (name != null && tripcondition != null && backcondition != null)
                 {
                     Profile p = new Profile(profileid, name, tripcondition, backcondition);
-                    System.Diagnostics.Debug.WriteLine("Profile {0} {1} {2}", name, tripcondition, backcondition);
+                    System.Diagnostics.Trace.WriteLine(string.Format("Profile {0} {1} {2}", name, tripcondition, backcondition));
                     ProfileList.Add(p);
                 }
             }
@@ -225,7 +225,7 @@ namespace EDDiscovery
         {
             errlist = string.Empty;
 
-            //System.Diagnostics.Debug.WriteLine("Profile check on " + vars.ToString(separ: Environment.NewLine));
+            System.Diagnostics.Trace.WriteLine("Profile check on " + vars.ToString(separ: Environment.NewLine));
 
             ConditionFunctions functions = new ConditionFunctions(vars, null);
 
@@ -233,13 +233,15 @@ namespace EDDiscovery
             {
                 bool? condres = p.TripCondition.CheckAll(vars, out string err, null, functions);     // may return null.. and will return errlist
 
+                System.Diagnostics.Trace.WriteLine("Trip ? " + p.TripCondition.ToString() + " Res " + condres + " err " + err);
+
                 if (err == null)
                 {
                     bool res = condres.HasValue && condres.Value;
 
                     if (res)
                     {
-                        System.Diagnostics.Debug.WriteLine("Profile " + p.Name + " Tripped due to " + p.TripCondition.ToString());
+                        System.Diagnostics.Trace.WriteLine("Profile " + p.Name + " Tripped due to " + p.TripCondition.ToString());
                         return p.Id;
                     }
                 }
@@ -249,13 +251,15 @@ namespace EDDiscovery
 
             bool? backres = Current.BackCondition.CheckAll(vars, out string err2, null, functions);     // check the back condition on the current profile..
 
+            System.Diagnostics.Trace.WriteLine("Back ? " + Current.BackCondition.ToString() + " Res " + backres + " err " + err2);
+
             if (err2 == null)
             {
                 bool res = backres.HasValue && backres.Value;
 
                 if (res)
                 {
-                    System.Diagnostics.Debug.WriteLine("Profile " + Current.Name + " Back Tripped due to " + Current.BackCondition.ToString());
+                    System.Diagnostics.Trace.WriteLine("Profile " + Current.Name + " Back Tripped due to " + Current.BackCondition.ToString());
 
                     if ( History.Count>=2)       // we may have an empty history (because its been erased due to editing) or only a single entry (ours).. so just double check
                     {
