@@ -238,6 +238,7 @@
             this.checkBoxEGOSync.CheckBoxColor = System.Drawing.Color.Gray;
             this.checkBoxEGOSync.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxEGOSync.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxEGOSync.Enabled = false;
             this.checkBoxEGOSync.FontNerfReduction = 0.5F;
             this.checkBoxEGOSync.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxEGOSync.Location = new System.Drawing.Point(467, 32);
@@ -260,6 +261,7 @@
             this.textBoxEGOName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxEGOName.ClearOnFirstChar = false;
             this.textBoxEGOName.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxEGOName.Enabled = false;
             this.textBoxEGOName.InErrorCondition = false;
             this.textBoxEGOName.Location = new System.Drawing.Point(200, 30);
             this.textBoxEGOName.Multiline = false;
@@ -284,6 +286,7 @@
             this.textBoxEGOAPI.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxEGOAPI.ClearOnFirstChar = false;
             this.textBoxEGOAPI.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxEGOAPI.Enabled = false;
             this.textBoxEGOAPI.InErrorCondition = false;
             this.textBoxEGOAPI.Location = new System.Drawing.Point(200, 60);
             this.textBoxEGOAPI.Multiline = false;
@@ -639,7 +642,7 @@
             this.groupBoxCustomEGO.Size = new System.Drawing.Size(652, 91);
             this.groupBoxCustomEGO.TabIndex = 33;
             this.groupBoxCustomEGO.TabStop = false;
-            this.groupBoxCustomEGO.Text = "Elite Galaxy Online Information (optional)";
+            this.groupBoxCustomEGO.Text = "Elite Galaxy Online Information (optional - disabled pending site upgrade)";
             this.groupBoxCustomEGO.TextPadding = 0;
             this.groupBoxCustomEGO.TextStartPosition = -1;
             // 

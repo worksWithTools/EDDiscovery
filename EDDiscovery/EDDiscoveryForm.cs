@@ -682,10 +682,11 @@ namespace EDDiscovery
                 EDDNSync.SendEDDNEvents(LogLine, he);
             }
 
-            if (he.EntryType == JournalTypeEnum.Scan && EDCommander.Current.SyncToEGO)
-            {
-                EliteDangerousCore.EGO.EGOSync.SendEGOEvents(LogLine, he);
-            }
+            //Temporarily disabling EGO syncing until website upgrade is complete
+            //if (he.EntryType == JournalTypeEnum.Scan && EDCommander.Current.SyncToEGO)
+            //{
+            //    EliteDangerousCore.EGO.EGOSync.SendEGOEvents(LogLine, he);
+            //}
 
             DLLManager.NewJournalEntry( DLL.EDDDLLCallerHE.CreateFromHistoryEntry(he));
 
