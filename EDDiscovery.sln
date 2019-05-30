@@ -20,21 +20,25 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EDDIcons", "EDDIcons\EDDIco
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActionLanguage", "ActionLanguage\ActionLanguage\ActionLanguage.csproj", "{17F82244-9FA8-4B04-85F0-9B1D0654CD26}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Audio", "BaseUtilities\Audio\Audio.csproj", "{59F99A05-CE16-4FB8-BE99-F1A24F019CB8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Audio", "BaseUtilities\Audio\Audio.csproj", "{59F99A05-CE16-4FB8-BE99-F1A24F019CB8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseUtils", "BaseUtilities\BaseUtilities\BaseUtils.csproj", "{C657C881-F3E1-45BA-ACA5-966348010414}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaseUtils", "BaseUtilities\BaseUtilities\BaseUtils.csproj", "{C657C881-F3E1-45BA-ACA5-966348010414}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DirectInput", "BaseUtilities\DirectInput\DirectInput.csproj", "{390B1547-A455-45E3-974F-E1F9B1613AD5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DirectInput", "BaseUtilities\DirectInput\DirectInput.csproj", "{390B1547-A455-45E3-974F-E1F9B1613AD5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenTKUtils", "BaseUtilities\OpenTKUtils\OpenTKUtils.csproj", "{4CFA37D5-4182-4CAE-AFC3-7563A13B44EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenTKUtils", "BaseUtilities\OpenTKUtils\OpenTKUtils.csproj", "{4CFA37D5-4182-4CAE-AFC3-7563A13B44EE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtendedControls", "ExtendedControls\ExtendedControls\ExtendedControls.csproj", "{2049403F-F4C7-45E6-B777-6390C78E4D2B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtendedForms", "ExtendedControls\ExtendedForms\ExtendedForms.csproj", "{298C11C9-B58F-415C-8458-1CAE3C6CAB62}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLLite", "BaseUtilities\SQLLite\SQLLite.csproj", "{3D79DE63-5EEC-4F30-A879-FB4C6BA4B2DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLLite", "BaseUtilities\SQLLite\SQLLite.csproj", "{3D79DE63-5EEC-4F30-A879-FB4C6BA4B2DC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaseUtils.WinForms", "BaseUtilities\BaseUtils.WinForms\BaseUtils.WinForms.csproj", "{61AFEA77-0276-4DCF-983F-589E6AF31258}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Audio.WindowsSpeech", "BaseUtilities\Audio.WindowsSpeech\Audio.WindowsSpeech.csproj", "{33581321-4984-43C2-9D52-34C40DBD47E9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Audio.CSCore", "BaseUtilities\Audio.CSCore\Audio.CSCore.csproj", "{FEE8997A-52E1-4803-B337-453707835C0A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -200,6 +204,30 @@ Global
 		{61AFEA77-0276-4DCF-983F-589E6AF31258}.Release|x64.Build.0 = Release|Any CPU
 		{61AFEA77-0276-4DCF-983F-589E6AF31258}.Release|x86.ActiveCfg = Release|Any CPU
 		{61AFEA77-0276-4DCF-983F-589E6AF31258}.Release|x86.Build.0 = Release|Any CPU
+		{33581321-4984-43C2-9D52-34C40DBD47E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33581321-4984-43C2-9D52-34C40DBD47E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33581321-4984-43C2-9D52-34C40DBD47E9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{33581321-4984-43C2-9D52-34C40DBD47E9}.Debug|x64.Build.0 = Debug|Any CPU
+		{33581321-4984-43C2-9D52-34C40DBD47E9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{33581321-4984-43C2-9D52-34C40DBD47E9}.Debug|x86.Build.0 = Debug|Any CPU
+		{33581321-4984-43C2-9D52-34C40DBD47E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33581321-4984-43C2-9D52-34C40DBD47E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33581321-4984-43C2-9D52-34C40DBD47E9}.Release|x64.ActiveCfg = Release|Any CPU
+		{33581321-4984-43C2-9D52-34C40DBD47E9}.Release|x64.Build.0 = Release|Any CPU
+		{33581321-4984-43C2-9D52-34C40DBD47E9}.Release|x86.ActiveCfg = Release|Any CPU
+		{33581321-4984-43C2-9D52-34C40DBD47E9}.Release|x86.Build.0 = Release|Any CPU
+		{FEE8997A-52E1-4803-B337-453707835C0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEE8997A-52E1-4803-B337-453707835C0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEE8997A-52E1-4803-B337-453707835C0A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FEE8997A-52E1-4803-B337-453707835C0A}.Debug|x64.Build.0 = Debug|Any CPU
+		{FEE8997A-52E1-4803-B337-453707835C0A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FEE8997A-52E1-4803-B337-453707835C0A}.Debug|x86.Build.0 = Debug|Any CPU
+		{FEE8997A-52E1-4803-B337-453707835C0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEE8997A-52E1-4803-B337-453707835C0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FEE8997A-52E1-4803-B337-453707835C0A}.Release|x64.ActiveCfg = Release|Any CPU
+		{FEE8997A-52E1-4803-B337-453707835C0A}.Release|x64.Build.0 = Release|Any CPU
+		{FEE8997A-52E1-4803-B337-453707835C0A}.Release|x86.ActiveCfg = Release|Any CPU
+		{FEE8997A-52E1-4803-B337-453707835C0A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
