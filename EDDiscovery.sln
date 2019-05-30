@@ -28,9 +28,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DirectInput", "BaseUtilitie
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenTKUtils", "BaseUtilities\OpenTKUtils\OpenTKUtils.csproj", "{4CFA37D5-4182-4CAE-AFC3-7563A13B44EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtendedControls", "ExtendedControls\ExtendedControls\ExtendedControls.csproj", "{2049403F-F4C7-45E6-B777-6390C78E4D2B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExtendedControls", "ExtendedControls\ExtendedControls\ExtendedControls.csproj", "{2049403F-F4C7-45E6-B777-6390C78E4D2B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtendedForms", "ExtendedControls\ExtendedForms\ExtendedForms.csproj", "{298C11C9-B58F-415C-8458-1CAE3C6CAB62}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExtendedForms", "ExtendedControls\ExtendedForms\ExtendedForms.csproj", "{298C11C9-B58F-415C-8458-1CAE3C6CAB62}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLLite", "BaseUtilities\SQLLite\SQLLite.csproj", "{3D79DE63-5EEC-4F30-A879-FB4C6BA4B2DC}"
 EndProject
