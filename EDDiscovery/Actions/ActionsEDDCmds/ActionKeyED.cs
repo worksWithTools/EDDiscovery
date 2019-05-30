@@ -27,7 +27,7 @@ namespace EDDiscovery.Actions
     {
         const string errmsgforbinding = "No keyboard binding for ";
 
-        class AKP : BaseUtils.EnhancedSendKeysParser.IAdditionalKeyParser      // AKP parser to pass to SendKeys
+        class AKP : BaseUtils.IAdditionalKeyParser      // AKP parser to pass to SendKeys
         {
             public BaseUtils.BindingsFile bindingsfile;
 
@@ -77,7 +77,7 @@ namespace EDDiscovery.Actions
             }
         }
 
-        static public string Menu(Form parent, System.Drawing.Icon ic, string userdata, EliteDangerousCore.BindingsFile bf)
+        static public string Menu(Form parent, System.Drawing.Icon ic, string userdata, BaseUtils.BindingsFile bf)
         {
             List<string> decorated = (from x in bf.KeyNames select "{"+x+"}").ToList();
             decorated.Sort();
@@ -106,7 +106,7 @@ namespace EDDiscovery.Actions
         }
 
         // check binding in userdata for consistency.
-        static public string VerifyBinding(string userdata, EliteDangerousCore.BindingsFile bf)    // empty string okay
+        static public string VerifyBinding(string userdata, BaseUtils.BindingsFile bf)    // empty string okay
         {
             string keys;
             Variables statementvars;

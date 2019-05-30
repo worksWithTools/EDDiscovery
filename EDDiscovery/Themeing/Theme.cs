@@ -13,18 +13,13 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EliteDangerousCore.DB;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using Newtonsoft.Json.Linq;
-using System.IO;
 using System.Diagnostics;
-using ExtendedControls;
-using System.Windows.Forms.DataVisualization.Charting;
-using EliteDangerousCore.DB;
+using System.Drawing;
+using System.IO;
 
 namespace EDDiscovery
 {
