@@ -1581,7 +1581,7 @@ namespace EDDiscovery
             popoutdropdown.FlatStyle = FlatStyle.Popup;
             popoutdropdown.Shown += (s, ea) =>
             {
-                popoutdropdown.Location = popoutdropdown.PositionWithinScreen(location.X + buttonExtPopOut.Width, location.Y);
+                popoutdropdown.PositionWithinScreen(location.X + buttonExtPopOut.Width, location.Y);
                 this.Invalidate(true);
             };
             popoutdropdown.SelectedIndexChanged += (s, ea) =>

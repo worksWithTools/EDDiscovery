@@ -57,7 +57,7 @@ namespace EDDiscovery.Forms
             this.btnClose = new ExtendedControls.ExtButton();
             this.panelMain = new System.Windows.Forms.Panel();
             this.pnlCaption = new System.Windows.Forms.Panel();
-            this.pnlClose = new ExtendedControls.ExtButtonDrawn();
+            this.pnlClose = new ExtendedControls.ExtPanelDrawn();
             this.lblCaption = new System.Windows.Forms.Label();
             this.pnlBack = new System.Windows.Forms.Panel();
             this.panelMain.SuspendLayout();
@@ -348,7 +348,7 @@ namespace EDDiscovery.Forms
         private System.Windows.Forms.Panel panelMain;
         private System.Windows.Forms.Panel pnlCaption;
         private System.Windows.Forms.Label lblCaption;
-        private ExtendedControls.ExtButtonDrawn pnlClose;
+        private ExtendedControls.ExtPanelDrawn pnlClose;
         private System.Windows.Forms.Panel pnlBack;
     }
 }

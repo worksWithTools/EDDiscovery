@@ -71,8 +71,8 @@ namespace EDDiscovery.Forms
             this.checkBoxWaitComplete = new ExtendedControls.ExtCheckBox();
             this.checkBoxDisplayMessageWhenComplete = new ExtendedControls.ExtCheckBox();
             this.panelTop = new System.Windows.Forms.Panel();
-            this.panel_close = new ExtendedControls.ExtButtonDrawn();
-            this.panel_minimize = new ExtendedControls.ExtButtonDrawn();
+            this.panel_close = new ExtendedControls.ExtPanelDrawn();
+            this.panel_minimize = new ExtendedControls.ExtPanelDrawn();
             this.label_index = new System.Windows.Forms.Label();
             this.panelMain = new System.Windows.Forms.Panel();
             this.panelTop.SuspendLayout();
@@ -539,7 +539,7 @@ namespace EDDiscovery.Forms
             // panel_minimize
             // 
             this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_minimize.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Minimize;
+            this.panel_minimize.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Minimize;
             this.panel_minimize.Location = new System.Drawing.Point(518, 0);
             this.panel_minimize.Name = "panel_minimize";
             this.panel_minimize.Padding = new System.Windows.Forms.Padding(6);
@@ -644,8 +644,8 @@ namespace EDDiscovery.Forms
         private ExtendedControls.ExtCheckBox checkBoxWaitComplete;
         private ExtendedControls.ExtCheckBox checkBoxDisplayMessageWhenComplete;
         private System.Windows.Forms.Panel panelTop;
-        private ExtendedControls.ExtButtonDrawn panel_close;
-        private ExtendedControls.ExtButtonDrawn panel_minimize;
+        private ExtendedControls.ExtPanelDrawn panel_close;
+        private ExtendedControls.ExtPanelDrawn panel_minimize;
         private System.Windows.Forms.Label label_index;
         private System.Windows.Forms.Panel panelMain;
     }

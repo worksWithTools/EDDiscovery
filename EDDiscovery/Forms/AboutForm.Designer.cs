@@ -65,7 +65,7 @@ namespace EDDiscovery.Forms
             this.labelNoAffiliation = new System.Windows.Forms.Label();
             this.panelLogo = new System.Windows.Forms.PictureBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.panel_close = new ExtendedControls.ExtButtonDrawn();
+            this.panel_close = new ExtendedControls.ExtPanelDrawn();
             this.panelLinks.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.panelLogo)).BeginInit();
@@ -328,7 +328,7 @@ namespace EDDiscovery.Forms
             this.panel_close.AutoEllipsis = false;
             this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel_close.Image = null;
-            this.panel_close.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Close;
+            this.panel_close.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Close;
             this.panel_close.Location = new System.Drawing.Point(936, 1);
             this.panel_close.MouseOverColor = System.Drawing.Color.White;
             this.panel_close.MouseSelectedColor = System.Drawing.Color.Green;
@@ -397,6 +397,6 @@ namespace EDDiscovery.Forms
         private System.Windows.Forms.Label labelNoAffiliation;
         private System.Windows.Forms.PictureBox panelLogo;
         private System.Windows.Forms.ToolTip toolTip1;
-        private ExtendedControls.ExtButtonDrawn panel_close;
+        private ExtendedControls.ExtPanelDrawn panel_close;
     }
 }

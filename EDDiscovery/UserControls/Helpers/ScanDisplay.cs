@@ -54,7 +54,7 @@ namespace EDDiscovery.UserControls
 
         private Font stdfont = EDDTheme.Instance.GetFontAtSize(8.25f);
         private Font largerfont = EDDTheme.Instance.GetFontAtSize(10f);
-        private Font stdfontUnderline = EDDTheme.Instance.GetFontAtSize(8.25f, FontStyle.Underline);
+        private Font stdfontUnderline = EDDTheme.Instance.GetFontAtSize(8.25f/*, FontStyle.Underline*/);
 
         #region Init
         public ScanDisplayControl()

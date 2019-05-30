@@ -390,7 +390,7 @@ namespace EDDiscovery.UserControls
             dropdown.Activated += (s, ea) =>
             {
                 Point location = buttonSize.PointToScreen(new Point(0, 0));
-                dropdown.Location = dropdown.PositionWithinScreen(location.X, location.Y);
+                dropdown.PositionWithinScreen(location.X, location.Y);
                 this.Invalidate(true);
             };
             dropdown.SelectedIndexChanged += (s, ea) =>

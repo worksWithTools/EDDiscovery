@@ -329,7 +329,7 @@ namespace EDDiscovery.UserControls
             popoutdropdown.Activated += (s, ea) =>
             {
                 Point location = buttonExtPopOut.PointToScreen(new Point(0, 0));
-                popoutdropdown.Location = popoutdropdown.PositionWithinScreen(location.X + buttonExtPopOut.Width, location.Y);
+                popoutdropdown.PositionWithinScreen(location.X + buttonExtPopOut.Width, location.Y);
                 this.Invalidate(true);
             };
             popoutdropdown.SelectedIndexChanged += (s, ea) =>

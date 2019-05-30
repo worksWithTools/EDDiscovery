@@ -114,8 +114,8 @@ namespace EDDiscovery
             this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelAuxControls = new System.Windows.Forms.Panel();
             this.panelTop = new System.Windows.Forms.Panel();
-            this.panel_minimize = new ExtendedControls.ExtButtonDrawn();
-            this.panel_close = new ExtendedControls.ExtButtonDrawn();
+            this.panel_minimize = new ExtendedControls.ExtPanelDrawn();
+            this.panel_close = new ExtendedControls.ExtPanelDrawn();
             this.panelOuter = new System.Windows.Forms.Panel();
             this.toolStripControls.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -807,7 +807,7 @@ namespace EDDiscovery
             // panel_minimize
             // 
             this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_minimize.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Minimize;
+            this.panel_minimize.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Minimize;
             this.panel_minimize.Location = new System.Drawing.Point(1507, 5);
             this.panel_minimize.Name = "panel_minimize";
             this.panel_minimize.Padding = new System.Windows.Forms.Padding(6);
@@ -934,7 +934,7 @@ namespace EDDiscovery
         private ToolStripMenuItem useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem;
         private Panel panelTop;
         private Panel panelOuter;
-        private ExtendedControls.ExtButtonDrawn panel_minimize;
-        private ExtendedControls.ExtButtonDrawn panel_close;
+        private ExtendedControls.ExtPanelDrawn panel_minimize;
+        private ExtendedControls.ExtPanelDrawn panel_close;
     }
     }

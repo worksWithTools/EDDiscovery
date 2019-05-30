@@ -48,6 +48,7 @@
     <ProjectReference Include="..\ExtendedControls\ExtendedControls\ExtendedControls.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Windows.Forms.DataVisualization" />
   </ItemGroup>
   <Import Sdk="Microsoft.NET.Sdk.WindowsDesktop" Project="Sdk.targets" Condition="'$(TargetFramework)' == 'netcoreapp3.0'" />
