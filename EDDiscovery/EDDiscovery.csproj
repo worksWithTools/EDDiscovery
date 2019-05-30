@@ -928,9 +928,6 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="EDDiscovery_TemporaryKey.pfx" />
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -985,6 +982,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ActionLanguage\ActionLanguage.WinForms\ActionLanguage.WinForms.csproj">
+      <Project>{5c2d4049-6062-4b66-b850-3580cec0232c}</Project>
+      <Name>ActionLanguage.WinForms</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ActionLanguage\ActionLanguage\ActionLanguage.csproj">
       <Project>{17f82244-9fa8-4b04-85f0-9b1d0654cd26}</Project>
       <Name>ActionLanguage</Name>
@@ -996,6 +997,10 @@
     <ProjectReference Include="..\BaseUtilities\BaseUtilities\BaseUtils.csproj">
       <Project>{c657c881-f3e1-45ba-aca5-966348010414}</Project>
       <Name>BaseUtils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BaseUtilities\BaseUtils.WinForms\BaseUtils.WinForms.csproj">
+      <Project>{61afea77-0276-4dcf-983f-589e6af31258}</Project>
+      <Name>BaseUtils.WinForms</Name>
     </ProjectReference>
     <ProjectReference Include="..\BaseUtilities\DirectInput\DirectInput.csproj">
       <Project>{390b1547-a455-45e3-974f-e1f9b1613ad5}</Project>

@@ -308,9 +308,9 @@ namespace EliteDangerousCore
         public void UIEventPost(ConcurrentQueue<UIEvent> events)       // UI thread
         {
             ManualResetEvent stopRequested = StopRequested;
-
+#if NET472
             Debug.Assert(System.Windows.Forms.Application.MessageLoop);
-
+#endif
             if (stopRequested != null)
             {
                 while (!events.IsEmpty)

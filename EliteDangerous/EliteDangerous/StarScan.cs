@@ -202,7 +202,9 @@ namespace EliteDangerousCore
 
         public SystemNode FindSystem(ISystem sys, bool edsmweblookup, bool byname = false)    // Find the system. Optionally do a EDSM web lookup
         {
+#if NET472
             System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);  // foreground only
+#endif
 
             SystemNode sn = FindSystemNode(sys);
 
@@ -1279,7 +1281,7 @@ namespace EliteDangerousCore
 
             if (!File.Exists(desigmappath))
             {
-                desigmappath = Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), "bodydesignations.csv");
+                desigmappath = Path.Combine(Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory), "bodydesignations.csv");
             }
 
             if (File.Exists(desigmappath))

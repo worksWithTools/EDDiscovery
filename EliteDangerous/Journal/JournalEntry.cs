@@ -20,19 +20,20 @@ using EliteDangerousCore.JournalEvents;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Common;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
 
+
+
 namespace EliteDangerousCore
 {
     [DebuggerDisplay("Event {EventTypeStr} {EventTimeUTC} EdsmID {EdsmID} JID {Id} C {CommanderId}")]
     public abstract partial class JournalEntry
     {
-        #region Public Instance properties and fields
+#region Public Instance properties and fields
 
         public long Id { get; private set; }                    // this is the entry ID
         public long TLUId { get; private set; }                 // this ID of the journal tlu (aka TravelLogId)
@@ -77,9 +78,9 @@ namespace EliteDangerousCore
         // the name used to filter it.. and the filter keyword. Its normally the enum of the event.
         public virtual string EventFilterName { get { return EventTypeID.ToString(); } } // text name used in filter
 
-        #endregion
+#endregion
 
-        #region Special Setters - db not updated by them
+#region Special Setters - db not updated by them
 
         public void SetTLUCommander(long t, int cmdr)         // used during log reading..
         {
@@ -97,9 +98,9 @@ namespace EliteDangerousCore
             EdsmID = edsmid;
         }
 
-        #endregion
+#endregion
 
-        #region Setters - db is updated
+#region Setters - db is updated
 
         public void SetStartFlag(SQLiteConnectionUser cn = null, DbTransaction txn = null)
         {
@@ -131,9 +132,9 @@ namespace EliteDangerousCore
             UpdateSyncFlagBit(SyncFlags.EGO, true, SyncFlags.NoBit, false, cn, txn);
         }
 
-        #endregion
+#endregion
 
-        #region Event Information - return event enums/icons/text etc.
+#region Event Information - return event enums/icons/text etc.
 
         // return JEnums with events matching optional methods, unsorted
         static public List<JournalTypeEnum> GetEnumOfEvents(string[] methods = null)
@@ -202,9 +203,9 @@ namespace EliteDangerousCore
                 JournalTypeIcons.ContainsKey(ev) ? JournalTypeIcons[ev] : JournalTypeIcons[JournalTypeEnum.Unknown]);
         }
 
-        #endregion
+#endregion
 
-            #region Factory creation
+#region Factory creation
 
             static public JournalEntry CreateJournalEntry(string text)
         {
@@ -245,9 +246,9 @@ namespace EliteDangerousCore
             return ret;
         }
 
-        #endregion
+#endregion
 
-        #region Types of events
+#region Types of events
 
         static public Type TypeOfJournalEntry(string text)
         {
@@ -267,10 +268,10 @@ namespace EliteDangerousCore
             }
         }
 
-        #endregion
+#endregion
 
 
-        #region Private variables
+#region Private variables
 
         private bool? beta;                        // True if journal entry is from beta
 
@@ -285,15 +286,15 @@ namespace EliteDangerousCore
         }
         private int Synced { get; set; }                     // sync flags
 
-        #endregion
+#endregion
 
-        #region Virtual overrides
+#region Virtual overrides
 
         protected virtual JournalTypeEnum IconEventType { get { return EventTypeID; } }  // entry may be overridden to dynamically change icon event for an event
 
-        #endregion
+#endregion
 
-        #region Constructors
+#region Constructors
 
         protected JournalEntry(DateTime utc, JournalTypeEnum jtype, bool edsmsynced)       // manual creation via NEW
         {
@@ -313,9 +314,9 @@ namespace EliteDangerousCore
             TLUId = 0;
         }
 
-        #endregion
+#endregion
 
-        #region Private Type info
+#region Private Type info
 
         private static string JournalRootClassname = typeof(JournalEvents.JournalTouchdown).Namespace;        // pick one at random to find out root classname
         private static Dictionary<JournalTypeEnum, Type> JournalEntryTypes = GetJournalEntryTypes();        // enum -> type
@@ -339,9 +340,9 @@ namespace EliteDangerousCore
             return typedict;
         }
 
-        #endregion
+#endregion
 
-        #region Icons and names
+#region Icons and names
 
         // enum -> icons 
         public static IReadOnlyDictionary<JournalTypeEnum, Image> JournalTypeIcons { get; } = new IconGroup<JournalTypeEnum>("Journal");
@@ -355,9 +356,9 @@ namespace EliteDangerousCore
             return v.ToDictionary(e => e, e => e.ToString().SplitCapsWord().Tx(typeof(JournalTypeEnum), e.ToString()));
         }
 
-        #endregion
+#endregion
 
-        #region Helpers
+#region Helpers
 
         public static JObject RemoveEDDGeneratedKeys(JObject obj)      // obj not changed
         {
@@ -445,7 +446,7 @@ namespace EliteDangerousCore
             return null;
         }
 
-        #endregion
+#endregion
 
     }
 }

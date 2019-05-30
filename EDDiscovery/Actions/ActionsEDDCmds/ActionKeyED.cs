@@ -13,16 +13,13 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using ActionLanguage;
+using BaseUtils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using BaseUtils;
-using AudioExtensions;
-using ActionLanguage;
-using static EliteDangerousCore.BindingsFile;
+using static BaseUtils.BindingsFile;
 
 namespace EDDiscovery.Actions
 {
@@ -32,7 +29,7 @@ namespace EDDiscovery.Actions
 
         class AKP : BaseUtils.EnhancedSendKeysParser.IAdditionalKeyParser      // AKP parser to pass to SendKeys
         {
-            public EliteDangerousCore.BindingsFile bindingsfile;
+            public BaseUtils.BindingsFile bindingsfile;
 
             public Tuple<string, int, string> Parse(string s)
             {
