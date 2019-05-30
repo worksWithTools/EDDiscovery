@@ -13,7 +13,6 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
 using Newtonsoft.Json.Linq;
 using System;
@@ -22,9 +21,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using System.Management;
 using System.Reflection;
-using System.Text;
 
 namespace EliteDangerousCore.EDDN
 {
@@ -898,30 +895,9 @@ namespace EliteDangerousCore.EDDN
 
         private static string GetMainModuleFilepath(int processId)
         {
-            string wmiQueryString = "SELECT ProcessId, ExecutablePath FROM Win32_Process WHERE ProcessId = " + processId;
-
-            using (var searcher = new ManagementObjectSearcher(wmiQueryString))
-            {
-                if (searcher != null)           // seen it return null
-                {
-                    using (var results = searcher.Get())
-                    {
-                        if (results != null)
-                        {
-                            foreach (ManagementObject mo in results)
-                            {
-                                if (mo != null)
-                                {
-                                    return (string)mo["ExecutablePath"];
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return null;
+            var proc = Process.GetProcessById(processId);
+            return proc?.MainModule.FileName;          
         }
-
 
 
 

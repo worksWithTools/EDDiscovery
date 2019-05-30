@@ -419,9 +419,6 @@
     <EmbeddedResource Include="Controls\UCContainer\Tile.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Controls\Expedition\ShowOnMap.png" />
     <EmbeddedResource Include="Controls\Expedition\New.png" />
     <EmbeddedResource Include="Controls\Expedition\ImportFile.png" />

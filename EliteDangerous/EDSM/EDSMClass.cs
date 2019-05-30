@@ -13,7 +13,6 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
 using Newtonsoft.Json.Linq;
@@ -22,10 +21,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Web;
-using System.Linq;
 
 namespace EliteDangerousCore.EDSM
 {
@@ -68,7 +67,7 @@ namespace EliteDangerousCore.EDSM
         public static string ServerAddress { get { return edsm_server_address; } set { edsm_server_address = value; } }
         public static bool IsServerAddressValid { get { return edsm_server_address.Length > 0; } }
 
-        #region For Trilateration
+#region For Trilateration
 
         public string SubmitDistances(string from, Dictionary<string, double> distances)
         {
@@ -232,9 +231,9 @@ namespace EliteDangerousCore.EDSM
             return systems;
         }
 
-        #endregion
+#endregion
 
-        #region For System DB update
+#region For System DB update
 
         public BaseUtils.ResponseData RequestSystemsData(DateTime startdate, DateTime enddate, int timeout = 5000)      // protect yourself against JSON errors!
         {
@@ -284,9 +283,9 @@ namespace EliteDangerousCore.EDSM
         
         }
 
-        #endregion
+#endregion
 
-        #region Comment sync
+#region Comment sync
 
         private string GetComments(DateTime starttime)
         {
@@ -396,9 +395,9 @@ namespace EliteDangerousCore.EDSM
             });
         }
 
-        #endregion
+#endregion
 
-        #region Log Sync for log fetcher
+#region Log Sync for log fetcher
 
         // Protected against bad JSON
 
@@ -555,9 +554,9 @@ namespace EliteDangerousCore.EDSM
             return systems;
         }
 
-        #endregion
+#endregion
 
-        #region System Information
+#region System Information
 
         // protected against bad JSON
 
@@ -652,9 +651,9 @@ namespace EliteDangerousCore.EDSM
         // https://www.edsm.net/api-system-v1/bodies?systemName=Colonia
         // https://www.edsm.net/api-system-v1/bodies?systemId=27
 
-        #endregion
+#endregion
 
-        #region Body info
+#region Body info
 
         private JObject GetBodies(string sysName)       // protect yourself from bad JSON
         {
@@ -973,9 +972,9 @@ namespace EliteDangerousCore.EDSM
             return startype;
         }
 
-        #endregion
+#endregion
 
-        #region Journal Events
+#region Journal Events
 
         public List<string> GetJournalEventsToDiscard()     // protect yourself against bad JSON
         {
@@ -1028,6 +1027,6 @@ namespace EliteDangerousCore.EDSM
             }
         }
 
-        #endregion
+#endregion
     }
 }
