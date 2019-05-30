@@ -19,7 +19,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using static BaseUtils.BindingsFile;
+using BaseUtils;
+using AudioExtensions;
+using ActionLanguage;
 
 namespace EDDiscovery.Actions
 {
@@ -29,7 +31,7 @@ namespace EDDiscovery.Actions
 
         class AKP : BaseUtils.IAdditionalKeyParser      // AKP parser to pass to SendKeys
         {
-            public BaseUtils.BindingsFile bindingsfile;
+            public BindingsFile bindingsfile;
 
             public Tuple<string, int, string> Parse(string s)
             {
@@ -45,8 +47,8 @@ namespace EDDiscovery.Actions
                             return new Tuple<string, int, string>(null, 0, "Binding name " + binding + " is not an known binding");
                         }
 
-                        List<Tuple<Device, Assignment>> matches 
-                                    = bindingsfile.FindAssignedFunc(binding, KeyboardDeviceName);   // just give me keyboard bindings, thats all i can do
+                        List<Tuple<BindingsFile.Device, BindingsFile.Assignment>> matches 
+                                    = bindingsfile.FindAssignedFunc(binding, BindingsFile.KeyboardDeviceName);   // just give me keyboard bindings, thats all i can do
 
                         if ( matches != null )      // null if no matches to keyboard is found
                         {
@@ -77,7 +79,7 @@ namespace EDDiscovery.Actions
             }
         }
 
-        static public string Menu(Form parent, System.Drawing.Icon ic, string userdata, BaseUtils.BindingsFile bf)
+        static public string Menu(Form parent, System.Drawing.Icon ic, string userdata, BindingsFile bf)
         {
             List<string> decorated = (from x in bf.KeyNames select "{"+x+"}").ToList();
             decorated.Sort();
@@ -106,7 +108,7 @@ namespace EDDiscovery.Actions
         }
 
         // check binding in userdata for consistency.
-        static public string VerifyBinding(string userdata, BaseUtils.BindingsFile bf)    // empty string okay
+        static public string VerifyBinding(string userdata, BindingsFile bf)    // empty string okay
         {
             string keys;
             Variables statementvars;
