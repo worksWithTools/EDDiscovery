@@ -36,8 +36,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="*\*\*.png" />
-    <EmbeddedResource Include="*\*.png" />
+    <EmbeddedResource Include="*\**\*.png" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
