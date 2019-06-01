@@ -28,11 +28,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Controls\Fakes\Controls.Designer.cs" />
     <None Include="Controls\Fakes\Controls.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
       <CustomToolNamespace>EDDiscovery.Icons</CustomToolNamespace>
       <SubType>Designer</SubType>
-      <LastGenOutput>Controls.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>

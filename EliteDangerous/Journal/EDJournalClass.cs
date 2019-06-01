@@ -194,7 +194,7 @@ namespace EliteDangerousCore
                         if (stopRequested.WaitOne(0))
                             return;
 
-                        System.Diagnostics.Trace.WriteLine(string.Format("New UI entry from journal {0} {1}", uient.EventTimeUTC, uient.EventTypeStr));
+                        //System.Diagnostics.Trace.WriteLine(string.Format("New UI entry from journal {0} {1}", uient.EventTimeUTC, uient.EventTypeStr));
 
                         OnNewUIEvent?.Invoke(uient);
                     }
@@ -308,9 +308,7 @@ namespace EliteDangerousCore
         public void UIEventPost(ConcurrentQueue<UIEvent> events)       // UI thread
         {
             ManualResetEvent stopRequested = StopRequested;
-#if NET472
-            Debug.Assert(System.Windows.Forms.Application.MessageLoop);
-#endif
+
             if (stopRequested != null)
             {
                 while (!events.IsEmpty)
@@ -324,7 +322,7 @@ namespace EliteDangerousCore
 
                         if (events.TryDequeue(out e))
                         {
-                            System.Diagnostics.Trace.WriteLine(string.Format("New UI entry from status {0} {1}", e.EventTimeUTC, e.EventTypeStr));
+                            //System.Diagnostics.Trace.WriteLine(string.Format("New UI entry from status {0} {1}", e.EventTimeUTC, e.EventTypeStr));
                             OnNewUIEvent?.Invoke(e);
                         }
                         else

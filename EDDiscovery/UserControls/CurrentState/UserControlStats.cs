@@ -19,6 +19,7 @@ using EliteDangerousCore.JournalEvents;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -36,6 +37,9 @@ namespace EDDiscovery.UserControls
         public UserControlStats()
         {
             InitializeComponent();
+            userControlStatsTimeScan.AutoScaleMode = AutoScaleMode.Inherit;
+            userControlStatsTimeTravel.AutoScaleMode = AutoScaleMode.Inherit;
+
             var corner = dataGridViewStats.TopLeftHeaderCell; // work around #1487
         }
 

@@ -18,6 +18,8 @@ using DirectInputDevices;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using DirectInputDevices;
+using BaseUtils;
 
 namespace EDDiscovery.Actions
 {

@@ -98,9 +98,9 @@ namespace EDDiscovery.UserControls
             this.textBoxJumpRange = new ExtendedControls.ExtTextBox();
             this.panelFD = new ExtendedControls.PanelNoTheme();
             this.textBoxSystem = new ExtendedControls.ExtTextBox();
-            this.buttonEDSM = new ExtendedControls.ExtPanelDrawn();
-            this.buttonEDDB = new ExtendedControls.ExtPanelDrawn();
-            this.buttonRoss = new ExtendedControls.ExtPanelDrawn();
+            this.buttonEDSM = new ExtendedControls.ExtButtonDrawn();
+            this.buttonEDDB = new ExtendedControls.ExtButtonDrawn();
+            this.buttonRoss = new ExtendedControls.ExtButtonDrawn();
             this.textBoxVisits = new ExtendedControls.ExtTextBox();
             this.textBoxBody = new ExtendedControls.ExtTextBox();
             this.textBoxTravelJumps = new ExtendedControls.ExtTextBox();
@@ -122,7 +122,7 @@ namespace EDDiscovery.UserControls
             this.textBoxEconomy = new ExtendedControls.ExtTextBox();
             this.richTextBoxScrollMissions = new ExtendedControls.ExtRichTextBox();
             this.richTextBoxNote = new ExtendedControls.ExtRichTextBox();
-            this.buttonEDSMTarget = new ExtendedControls.ExtPanelDrawn();
+            this.buttonEDSMTarget = new ExtendedControls.ExtButtonDrawn();
             this.extPanelScroll = new ExtendedControls.ExtPanelScroll();
             this.extScrollBar1 = new ExtendedControls.ExtScrollBar();
             this.contextMenuStrip.SuspendLayout();
@@ -536,14 +536,11 @@ namespace EDDiscovery.UserControls
             this.textBoxTarget.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxTarget.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.textBoxTarget.DropDownBorderColor = System.Drawing.Color.Green;
-            this.textBoxTarget.DropDownHeight = 200;
-            this.textBoxTarget.DropDownItemHeight = 13;
             this.textBoxTarget.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
             this.textBoxTarget.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.textBoxTarget.DropDownScrollBarColor = System.Drawing.Color.LightGray;
-            this.textBoxTarget.DropDownWidth = 0;
             this.textBoxTarget.EndButtonEnable = false;
-            this.textBoxTarget.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxTarget.EndButtonImage")));
+            this.textBoxTarget.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxTarget.EndButtonVisible = true;
             this.textBoxTarget.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.textBoxTarget.InErrorCondition = false;
@@ -577,7 +574,7 @@ namespace EDDiscovery.UserControls
             this.textBoxTargetDist.ClearOnFirstChar = false;
             this.textBoxTargetDist.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxTargetDist.EndButtonEnable = true;
-            this.textBoxTargetDist.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxTargetDist.EndButtonImage")));
+            this.textBoxTargetDist.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxTargetDist.EndButtonVisible = false;
             this.textBoxTargetDist.InErrorCondition = false;
             this.textBoxTargetDist.Location = new System.Drawing.Point(165, 341);
@@ -751,7 +748,7 @@ namespace EDDiscovery.UserControls
             this.textBoxJumpRange.ClearOnFirstChar = false;
             this.textBoxJumpRange.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxJumpRange.EndButtonEnable = true;
-            this.textBoxJumpRange.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxJumpRange.EndButtonImage")));
+            this.textBoxJumpRange.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxJumpRange.EndButtonVisible = false;
             this.textBoxJumpRange.InErrorCondition = false;
             this.textBoxJumpRange.Location = new System.Drawing.Point(58, 677);
@@ -766,6 +763,9 @@ namespace EDDiscovery.UserControls
             this.textBoxJumpRange.TabStop = false;
             this.textBoxJumpRange.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxJumpRange.WordWrap = true;
+            this.textBoxJumpRange.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.textBoxJumpRange.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.textBoxJumpRange.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
             // panelFD
             // 
@@ -787,7 +787,7 @@ namespace EDDiscovery.UserControls
             this.textBoxSystem.ClearOnFirstChar = false;
             this.textBoxSystem.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxSystem.EndButtonEnable = true;
-            this.textBoxSystem.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxSystem.EndButtonImage")));
+            this.textBoxSystem.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxSystem.EndButtonVisible = false;
             this.textBoxSystem.InErrorCondition = false;
             this.textBoxSystem.Location = new System.Drawing.Point(53, 14);
@@ -812,7 +812,7 @@ namespace EDDiscovery.UserControls
             this.buttonEDSM.AutoEllipsis = false;
             this.buttonEDSM.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.buttonEDSM.Image = null;
-            this.buttonEDSM.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.InverseText;
+            this.buttonEDSM.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.InverseText;
             this.buttonEDSM.Location = new System.Drawing.Point(54, 36);
             this.buttonEDSM.MouseOverColor = System.Drawing.Color.White;
             this.buttonEDSM.MouseSelectedColor = System.Drawing.Color.Green;
@@ -837,7 +837,7 @@ namespace EDDiscovery.UserControls
             this.buttonEDDB.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.buttonEDDB.Cursor = System.Windows.Forms.Cursors.Hand;
             this.buttonEDDB.Image = null;
-            this.buttonEDDB.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.EDDB;
+            this.buttonEDDB.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.EDDB;
             this.buttonEDDB.Location = new System.Drawing.Point(98, 36);
             this.buttonEDDB.MouseOverColor = System.Drawing.Color.White;
             this.buttonEDDB.MouseSelectedColor = System.Drawing.Color.Green;
@@ -861,7 +861,7 @@ namespace EDDiscovery.UserControls
             this.buttonRoss.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.buttonRoss.Cursor = System.Windows.Forms.Cursors.Hand;
             this.buttonRoss.Image = null;
-            this.buttonRoss.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Ross;
+            this.buttonRoss.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Ross;
             this.buttonRoss.Location = new System.Drawing.Point(121, 36);
             this.buttonRoss.MouseOverColor = System.Drawing.Color.White;
             this.buttonRoss.MouseSelectedColor = System.Drawing.Color.Green;
@@ -890,7 +890,7 @@ namespace EDDiscovery.UserControls
             this.textBoxVisits.ClearOnFirstChar = false;
             this.textBoxVisits.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxVisits.EndButtonEnable = true;
-            this.textBoxVisits.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxVisits.EndButtonImage")));
+            this.textBoxVisits.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxVisits.EndButtonVisible = false;
             this.textBoxVisits.InErrorCondition = false;
             this.textBoxVisits.Location = new System.Drawing.Point(53, 62);
@@ -921,7 +921,7 @@ namespace EDDiscovery.UserControls
             this.textBoxBody.ClearOnFirstChar = false;
             this.textBoxBody.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxBody.EndButtonEnable = true;
-            this.textBoxBody.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxBody.EndButtonImage")));
+            this.textBoxBody.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxBody.EndButtonVisible = false;
             this.textBoxBody.InErrorCondition = false;
             this.textBoxBody.Location = new System.Drawing.Point(53, 86);
@@ -952,7 +952,7 @@ namespace EDDiscovery.UserControls
             this.textBoxTravelJumps.ClearOnFirstChar = false;
             this.textBoxTravelJumps.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxTravelJumps.EndButtonEnable = true;
-            this.textBoxTravelJumps.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxTravelJumps.EndButtonImage")));
+            this.textBoxTravelJumps.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxTravelJumps.EndButtonVisible = false;
             this.textBoxTravelJumps.InErrorCondition = false;
             this.textBoxTravelJumps.Location = new System.Drawing.Point(212, 555);
@@ -983,7 +983,7 @@ namespace EDDiscovery.UserControls
             this.textBoxTravelTime.ClearOnFirstChar = false;
             this.textBoxTravelTime.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxTravelTime.EndButtonEnable = true;
-            this.textBoxTravelTime.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxTravelTime.EndButtonImage")));
+            this.textBoxTravelTime.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxTravelTime.EndButtonVisible = false;
             this.textBoxTravelTime.InErrorCondition = false;
             this.textBoxTravelTime.Location = new System.Drawing.Point(132, 555);
@@ -1014,7 +1014,7 @@ namespace EDDiscovery.UserControls
             this.textBoxFuel.ClearOnFirstChar = false;
             this.textBoxFuel.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxFuel.EndButtonEnable = true;
-            this.textBoxFuel.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxFuel.EndButtonImage")));
+            this.textBoxFuel.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxFuel.EndButtonVisible = false;
             this.textBoxFuel.InErrorCondition = false;
             this.textBoxFuel.Location = new System.Drawing.Point(54, 393);
@@ -1045,7 +1045,7 @@ namespace EDDiscovery.UserControls
             this.textBoxData.ClearOnFirstChar = false;
             this.textBoxData.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxData.EndButtonEnable = true;
-            this.textBoxData.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxData.EndButtonImage")));
+            this.textBoxData.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxData.EndButtonVisible = false;
             this.textBoxData.InErrorCondition = false;
             this.textBoxData.Location = new System.Drawing.Point(52, 472);
@@ -1076,7 +1076,7 @@ namespace EDDiscovery.UserControls
             this.textBoxMaterials.ClearOnFirstChar = false;
             this.textBoxMaterials.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxMaterials.EndButtonEnable = true;
-            this.textBoxMaterials.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxMaterials.EndButtonImage")));
+            this.textBoxMaterials.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxMaterials.EndButtonVisible = false;
             this.textBoxMaterials.InErrorCondition = false;
             this.textBoxMaterials.Location = new System.Drawing.Point(61, 498);
@@ -1107,7 +1107,7 @@ namespace EDDiscovery.UserControls
             this.textBoxCredits.ClearOnFirstChar = false;
             this.textBoxCredits.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxCredits.EndButtonEnable = true;
-            this.textBoxCredits.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxCredits.EndButtonImage")));
+            this.textBoxCredits.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxCredits.EndButtonVisible = false;
             this.textBoxCredits.InErrorCondition = false;
             this.textBoxCredits.Location = new System.Drawing.Point(61, 650);
@@ -1138,7 +1138,7 @@ namespace EDDiscovery.UserControls
             this.textBoxCargo.ClearOnFirstChar = false;
             this.textBoxCargo.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxCargo.EndButtonEnable = true;
-            this.textBoxCargo.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxCargo.EndButtonImage")));
+            this.textBoxCargo.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxCargo.EndButtonVisible = false;
             this.textBoxCargo.InErrorCondition = false;
             this.textBoxCargo.Location = new System.Drawing.Point(55, 439);
@@ -1169,7 +1169,7 @@ namespace EDDiscovery.UserControls
             this.textBoxTravelDist.ClearOnFirstChar = false;
             this.textBoxTravelDist.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxTravelDist.EndButtonEnable = true;
-            this.textBoxTravelDist.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxTravelDist.EndButtonImage")));
+            this.textBoxTravelDist.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxTravelDist.EndButtonVisible = false;
             this.textBoxTravelDist.InErrorCondition = false;
             this.textBoxTravelDist.Location = new System.Drawing.Point(55, 555);
@@ -1200,7 +1200,7 @@ namespace EDDiscovery.UserControls
             this.textBoxShip.ClearOnFirstChar = false;
             this.textBoxShip.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxShip.EndButtonEnable = true;
-            this.textBoxShip.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxShip.EndButtonImage")));
+            this.textBoxShip.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxShip.EndButtonVisible = false;
             this.textBoxShip.InErrorCondition = false;
             this.textBoxShip.Location = new System.Drawing.Point(55, 367);
@@ -1231,7 +1231,7 @@ namespace EDDiscovery.UserControls
             this.textBoxGameMode.ClearOnFirstChar = false;
             this.textBoxGameMode.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxGameMode.EndButtonEnable = true;
-            this.textBoxGameMode.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxGameMode.EndButtonImage")));
+            this.textBoxGameMode.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxGameMode.EndButtonVisible = false;
             this.textBoxGameMode.InErrorCondition = false;
             this.textBoxGameMode.Location = new System.Drawing.Point(55, 529);
@@ -1262,7 +1262,7 @@ namespace EDDiscovery.UserControls
             this.textBoxPosition.ClearOnFirstChar = false;
             this.textBoxPosition.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxPosition.EndButtonEnable = true;
-            this.textBoxPosition.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxPosition.EndButtonImage")));
+            this.textBoxPosition.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxPosition.EndButtonVisible = false;
             this.textBoxPosition.InErrorCondition = false;
             this.textBoxPosition.Location = new System.Drawing.Point(53, 110);
@@ -1293,7 +1293,7 @@ namespace EDDiscovery.UserControls
             this.textBoxHomeDist.ClearOnFirstChar = false;
             this.textBoxHomeDist.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxHomeDist.EndButtonEnable = true;
-            this.textBoxHomeDist.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxHomeDist.EndButtonImage")));
+            this.textBoxHomeDist.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxHomeDist.EndButtonVisible = false;
             this.textBoxHomeDist.InErrorCondition = false;
             this.textBoxHomeDist.Location = new System.Drawing.Point(61, 167);
@@ -1324,7 +1324,7 @@ namespace EDDiscovery.UserControls
             this.textBoxSolDist.ClearOnFirstChar = false;
             this.textBoxSolDist.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxSolDist.EndButtonEnable = true;
-            this.textBoxSolDist.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxSolDist.EndButtonImage")));
+            this.textBoxSolDist.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxSolDist.EndButtonVisible = false;
             this.textBoxSolDist.InErrorCondition = false;
             this.textBoxSolDist.Location = new System.Drawing.Point(246, 166);
@@ -1355,7 +1355,7 @@ namespace EDDiscovery.UserControls
             this.textBoxState.ClearOnFirstChar = false;
             this.textBoxState.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxState.EndButtonEnable = true;
-            this.textBoxState.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxState.EndButtonImage")));
+            this.textBoxState.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxState.EndButtonVisible = false;
             this.textBoxState.InErrorCondition = false;
             this.textBoxState.Location = new System.Drawing.Point(54, 237);
@@ -1386,7 +1386,7 @@ namespace EDDiscovery.UserControls
             this.textBoxAllegiance.ClearOnFirstChar = false;
             this.textBoxAllegiance.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxAllegiance.EndButtonEnable = true;
-            this.textBoxAllegiance.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxAllegiance.EndButtonImage")));
+            this.textBoxAllegiance.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxAllegiance.EndButtonVisible = false;
             this.textBoxAllegiance.InErrorCondition = false;
             this.textBoxAllegiance.Location = new System.Drawing.Point(192, 237);
@@ -1417,7 +1417,7 @@ namespace EDDiscovery.UserControls
             this.textBoxGovernment.ClearOnFirstChar = false;
             this.textBoxGovernment.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxGovernment.EndButtonEnable = true;
-            this.textBoxGovernment.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxGovernment.EndButtonImage")));
+            this.textBoxGovernment.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxGovernment.EndButtonVisible = false;
             this.textBoxGovernment.InErrorCondition = false;
             this.textBoxGovernment.Location = new System.Drawing.Point(54, 255);
@@ -1448,7 +1448,7 @@ namespace EDDiscovery.UserControls
             this.textBoxEconomy.ClearOnFirstChar = false;
             this.textBoxEconomy.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxEconomy.EndButtonEnable = true;
-            this.textBoxEconomy.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxEconomy.EndButtonImage")));
+            this.textBoxEconomy.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxEconomy.EndButtonVisible = false;
             this.textBoxEconomy.InErrorCondition = false;
             this.textBoxEconomy.Location = new System.Drawing.Point(192, 255);
@@ -1484,13 +1484,11 @@ namespace EDDiscovery.UserControls
             this.richTextBoxScrollMissions.ScrollBarBorderColor = System.Drawing.Color.White;
             this.richTextBoxScrollMissions.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
             this.richTextBoxScrollMissions.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
-            this.richTextBoxScrollMissions.ScrollBarLineTweak = 0;
             this.richTextBoxScrollMissions.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
             this.richTextBoxScrollMissions.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
             this.richTextBoxScrollMissions.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
             this.richTextBoxScrollMissions.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
             this.richTextBoxScrollMissions.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.richTextBoxScrollMissions.ScrollBarWidth = 20;
             this.richTextBoxScrollMissions.ShowLineCount = false;
             this.richTextBoxScrollMissions.Size = new System.Drawing.Size(200, 50);
             this.richTextBoxScrollMissions.TabIndex = 0;
@@ -1516,13 +1514,11 @@ namespace EDDiscovery.UserControls
             this.richTextBoxNote.ScrollBarBorderColor = System.Drawing.Color.White;
             this.richTextBoxNote.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
             this.richTextBoxNote.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
-            this.richTextBoxNote.ScrollBarLineTweak = 0;
             this.richTextBoxNote.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
             this.richTextBoxNote.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
             this.richTextBoxNote.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
             this.richTextBoxNote.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
             this.richTextBoxNote.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.richTextBoxNote.ScrollBarWidth = 20;
             this.richTextBoxNote.ShowLineCount = false;
             this.richTextBoxNote.Size = new System.Drawing.Size(200, 50);
             this.richTextBoxNote.TabIndex = 0;
@@ -1539,7 +1535,7 @@ namespace EDDiscovery.UserControls
             this.buttonEDSMTarget.AutoEllipsis = false;
             this.buttonEDSMTarget.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.buttonEDSMTarget.Image = null;
-            this.buttonEDSMTarget.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.InverseText;
+            this.buttonEDSMTarget.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.InverseText;
             this.buttonEDSMTarget.Location = new System.Drawing.Point(217, 341);
             this.buttonEDSMTarget.MouseOverColor = System.Drawing.Color.White;
             this.buttonEDSMTarget.MouseSelectedColor = System.Drawing.Color.Green;
@@ -1615,9 +1611,9 @@ namespace EDDiscovery.UserControls
             this.extPanelScroll.Controls.Add(this.labelHomeDist);
             this.extPanelScroll.Controls.Add(this.textBoxHomeDist);
             this.extPanelScroll.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.extPanelScroll.InternalScrollbar = true;
             this.extPanelScroll.Location = new System.Drawing.Point(0, 0);
             this.extPanelScroll.Name = "extPanelScroll";
-            this.extPanelScroll.ScrollBarWidth = 20;
             this.extPanelScroll.Size = new System.Drawing.Size(371, 760);
             this.extPanelScroll.TabIndex = 49;
             this.extPanelScroll.VerticalScrollBarDockRight = true;
@@ -1633,13 +1629,13 @@ namespace EDDiscovery.UserControls
             this.extScrollBar1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extScrollBar1.HideScrollBar = true;
             this.extScrollBar1.LargeChange = 10;
-            this.extScrollBar1.Location = new System.Drawing.Point(351, 0);
+            this.extScrollBar1.Location = new System.Drawing.Point(358, 0);
             this.extScrollBar1.Maximum = -53;
             this.extScrollBar1.Minimum = 0;
             this.extScrollBar1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.extScrollBar1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.extScrollBar1.Name = "extScrollBar1";
-            this.extScrollBar1.Size = new System.Drawing.Size(20, 760);
+            this.extScrollBar1.Size = new System.Drawing.Size(13, 760);
             this.extScrollBar1.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBar1.SmallChange = 1;
             this.extScrollBar1.TabIndex = 49;
@@ -1683,17 +1679,17 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Label labelState;
         private ExtendedControls.ExtTextBox textBoxEconomy;
         private ExtendedControls.ExtTextBox textBoxState;
-        private ExtendedControls.ExtPanelDrawn buttonEDDB;
-        private ExtendedControls.ExtPanelDrawn buttonRoss;
+        private ExtendedControls.ExtButtonDrawn buttonEDDB;
+        private ExtendedControls.ExtButtonDrawn buttonRoss;
         private ExtendedControls.ExtTextBox textBoxHomeDist;
         private System.Windows.Forms.Label labelHomeDist;
-        private ExtendedControls.ExtPanelDrawn buttonEDSM;
+        private ExtendedControls.ExtButtonDrawn buttonEDSM;
         private ExtendedControls.ExtTextBox textBoxSolDist;
         private System.Windows.Forms.Label labelSolDist;
         private ExtendedControls.ExtRichTextBox richTextBoxNote;
         private System.Windows.Forms.Label labelNote;
         private System.Windows.Forms.Label labelTarget;
-        private ExtendedControls.ExtPanelDrawn buttonEDSMTarget;
+        private ExtendedControls.ExtButtonDrawn buttonEDSMTarget;
         private ExtendedControls.ExtTextBoxAutoComplete textBoxTarget;
         private System.Windows.Forms.ToolTip toolTip1;
         private ExtendedControls.ExtTextBox textBoxTargetDist;

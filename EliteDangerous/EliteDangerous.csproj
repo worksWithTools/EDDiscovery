@@ -1,55 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-  <Import Sdk="Microsoft.NET.Sdk.WindowsDesktop" Project="Sdk.props" Condition="'$(TargetFramework)' == 'netcoreapp3.0'" />
-
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{019917A4-7342-4F67-8AAF-9E20C016A935}</ProjectGuid>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>EliteDangerous</RootNamespace>
     <AssemblyName>EliteDangerous</AssemblyName>
-    <TargetFrameworks>netstandard2.0;net472</TargetFrameworks>
+    <TargetFrameworks>netstandard20;net472</TargetFrameworks>
     <Company>EDDiscovery</Company>
     <Version>1.1.0.0</Version>
   </PropertyGroup>
-   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
-   <ItemGroup>
-     <Compile Remove="EliteDangerous\Synthesis.cs" />
-   </ItemGroup>
-   <ItemGroup>
-     <None Include="EliteDangerous\Synthesis.cs" />
-   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <Compile Remove="EDDN\*.cs" />
-    <Compile Remove="EGO\*.cs" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <None Include="EDDN\*.cs" />
-    <None Include="EGO\*.cs" />
+  <ItemGroup>
+    <Compile Remove="EliteDangerous\Synthesis.cs" />
+    <Compile Remove="SystemDB\SystemClass.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-    <PackageReference Include="System.Drawing.Common" Version="4.5.1" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <Reference Remove="System.Drawing" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Web" />
+    <PackageReference Include="System.Management" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="$(SolutionDir)\BaseUtilities\BaseUtilities\BaseUtils.csproj" />
-    <ProjectReference Include="$(SolutionDir)\BaseUtilities\SQLLite\SQLLite.csproj" />
-   <ProjectReference Include="$(SolutionDir)\EDDIcons\EDDIcons.csproj" />
-  <ProjectReference Condition="'$(TargetFramework)' == 'net472'" Include="$(SolutionDir)\ExtendedControls\ExtendedForms\ExtendedForms.csproj" />
+    <ProjectReference Include="..\BaseUtilities\BaseUtilities\BaseUtils.csproj" />
+    <ProjectReference Include="..\BaseUtilities\SQLLite\SQLLite.csproj" />
+    <ProjectReference Include="..\EDDIcons\EDDIcons.csproj" />
   </ItemGroup>
-  <Import Sdk="Microsoft.NET.Sdk.WindowsDesktop" Project="Sdk.targets" Condition="'$(TargetFramework)' == 'netcoreapp3.0'" />
 </Project>

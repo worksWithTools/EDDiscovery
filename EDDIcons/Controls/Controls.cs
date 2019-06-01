@@ -172,6 +172,7 @@ namespace EDDiscovery.Icons
         public static Image Scan_DisplaySystemAlways { get { return IconSet.GetIcon("Controls.Scan.DisplaySystemAlways"); } }
         public static Image Scan_ExportToExcel { get { return IconSet.GetIcon("Controls.Scan.ExportToExcel"); } }
         public static Image Scan_FetchEDSMBodies { get { return IconSet.GetIcon("Controls.Scan.FetchEDSMBodies"); } }
+        public static Image Scan_ShowAnotherSystem { get { return IconSet.GetIcon("Controls.Scan.ShowAnotherSystem"); } }
         public static Image Scan_ShowAllMaterials { get { return IconSet.GetIcon("Controls.Scan.ShowAllMaterials"); } }
         public static Image Scan_HideFullMaterials { get { return IconSet.GetIcon("Controls.Scan.HideFullMaterials"); } }
         public static Image Scan_ShowMoons { get { return IconSet.GetIcon("Controls.Scan.ShowMoons"); } }
@@ -208,6 +209,7 @@ namespace EDDiscovery.Icons
         public static Image TravelGrid_FlagStart { get { return IconSet.GetIcon("Controls.TravelGrid.FlagStart"); } }
         public static Image TravelGrid_FlagStop { get { return IconSet.GetIcon("Controls.TravelGrid.FlagStop"); } }
         public static Image TravelGrid_CursorToTop { get { return IconSet.GetIcon("Controls.TravelGrid.CursorToTop"); } }
+        public static Image TravelGrid_CursorStill { get { return IconSet.GetIcon("Controls.TravelGrid.CursorStill"); } }
         public static Image TravelGrid_Outlines { get { return IconSet.GetIcon("Controls.TravelGrid.Outlines"); } }
         public static Image TravelGrid_FieldFilter { get { return IconSet.GetIcon("Controls.TravelGrid.FieldFilter"); } }
         public static Image TravelGrid_EventFilter { get { return IconSet.GetIcon("Controls.TravelGrid.EventFilter"); } }
@@ -230,6 +232,7 @@ namespace EDDiscovery.Icons
         #endregion
         #region TabStrip
         public static Image TabStrip_Popout { get { return IconSet.GetIcon("Controls.TabStrip.Popout"); } }
+        public static Image TabStrip_EmptyPanel { get { return IconSet.GetIcon("Controls.TabStrip.EmptyPanel"); } }
         #endregion
         #region Selector
         public static Image Selector_Background { get { return IconSet.GetIcon("Controls.Selector.Selector"); } }
@@ -256,6 +259,7 @@ namespace EDDiscovery.Icons
         #region General
         public static Image All { get { return IconSet.GetIcon("Controls.General.All"); } }
         public static Image None { get { return IconSet.GetIcon("Controls.General.None"); } }
+        public static Image Dropdown { get { return IconSet.GetIcon("Controls.General.Dropdown"); } }
         #endregion
 
     }
