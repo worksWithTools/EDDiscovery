@@ -79,7 +79,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxCustomHideFullMats.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.checkBoxCustomHideFullMats.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.checkBoxCustomHideFullMats.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxCustomHideFullMats.Image = global::EDDiscovery.Icons.Controls.Scan_HideFullMaterials;
+            this.checkBoxCustomHideFullMats.Image = global::EDDiscovery.Images.Controls.Scan_HideFullMaterials;
             this.checkBoxCustomHideFullMats.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxCustomHideFullMats.ImageIndeterminate = null;
             this.checkBoxCustomHideFullMats.ImageLayout = System.Windows.Forms.ImageLayout.Center;
@@ -110,7 +110,7 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxDisplaySystemAlways.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.extCheckBoxDisplaySystemAlways.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.extCheckBoxDisplaySystemAlways.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.extCheckBoxDisplaySystemAlways.Image = global::EDDiscovery.Icons.Controls.Scan_DisplaySystemAlways;
+            this.extCheckBoxDisplaySystemAlways.Image = global::EDDiscovery.Images.Controls.Scan_DisplaySystemAlways;
             this.extCheckBoxDisplaySystemAlways.ImageButtonDisabledScaling = 0.5F;
             this.extCheckBoxDisplaySystemAlways.ImageIndeterminate = null;
             this.extCheckBoxDisplaySystemAlways.ImageLayout = System.Windows.Forms.ImageLayout.Center;
@@ -141,7 +141,7 @@ namespace EDDiscovery.UserControls
             this.chkShowOverlays.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.chkShowOverlays.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.chkShowOverlays.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.chkShowOverlays.Image = global::EDDiscovery.Icons.Controls.Scan_ShowOverlays;
+            this.chkShowOverlays.Image = global::EDDiscovery.Images.Controls.Scan_ShowOverlays;
             this.chkShowOverlays.ImageButtonDisabledScaling = 0.5F;
             this.chkShowOverlays.ImageIndeterminate = null;
             this.chkShowOverlays.ImageLayout = System.Windows.Forms.ImageLayout.Center;
@@ -161,7 +161,7 @@ namespace EDDiscovery.UserControls
             // 
             this.extCheckBoxStar.Appearance = System.Windows.Forms.Appearance.Button;
             this.extCheckBoxStar.BackColor = System.Drawing.Color.Transparent;
-            this.extCheckBoxStar.Image = global::EDDiscovery.Icons.Controls.Scan_ShowAnotherSystem;
+            this.extCheckBoxStar.Image = global::EDDiscovery.Images.Controls.Scan_ShowAnotherSystem;
             this.extCheckBoxStar.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxStar.CheckBoxColor = System.Drawing.Color.White;
             this.extCheckBoxStar.CheckBoxDisabledScaling = 0.5F;
@@ -192,7 +192,7 @@ namespace EDDiscovery.UserControls
             // 
             this.checkBoxMaterials.Appearance = System.Windows.Forms.Appearance.Button;
             this.checkBoxMaterials.BackColor = System.Drawing.Color.Transparent;
-            this.checkBoxMaterials.Image = global::EDDiscovery.Icons.Controls.Scan_ShowAllMaterials;
+            this.checkBoxMaterials.Image = global::EDDiscovery.Images.Controls.Scan_ShowAllMaterials;
             this.checkBoxMaterials.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxMaterials.CheckBoxColor = System.Drawing.Color.White;
             this.checkBoxMaterials.CheckBoxDisabledScaling = 0.5F;
@@ -223,7 +223,7 @@ namespace EDDiscovery.UserControls
             // 
             this.checkBoxMaterialsRare.Appearance = System.Windows.Forms.Appearance.Button;
             this.checkBoxMaterialsRare.BackColor = System.Drawing.Color.Transparent;
-            this.checkBoxMaterialsRare.Image = global::EDDiscovery.Icons.Controls.Scan_ShowRareMaterials;
+            this.checkBoxMaterialsRare.Image = global::EDDiscovery.Images.Controls.Scan_ShowRareMaterials;
             this.checkBoxMaterialsRare.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxMaterialsRare.CheckBoxColor = System.Drawing.Color.White;
             this.checkBoxMaterialsRare.CheckBoxDisabledScaling = 0.5F;
@@ -265,7 +265,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxEDSM.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.checkBoxEDSM.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.checkBoxEDSM.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxEDSM.Image = global::EDDiscovery.Icons.Controls.Scan_FetchEDSMBodies;
+            this.checkBoxEDSM.Image = global::EDDiscovery.Images.Controls.Scan_FetchEDSMBodies;
             this.checkBoxEDSM.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxEDSM.ImageIndeterminate = null;
             this.checkBoxEDSM.ImageLayout = System.Windows.Forms.ImageLayout.Center;
@@ -285,7 +285,7 @@ namespace EDDiscovery.UserControls
             // 
             this.checkBoxMoons.Appearance = System.Windows.Forms.Appearance.Button;
             this.checkBoxMoons.BackColor = System.Drawing.Color.Transparent;
-            this.checkBoxMoons.Image = global::EDDiscovery.Icons.Controls.Scan_ShowMoons;
+            this.checkBoxMoons.Image = global::EDDiscovery.Images.Controls.Scan_ShowMoons;
             this.checkBoxMoons.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxMoons.CheckBoxColor = System.Drawing.Color.White;
             this.checkBoxMoons.CheckBoxDisabledScaling = 0.5F;
@@ -315,7 +315,7 @@ namespace EDDiscovery.UserControls
             // buttonSize
             // 
             this.buttonSize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonSize.Image = global::EDDiscovery.Icons.Controls.Scan_SizeLarge;
+            this.buttonSize.Image = global::EDDiscovery.Images.Controls.Scan_SizeLarge;
             this.buttonSize.Location = new System.Drawing.Point(164, 1);
             this.buttonSize.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
             this.buttonSize.Name = "buttonSize";
@@ -328,7 +328,7 @@ namespace EDDiscovery.UserControls
             // extButtonHighValue
             // 
             this.extButtonHighValue.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.extButtonHighValue.Image = global::EDDiscovery.Icons.Controls.Scan_Bodies_HighValue;
+            this.extButtonHighValue.Image = global::EDDiscovery.Images.Controls.Scan_Bodies_HighValue;
             this.extButtonHighValue.Location = new System.Drawing.Point(284, 1);
             this.extButtonHighValue.Margin = new System.Windows.Forms.Padding(0, 1, 4, 1);
             this.extButtonHighValue.Name = "extButtonHighValue";
@@ -341,7 +341,7 @@ namespace EDDiscovery.UserControls
             // buttonExtExcel
             // 
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.Scan_ExportToExcel;
+            this.buttonExtExcel.Image = global::EDDiscovery.Images.Controls.Scan_ExportToExcel;
             this.buttonExtExcel.Location = new System.Drawing.Point(312, 1);
             this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(0, 1, 4, 1);
             this.buttonExtExcel.Name = "buttonExtExcel";

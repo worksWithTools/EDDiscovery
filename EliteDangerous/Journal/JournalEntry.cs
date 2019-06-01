@@ -22,7 +22,11 @@ using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Diagnostics;
+#if NET472
 using System.Drawing;
+#else
+using Image = EDDiscovery.Icons.Image;
+#endif
 using System.Globalization;
 using System.Linq;
 
@@ -42,7 +46,7 @@ namespace EliteDangerousCore
         public JournalTypeEnum EventTypeID { get; private set; }
         public string EventTypeStr { get { return EventTypeID.ToString(); } }             // name of event. these two duplicate each other, string if for debuggin in the db view of a browser
 
-        public System.Drawing.Image Icon { get { return JournalTypeIcons.ContainsKey(this.IconEventType) ? JournalTypeIcons[this.IconEventType] : JournalTypeIcons[JournalTypeEnum.Unknown]; } }   // Icon to paint for this
+        public Image Icon { get { return JournalTypeIcons.ContainsKey(this.IconEventType) ? JournalTypeIcons[this.IconEventType] : JournalTypeIcons[JournalTypeEnum.Unknown]; } }   // Icon to paint for this
 
         public DateTime EventTimeUTC { get; set; }
 

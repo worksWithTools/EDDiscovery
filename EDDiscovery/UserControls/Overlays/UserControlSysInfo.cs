@@ -112,7 +112,7 @@ namespace EDDiscovery.UserControls
             discoveryform.OnEDSMSyncComplete += Discoveryform_OnEDSMSyncComplete;
             discoveryform.OnNewUIEvent += Discoveryform_OnNewUIEvent;
 
-            panelFD.BackgroundImage = EDDiscovery.Icons.Controls.notfirstdiscover;      // just to hide it during boot up
+            panelFD.BackgroundImage = EDDiscovery.Images.Controls.notfirstdiscover;      // just to hide it during boot up
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
@@ -189,7 +189,7 @@ namespace EDDiscovery.UserControls
                 HistoryEntry lastfsd = hl.GetLastHistoryEntry(x => x.journalEntry is EliteDangerousCore.JournalEvents.JournalFSDJump, he);
 
                 textBoxSystem.Text = he.System.Name;
-                panelFD.BackgroundImage = (lastfsd != null && (lastfsd.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump).EDSMFirstDiscover) ? EDDiscovery.Icons.Controls.firstdiscover : EDDiscovery.Icons.Controls.notfirstdiscover;
+                panelFD.BackgroundImage = (lastfsd != null && (lastfsd.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump).EDSMFirstDiscover) ? EDDiscovery.Images.Controls.firstdiscover : EDDiscovery.Images.Controls.notfirstdiscover;
 
                 discoveryform.history.FillEDSM(he); // Fill in any EDSM info we have
 

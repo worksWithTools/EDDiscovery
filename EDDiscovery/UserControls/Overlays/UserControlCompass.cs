@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using static EDDiscovery.Icons.Controls;
+using static EDDiscovery.Images.Controls;
 using static EliteDangerousCore.DB.SQLiteDBClass;
 using static System.Math;
 

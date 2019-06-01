@@ -110,7 +110,7 @@ namespace EDDiscovery.UserControls
 
                     int offset = 0;
                     Point maxstarpos = DrawNode(starcontrols, starnode,curmats,hl,
-                                (starnode.type == StarScan.ScanNodeType.barycentre) ? Icons.Controls.Scan_Bodies_Barycentre : JournalScan.GetStarImageNotScanned(),
+                                (starnode.type == StarScan.ScanNodeType.barycentre) ? Images.Controls.Scan_Bodies_Barycentre : JournalScan.GetStarImageNotScanned(),
                                 curpos, StarSize, ref offset, false, (planetsize.Height * 6 / 4 - StarSize.Height) / 2, true);       // the last part nerfs the label down to the right position
 
                     Point maxitemspos = maxstarpos;
@@ -148,7 +148,7 @@ namespace EDDiscovery.UserControls
                                     curpos = new Point(firstcolumn.X, maxitemspos.Y + planetsize.Height + planetspacery);
                                 }
 
-                                Point used = DrawNode(starcontrols, lastbelt, curmats, hl, Icons.Controls.Scan_Bodies_Belt,
+                                Point used = DrawNode(starcontrols, lastbelt, curmats, hl, Images.Controls.Scan_Bodies_Belt,
                                                         new Point(curpos.X + (planetsize.Width - beltsize.Width) / 2, curpos.Y), beltsize, ref offset, false);
 
                                 curpos = new Point(used.X, curpos.Y);
@@ -193,7 +193,7 @@ namespace EDDiscovery.UserControls
                                 curpos = new Point(firstcolumn.X, maxitemspos.Y + planetsize.Height);
                             }
 
-                            Point used = DrawNode(starcontrols, lastbelt, curmats, hl, Icons.Controls.Scan_Bodies_Belt,
+                            Point used = DrawNode(starcontrols, lastbelt, curmats, hl, Images.Controls.Scan_Bodies_Belt,
                                      new Point(curpos.X + (planetsize.Width - beltsize.Width) / 2, curpos.Y), beltsize, ref offset, false);
 
                             curpos = new Point(used.X, curpos.Y);
@@ -338,10 +338,10 @@ namespace EDDiscovery.UserControls
                             g.DrawImage(nodeimage, size.Width / 2, quarterheight, size.Width, size.Height);
 
                             if (sc.IsLandable)
-                                g.DrawImage(Icons.Controls.Scan_Bodies_Landable, new Rectangle(quarterheight, 0, quarterheight * 6, quarterheight * 6));
+                                g.DrawImage(Images.Controls.Scan_Bodies_Landable, new Rectangle(quarterheight, 0, quarterheight * 6, quarterheight * 6));
 
                             if (sc.HasRings)
-                                g.DrawImage(sc.Rings.Count() > 1 ? Icons.Controls.Scan_Bodies_RingGap : Icons.Controls.Scan_Bodies_RingOnly,
+                                g.DrawImage(sc.Rings.Count() > 1 ? Images.Controls.Scan_Bodies_RingGap : Images.Controls.Scan_Bodies_RingOnly,
                                                 new Rectangle(-2, quarterheight, size.Width * 2, size.Height));
 
                             if (ShowOverlays)
@@ -352,29 +352,29 @@ namespace EDDiscovery.UserControls
 
                                 if (sc.Terraformable)
                                 {
-                                    g.DrawImage(Icons.Controls.Scan_Bodies_Terraformable, new Rectangle(0, pos, ovsize, ovsize));
+                                    g.DrawImage(Images.Controls.Scan_Bodies_Terraformable, new Rectangle(0, pos, ovsize, ovsize));
                                     pos += ovsize + 1;
                                 }
 
                                 if (sc.HasMeaningfulVolcanism) //this renders below the terraformable icon if present
                                 {
-                                    g.DrawImage(Icons.Controls.Scan_Bodies_Volcanism, new Rectangle(0, pos, ovsize, ovsize));
+                                    g.DrawImage(Images.Controls.Scan_Bodies_Volcanism, new Rectangle(0, pos, ovsize, ovsize));
                                     pos += ovsize + 1;
                                 }
 
                                 if (valuable)
                                 {
-                                    g.DrawImage(Icons.Controls.Scan_Bodies_HighValue, new Rectangle(0, pos, ovsize, ovsize));
+                                    g.DrawImage(Images.Controls.Scan_Bodies_HighValue, new Rectangle(0, pos, ovsize, ovsize));
                                     pos += ovsize + 1;
                                 }
 
                                 if (sc.Mapped)
-                                    g.DrawImage(Icons.Controls.Scan_Bodies_Mapped, new Rectangle(0, pos, ovsize, ovsize));
+                                    g.DrawImage(Images.Controls.Scan_Bodies_Mapped, new Rectangle(0, pos, ovsize, ovsize));
                             }
 
                             if (indicatematerials)
                             {
-                                Image mm = Icons.Controls.Scan_Bodies_MaterialMore;
+                                Image mm = Images.Controls.Scan_Bodies_MaterialMore;
                                 g.DrawImage(mm, new Rectangle(bmp.Width - mm.Width, bmp.Height - mm.Height, mm.Width, mm.Height));
                             }
                         }
@@ -421,7 +421,7 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                endpoint = CreateImageLabel(pc, Icons.Controls.Scan_Bodies_Belt,
+                endpoint = CreateImageLabel(pc, Images.Controls.Scan_Bodies_Belt,
                     new Point(curpos.X, curpos.Y + alignv), new Size(size.Width, size.Height), sn.ownname,
                                                     tip, alignv + labelvoff, false, false);
                 offset += size.Width;
@@ -512,7 +512,7 @@ namespace EDDiscovery.UserControls
             colormap.OldColor = Color.White;    // this is the marker colour to replace
             colormap.NewColor = matcolour;
 
-            Bitmap mat = BaseUtils.BitMapHelpers.ReplaceColourInBitmap((Bitmap)Icons.Controls.Scan_Bodies_Material, new System.Drawing.Imaging.ColorMap[] { colormap });
+            Bitmap mat = BaseUtils.BitMapHelpers.ReplaceColourInBitmap((Bitmap)Images.Controls.Scan_Bodies_Material, new System.Drawing.Imaging.ColorMap[] { colormap });
 
             BaseUtils.BitMapHelpers.DrawTextCentreIntoBitmap(ref mat, text, stdfont, textcolour);
 

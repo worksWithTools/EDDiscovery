@@ -157,7 +157,7 @@ namespace EDDiscovery
         static private List<PanelInfo> userselectablepanellist;   // filled by Init - all panels that the user can select directly
         static private int[] userselectablepanelseperatorlistgroup;    // filled by Init - the seperator group index into userselectablepanellist
 
-        public static IReadOnlyDictionary<PanelIDs, Image> PanelTypeIcons { get; private set; } = new IconGroup<PanelIDs>("Panels");
+        public static IReadOnlyDictionary<PanelIDs, System.Drawing.Image> PanelTypeIcons { get; private set; } = new IconGroup<PanelIDs>("Panels");
 
         public static void Init()
         {
@@ -195,7 +195,7 @@ namespace EDDiscovery
             public Type PopoutType;
             public string WindowTitle;
             public string WindowRefName;
-            public Image TabIcon { get { return PanelTypeIcons[PopoutID]; } }
+            public System.Drawing.Image TabIcon { get { return PanelTypeIcons[PopoutID]; } }
             public string Description;          // must be non zero length to be user selectable
             public bool SupportsTransparency;
             public bool DefaultTransparent;
@@ -235,7 +235,7 @@ namespace EDDiscovery
                 return userselectablepanellist.Select(x => x.Description).ToArray();
         }
 
-        static public Image[] GetUserSelectablePanelImages(bool sortbyname )                // only user selected
+        static public System.Drawing.Image[] GetUserSelectablePanelImages(bool sortbyname )                // only user selected
         {
             if (sortbyname)
                 return (from x in userselectablepanellist orderby x.Description select x.TabIcon).ToArray();

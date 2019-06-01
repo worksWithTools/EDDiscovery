@@ -16,7 +16,11 @@
 using EDDiscovery.Icons;
 using System;
 using System.Collections.Generic;
+#if NET472
 using System.Drawing;
+#else
+using Image = EDDiscovery.Icons.Image;
+#endif
 
 namespace EliteDangerousCore
 {
@@ -355,14 +359,14 @@ namespace EliteDangerousCore
 
         public static IReadOnlyDictionary<EDStar, Image> StarTypeIcons { get; } = new IconGroup<EDStar>("Stars");
 
-        public static System.Drawing.Image GetStarTypeImage(EDStar type)
+        public static Image GetStarTypeImage(EDStar type)
         {
             return StarTypeIcons[type];
         }
 
         public static IReadOnlyDictionary<EDPlanet, Image> PlanetTypeIcons { get; } = new IconGroup<EDPlanet>("Planets");
 
-        public static System.Drawing.Image GetPlanetClassImage(EDPlanet type)
+        public static Image GetPlanetClassImage(EDPlanet type)
         {
             return PlanetTypeIcons[type];
         }

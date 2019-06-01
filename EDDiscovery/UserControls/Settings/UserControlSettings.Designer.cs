@@ -248,7 +248,7 @@ namespace EDDiscovery.UserControls
             this.textBoxDefaultZoom.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxDefaultZoom.DelayBeforeNotification = 0;
             this.textBoxDefaultZoom.EndButtonEnable = true;
-            this.textBoxDefaultZoom.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
+            this.textBoxDefaultZoom.EndButtonImage = global::EDDiscovery.Images.Controls.Dropdown;
             this.textBoxDefaultZoom.EndButtonVisible = false;
             this.textBoxDefaultZoom.Format = "0.#######";
             this.textBoxDefaultZoom.InErrorCondition = true;
@@ -319,7 +319,7 @@ namespace EDDiscovery.UserControls
             this.textBoxHomeSystem.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.textBoxHomeSystem.DropDownScrollBarColor = System.Drawing.Color.LightGray;
             this.textBoxHomeSystem.EndButtonEnable = false;
-            this.textBoxHomeSystem.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
+            this.textBoxHomeSystem.EndButtonImage = global::EDDiscovery.Images.Controls.Dropdown;
             this.textBoxHomeSystem.EndButtonVisible = false;
             this.textBoxHomeSystem.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.textBoxHomeSystem.InErrorCondition = false;

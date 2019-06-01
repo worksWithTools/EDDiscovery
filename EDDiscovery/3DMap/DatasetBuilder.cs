@@ -14,21 +14,17 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
+using EliteDangerousCore;
+using EliteDangerousCore.DB;
+using EliteDangerousCore.EDSM;
+using OpenTK;
+using OpenTKUtils;
+using OpenTKUtils.GL1;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Drawing;
 using System.Diagnostics;
-using OpenTK;
-using System.Resources;
-using EDDiscovery.Properties;
-using EliteDangerousCore.EDSM;
-using EliteDangerousCore.DB;
-using EliteDangerousCore;
-using System.IO;
-using OpenTKUtils.GL1;
-using OpenTKUtils;
+using System.Drawing;
+using System.Linq;
 
 namespace EDDiscovery._3DMap
 {
@@ -43,7 +39,7 @@ namespace EDDiscovery._3DMap
         Color CentredSystem = System.Drawing.Color.Yellow;
         Color PlannedRouteColor = System.Drawing.Color.Green;
 
-        Bitmap SelectedMarker = (Bitmap)Icons.Controls.Map3D_Markers_Selected;
+        Bitmap SelectedMarker = (Bitmap)Images.Controls.Map3D_Markers_Selected;
 
         public Vector2 MinGridPos { get; set; } = new Vector2(-50000.0f, -20000.0f);
         public Vector2 MaxGridPos { get; set; } = new Vector2(50000.0f, 80000.0f);

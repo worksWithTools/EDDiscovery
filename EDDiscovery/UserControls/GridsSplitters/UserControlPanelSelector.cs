@@ -59,7 +59,7 @@ namespace EDDiscovery.UserControls
 
             // design for std 8.25 font sizes
 
-            Bitmap backimage = new Bitmap(EDDiscovery.Icons.Controls.Selector_Background);
+            Bitmap backimage = new Bitmap(EDDiscovery.Images.Controls.Selector_Background);
             Color centre = backimage.GetPixel(48, 48);
             Size iconsize = new Size(24,24);
             int width = 96;
@@ -72,13 +72,13 @@ namespace EDDiscovery.UserControls
                 int i = mgr.DownloadItems.Count;
 
                 CompositeButton cb = CompositeButton.QuickInit(
-                            EDDiscovery.Icons.Controls.Selector_Background,
+                            EDDiscovery.Images.Controls.Selector_Background,
                             (i == 0) ? "NO ADD ONS!".Tx(this) : i.ToString() + " Add Ons".Tx(this),
                             EDDTheme.Instance.GetFont,
                             (i == 0) ? Color.Red : (EDDTheme.Instance.TextBlockColor.GetBrightness() < 0.1 ? Color.AntiqueWhite : EDDTheme.Instance.TextBlockColor),
                             Color.Transparent,
-                            EDDiscovery.Icons.Controls.Main_Addons_ManageAddOns, iconsize,
-                            new Image[] { EDDiscovery.Icons.Controls.Main_Addons_ManageAddOns }, iconsize,
+                            EDDiscovery.Images.Controls.Main_Addons_ManageAddOns, iconsize,
+                            new Image[] { EDDiscovery.Images.Controls.Main_Addons_ManageAddOns }, iconsize,
                             padbetween,
                             ButtonPress);
 
@@ -101,13 +101,13 @@ namespace EDDiscovery.UserControls
                 PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByPanelID(pids[i]);
 
                 CompositeButton cb = CompositeButton.QuickInit(
-                            EDDiscovery.Icons.Controls.Selector_Background,
+                            EDDiscovery.Images.Controls.Selector_Background,
                             pi.WindowTitle,
                             EDDTheme.Instance.GetFont,
                             EDDTheme.Instance.TextBlockColor.GetBrightness() < 0.1 ? Color.AntiqueWhite : EDDTheme.Instance.TextBlockColor,
                             Color.Transparent,
                             pi.TabIcon, iconsize,
-                            new Image[] { EDDiscovery.Icons.Controls.TabStrip_Popout, EDDiscovery.Icons.Controls.Selector_AddTab }, iconsize,
+                            new Image[] { EDDiscovery.Images.Controls.TabStrip_Popout, EDDiscovery.Images.Controls.Selector_AddTab }, iconsize,
                             padbetween,
                             ButtonPress);
                 cb.SuspendLayout();

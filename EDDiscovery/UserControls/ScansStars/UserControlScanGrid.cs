@@ -248,7 +248,7 @@ namespace EDDiscovery.UserControls
                                 bdDist.AppendFormat("{0:0.00}AU ({1:0.0}ls)", sn.ScanData.DistanceFromArrivalLS / JournalScan.oneAU_LS, sn.ScanData.DistanceFromArrivalLS);
                             }
 
-                            var img = global::EDDiscovery.Icons.Controls.ScanGrid_Belt;
+                            var img = global::EDDiscovery.Images.Controls.ScanGrid_Belt;
 
                             dataGridViewScangrid.Rows.Add(new object[] { null, sn.ScanData.BodyName, bdClass, bdDist, bdDetails });
 
@@ -606,25 +606,25 @@ namespace EDDiscovery.UserControls
 
                 if (overlays?.landable ?? false)
                 {
-                    e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_Bodies_Landable, new Rectangle(right, vposoverlay, iconsize, iconsize));
+                    e.Graphics.DrawImage((Image)EDDiscovery.Images.Controls.Scan_Bodies_Landable, new Rectangle(right, vposoverlay, iconsize, iconsize));
                     vposoverlay += iconsize + iconspacing;
                 }
 
                 if (overlays?.materials ?? false)
                 {
-                    e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_ShowAllMaterials, new Rectangle(right, vposoverlay, iconsize, iconsize));
+                    e.Graphics.DrawImage((Image)EDDiscovery.Images.Controls.Scan_ShowAllMaterials, new Rectangle(right, vposoverlay, iconsize, iconsize));
                     vposoverlay += iconsize + iconspacing;
                 }
 
                 if (overlays?.volcanism ?? false)
                 {
-                    e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_Bodies_Volcanism, new Rectangle(right, vposoverlay, iconsize, iconsize));
+                    e.Graphics.DrawImage((Image)EDDiscovery.Images.Controls.Scan_Bodies_Volcanism, new Rectangle(right, vposoverlay, iconsize, iconsize));
                     vposoverlay += iconsize + iconspacing;
                 }
 
                 if (overlays?.mapped ?? false)
                 {
-                    e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_Bodies_Mapped, new Rectangle(right, vposoverlay, iconsize, iconsize));
+                    e.Graphics.DrawImage((Image)EDDiscovery.Images.Controls.Scan_Bodies_Mapped, new Rectangle(right, vposoverlay, iconsize, iconsize));
                 }
             }
         }

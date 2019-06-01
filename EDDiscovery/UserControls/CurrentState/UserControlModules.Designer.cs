@@ -197,7 +197,7 @@ namespace EDDiscovery.UserControls
             // buttonExtConfigure
             // 
             this.buttonExtConfigure.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExtConfigure.Image = global::EDDiscovery.Icons.Controls.Modules_Configure;
+            this.buttonExtConfigure.Image = global::EDDiscovery.Images.Controls.Modules_Configure;
             this.buttonExtConfigure.Location = new System.Drawing.Point(296, 1);
             this.buttonExtConfigure.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonExtConfigure.Name = "buttonExtConfigure";
@@ -210,7 +210,7 @@ namespace EDDiscovery.UserControls
             // buttonExtEDShipyard
             // 
             this.buttonExtEDShipyard.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExtEDShipyard.Image = global::EDDiscovery.Icons.Controls.Modules_EDShipYard;
+            this.buttonExtEDShipyard.Image = global::EDDiscovery.Images.Controls.Modules_EDShipYard;
             this.buttonExtEDShipyard.Location = new System.Drawing.Point(264, 1);
             this.buttonExtEDShipyard.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonExtEDShipyard.Name = "buttonExtEDShipyard";
@@ -224,7 +224,7 @@ namespace EDDiscovery.UserControls
             // buttonExtCoriolis
             // 
             this.buttonExtCoriolis.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExtCoriolis.Image = global::EDDiscovery.Icons.Controls.Modules_ShowOnCoriolis;
+            this.buttonExtCoriolis.Image = global::EDDiscovery.Images.Controls.Modules_ShowOnCoriolis;
             this.buttonExtCoriolis.Location = new System.Drawing.Point(232, 1);
             this.buttonExtCoriolis.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonExtCoriolis.Name = "buttonExtCoriolis";

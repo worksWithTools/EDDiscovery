@@ -193,7 +193,7 @@ namespace EDDiscovery.UserControls
                 int line1hpos = coltext;
                 if ( firstdiscovery )
                 {
-                    var i1 = pictureBox.AddImage(new Rectangle(line1hpos, 5, 24, 24), Icons.Controls.firstdiscover, null, "Shows if EDSM indicates your it's first discoverer".Tx(this, "FDEDSM"), false);
+                    var i1 = pictureBox.AddImage(new Rectangle(line1hpos, 5, 24, 24), Images.Controls.firstdiscover, null, "Shows if EDSM indicates your it's first discoverer".Tx(this, "FDEDSM"), false);
                     line1hpos = i1.pos.Right + Font.ScalePixels(8);
                 }
 

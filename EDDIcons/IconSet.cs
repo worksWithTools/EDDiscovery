@@ -17,13 +17,35 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+#if NET472
 using System.Drawing;
+using System.IO.Compression;
+#endif
+using SkiaSharp;
+
 using System.Reflection;
 using System.IO;
-using System.IO.Compression;
 
 namespace EDDiscovery.Icons
 {
+#if NETSTANDARD2_0
+    public class Image
+    {
+        private SKImage img;
+        public object Tag;
+
+        public static Image FromStream(Stream stm, object tag = null)
+        {
+            return new Image { img = SKImage.FromBitmap(SKBitmap.Decode(stm)), Tag = tag };
+        }
+
+        public static implicit operator SKImage(Image src)
+        {
+            return src.img;
+        }
+    }
+#endif
+
     public static class IconSet
     {
         public static Dictionary<string, Image> Icons { get; private set; }
@@ -59,7 +81,7 @@ namespace EDDiscovery.Icons
             Icons["missioncompleted"] = IconSet.GetIcon("Journal.MissionCompleted");
             Icons["speaker"] = IconSet.GetIcon("Legacy.speaker");
         }
-
+#if NET472
         public static void LoadIconsFromDirectory(string path)      // tested 1/feb/2018
         {
             if (Directory.Exists(path))
@@ -183,6 +205,8 @@ namespace EDDiscovery.Icons
             }
 
         }
+    
+#endif
 
         public static Image GetIcon(string name)
         {
@@ -201,5 +225,6 @@ namespace EDDiscovery.Icons
                 return defaultIcons["Legacy.star"];
             }
         }
+
     }
 }

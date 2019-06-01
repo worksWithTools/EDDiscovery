@@ -384,12 +384,12 @@ namespace EDDiscovery.UserControls
             // 128,96,64,48
             dropdown = new ExtListBoxForm("", true);
 
-            Image[] imagelist = new Image[] { global::EDDiscovery.Icons.Controls.Scan_SizeLarge ,
-                global::EDDiscovery.Icons.Controls.Scan_SizeMedium ,
-                global::EDDiscovery.Icons.Controls.Scan_SizeSmall ,
-                global::EDDiscovery.Icons.Controls.Scan_SizeTiny ,
-                global::EDDiscovery.Icons.Controls.Scan_SizeTinyTiny ,
-                global::EDDiscovery.Icons.Controls.Scan_SizeMinuscule ,
+            Image[] imagelist = new Image[] { global::EDDiscovery.Images.Controls.Scan_SizeLarge ,
+                global::EDDiscovery.Images.Controls.Scan_SizeMedium ,
+                global::EDDiscovery.Images.Controls.Scan_SizeSmall ,
+                global::EDDiscovery.Images.Controls.Scan_SizeTiny ,
+                global::EDDiscovery.Images.Controls.Scan_SizeTinyTiny ,
+                global::EDDiscovery.Images.Controls.Scan_SizeMinuscule ,
             };
 
             string[] textlist = new string[] { "128", "96", "64", "48", "32", "16" };
@@ -413,17 +413,17 @@ namespace EDDiscovery.UserControls
         private void SetSizeImage(int size)
         {
             if (size == 128)
-                buttonSize.Image = global::EDDiscovery.Icons.Controls.Scan_SizeLarge;
+                buttonSize.Image = global::EDDiscovery.Images.Controls.Scan_SizeLarge;
             else if (size == 96)
-                buttonSize.Image = global::EDDiscovery.Icons.Controls.Scan_SizeMedium;
+                buttonSize.Image = global::EDDiscovery.Images.Controls.Scan_SizeMedium;
             else if (size == 64)
-                buttonSize.Image = global::EDDiscovery.Icons.Controls.Scan_SizeSmall;
+                buttonSize.Image = global::EDDiscovery.Images.Controls.Scan_SizeSmall;
             else if (size == 48)
-                buttonSize.Image = global::EDDiscovery.Icons.Controls.Scan_SizeTiny;
+                buttonSize.Image = global::EDDiscovery.Images.Controls.Scan_SizeTiny;
             else if (size == 32)
-                buttonSize.Image = global::EDDiscovery.Icons.Controls.Scan_SizeTinyTiny;
+                buttonSize.Image = global::EDDiscovery.Images.Controls.Scan_SizeTinyTiny;
             else
-                buttonSize.Image = global::EDDiscovery.Icons.Controls.Scan_SizeMinuscule;
+                buttonSize.Image = global::EDDiscovery.Images.Controls.Scan_SizeMinuscule;
 
             panelStars.SetSize(size);
             SQLiteDBClass.PutSettingInt(DbSave + "Size", size);

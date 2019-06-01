@@ -119,7 +119,7 @@
             // 
             // buttonTags
             // 
-            this.buttonTags.Image = global::EDDiscovery.Icons.Controls.CaptainsLog_Tags;
+            this.buttonTags.Image = global::EDDiscovery.Images.Controls.CaptainsLog_Tags;
             this.buttonTags.Location = new System.Drawing.Point(277, 1);
             this.buttonTags.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonTags.Name = "buttonTags";
@@ -131,7 +131,7 @@
             // 
             // buttonDelete
             // 
-            this.buttonDelete.Image = global::EDDiscovery.Icons.Controls.CaptainsLog_Delete;
+            this.buttonDelete.Image = global::EDDiscovery.Images.Controls.CaptainsLog_Delete;
             this.buttonDelete.Location = new System.Drawing.Point(241, 1);
             this.buttonDelete.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonDelete.Name = "buttonDelete";
@@ -143,7 +143,7 @@
             // 
             // buttonNew
             // 
-            this.buttonNew.Image = global::EDDiscovery.Icons.Controls.CaptainsLog_New;
+            this.buttonNew.Image = global::EDDiscovery.Images.Controls.CaptainsLog_New;
             this.buttonNew.Location = new System.Drawing.Point(205, 1);
             this.buttonNew.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonNew.Name = "buttonNew";
@@ -164,7 +164,7 @@
             this.textBoxFilter.ClearOnFirstChar = false;
             this.textBoxFilter.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxFilter.EndButtonEnable = true;
-            this.textBoxFilter.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
+            this.textBoxFilter.EndButtonImage = global::EDDiscovery.Images.Controls.Dropdown;
             this.textBoxFilter.EndButtonVisible = false;
             this.textBoxFilter.InErrorCondition = false;
             this.textBoxFilter.Location = new System.Drawing.Point(49, 1);

@@ -112,7 +112,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripButtonNew
             // 
-            this.toolStripButtonNew.Image = global::EDDiscovery.Icons.Controls.Expedition_New;
+            this.toolStripButtonNew.Image = global::EDDiscovery.Images.Controls.Expedition_New;
             this.toolStripButtonNew.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripButtonNew.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonNew.Name = "toolStripButtonNew";
@@ -122,7 +122,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripButtonImportFile
             // 
-            this.toolStripButtonImportFile.Image = global::EDDiscovery.Icons.Controls.Expedition_ImportFile;
+            this.toolStripButtonImportFile.Image = global::EDDiscovery.Images.Controls.Expedition_ImportFile;
             this.toolStripButtonImportFile.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripButtonImportFile.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonImportFile.Name = "toolStripButtonImportFile";
@@ -132,7 +132,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripButtonImportRoute
             // 
-            this.toolStripButtonImportRoute.Image = global::EDDiscovery.Icons.Controls.Expedition_ImportRoute;
+            this.toolStripButtonImportRoute.Image = global::EDDiscovery.Images.Controls.Expedition_ImportRoute;
             this.toolStripButtonImportRoute.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripButtonImportRoute.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonImportRoute.Name = "toolStripButtonImportRoute";
@@ -143,7 +143,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripButtonSave
             // 
-            this.toolStripButtonSave.Image = global::EDDiscovery.Icons.Controls.Expedition_Save;
+            this.toolStripButtonSave.Image = global::EDDiscovery.Images.Controls.Expedition_Save;
             this.toolStripButtonSave.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripButtonSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonSave.Name = "toolStripButtonSave";
@@ -153,7 +153,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripButtonExport
             // 
-            this.toolStripButtonExport.Image = global::EDDiscovery.Icons.Controls.Expedition_Export;
+            this.toolStripButtonExport.Image = global::EDDiscovery.Images.Controls.Expedition_Export;
             this.toolStripButtonExport.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripButtonExport.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonExport.Name = "toolStripButtonExport";
@@ -164,7 +164,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripButtonDelete
             // 
-            this.toolStripButtonDelete.Image = global::EDDiscovery.Icons.Controls.Expedition_Delete;
+            this.toolStripButtonDelete.Image = global::EDDiscovery.Images.Controls.Expedition_Delete;
             this.toolStripButtonDelete.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripButtonDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonDelete.Name = "toolStripButtonDelete";
@@ -174,7 +174,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripButtonShowOn3DMap
             // 
-            this.toolStripButtonShowOn3DMap.Image = global::EDDiscovery.Icons.Controls.Expedition_ShowOnMap;
+            this.toolStripButtonShowOn3DMap.Image = global::EDDiscovery.Images.Controls.Expedition_ShowOnMap;
             this.toolStripButtonShowOn3DMap.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripButtonShowOn3DMap.Name = "toolStripButtonShowOn3DMap";
             this.toolStripButtonShowOn3DMap.Size = new System.Drawing.Size(125, 29);

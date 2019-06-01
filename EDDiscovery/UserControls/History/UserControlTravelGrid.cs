@@ -690,17 +690,17 @@ namespace EDDiscovery.UserControls
 
             if (he.StartMarker)
             {
-                e.Graphics.DrawImage(Icons.Controls.TravelGrid_FlagStart, new Rectangle(hstart, top, size, size));
+                e.Graphics.DrawImage(Images.Controls.TravelGrid_FlagStart, new Rectangle(hstart, top, size, size));
                 hstart += size + padding;
             }
             else if (he.StopMarker)
             {
-                e.Graphics.DrawImage(Icons.Controls.TravelGrid_FlagStop, new Rectangle(hstart, top, size, size));
+                e.Graphics.DrawImage(Images.Controls.TravelGrid_FlagStop, new Rectangle(hstart, top, size, size));
                 hstart += size + padding;
             }
             if (bk != null)
             {
-                e.Graphics.DrawImage(Icons.Controls.Map3D_Bookmarks_Star, new Rectangle(hstart, top, size, size));
+                e.Graphics.DrawImage(Images.Controls.Map3D_Bookmarks_Star, new Rectangle(hstart, top, size, size));
             }
         }
 

@@ -106,7 +106,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripButtonNew
             // 
-            this.toolStripButtonNew.Image = global::EDDiscovery.Icons.Controls.Exploration_New;
+            this.toolStripButtonNew.Image = global::EDDiscovery.Images.Controls.Exploration_New;
             this.toolStripButtonNew.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripButtonNew.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonNew.Name = "toolStripButtonNew";
@@ -116,7 +116,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripButtonLoad
             // 
-            this.toolStripButtonLoad.Image = global::EDDiscovery.Icons.Controls.Exploration_Load;
+            this.toolStripButtonLoad.Image = global::EDDiscovery.Images.Controls.Exploration_Load;
             this.toolStripButtonLoad.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripButtonLoad.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonLoad.Name = "toolStripButtonLoad";
@@ -126,7 +126,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripButtonSave
             // 
-            this.toolStripButtonSave.Image = global::EDDiscovery.Icons.Controls.Exploration_Save;
+            this.toolStripButtonSave.Image = global::EDDiscovery.Images.Controls.Exploration_Save;
             this.toolStripButtonSave.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripButtonSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonSave.Name = "toolStripButtonSave";
@@ -136,7 +136,7 @@ namespace EDDiscovery.UserControls
             // 
             // tsbAddSystems
             // 
-            this.tsbAddSystems.Image = global::EDDiscovery.Icons.Controls.Exploration_ImportSphere;
+            this.tsbAddSystems.Image = global::EDDiscovery.Images.Controls.Exploration_ImportSphere;
             this.tsbAddSystems.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.tsbAddSystems.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbAddSystems.Name = "tsbAddSystems";
@@ -146,7 +146,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripButtonImportFile
             // 
-            this.toolStripButtonImportFile.Image = global::EDDiscovery.Icons.Controls.Exploration_ImportFile;
+            this.toolStripButtonImportFile.Image = global::EDDiscovery.Images.Controls.Exploration_ImportFile;
             this.toolStripButtonImportFile.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripButtonImportFile.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonImportFile.Name = "toolStripButtonImportFile";
@@ -156,7 +156,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripButtonExport
             // 
-            this.toolStripButtonExport.Image = global::EDDiscovery.Icons.Controls.Exploration_Export;
+            this.toolStripButtonExport.Image = global::EDDiscovery.Images.Controls.Exploration_Export;
             this.toolStripButtonExport.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripButtonExport.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonExport.Name = "toolStripButtonExport";
@@ -167,7 +167,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripButtonClear
             // 
-            this.toolStripButtonClear.Image = global::EDDiscovery.Icons.Controls.Exploration_Delete;
+            this.toolStripButtonClear.Image = global::EDDiscovery.Images.Controls.Exploration_Delete;
             this.toolStripButtonClear.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripButtonClear.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonClear.Name = "toolStripButtonClear";

@@ -15,7 +15,11 @@
  */
 using EDDiscovery.Icons;
 using System.Collections.Generic;
+#if NET472
 using System.Drawing;
+#else
+using Image = EDDiscovery.Icons.Image;
+#endif
 
 namespace EliteDangerousCore.EDSM
 {

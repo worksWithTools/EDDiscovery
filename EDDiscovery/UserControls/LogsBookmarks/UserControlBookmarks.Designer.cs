@@ -66,7 +66,7 @@
             // buttonExtImport
             // 
             this.buttonExtImport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonExtImport.Image = global::EDDiscovery.Icons.Controls.ImportExcel;
+            this.buttonExtImport.Image = global::EDDiscovery.Images.Controls.ImportExcel;
             this.buttonExtImport.Location = new System.Drawing.Point(349, 1);
             this.buttonExtImport.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonExtImport.Name = "buttonExtImport";
@@ -79,7 +79,7 @@
             // buttonExtExcel
             // 
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.TravelGrid_ExportToExcel;
+            this.buttonExtExcel.Image = global::EDDiscovery.Images.Controls.TravelGrid_ExportToExcel;
             this.buttonExtExcel.Location = new System.Drawing.Point(313, 1);
             this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonExtExcel.Name = "buttonExtExcel";
@@ -91,7 +91,7 @@
             // 
             // buttonDelete
             // 
-            this.buttonDelete.Image = global::EDDiscovery.Icons.Controls.Bookmarks_Delete;
+            this.buttonDelete.Image = global::EDDiscovery.Images.Controls.Bookmarks_Delete;
             this.buttonDelete.Location = new System.Drawing.Point(277, 1);
             this.buttonDelete.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonDelete.Name = "buttonDelete";
@@ -103,7 +103,7 @@
             // 
             // buttonNew
             // 
-            this.buttonNew.Image = global::EDDiscovery.Icons.Controls.Bookmarks_New;
+            this.buttonNew.Image = global::EDDiscovery.Images.Controls.Bookmarks_New;
             this.buttonNew.Location = new System.Drawing.Point(205, 1);
             this.buttonNew.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonNew.Name = "buttonNew";
@@ -115,7 +115,7 @@
             // 
             // buttonEdit
             // 
-            this.buttonEdit.Image = global::EDDiscovery.Icons.Controls.Bookmarks_Edit;
+            this.buttonEdit.Image = global::EDDiscovery.Images.Controls.Bookmarks_Edit;
             this.buttonEdit.Location = new System.Drawing.Point(241, 1);
             this.buttonEdit.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonEdit.Name = "buttonEdit";

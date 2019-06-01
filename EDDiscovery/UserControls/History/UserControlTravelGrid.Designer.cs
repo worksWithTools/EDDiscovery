@@ -121,7 +121,7 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxOutlines.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.extCheckBoxOutlines.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.extCheckBoxOutlines.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.extCheckBoxOutlines.Image = global::EDDiscovery.Icons.Controls.TravelGrid_Outlines;
+            this.extCheckBoxOutlines.Image = global::EDDiscovery.Images.Controls.TravelGrid_Outlines;
             this.extCheckBoxOutlines.ImageButtonDisabledScaling = 0.5F;
             this.extCheckBoxOutlines.ImageIndeterminate = null;
             this.extCheckBoxOutlines.ImageLayout = System.Windows.Forms.ImageLayout.Center;
@@ -152,11 +152,11 @@ namespace EDDiscovery.UserControls
             this.checkBoxCursorToTop.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.checkBoxCursorToTop.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.checkBoxCursorToTop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxCursorToTop.Image = global::EDDiscovery.Icons.Controls.TravelGrid_CursorToTop;
+            this.checkBoxCursorToTop.Image = global::EDDiscovery.Images.Controls.TravelGrid_CursorToTop;
             this.checkBoxCursorToTop.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxCursorToTop.ImageIndeterminate = null;
             this.checkBoxCursorToTop.ImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.checkBoxCursorToTop.ImageUnchecked = global::EDDiscovery.Icons.Controls.TravelGrid_CursorStill;
+            this.checkBoxCursorToTop.ImageUnchecked = global::EDDiscovery.Images.Controls.TravelGrid_CursorStill;
             this.checkBoxCursorToTop.Location = new System.Drawing.Point(459, 1);
             this.checkBoxCursorToTop.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.checkBoxCursorToTop.MouseOverColor = System.Drawing.Color.CornflowerBlue;
@@ -170,7 +170,7 @@ namespace EDDiscovery.UserControls
             // buttonExtExcel
             // 
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.TravelGrid_ExportToExcel;
+            this.buttonExtExcel.Image = global::EDDiscovery.Images.Controls.TravelGrid_ExportToExcel;
             this.buttonExtExcel.Location = new System.Drawing.Point(423, 1);
             this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonExtExcel.Name = "buttonExtExcel";
@@ -182,7 +182,7 @@ namespace EDDiscovery.UserControls
             // 
             // buttonField
             // 
-            this.buttonField.Image = global::EDDiscovery.Icons.Controls.TravelGrid_FieldFilter;
+            this.buttonField.Image = global::EDDiscovery.Images.Controls.TravelGrid_FieldFilter;
             this.buttonField.Location = new System.Drawing.Point(387, 1);
             this.buttonField.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonField.Name = "buttonField";
@@ -194,7 +194,7 @@ namespace EDDiscovery.UserControls
             // 
             // buttonFilter
             // 
-            this.buttonFilter.Image = global::EDDiscovery.Icons.Controls.TravelGrid_EventFilter;
+            this.buttonFilter.Image = global::EDDiscovery.Images.Controls.TravelGrid_EventFilter;
             this.buttonFilter.Location = new System.Drawing.Point(351, 1);
             this.buttonFilter.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonFilter.Name = "buttonFilter";

@@ -43,7 +43,7 @@
             this.tabStrip.DropDownScrollBarColor = System.Drawing.Color.LightGray;
             this.tabStrip.EmptyColor = System.Drawing.Color.Empty;
             this.tabStrip.EmptyColorScaling = 0.5F;
-            this.tabStrip.EmptyPanelIcon = global::EDDiscovery.Icons.Controls.TabStrip_EmptyPanel;
+            this.tabStrip.EmptyPanelIcon = global::EDDiscovery.Images.Controls.TabStrip_EmptyPanel;
             this.tabStrip.Location = new System.Drawing.Point(0, 0);
             this.tabStrip.Name = "tabStrip";
             this.tabStrip.SelectedBackColor = System.Drawing.Color.Transparent;

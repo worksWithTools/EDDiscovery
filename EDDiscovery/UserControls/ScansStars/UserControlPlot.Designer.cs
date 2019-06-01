@@ -217,7 +217,7 @@ namespace EDDiscovery.UserControls
             this.optionsToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.exportToToolStripMenuItem});
-            this.optionsToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.StatsTime_Text;
+            this.optionsToolStripMenuItem.Image = global::EDDiscovery.Images.Controls.StatsTime_Text;
             this.optionsToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.optionsToolStripMenuItem.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";

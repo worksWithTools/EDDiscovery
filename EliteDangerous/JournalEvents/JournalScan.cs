@@ -16,7 +16,11 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+#if NET472
 using System.Drawing;
+#else
+using Image = EDDiscovery.Icons.Image;
+#endif
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -1002,17 +1006,17 @@ namespace EliteDangerousCore.JournalEvents
             return Bodies.StarName(StarTypeID);
         }
 
-        public System.Drawing.Image GetStarTypeImage()           // give image and description to star class
+        public Image GetStarTypeImage()           // give image and description to star class
         {
             return Bodies.GetStarTypeImage(StarTypeID);
         }
 
-        static public System.Drawing.Image GetStarImageNotScanned()
+        static public Image GetStarImageNotScanned()
         {
             return Bodies.GetStarTypeImage(EDStar.Unknown);
         }
 
-        public System.Drawing.Image GetPlanetClassImage()
+        public Image GetPlanetClassImage()
         {
             if (PlanetClass == null)
             {
@@ -1040,12 +1044,12 @@ namespace EliteDangerousCore.JournalEvents
             return Bodies.GetPlanetClassImage(planetclass);
         }
 
-        static public System.Drawing.Image GetPlanetImageNotScanned()
+        static public Image GetPlanetImageNotScanned()
         {
             return Bodies.GetPlanetClassImage(EDPlanet.Unknown);
         }
 
-        static public System.Drawing.Image GetMoonImageNotScanned()
+        static public Image GetMoonImageNotScanned()
         {
             return Bodies.GetPlanetClassImage(EDPlanet.Unknown);
         }

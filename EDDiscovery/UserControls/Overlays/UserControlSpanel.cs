@@ -311,7 +311,7 @@ namespace EDDiscovery.UserControls
                             HistoryEntry lastfsd = hl.GetLastHistoryEntry(x => x.journalEntry is EliteDangerousCore.JournalEvents.JournalFSDJump, last);
                             bool firstdiscovery = (lastfsd != null && (lastfsd.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump).EDSMFirstDiscover);
 
-                            rowpos = rowmargin + AddColText(0, 0, rowpos, str, textcolour, backcolour, null , firstdiscovery ? EDDiscovery.Icons.Controls.firstdiscover : null, "Shows if EDSM indicates your it's first discoverer").pos.Bottom;
+                            rowpos = rowmargin + AddColText(0, 0, rowpos, str, textcolour, backcolour, null , firstdiscovery ? EDDiscovery.Images.Controls.firstdiscover : null, "Shows if EDSM indicates your it's first discoverer").pos.Bottom;
                         }
 
                         if (Config(Configuration.showHabInformation) && last != null)
@@ -559,7 +559,7 @@ namespace EDDiscovery.UserControls
 
                 if (opt != null)
                 {
-                    pictureBox.AddImage(new Rectangle(colpos, rowpos, 24, 24), Icons.Controls.firstdiscover, null, imagetooltip, false);
+                    pictureBox.AddImage(new Rectangle(colpos, rowpos, 24, 24), Images.Controls.firstdiscover, null, imagetooltip, false);
                     colpos += 24;
                 }
 
