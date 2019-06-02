@@ -19,9 +19,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using BaseUtils;
-using AudioExtensions;
-using ActionLanguage;
 
 namespace EDDiscovery.Actions
 {
