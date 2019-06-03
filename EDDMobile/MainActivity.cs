@@ -4,6 +4,8 @@ using Android.Support.V7.App;
 using Android.Runtime;
 using Android.Widget;
 using EliteDangerousCore;
+using System.Linq;
+using Syncfusion.SfDataGrid;
 
 namespace EDDMobile
 {
@@ -17,16 +19,8 @@ namespace EDDMobile
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.activity_main);
 
-
-            string entry = @"{ 'timestamp':'2019 - 05 - 26T18: 00:17Z', 'event':'Progress', 'Combat':97, 'Trade':26, 'Explore':58, 'Empire':8, 'Federation':48, 'CQC':46 }";
-            JournalEntry je = JournalEntry.CreateJournalEntry(entry);
-
-            string info, details;
-            je.FillInformation(out info, out details);
-
-            var journal = FindViewById<TextView>(Resource.Id.journalEntry);
-            journal.Text = info + "\n" + details;
-
+            var journalEntries = FindViewById<SfDataGrid>(Resource.Id.journalDatagrid);
+            journalEntries.ItemsSource = new JournalEntryRepository().journalCollection;
         }
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {

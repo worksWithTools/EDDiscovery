@@ -64,13 +64,16 @@ namespace EliteDangerousCore
         {
             get
             {
+#if NET472
                 if (beta == null)
                 {
                     TravelLogUnit tlu = TravelLogUnit.Get(TLUId);
                     beta = tlu?.Beta ?? false;
                 }
-
+                
                 return beta ?? false;
+#endif
+                return false;
             }
         }
 
