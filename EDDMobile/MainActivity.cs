@@ -1,26 +1,27 @@
 ﻿using Android.App;
 using Android.OS;
-using Android.Support.V7.App;
 using Android.Runtime;
+using Android.Support.V7.App;
 using Android.Widget;
 using EliteDangerousCore;
 using System.Linq;
-using Syncfusion.SfDataGrid;
 
 namespace EDDMobile
 {
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme", MainLauncher = true)]
-    public class MainActivity : AppCompatActivity
+    public class MainActivity : Activity
     {
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
-            // Set our view from the "main" layout resource
+            //// Set our view from the "main" layout resource
             SetContentView(Resource.Layout.activity_main);
 
-            var journalEntries = FindViewById<SfDataGrid>(Resource.Id.journalDatagrid);
-            journalEntries.ItemsSource = new JournalEntryRepository().journalCollection;
+            
+            var journalEntries = new JournalEntryRepository().journalCollection;
+            var listView = FindViewById<ListView>(Resource.Id.journalListView);
+            listView.Adapter = new ArrayAdapter<JournalEntry>(this, Android.Resource.Layout.SimpleListItem1, journalEntries.ToArray());
         }
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {

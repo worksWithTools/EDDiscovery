@@ -26,204 +26,6 @@ namespace EDDMobile
 		
 		public static void UpdateIdValues()
 		{
-			global::Syncfusion.Data.Resource.String.library_name = global::EDDMobile.Resource.String.library_name;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.allowDraggingColumn = global::EDDMobile.Resource.Attribute.allowDraggingColumn;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.allowDraggingRow = global::EDDMobile.Resource.Attribute.allowDraggingRow;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.allowEditing = global::EDDMobile.Resource.Attribute.allowEditing;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.allowGroupExpandCollapse = global::EDDMobile.Resource.Attribute.allowGroupExpandCollapse;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.allowLoadMore = global::EDDMobile.Resource.Attribute.allowLoadMore;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.allowMultiSorting = global::EDDMobile.Resource.Attribute.allowMultiSorting;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.allowNull = global::EDDMobile.Resource.Attribute.allowNull;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.allowPullToRefresh = global::EDDMobile.Resource.Attribute.allowPullToRefresh;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.allowResizingColumn = global::EDDMobile.Resource.Attribute.allowResizingColumn;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.allowSorting = global::EDDMobile.Resource.Attribute.allowSorting;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.allowSwiping = global::EDDMobile.Resource.Attribute.allowSwiping;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.allowTriStateSorting = global::EDDMobile.Resource.Attribute.allowTriStateSorting;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.alternationCount = global::EDDMobile.Resource.Attribute.alternationCount;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.autoExpandGroups = global::EDDMobile.Resource.Attribute.autoExpandGroups;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.autoGenerateColumns = global::EDDMobile.Resource.Attribute.autoGenerateColumns;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.borderColor = global::EDDMobile.Resource.Attribute.borderColor;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.columnSizer = global::EDDMobile.Resource.Attribute.columnSizer;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.culture = global::EDDMobile.Resource.Attribute.culture;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.editTapAction = global::EDDMobile.Resource.Attribute.editTapAction;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.editorSelectionBehavior = global::EDDMobile.Resource.Attribute.editorSelectionBehavior;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.enableGroupSeparator = global::EDDMobile.Resource.Attribute.enableGroupSeparator;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.fontSize = global::EDDMobile.Resource.Attribute.fontSize;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.frozenColumnsCount = global::EDDMobile.Resource.Attribute.frozenColumnsCount;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.frozenRowsCount = global::EDDMobile.Resource.Attribute.frozenRowsCount;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.gridRowHeight = global::EDDMobile.Resource.Attribute.gridRowHeight;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.gridSelectionMode = global::EDDMobile.Resource.Attribute.gridSelectionMode;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.groupingMode = global::EDDMobile.Resource.Attribute.groupingMode;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.headerRowHeight = global::EDDMobile.Resource.Attribute.headerRowHeight;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.indentColumnWidth = global::EDDMobile.Resource.Attribute.indentColumnWidth;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.isBusy = global::EDDMobile.Resource.Attribute.isBusy;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.loadMorePosition = global::EDDMobile.Resource.Attribute.loadMorePosition;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.loadMoreText = global::EDDMobile.Resource.Attribute.loadMoreText;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.maxSwipeOffset = global::EDDMobile.Resource.Attribute.maxSwipeOffset;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.maximumDecimalDigits = global::EDDMobile.Resource.Attribute.maximumDecimalDigits;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.numberFormat = global::EDDMobile.Resource.Attribute.numberFormat;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.numericButtonBackground = global::EDDMobile.Resource.Attribute.numericButtonBackground;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.numericButtonCount = global::EDDMobile.Resource.Attribute.numericButtonCount;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.numericTextBoxValue = global::EDDMobile.Resource.Attribute.numericTextBoxValue;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.orientation = global::EDDMobile.Resource.Attribute.orientation;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.pageCount = global::EDDMobile.Resource.Attribute.pageCount;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.pageSize = global::EDDMobile.Resource.Attribute.pageSize;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.parsingMode = global::EDDMobile.Resource.Attribute.parsingMode;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.percentDisplayMode = global::EDDMobile.Resource.Attribute.percentDisplayMode;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.resizingMode = global::EDDMobile.Resource.Attribute.resizingMode;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.rowHeaderWidth = global::EDDMobile.Resource.Attribute.rowHeaderWidth;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.scrollingMode = global::EDDMobile.Resource.Attribute.scrollingMode;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.selectAllOnFocus = global::EDDMobile.Resource.Attribute.selectAllOnFocus;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.selectedIndex = global::EDDMobile.Resource.Attribute.selectedIndex;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.selectionForeground = global::EDDMobile.Resource.Attribute.selectionForeground;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.showRowHeader = global::EDDMobile.Resource.Attribute.showRowHeader;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.sortTapAction = global::EDDMobile.Resource.Attribute.sortTapAction;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.useOnDemandPaging = global::EDDMobile.Resource.Attribute.useOnDemandPaging;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.valueChangeMode = global::EDDMobile.Resource.Attribute.valueChangeMode;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.verticalOverScrollMode = global::EDDMobile.Resource.Attribute.verticalOverScrollMode;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.watermark = global::EDDMobile.Resource.Attribute.watermark;
-			global::Syncfusion.SfDataGrid.Android.Resource.Attribute.watermarkColor = global::EDDMobile.Resource.Attribute.watermarkColor;
-			global::Syncfusion.SfDataGrid.Android.Resource.Drawable.Ascending = global::EDDMobile.Resource.Drawable.Ascending;
-			global::Syncfusion.SfDataGrid.Android.Resource.Drawable.Descending = global::EDDMobile.Resource.Drawable.Descending;
-			global::Syncfusion.SfDataGrid.Android.Resource.Drawable.Drag_and_Drop_Icon = global::EDDMobile.Resource.Drawable.Drag_and_Drop_Icon;
-			global::Syncfusion.SfDataGrid.Android.Resource.Drawable.DragDown = global::EDDMobile.Resource.Drawable.DragDown;
-			global::Syncfusion.SfDataGrid.Android.Resource.Drawable.DragUp = global::EDDMobile.Resource.Drawable.DragUp;
-			global::Syncfusion.SfDataGrid.Android.Resource.Drawable.error2 = global::EDDMobile.Resource.Drawable.error2;
-			global::Syncfusion.SfDataGrid.Android.Resource.Drawable.FirstPageIcon = global::EDDMobile.Resource.Drawable.FirstPageIcon;
-			global::Syncfusion.SfDataGrid.Android.Resource.Drawable.GroupCollapse = global::EDDMobile.Resource.Drawable.GroupCollapse;
-			global::Syncfusion.SfDataGrid.Android.Resource.Drawable.GroupExpander = global::EDDMobile.Resource.Drawable.GroupExpander;
-			global::Syncfusion.SfDataGrid.Android.Resource.Drawable.GroupIcon_Android = global::EDDMobile.Resource.Drawable.GroupIcon_Android;
-			global::Syncfusion.SfDataGrid.Android.Resource.Drawable.LastPageIcon = global::EDDMobile.Resource.Drawable.LastPageIcon;
-			global::Syncfusion.SfDataGrid.Android.Resource.Drawable.NextPageIcon = global::EDDMobile.Resource.Drawable.NextPageIcon;
-			global::Syncfusion.SfDataGrid.Android.Resource.Drawable.PrevPageIcon = global::EDDMobile.Resource.Drawable.PrevPageIcon;
-			global::Syncfusion.SfDataGrid.Android.Resource.Drawable.ResizingIcon = global::EDDMobile.Resource.Drawable.ResizingIcon;
-			global::Syncfusion.SfDataGrid.Android.Resource.Drawable.Sort = global::EDDMobile.Resource.Drawable.Sort;
-			global::Syncfusion.SfDataGrid.Android.Resource.Drawable.SortDescending = global::EDDMobile.Resource.Drawable.SortDescending;
-			global::Syncfusion.SfDataGrid.Android.Resource.Id.auto = global::EDDMobile.Resource.Id.auto;
-			global::Syncfusion.SfDataGrid.Android.Resource.Id.bottom = global::EDDMobile.Resource.Id.bottom;
-			global::Syncfusion.SfDataGrid.Android.Resource.Id.bounce = global::EDDMobile.Resource.Id.bounce;
-			global::Syncfusion.SfDataGrid.Android.Resource.Id.compute = global::EDDMobile.Resource.Id.compute;
-			global::Syncfusion.SfDataGrid.Android.Resource.Id.decimalMode = global::EDDMobile.Resource.Id.decimalMode;
-			global::Syncfusion.SfDataGrid.Android.Resource.Id.doubleMode = global::EDDMobile.Resource.Id.doubleMode;
-			global::Syncfusion.SfDataGrid.Android.Resource.Id.doubleTap = global::EDDMobile.Resource.Id.doubleTap;
-			global::Syncfusion.SfDataGrid.Android.Resource.Id.horizontal = global::EDDMobile.Resource.Id.horizontal;
-			global::Syncfusion.SfDataGrid.Android.Resource.Id.lastCoulmnFill = global::EDDMobile.Resource.Id.lastCoulmnFill;
-			global::Syncfusion.SfDataGrid.Android.Resource.Id.line = global::EDDMobile.Resource.Id.line;
-			global::Syncfusion.SfDataGrid.Android.Resource.Id.moveLast = global::EDDMobile.Resource.Id.moveLast;
-			global::Syncfusion.SfDataGrid.Android.Resource.Id.multiple = global::EDDMobile.Resource.Id.multiple;
-			global::Syncfusion.SfDataGrid.Android.Resource.Id.none = global::EDDMobile.Resource.Id.none;
-			global::Syncfusion.SfDataGrid.Android.Resource.Id.onKeyFocus = global::EDDMobile.Resource.Id.onKeyFocus;
-			global::Syncfusion.SfDataGrid.Android.Resource.Id.onLostFocus = global::EDDMobile.Resource.Id.onLostFocus;
-			global::Syncfusion.SfDataGrid.Android.Resource.Id.onMoved = global::EDDMobile.Resource.Id.onMoved;
-			global::Syncfusion.SfDataGrid.Android.Resource.Id.onTap = global::EDDMobile.Resource.Id.onTap;
-			global::Syncfusion.SfDataGrid.Android.Resource.Id.onTouchUp = global::EDDMobile.Resource.Id.onTouchUp;
-			global::Syncfusion.SfDataGrid.Android.Resource.Id.pixel = global::EDDMobile.Resource.Id.pixel;
-			global::Syncfusion.SfDataGrid.Android.Resource.Id.pixelLine = global::EDDMobile.Resource.Id.pixelLine;
-			global::Syncfusion.SfDataGrid.Android.Resource.Id.selectAll = global::EDDMobile.Resource.Id.selectAll;
-			global::Syncfusion.SfDataGrid.Android.Resource.Id.single = global::EDDMobile.Resource.Id.single;
-			global::Syncfusion.SfDataGrid.Android.Resource.Id.singleDeSelect = global::EDDMobile.Resource.Id.singleDeSelect;
-			global::Syncfusion.SfDataGrid.Android.Resource.Id.singleTap = global::EDDMobile.Resource.Id.singleTap;
-			global::Syncfusion.SfDataGrid.Android.Resource.Id.star = global::EDDMobile.Resource.Id.star;
-			global::Syncfusion.SfDataGrid.Android.Resource.Id.top = global::EDDMobile.Resource.Id.top;
-			global::Syncfusion.SfDataGrid.Android.Resource.Id.value = global::EDDMobile.Resource.Id.value;
-			global::Syncfusion.SfDataGrid.Android.Resource.Id.vertical = global::EDDMobile.Resource.Id.vertical;
-			global::Syncfusion.SfDataGrid.Android.Resource.Layout.ScrollViewer = global::EDDMobile.Resource.Layout.ScrollViewer;
-			global::Syncfusion.SfDataGrid.Android.Resource.String.library_name = global::EDDMobile.Resource.String.library_name;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataGrid = global::EDDMobile.Resource.Styleable.SfDataGrid;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataGrid_allowDraggingColumn = global::EDDMobile.Resource.Styleable.SfDataGrid_allowDraggingColumn;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataGrid_allowDraggingRow = global::EDDMobile.Resource.Styleable.SfDataGrid_allowDraggingRow;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataGrid_allowEditing = global::EDDMobile.Resource.Styleable.SfDataGrid_allowEditing;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataGrid_allowGroupExpandCollapse = global::EDDMobile.Resource.Styleable.SfDataGrid_allowGroupExpandCollapse;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataGrid_allowLoadMore = global::EDDMobile.Resource.Styleable.SfDataGrid_allowLoadMore;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataGrid_allowMultiSorting = global::EDDMobile.Resource.Styleable.SfDataGrid_allowMultiSorting;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataGrid_allowPullToRefresh = global::EDDMobile.Resource.Styleable.SfDataGrid_allowPullToRefresh;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataGrid_allowResizingColumn = global::EDDMobile.Resource.Styleable.SfDataGrid_allowResizingColumn;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataGrid_allowSorting = global::EDDMobile.Resource.Styleable.SfDataGrid_allowSorting;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataGrid_allowSwiping = global::EDDMobile.Resource.Styleable.SfDataGrid_allowSwiping;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataGrid_allowTriStateSorting = global::EDDMobile.Resource.Styleable.SfDataGrid_allowTriStateSorting;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataGrid_alternationCount = global::EDDMobile.Resource.Styleable.SfDataGrid_alternationCount;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataGrid_autoExpandGroups = global::EDDMobile.Resource.Styleable.SfDataGrid_autoExpandGroups;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataGrid_autoGenerateColumns = global::EDDMobile.Resource.Styleable.SfDataGrid_autoGenerateColumns;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataGrid_columnSizer = global::EDDMobile.Resource.Styleable.SfDataGrid_columnSizer;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataGrid_editTapAction = global::EDDMobile.Resource.Styleable.SfDataGrid_editTapAction;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataGrid_editorSelectionBehavior = global::EDDMobile.Resource.Styleable.SfDataGrid_editorSelectionBehavior;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataGrid_frozenColumnsCount = global::EDDMobile.Resource.Styleable.SfDataGrid_frozenColumnsCount;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataGrid_frozenRowsCount = global::EDDMobile.Resource.Styleable.SfDataGrid_frozenRowsCount;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataGrid_gridRowHeight = global::EDDMobile.Resource.Styleable.SfDataGrid_gridRowHeight;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataGrid_gridSelectionMode = global::EDDMobile.Resource.Styleable.SfDataGrid_gridSelectionMode;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataGrid_groupingMode = global::EDDMobile.Resource.Styleable.SfDataGrid_groupingMode;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataGrid_headerRowHeight = global::EDDMobile.Resource.Styleable.SfDataGrid_headerRowHeight;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataGrid_indentColumnWidth = global::EDDMobile.Resource.Styleable.SfDataGrid_indentColumnWidth;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataGrid_isBusy = global::EDDMobile.Resource.Styleable.SfDataGrid_isBusy;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataGrid_loadMorePosition = global::EDDMobile.Resource.Styleable.SfDataGrid_loadMorePosition;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataGrid_loadMoreText = global::EDDMobile.Resource.Styleable.SfDataGrid_loadMoreText;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataGrid_maxSwipeOffset = global::EDDMobile.Resource.Styleable.SfDataGrid_maxSwipeOffset;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataGrid_resizingMode = global::EDDMobile.Resource.Styleable.SfDataGrid_resizingMode;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataGrid_rowHeaderWidth = global::EDDMobile.Resource.Styleable.SfDataGrid_rowHeaderWidth;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataGrid_scrollingMode = global::EDDMobile.Resource.Styleable.SfDataGrid_scrollingMode;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataGrid_selectedIndex = global::EDDMobile.Resource.Styleable.SfDataGrid_selectedIndex;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataGrid_showRowHeader = global::EDDMobile.Resource.Styleable.SfDataGrid_showRowHeader;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataGrid_sortTapAction = global::EDDMobile.Resource.Styleable.SfDataGrid_sortTapAction;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataGrid_verticalOverScrollMode = global::EDDMobile.Resource.Styleable.SfDataGrid_verticalOverScrollMode;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataPager = global::EDDMobile.Resource.Styleable.SfDataPager;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataPager_numericButtonBackground = global::EDDMobile.Resource.Styleable.SfDataPager_numericButtonBackground;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataPager_numericButtonCount = global::EDDMobile.Resource.Styleable.SfDataPager_numericButtonCount;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataPager_orientation = global::EDDMobile.Resource.Styleable.SfDataPager_orientation;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataPager_pageCount = global::EDDMobile.Resource.Styleable.SfDataPager_pageCount;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataPager_pageSize = global::EDDMobile.Resource.Styleable.SfDataPager_pageSize;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataPager_selectionForeground = global::EDDMobile.Resource.Styleable.SfDataPager_selectionForeground;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfDataPager_useOnDemandPaging = global::EDDMobile.Resource.Styleable.SfDataPager_useOnDemandPaging;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfNumericTextBox = global::EDDMobile.Resource.Styleable.SfNumericTextBox;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfNumericTextBox_allowNull = global::EDDMobile.Resource.Styleable.SfNumericTextBox_allowNull;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfNumericTextBox_borderColor = global::EDDMobile.Resource.Styleable.SfNumericTextBox_borderColor;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfNumericTextBox_culture = global::EDDMobile.Resource.Styleable.SfNumericTextBox_culture;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfNumericTextBox_enableGroupSeparator = global::EDDMobile.Resource.Styleable.SfNumericTextBox_enableGroupSeparator;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfNumericTextBox_fontSize = global::EDDMobile.Resource.Styleable.SfNumericTextBox_fontSize;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfNumericTextBox_maximumDecimalDigits = global::EDDMobile.Resource.Styleable.SfNumericTextBox_maximumDecimalDigits;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfNumericTextBox_numberFormat = global::EDDMobile.Resource.Styleable.SfNumericTextBox_numberFormat;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfNumericTextBox_numericTextBoxValue = global::EDDMobile.Resource.Styleable.SfNumericTextBox_numericTextBoxValue;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfNumericTextBox_parsingMode = global::EDDMobile.Resource.Styleable.SfNumericTextBox_parsingMode;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfNumericTextBox_percentDisplayMode = global::EDDMobile.Resource.Styleable.SfNumericTextBox_percentDisplayMode;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfNumericTextBox_selectAllOnFocus = global::EDDMobile.Resource.Styleable.SfNumericTextBox_selectAllOnFocus;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfNumericTextBox_valueChangeMode = global::EDDMobile.Resource.Styleable.SfNumericTextBox_valueChangeMode;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfNumericTextBox_watermark = global::EDDMobile.Resource.Styleable.SfNumericTextBox_watermark;
-			global::Syncfusion.SfDataGrid.Android.Resource.Styleable.SfNumericTextBox_watermarkColor = global::EDDMobile.Resource.Styleable.SfNumericTextBox_watermarkColor;
-			global::Com.Syncfusion.Numerictextbox.Resource.Attribute.allowNull = global::EDDMobile.Resource.Attribute.allowNull;
-			global::Com.Syncfusion.Numerictextbox.Resource.Attribute.borderColor = global::EDDMobile.Resource.Attribute.borderColor;
-			global::Com.Syncfusion.Numerictextbox.Resource.Attribute.culture = global::EDDMobile.Resource.Attribute.culture;
-			global::Com.Syncfusion.Numerictextbox.Resource.Attribute.enableGroupSeparator = global::EDDMobile.Resource.Attribute.enableGroupSeparator;
-			global::Com.Syncfusion.Numerictextbox.Resource.Attribute.fontSize = global::EDDMobile.Resource.Attribute.fontSize;
-			global::Com.Syncfusion.Numerictextbox.Resource.Attribute.maximumDecimalDigits = global::EDDMobile.Resource.Attribute.maximumDecimalDigits;
-			global::Com.Syncfusion.Numerictextbox.Resource.Attribute.numberFormat = global::EDDMobile.Resource.Attribute.numberFormat;
-			global::Com.Syncfusion.Numerictextbox.Resource.Attribute.numericTextBoxValue = global::EDDMobile.Resource.Attribute.numericTextBoxValue;
-			global::Com.Syncfusion.Numerictextbox.Resource.Attribute.parsingMode = global::EDDMobile.Resource.Attribute.parsingMode;
-			global::Com.Syncfusion.Numerictextbox.Resource.Attribute.percentDisplayMode = global::EDDMobile.Resource.Attribute.percentDisplayMode;
-			global::Com.Syncfusion.Numerictextbox.Resource.Attribute.selectAllOnFocus = global::EDDMobile.Resource.Attribute.selectAllOnFocus;
-			global::Com.Syncfusion.Numerictextbox.Resource.Attribute.valueChangeMode = global::EDDMobile.Resource.Attribute.valueChangeMode;
-			global::Com.Syncfusion.Numerictextbox.Resource.Attribute.watermark = global::EDDMobile.Resource.Attribute.watermark;
-			global::Com.Syncfusion.Numerictextbox.Resource.Attribute.watermarkColor = global::EDDMobile.Resource.Attribute.watermarkColor;
-			global::Com.Syncfusion.Numerictextbox.Resource.Id.compute = global::EDDMobile.Resource.Id.compute;
-			global::Com.Syncfusion.Numerictextbox.Resource.Id.decimalMode = global::EDDMobile.Resource.Id.decimalMode;
-			global::Com.Syncfusion.Numerictextbox.Resource.Id.doubleMode = global::EDDMobile.Resource.Id.doubleMode;
-			global::Com.Syncfusion.Numerictextbox.Resource.Id.onKeyFocus = global::EDDMobile.Resource.Id.onKeyFocus;
-			global::Com.Syncfusion.Numerictextbox.Resource.Id.onLostFocus = global::EDDMobile.Resource.Id.onLostFocus;
-			global::Com.Syncfusion.Numerictextbox.Resource.Id.value = global::EDDMobile.Resource.Id.value;
-			global::Com.Syncfusion.Numerictextbox.Resource.String.library_name = global::EDDMobile.Resource.String.library_name;
-			global::Com.Syncfusion.Numerictextbox.Resource.Styleable.SfNumericTextBox = global::EDDMobile.Resource.Styleable.SfNumericTextBox;
-			global::Com.Syncfusion.Numerictextbox.Resource.Styleable.SfNumericTextBox_allowNull = global::EDDMobile.Resource.Styleable.SfNumericTextBox_allowNull;
-			global::Com.Syncfusion.Numerictextbox.Resource.Styleable.SfNumericTextBox_borderColor = global::EDDMobile.Resource.Styleable.SfNumericTextBox_borderColor;
-			global::Com.Syncfusion.Numerictextbox.Resource.Styleable.SfNumericTextBox_culture = global::EDDMobile.Resource.Styleable.SfNumericTextBox_culture;
-			global::Com.Syncfusion.Numerictextbox.Resource.Styleable.SfNumericTextBox_enableGroupSeparator = global::EDDMobile.Resource.Styleable.SfNumericTextBox_enableGroupSeparator;
-			global::Com.Syncfusion.Numerictextbox.Resource.Styleable.SfNumericTextBox_fontSize = global::EDDMobile.Resource.Styleable.SfNumericTextBox_fontSize;
-			global::Com.Syncfusion.Numerictextbox.Resource.Styleable.SfNumericTextBox_maximumDecimalDigits = global::EDDMobile.Resource.Styleable.SfNumericTextBox_maximumDecimalDigits;
-			global::Com.Syncfusion.Numerictextbox.Resource.Styleable.SfNumericTextBox_numberFormat = global::EDDMobile.Resource.Styleable.SfNumericTextBox_numberFormat;
-			global::Com.Syncfusion.Numerictextbox.Resource.Styleable.SfNumericTextBox_numericTextBoxValue = global::EDDMobile.Resource.Styleable.SfNumericTextBox_numericTextBoxValue;
-			global::Com.Syncfusion.Numerictextbox.Resource.Styleable.SfNumericTextBox_parsingMode = global::EDDMobile.Resource.Styleable.SfNumericTextBox_parsingMode;
-			global::Com.Syncfusion.Numerictextbox.Resource.Styleable.SfNumericTextBox_percentDisplayMode = global::EDDMobile.Resource.Styleable.SfNumericTextBox_percentDisplayMode;
-			global::Com.Syncfusion.Numerictextbox.Resource.Styleable.SfNumericTextBox_selectAllOnFocus = global::EDDMobile.Resource.Styleable.SfNumericTextBox_selectAllOnFocus;
-			global::Com.Syncfusion.Numerictextbox.Resource.Styleable.SfNumericTextBox_valueChangeMode = global::EDDMobile.Resource.Styleable.SfNumericTextBox_valueChangeMode;
-			global::Com.Syncfusion.Numerictextbox.Resource.Styleable.SfNumericTextBox_watermark = global::EDDMobile.Resource.Styleable.SfNumericTextBox_watermark;
-			global::Com.Syncfusion.Numerictextbox.Resource.Styleable.SfNumericTextBox_watermarkColor = global::EDDMobile.Resource.Styleable.SfNumericTextBox_watermarkColor;
 			global::Xamarin.Essentials.Resource.Attribute.alpha = global::EDDMobile.Resource.Attribute.alpha;
 			global::Xamarin.Essentials.Resource.Attribute.coordinatorLayoutStyle = global::EDDMobile.Resource.Attribute.coordinatorLayoutStyle;
 			global::Xamarin.Essentials.Resource.Attribute.font = global::EDDMobile.Resource.Attribute.font;
@@ -629,53 +431,14 @@ namespace EDDMobile
 			// aapt resource value: 0x7f0100ad
 			public const int alertDialogTheme = 2130772141;
 			
-			// aapt resource value: 0x7f010205
-			public const int allowDraggingColumn = 2130772485;
-			
-			// aapt resource value: 0x7f010207
-			public const int allowDraggingRow = 2130772487;
-			
-			// aapt resource value: 0x7f0101f8
-			public const int allowEditing = 2130772472;
-			
-			// aapt resource value: 0x7f0101f7
-			public const int allowGroupExpandCollapse = 2130772471;
-			
-			// aapt resource value: 0x7f010200
-			public const int allowLoadMore = 2130772480;
-			
-			// aapt resource value: 0x7f0101f3
-			public const int allowMultiSorting = 2130772467;
-			
-			// aapt resource value: 0x7f0101e6
-			public const int allowNull = 2130772454;
-			
-			// aapt resource value: 0x7f010203
-			public const int allowPullToRefresh = 2130772483;
-			
-			// aapt resource value: 0x7f0101ed
-			public const int allowResizingColumn = 2130772461;
-			
-			// aapt resource value: 0x7f0101f1
-			public const int allowSorting = 2130772465;
-			
 			// aapt resource value: 0x7f0100c4
 			public const int allowStacking = 2130772164;
-			
-			// aapt resource value: 0x7f010209
-			public const int allowSwiping = 2130772489;
-			
-			// aapt resource value: 0x7f0101f2
-			public const int allowTriStateSorting = 2130772466;
 			
 			// aapt resource value: 0x7f0101d1
 			public const int alpha = 2130772433;
 			
 			// aapt resource value: 0x7f0100d2
 			public const int alphabeticModifiers = 2130772178;
-			
-			// aapt resource value: 0x7f0101ff
-			public const int alternationCount = 2130772479;
 			
 			// aapt resource value: 0x7f0100cb
 			public const int arrowHeadLength = 2130772171;
@@ -685,12 +448,6 @@ namespace EDDMobile
 			
 			// aapt resource value: 0x7f0100b2
 			public const int autoCompleteTextViewStyle = 2130772146;
-			
-			// aapt resource value: 0x7f0101f6
-			public const int autoExpandGroups = 2130772470;
-			
-			// aapt resource value: 0x7f0101eb
-			public const int autoGenerateColumns = 2130772459;
 			
 			// aapt resource value: 0x7f010048
 			public const int autoSizeMaxTextSize = 2130772040;
@@ -742,9 +499,6 @@ namespace EDDMobile
 			
 			// aapt resource value: 0x7f010145
 			public const int behavior_skipCollapsed = 2130772293;
-			
-			// aapt resource value: 0x7f0101e7
-			public const int borderColor = 2130772455;
 			
 			// aapt resource value: 0x7f01017b
 			public const int borderWidth = 2130772347;
@@ -992,9 +746,6 @@ namespace EDDMobile
 			// aapt resource value: 0x7f0100a7
 			public const int colorSwitchThumbNormal = 2130772135;
 			
-			// aapt resource value: 0x7f01020b
-			public const int columnSizer = 2130772491;
-			
 			// aapt resource value: 0x7f0100eb
 			public const int commitIcon = 2130772203;
 			
@@ -1058,9 +809,6 @@ namespace EDDMobile
 			// aapt resource value: 0x7f0101b6
 			public const int counterTextAppearance = 2130772406;
 			
-			// aapt resource value: 0x7f0101e9
-			public const int culture = 2130772457;
-			
 			// aapt resource value: 0x7f010024
 			public const int customNavigationLayout = 2130772004;
 			
@@ -1103,9 +851,6 @@ namespace EDDMobile
 			// aapt resource value: 0x7f01007b
 			public const int dropdownListPreferredItemHeight = 2130772091;
 			
-			// aapt resource value: 0x7f0101f9
-			public const int editTapAction = 2130772473;
-			
 			// aapt resource value: 0x7f01008c
 			public const int editTextBackground = 2130772108;
 			
@@ -1115,14 +860,8 @@ namespace EDDMobile
 			// aapt resource value: 0x7f0100b7
 			public const int editTextStyle = 2130772151;
 			
-			// aapt resource value: 0x7f0101fa
-			public const int editorSelectionBehavior = 2130772474;
-			
 			// aapt resource value: 0x7f010031
 			public const int elevation = 2130772017;
-			
-			// aapt resource value: 0x7f0101e0
-			public const int enableGroupSeparator = 2130772448;
 			
 			// aapt resource value: 0x7f0101c6
 			public const int enforceMaterialTheme = 2130772422;
@@ -1226,9 +965,6 @@ namespace EDDMobile
 			// aapt resource value: 0x7f0101d4
 			public const int fontProviderQuery = 2130772436;
 			
-			// aapt resource value: 0x7f0101e5
-			public const int fontSize = 2130772453;
-			
 			// aapt resource value: 0x7f0101d8
 			public const int fontStyle = 2130772440;
 			
@@ -1241,32 +977,14 @@ namespace EDDMobile
 			// aapt resource value: 0x7f010181
 			public const int foregroundInsidePadding = 2130772353;
 			
-			// aapt resource value: 0x7f010206
-			public const int frozenColumnsCount = 2130772486;
-			
-			// aapt resource value: 0x7f010208
-			public const int frozenRowsCount = 2130772488;
-			
 			// aapt resource value: 0x7f0100ca
 			public const int gapBetweenBars = 2130772170;
 			
 			// aapt resource value: 0x7f0100e7
 			public const int goIcon = 2130772199;
 			
-			// aapt resource value: 0x7f01020c
-			public const int gridRowHeight = 2130772492;
-			
-			// aapt resource value: 0x7f0101fb
-			public const int gridSelectionMode = 2130772475;
-			
-			// aapt resource value: 0x7f0101f5
-			public const int groupingMode = 2130772469;
-			
 			// aapt resource value: 0x7f01018b
 			public const int headerLayout = 2130772363;
-			
-			// aapt resource value: 0x7f01020d
-			public const int headerRowHeight = 2130772493;
 			
 			// aapt resource value: 0x7f010016
 			public const int height = 2130771990;
@@ -1337,9 +1055,6 @@ namespace EDDMobile
 			// aapt resource value: 0x7f01008d
 			public const int imageButtonStyle = 2130772109;
 			
-			// aapt resource value: 0x7f0101ec
-			public const int indentColumnWidth = 2130772460;
-			
 			// aapt resource value: 0x7f010027
 			public const int indeterminateProgressStyle = 2130772007;
 			
@@ -1348,9 +1063,6 @@ namespace EDDMobile
 			
 			// aapt resource value: 0x7f01018e
 			public const int insetForeground = 2130772366;
-			
-			// aapt resource value: 0x7f010204
-			public const int isBusy = 2130772484;
 			
 			// aapt resource value: 0x7f010017
 			public const int isLightTheme = 2130771991;
@@ -1478,12 +1190,6 @@ namespace EDDMobile
 			// aapt resource value: 0x7f010096
 			public const int listPreferredItemPaddingRight = 2130772118;
 			
-			// aapt resource value: 0x7f010202
-			public const int loadMorePosition = 2130772482;
-			
-			// aapt resource value: 0x7f010201
-			public const int loadMoreText = 2130772481;
-			
 			// aapt resource value: 0x7f01001f
 			public const int logo = 2130771999;
 			
@@ -1504,12 +1210,6 @@ namespace EDDMobile
 			
 			// aapt resource value: 0x7f01017d
 			public const int maxImageSize = 2130772349;
-			
-			// aapt resource value: 0x7f01020a
-			public const int maxSwipeOffset = 2130772490;
-			
-			// aapt resource value: 0x7f0101e3
-			public const int maximumDecimalDigits = 2130772451;
 			
 			// aapt resource value: 0x7f0100cf
 			public const int measureWithLargestChild = 2130772175;
@@ -1532,23 +1232,8 @@ namespace EDDMobile
 			// aapt resource value: 0x7f01011c
 			public const int navigationViewStyle = 2130772252;
 			
-			// aapt resource value: 0x7f0101e1
-			public const int numberFormat = 2130772449;
-			
-			// aapt resource value: 0x7f010213
-			public const int numericButtonBackground = 2130772499;
-			
-			// aapt resource value: 0x7f01020e
-			public const int numericButtonCount = 2130772494;
-			
 			// aapt resource value: 0x7f0100d3
 			public const int numericModifiers = 2130772179;
-			
-			// aapt resource value: 0x7f0101ea
-			public const int numericTextBoxValue = 2130772458;
-			
-			// aapt resource value: 0x7f010211
-			public const int orientation = 2130772497;
 			
 			// aapt resource value: 0x7f0100de
 			public const int overlapAnchor = 2130772190;
@@ -1565,12 +1250,6 @@ namespace EDDMobile
 			// aapt resource value: 0x7f0100e1
 			public const int paddingTopNoTitle = 2130772193;
 			
-			// aapt resource value: 0x7f010210
-			public const int pageCount = 2130772496;
-			
-			// aapt resource value: 0x7f01020f
-			public const int pageSize = 2130772495;
-			
 			// aapt resource value: 0x7f01009c
 			public const int panelBackground = 2130772124;
 			
@@ -1579,9 +1258,6 @@ namespace EDDMobile
 			
 			// aapt resource value: 0x7f01009d
 			public const int panelMenuListWidth = 2130772125;
-			
-			// aapt resource value: 0x7f0101dd
-			public const int parsingMode = 2130772445;
 			
 			// aapt resource value: 0x7f0101ba
 			public const int passwordToggleContentDescription = 2130772410;
@@ -1597,9 +1273,6 @@ namespace EDDMobile
 			
 			// aapt resource value: 0x7f0101bc
 			public const int passwordToggleTintMode = 2130772412;
-			
-			// aapt resource value: 0x7f0101de
-			public const int percentDisplayMode = 2130772446;
 			
 			// aapt resource value: 0x7f010089
 			public const int popupMenuStyle = 2130772105;
@@ -1640,17 +1313,11 @@ namespace EDDMobile
 			// aapt resource value: 0x7f0100bb
 			public const int ratingBarStyleSmall = 2130772155;
 			
-			// aapt resource value: 0x7f0101ee
-			public const int resizingMode = 2130772462;
-			
 			// aapt resource value: 0x7f010002
 			public const int reverseLayout = 2130771970;
 			
 			// aapt resource value: 0x7f01011d
 			public const int rippleColor = 2130772253;
-			
-			// aapt resource value: 0x7f0101ef
-			public const int rowHeaderWidth = 2130772463;
 			
 			// aapt resource value: 0x7f010171
 			public const int scrimAnimationDuration = 2130772337;
@@ -1660,9 +1327,6 @@ namespace EDDMobile
 			
 			// aapt resource value: 0x7f010170
 			public const int scrimVisibleHeightTrigger = 2130772336;
-			
-			// aapt resource value: 0x7f0101fd
-			public const int scrollingMode = 2130772477;
 			
 			// aapt resource value: 0x7f0100e9
 			public const int searchHintIcon = 2130772201;
@@ -1676,20 +1340,11 @@ namespace EDDMobile
 			// aapt resource value: 0x7f0100bc
 			public const int seekBarStyle = 2130772156;
 			
-			// aapt resource value: 0x7f0101e4
-			public const int selectAllOnFocus = 2130772452;
-			
 			// aapt resource value: 0x7f010081
 			public const int selectableItemBackground = 2130772097;
 			
 			// aapt resource value: 0x7f010082
 			public const int selectableItemBackgroundBorderless = 2130772098;
-			
-			// aapt resource value: 0x7f0101fc
-			public const int selectedIndex = 2130772476;
-			
-			// aapt resource value: 0x7f010214
-			public const int selectionForeground = 2130772500;
 			
 			// aapt resource value: 0x7f0100d4
 			public const int showAsAction = 2130772180;
@@ -1699,9 +1354,6 @@ namespace EDDMobile
 			
 			// aapt resource value: 0x7f01011f
 			public const int showMotionSpec = 2130772255;
-			
-			// aapt resource value: 0x7f0101f0
-			public const int showRowHeader = 2130772464;
 			
 			// aapt resource value: 0x7f0100f9
 			public const int showText = 2130772217;
@@ -1723,9 +1375,6 @@ namespace EDDMobile
 			
 			// aapt resource value: 0x7f010190
 			public const int snackbarStyle = 2130772368;
-			
-			// aapt resource value: 0x7f0101f4
-			public const int sortTapAction = 2130772468;
 			
 			// aapt resource value: 0x7f010001
 			public const int spanCount = 2130771969;
@@ -2063,26 +1712,11 @@ namespace EDDMobile
 			// aapt resource value: 0x7f01017c
 			public const int useCompatPadding = 2130772348;
 			
-			// aapt resource value: 0x7f010212
-			public const int useOnDemandPaging = 2130772498;
-			
-			// aapt resource value: 0x7f0101df
-			public const int valueChangeMode = 2130772447;
-			
-			// aapt resource value: 0x7f0101fe
-			public const int verticalOverScrollMode = 2130772478;
-			
 			// aapt resource value: 0x7f0100c3
 			public const int viewInflaterClass = 2130772163;
 			
 			// aapt resource value: 0x7f0100ea
 			public const int voiceIcon = 2130772202;
-			
-			// aapt resource value: 0x7f0101e2
-			public const int watermark = 2130772450;
-			
-			// aapt resource value: 0x7f0101e8
-			public const int watermarkColor = 2130772456;
 			
 			// aapt resource value: 0x7f01004d
 			public const int windowActionBar = 2130772045;
@@ -3487,154 +3121,106 @@ namespace EDDMobile
 			public const int abc_vector_test = 2130837587;
 			
 			// aapt resource value: 0x7f020054
-			public const int Ascending = 2130837588;
-			
-			// aapt resource value: 0x7f020055
-			public const int avd_hide_password = 2130837589;
-			
-			// aapt resource value: 0x7f020080
-			public const int avd_hide_password_1 = 2130837632;
-			
-			// aapt resource value: 0x7f020081
-			public const int avd_hide_password_2 = 2130837633;
-			
-			// aapt resource value: 0x7f020082
-			public const int avd_hide_password_3 = 2130837634;
-			
-			// aapt resource value: 0x7f020056
-			public const int avd_show_password = 2130837590;
-			
-			// aapt resource value: 0x7f020083
-			public const int avd_show_password_1 = 2130837635;
-			
-			// aapt resource value: 0x7f020084
-			public const int avd_show_password_2 = 2130837636;
-			
-			// aapt resource value: 0x7f020085
-			public const int avd_show_password_3 = 2130837637;
-			
-			// aapt resource value: 0x7f020057
-			public const int Descending = 2130837591;
-			
-			// aapt resource value: 0x7f020058
-			public const int design_bottom_navigation_item_background = 2130837592;
-			
-			// aapt resource value: 0x7f020059
-			public const int design_fab_background = 2130837593;
-			
-			// aapt resource value: 0x7f02005a
-			public const int design_ic_visibility = 2130837594;
-			
-			// aapt resource value: 0x7f02005b
-			public const int design_ic_visibility_off = 2130837595;
-			
-			// aapt resource value: 0x7f02005c
-			public const int design_password_eye = 2130837596;
-			
-			// aapt resource value: 0x7f02005d
-			public const int design_snackbar_background = 2130837597;
-			
-			// aapt resource value: 0x7f02005e
-			public const int Drag_and_Drop_Icon = 2130837598;
-			
-			// aapt resource value: 0x7f02005f
-			public const int DragDown = 2130837599;
-			
-			// aapt resource value: 0x7f020060
-			public const int DragUp = 2130837600;
-			
-			// aapt resource value: 0x7f020061
-			public const int error2 = 2130837601;
-			
-			// aapt resource value: 0x7f020062
-			public const int FirstPageIcon = 2130837602;
-			
-			// aapt resource value: 0x7f020063
-			public const int GroupCollapse = 2130837603;
-			
-			// aapt resource value: 0x7f020064
-			public const int GroupExpander = 2130837604;
-			
-			// aapt resource value: 0x7f020065
-			public const int GroupIcon_Android = 2130837605;
-			
-			// aapt resource value: 0x7f020066
-			public const int ic_mtrl_chip_checked_black = 2130837606;
-			
-			// aapt resource value: 0x7f020067
-			public const int ic_mtrl_chip_checked_circle = 2130837607;
-			
-			// aapt resource value: 0x7f020068
-			public const int ic_mtrl_chip_close_circle = 2130837608;
-			
-			// aapt resource value: 0x7f020069
-			public const int LastPageIcon = 2130837609;
-			
-			// aapt resource value: 0x7f02006a
-			public const int mtrl_snackbar_background = 2130837610;
-			
-			// aapt resource value: 0x7f02006b
-			public const int mtrl_tabs_default_indicator = 2130837611;
-			
-			// aapt resource value: 0x7f02006c
-			public const int navigation_empty_icon = 2130837612;
-			
-			// aapt resource value: 0x7f02006d
-			public const int NextPageIcon = 2130837613;
-			
-			// aapt resource value: 0x7f02006e
-			public const int notification_action_background = 2130837614;
-			
-			// aapt resource value: 0x7f02006f
-			public const int notification_bg = 2130837615;
+			public const int avd_hide_password = 2130837588;
 			
 			// aapt resource value: 0x7f020070
-			public const int notification_bg_low = 2130837616;
+			public const int avd_hide_password_1 = 2130837616;
 			
 			// aapt resource value: 0x7f020071
-			public const int notification_bg_low_normal = 2130837617;
+			public const int avd_hide_password_2 = 2130837617;
 			
 			// aapt resource value: 0x7f020072
-			public const int notification_bg_low_pressed = 2130837618;
+			public const int avd_hide_password_3 = 2130837618;
+			
+			// aapt resource value: 0x7f020055
+			public const int avd_show_password = 2130837589;
 			
 			// aapt resource value: 0x7f020073
-			public const int notification_bg_normal = 2130837619;
+			public const int avd_show_password_1 = 2130837619;
 			
 			// aapt resource value: 0x7f020074
-			public const int notification_bg_normal_pressed = 2130837620;
+			public const int avd_show_password_2 = 2130837620;
 			
 			// aapt resource value: 0x7f020075
-			public const int notification_icon_background = 2130837621;
+			public const int avd_show_password_3 = 2130837621;
 			
-			// aapt resource value: 0x7f02007e
-			public const int notification_template_icon_bg = 2130837630;
+			// aapt resource value: 0x7f020056
+			public const int design_bottom_navigation_item_background = 2130837590;
 			
-			// aapt resource value: 0x7f02007f
-			public const int notification_template_icon_low_bg = 2130837631;
+			// aapt resource value: 0x7f020057
+			public const int design_fab_background = 2130837591;
 			
-			// aapt resource value: 0x7f020076
-			public const int notification_tile_bg = 2130837622;
+			// aapt resource value: 0x7f020058
+			public const int design_ic_visibility = 2130837592;
 			
-			// aapt resource value: 0x7f020077
-			public const int notify_panel_notification_icon_bg = 2130837623;
+			// aapt resource value: 0x7f020059
+			public const int design_ic_visibility_off = 2130837593;
 			
-			// aapt resource value: 0x7f020078
-			public const int PrevPageIcon = 2130837624;
+			// aapt resource value: 0x7f02005a
+			public const int design_password_eye = 2130837594;
 			
-			// aapt resource value: 0x7f020079
-			public const int ResizingIcon = 2130837625;
+			// aapt resource value: 0x7f02005b
+			public const int design_snackbar_background = 2130837595;
 			
-			// aapt resource value: 0x7f02007a
-			public const int Sort = 2130837626;
+			// aapt resource value: 0x7f02005c
+			public const int ic_mtrl_chip_checked_black = 2130837596;
 			
-			// aapt resource value: 0x7f02007b
-			public const int SortDescending = 2130837627;
+			// aapt resource value: 0x7f02005d
+			public const int ic_mtrl_chip_checked_circle = 2130837597;
 			
-			// aapt resource value: 0x7f02007c
-			public const int tooltip_frame_dark = 2130837628;
+			// aapt resource value: 0x7f02005e
+			public const int ic_mtrl_chip_close_circle = 2130837598;
 			
-			// aapt resource value: 0x7f02007d
-			public const int tooltip_frame_light = 2130837629;
+			// aapt resource value: 0x7f02005f
+			public const int mtrl_snackbar_background = 2130837599;
+			
+			// aapt resource value: 0x7f020060
+			public const int mtrl_tabs_default_indicator = 2130837600;
+			
+			// aapt resource value: 0x7f020061
+			public const int navigation_empty_icon = 2130837601;
+			
+			// aapt resource value: 0x7f020062
+			public const int notification_action_background = 2130837602;
+			
+			// aapt resource value: 0x7f020063
+			public const int notification_bg = 2130837603;
+			
+			// aapt resource value: 0x7f020064
+			public const int notification_bg_low = 2130837604;
+			
+			// aapt resource value: 0x7f020065
+			public const int notification_bg_low_normal = 2130837605;
+			
+			// aapt resource value: 0x7f020066
+			public const int notification_bg_low_pressed = 2130837606;
+			
+			// aapt resource value: 0x7f020067
+			public const int notification_bg_normal = 2130837607;
+			
+			// aapt resource value: 0x7f020068
+			public const int notification_bg_normal_pressed = 2130837608;
+			
+			// aapt resource value: 0x7f020069
+			public const int notification_icon_background = 2130837609;
+			
+			// aapt resource value: 0x7f02006e
+			public const int notification_template_icon_bg = 2130837614;
+			
+			// aapt resource value: 0x7f02006f
+			public const int notification_template_icon_low_bg = 2130837615;
+			
+			// aapt resource value: 0x7f02006a
+			public const int notification_tile_bg = 2130837610;
+			
+			// aapt resource value: 0x7f02006b
+			public const int notify_panel_notification_icon_bg = 2130837611;
+			
+			// aapt resource value: 0x7f02006c
+			public const int tooltip_frame_dark = 2130837612;
+			
+			// aapt resource value: 0x7f02006d
+			public const int tooltip_frame_light = 2130837613;
 			
 			static Drawable()
 			{
@@ -3667,38 +3253,38 @@ namespace EDDMobile
 			// aapt resource value: 0x7f0a003e
 			public const int SYM = 2131361854;
 			
-			// aapt resource value: 0x7f0a00a5
-			public const int action_bar = 2131361957;
+			// aapt resource value: 0x7f0a008d
+			public const int action_bar = 2131361933;
 			
 			// aapt resource value: 0x7f0a0001
 			public const int action_bar_activity_content = 2131361793;
 			
-			// aapt resource value: 0x7f0a00a4
-			public const int action_bar_container = 2131361956;
+			// aapt resource value: 0x7f0a008c
+			public const int action_bar_container = 2131361932;
 			
-			// aapt resource value: 0x7f0a00a0
-			public const int action_bar_root = 2131361952;
+			// aapt resource value: 0x7f0a0088
+			public const int action_bar_root = 2131361928;
 			
 			// aapt resource value: 0x7f0a0002
 			public const int action_bar_spinner = 2131361794;
 			
-			// aapt resource value: 0x7f0a0082
-			public const int action_bar_subtitle = 2131361922;
+			// aapt resource value: 0x7f0a006a
+			public const int action_bar_subtitle = 2131361898;
 			
-			// aapt resource value: 0x7f0a0081
-			public const int action_bar_title = 2131361921;
+			// aapt resource value: 0x7f0a0069
+			public const int action_bar_title = 2131361897;
 			
-			// aapt resource value: 0x7f0a00c8
-			public const int action_container = 2131361992;
+			// aapt resource value: 0x7f0a00af
+			public const int action_container = 2131361967;
 			
-			// aapt resource value: 0x7f0a00a6
-			public const int action_context_bar = 2131361958;
+			// aapt resource value: 0x7f0a008e
+			public const int action_context_bar = 2131361934;
 			
-			// aapt resource value: 0x7f0a00d3
-			public const int action_divider = 2131362003;
+			// aapt resource value: 0x7f0a00ba
+			public const int action_divider = 2131361978;
 			
-			// aapt resource value: 0x7f0a00c9
-			public const int action_image = 2131361993;
+			// aapt resource value: 0x7f0a00b0
+			public const int action_image = 2131361968;
 			
 			// aapt resource value: 0x7f0a0003
 			public const int action_menu_divider = 2131361795;
@@ -3706,29 +3292,29 @@ namespace EDDMobile
 			// aapt resource value: 0x7f0a0004
 			public const int action_menu_presenter = 2131361796;
 			
-			// aapt resource value: 0x7f0a00a2
-			public const int action_mode_bar = 2131361954;
+			// aapt resource value: 0x7f0a008a
+			public const int action_mode_bar = 2131361930;
 			
-			// aapt resource value: 0x7f0a00a1
-			public const int action_mode_bar_stub = 2131361953;
+			// aapt resource value: 0x7f0a0089
+			public const int action_mode_bar_stub = 2131361929;
 			
-			// aapt resource value: 0x7f0a0083
-			public const int action_mode_close_button = 2131361923;
+			// aapt resource value: 0x7f0a006b
+			public const int action_mode_close_button = 2131361899;
 			
-			// aapt resource value: 0x7f0a00ca
-			public const int action_text = 2131361994;
+			// aapt resource value: 0x7f0a00b1
+			public const int action_text = 2131361969;
 			
-			// aapt resource value: 0x7f0a00d4
-			public const int actions = 2131362004;
+			// aapt resource value: 0x7f0a00bb
+			public const int actions = 2131361979;
 			
-			// aapt resource value: 0x7f0a0084
-			public const int activity_chooser_view_content = 2131361924;
+			// aapt resource value: 0x7f0a006c
+			public const int activity_chooser_view_content = 2131361900;
 			
 			// aapt resource value: 0x7f0a002e
 			public const int add = 2131361838;
 			
-			// aapt resource value: 0x7f0a0097
-			public const int alertTitle = 2131361943;
+			// aapt resource value: 0x7f0a007f
+			public const int alertTitle = 2131361919;
 			
 			// aapt resource value: 0x7f0a0064
 			public const int all = 2131361892;
@@ -3751,26 +3337,23 @@ namespace EDDMobile
 			// aapt resource value: 0x7f0a0044
 			public const int bottom = 2131361860;
 			
-			// aapt resource value: 0x7f0a007c
-			public const int bounce = 2131361916;
+			// aapt resource value: 0x7f0a009f
+			public const int browser_actions_header_text = 2131361951;
 			
-			// aapt resource value: 0x7f0a00b8
-			public const int browser_actions_header_text = 2131361976;
+			// aapt resource value: 0x7f0a00a1
+			public const int browser_actions_menu_item_icon = 2131361953;
 			
-			// aapt resource value: 0x7f0a00ba
-			public const int browser_actions_menu_item_icon = 2131361978;
+			// aapt resource value: 0x7f0a00a2
+			public const int browser_actions_menu_item_text = 2131361954;
 			
-			// aapt resource value: 0x7f0a00bb
-			public const int browser_actions_menu_item_text = 2131361979;
+			// aapt resource value: 0x7f0a00a0
+			public const int browser_actions_menu_items = 2131361952;
 			
-			// aapt resource value: 0x7f0a00b9
-			public const int browser_actions_menu_items = 2131361977;
+			// aapt resource value: 0x7f0a009e
+			public const int browser_actions_menu_view = 2131361950;
 			
-			// aapt resource value: 0x7f0a00b7
-			public const int browser_actions_menu_view = 2131361975;
-			
-			// aapt resource value: 0x7f0a008a
-			public const int buttonPanel = 2131361930;
+			// aapt resource value: 0x7f0a0072
+			public const int buttonPanel = 2131361906;
 			
 			// aapt resource value: 0x7f0a004c
 			public const int center = 2131361868;
@@ -3781,11 +3364,11 @@ namespace EDDMobile
 			// aapt resource value: 0x7f0a0052
 			public const int center_vertical = 2131361874;
 			
-			// aapt resource value: 0x7f0a009e
-			public const int checkbox = 2131361950;
+			// aapt resource value: 0x7f0a0086
+			public const int checkbox = 2131361926;
 			
-			// aapt resource value: 0x7f0a00d2
-			public const int chronometer = 2131362002;
+			// aapt resource value: 0x7f0a00b9
+			public const int chronometer = 2131361977;
 			
 			// aapt resource value: 0x7f0a0061
 			public const int clip_horizontal = 2131361889;
@@ -3796,62 +3379,50 @@ namespace EDDMobile
 			// aapt resource value: 0x7f0a0040
 			public const int collapseActionView = 2131361856;
 			
-			// aapt resource value: 0x7f0a006b
-			public const int compute = 2131361899;
+			// aapt resource value: 0x7f0a00a5
+			public const int container = 2131361957;
 			
-			// aapt resource value: 0x7f0a00be
-			public const int container = 2131361982;
+			// aapt resource value: 0x7f0a0082
+			public const int content = 2131361922;
 			
-			// aapt resource value: 0x7f0a009a
-			public const int content = 2131361946;
+			// aapt resource value: 0x7f0a0075
+			public const int contentPanel = 2131361909;
 			
-			// aapt resource value: 0x7f0a008d
-			public const int contentPanel = 2131361933;
+			// aapt resource value: 0x7f0a00a6
+			public const int coordinator = 2131361958;
 			
-			// aapt resource value: 0x7f0a00bf
-			public const int coordinator = 2131361983;
+			// aapt resource value: 0x7f0a007c
+			public const int custom = 2131361916;
 			
-			// aapt resource value: 0x7f0a0094
-			public const int custom = 2131361940;
+			// aapt resource value: 0x7f0a007b
+			public const int customPanel = 2131361915;
 			
-			// aapt resource value: 0x7f0a0093
-			public const int customPanel = 2131361939;
+			// aapt resource value: 0x7f0a008b
+			public const int decor_content_parent = 2131361931;
 			
-			// aapt resource value: 0x7f0a0069
-			public const int decimalMode = 2131361897;
+			// aapt resource value: 0x7f0a006f
+			public const int default_activity_button = 2131361903;
 			
-			// aapt resource value: 0x7f0a00a3
-			public const int decor_content_parent = 2131361955;
+			// aapt resource value: 0x7f0a00a8
+			public const int design_bottom_sheet = 2131361960;
 			
-			// aapt resource value: 0x7f0a0087
-			public const int default_activity_button = 2131361927;
+			// aapt resource value: 0x7f0a00ad
+			public const int design_menu_item_action_area = 2131361965;
 			
-			// aapt resource value: 0x7f0a00c1
-			public const int design_bottom_sheet = 2131361985;
+			// aapt resource value: 0x7f0a00ac
+			public const int design_menu_item_action_area_stub = 2131361964;
 			
-			// aapt resource value: 0x7f0a00c6
-			public const int design_menu_item_action_area = 2131361990;
+			// aapt resource value: 0x7f0a00ab
+			public const int design_menu_item_text = 2131361963;
 			
-			// aapt resource value: 0x7f0a00c5
-			public const int design_menu_item_action_area_stub = 2131361989;
-			
-			// aapt resource value: 0x7f0a00c4
-			public const int design_menu_item_text = 2131361988;
-			
-			// aapt resource value: 0x7f0a00c3
-			public const int design_navigation_view = 2131361987;
+			// aapt resource value: 0x7f0a00aa
+			public const int design_navigation_view = 2131361962;
 			
 			// aapt resource value: 0x7f0a0027
 			public const int disableHome = 2131361831;
 			
-			// aapt resource value: 0x7f0a006a
-			public const int doubleMode = 2131361898;
-			
-			// aapt resource value: 0x7f0a0071
-			public const int doubleTap = 2131361905;
-			
-			// aapt resource value: 0x7f0a00a7
-			public const int edit_query = 2131361959;
+			// aapt resource value: 0x7f0a008f
+			public const int edit_query = 2131361935;
 			
 			// aapt resource value: 0x7f0a0037
 			public const int end = 2131361847;
@@ -3865,11 +3436,11 @@ namespace EDDMobile
 			// aapt resource value: 0x7f0a0048
 			public const int exitUntilCollapsed = 2131361864;
 			
-			// aapt resource value: 0x7f0a0085
-			public const int expand_activities_button = 2131361925;
+			// aapt resource value: 0x7f0a006d
+			public const int expand_activities_button = 2131361901;
 			
-			// aapt resource value: 0x7f0a009d
-			public const int expanded_menu = 2131361949;
+			// aapt resource value: 0x7f0a0085
+			public const int expanded_menu = 2131361925;
 			
 			// aapt resource value: 0x7f0a005e
 			public const int fill = 2131361886;
@@ -3892,8 +3463,8 @@ namespace EDDMobile
 			// aapt resource value: 0x7f0a000a
 			public const int ghost_view = 2131361802;
 			
-			// aapt resource value: 0x7f0a0099
-			public const int group_divider = 2131361945;
+			// aapt resource value: 0x7f0a0081
+			public const int group_divider = 2131361921;
 			
 			// aapt resource value: 0x7f0a0005
 			public const int home = 2131361797;
@@ -3901,23 +3472,20 @@ namespace EDDMobile
 			// aapt resource value: 0x7f0a0028
 			public const int homeAsUp = 2131361832;
 			
-			// aapt resource value: 0x7f0a007f
-			public const int horizontal = 2131361919;
+			// aapt resource value: 0x7f0a0071
+			public const int icon = 2131361905;
 			
-			// aapt resource value: 0x7f0a0089
-			public const int icon = 2131361929;
-			
-			// aapt resource value: 0x7f0a00d5
-			public const int icon_group = 2131362005;
+			// aapt resource value: 0x7f0a00bc
+			public const int icon_group = 2131361980;
 			
 			// aapt resource value: 0x7f0a0041
 			public const int ifRoom = 2131361857;
 			
-			// aapt resource value: 0x7f0a0086
-			public const int image = 2131361926;
+			// aapt resource value: 0x7f0a006e
+			public const int image = 2131361902;
 			
-			// aapt resource value: 0x7f0a00ce
-			public const int info = 2131361998;
+			// aapt resource value: 0x7f0a00b5
+			public const int info = 2131361973;
 			
 			// aapt resource value: 0x7f0a0068
 			public const int italic = 2131361896;
@@ -3925,26 +3493,17 @@ namespace EDDMobile
 			// aapt resource value: 0x7f0a0000
 			public const int item_touch_helper_previous_elevation = 2131361792;
 			
-			// aapt resource value: 0x7f0a00b6
-			public const int journalDatagrid = 2131361974;
-			
-			// aapt resource value: 0x7f0a00b5
-			public const int journalEntry = 2131361973;
+			// aapt resource value: 0x7f0a009d
+			public const int journalListView = 2131361949;
 			
 			// aapt resource value: 0x7f0a004e
 			public const int labeled = 2131361870;
 			
-			// aapt resource value: 0x7f0a00bd
-			public const int largeLabel = 2131361981;
-			
-			// aapt resource value: 0x7f0a007d
-			public const int lastCoulmnFill = 2131361917;
+			// aapt resource value: 0x7f0a00a4
+			public const int largeLabel = 2131361956;
 			
 			// aapt resource value: 0x7f0a0054
 			public const int left = 2131361876;
-			
-			// aapt resource value: 0x7f0a0079
-			public const int line = 2131361913;
 			
 			// aapt resource value: 0x7f0a001c
 			public const int line1 = 2131361820;
@@ -3955,14 +3514,14 @@ namespace EDDMobile
 			// aapt resource value: 0x7f0a0024
 			public const int listMode = 2131361828;
 			
-			// aapt resource value: 0x7f0a0088
-			public const int list_item = 2131361928;
+			// aapt resource value: 0x7f0a0070
+			public const int list_item = 2131361904;
 			
-			// aapt resource value: 0x7f0a00d7
-			public const int masked = 2131362007;
+			// aapt resource value: 0x7f0a00be
+			public const int masked = 2131361982;
 			
-			// aapt resource value: 0x7f0a00b4
-			public const int message = 2131361972;
+			// aapt resource value: 0x7f0a009c
+			public const int message = 2131361948;
 			
 			// aapt resource value: 0x7f0a0038
 			public const int middle = 2131361848;
@@ -3970,23 +3529,17 @@ namespace EDDMobile
 			// aapt resource value: 0x7f0a0059
 			public const int mini = 2131361881;
 			
-			// aapt resource value: 0x7f0a0076
-			public const int moveLast = 2131361910;
-			
 			// aapt resource value: 0x7f0a0014
 			public const int mtrl_child_content_container = 2131361812;
 			
 			// aapt resource value: 0x7f0a0015
 			public const int mtrl_internal_children_alpha_tag = 2131361813;
 			
-			// aapt resource value: 0x7f0a0073
-			public const int multiple = 2131361907;
-			
 			// aapt resource value: 0x7f0a002f
 			public const int multiply = 2131361839;
 			
-			// aapt resource value: 0x7f0a00c2
-			public const int navigation_header_container = 2131361986;
+			// aapt resource value: 0x7f0a00a9
+			public const int navigation_header_container = 2131361961;
 			
 			// aapt resource value: 0x7f0a0042
 			public const int never = 2131361858;
@@ -3997,29 +3550,14 @@ namespace EDDMobile
 			// aapt resource value: 0x7f0a0025
 			public const int normal = 2131361829;
 			
-			// aapt resource value: 0x7f0a00d0
-			public const int notification_background = 2131362000;
+			// aapt resource value: 0x7f0a00b7
+			public const int notification_background = 2131361975;
 			
-			// aapt resource value: 0x7f0a00cc
-			public const int notification_main_column = 2131361996;
+			// aapt resource value: 0x7f0a00b3
+			public const int notification_main_column = 2131361971;
 			
-			// aapt resource value: 0x7f0a00cb
-			public const int notification_main_column_container = 2131361995;
-			
-			// aapt resource value: 0x7f0a006d
-			public const int onKeyFocus = 2131361901;
-			
-			// aapt resource value: 0x7f0a006e
-			public const int onLostFocus = 2131361902;
-			
-			// aapt resource value: 0x7f0a006f
-			public const int onMoved = 2131361903;
-			
-			// aapt resource value: 0x7f0a0075
-			public const int onTap = 2131361909;
-			
-			// aapt resource value: 0x7f0a0070
-			public const int onTouchUp = 2131361904;
+			// aapt resource value: 0x7f0a00b2
+			public const int notification_main_column_container = 2131361970;
 			
 			// aapt resource value: 0x7f0a0060
 			public const int outline = 2131361888;
@@ -4027,8 +3565,8 @@ namespace EDDMobile
 			// aapt resource value: 0x7f0a0057
 			public const int parallax = 2131361879;
 			
-			// aapt resource value: 0x7f0a008c
-			public const int parentPanel = 2131361932;
+			// aapt resource value: 0x7f0a0074
+			public const int parentPanel = 2131361908;
 			
 			// aapt resource value: 0x7f0a000b
 			public const int parent_matrix = 2131361803;
@@ -4036,29 +3574,23 @@ namespace EDDMobile
 			// aapt resource value: 0x7f0a0058
 			public const int pin = 2131361880;
 			
-			// aapt resource value: 0x7f0a007a
-			public const int pixel = 2131361914;
-			
-			// aapt resource value: 0x7f0a007b
-			public const int pixelLine = 2131361915;
-			
 			// aapt resource value: 0x7f0a0006
 			public const int progress_circular = 2131361798;
 			
 			// aapt resource value: 0x7f0a0007
 			public const int progress_horizontal = 2131361799;
 			
-			// aapt resource value: 0x7f0a009f
-			public const int radio = 2131361951;
+			// aapt resource value: 0x7f0a0087
+			public const int radio = 2131361927;
 			
 			// aapt resource value: 0x7f0a0055
 			public const int right = 2131361877;
 			
-			// aapt resource value: 0x7f0a00cf
-			public const int right_icon = 2131361999;
+			// aapt resource value: 0x7f0a00b6
+			public const int right_icon = 2131361974;
 			
-			// aapt resource value: 0x7f0a00cd
-			public const int right_side = 2131361997;
+			// aapt resource value: 0x7f0a00b4
+			public const int right_side = 2131361972;
 			
 			// aapt resource value: 0x7f0a000c
 			public const int save_image_matrix = 2131361804;
@@ -4075,59 +3607,56 @@ namespace EDDMobile
 			// aapt resource value: 0x7f0a0049
 			public const int scroll = 2131361865;
 			
-			// aapt resource value: 0x7f0a0092
-			public const int scrollIndicatorDown = 2131361938;
+			// aapt resource value: 0x7f0a007a
+			public const int scrollIndicatorDown = 2131361914;
 			
-			// aapt resource value: 0x7f0a008e
-			public const int scrollIndicatorUp = 2131361934;
+			// aapt resource value: 0x7f0a0076
+			public const int scrollIndicatorUp = 2131361910;
 			
-			// aapt resource value: 0x7f0a008f
-			public const int scrollView = 2131361935;
+			// aapt resource value: 0x7f0a0077
+			public const int scrollView = 2131361911;
 			
 			// aapt resource value: 0x7f0a005d
 			public const int scrollable = 2131361885;
 			
-			// aapt resource value: 0x7f0a00a9
-			public const int search_badge = 2131361961;
+			// aapt resource value: 0x7f0a0091
+			public const int search_badge = 2131361937;
 			
-			// aapt resource value: 0x7f0a00a8
-			public const int search_bar = 2131361960;
+			// aapt resource value: 0x7f0a0090
+			public const int search_bar = 2131361936;
 			
-			// aapt resource value: 0x7f0a00aa
-			public const int search_button = 2131361962;
+			// aapt resource value: 0x7f0a0092
+			public const int search_button = 2131361938;
 			
-			// aapt resource value: 0x7f0a00af
-			public const int search_close_btn = 2131361967;
+			// aapt resource value: 0x7f0a0097
+			public const int search_close_btn = 2131361943;
 			
-			// aapt resource value: 0x7f0a00ab
-			public const int search_edit_frame = 2131361963;
+			// aapt resource value: 0x7f0a0093
+			public const int search_edit_frame = 2131361939;
 			
-			// aapt resource value: 0x7f0a00b1
-			public const int search_go_btn = 2131361969;
+			// aapt resource value: 0x7f0a0099
+			public const int search_go_btn = 2131361945;
 			
-			// aapt resource value: 0x7f0a00ac
-			public const int search_mag_icon = 2131361964;
+			// aapt resource value: 0x7f0a0094
+			public const int search_mag_icon = 2131361940;
 			
-			// aapt resource value: 0x7f0a00ad
-			public const int search_plate = 2131361965;
+			// aapt resource value: 0x7f0a0095
+			public const int search_plate = 2131361941;
 			
-			// aapt resource value: 0x7f0a00ae
-			public const int search_src_text = 2131361966;
+			// aapt resource value: 0x7f0a0096
+			public const int search_src_text = 2131361942;
 			
-			// aapt resource value: 0x7f0a00b2
-			public const int search_voice_btn = 2131361970;
+			// aapt resource value: 0x7f0a009a
+			public const int search_voice_btn = 2131361946;
 			
-			// aapt resource value: 0x7f0a0077
-			public const int selectAll = 2131361911;
-			
-			// aapt resource value: 0x7f0a00b3
-			public const int select_dialog_listview = 2131361971;
+			// aapt resource value: 0x7f0a009b
+			public const int select_dialog_listview = 2131361947;
 			
 			// aapt resource value: 0x7f0a004f
 			public const int selected = 2131361871;
 			
-			// aapt resource value: 0x7f0a009b
-			public const int shortcut = 2131361947;
+			// aapt resource value: 0x7f0a0083
+			public const int shortcut = 2131361923;
 			
 			// aapt resource value: 0x7f0a002a
 			public const int showCustom = 2131361834;
@@ -4138,17 +3667,8 @@ namespace EDDMobile
 			// aapt resource value: 0x7f0a002c
 			public const int showTitle = 2131361836;
 			
-			// aapt resource value: 0x7f0a0074
-			public const int single = 2131361908;
-			
-			// aapt resource value: 0x7f0a0078
-			public const int singleDeSelect = 2131361912;
-			
-			// aapt resource value: 0x7f0a0072
-			public const int singleTap = 2131361906;
-			
-			// aapt resource value: 0x7f0a00bc
-			public const int smallLabel = 2131361980;
+			// aapt resource value: 0x7f0a00a3
+			public const int smallLabel = 2131361955;
 			
 			// aapt resource value: 0x7f0a0016
 			public const int snackbar_action = 2131361814;
@@ -4162,8 +3682,8 @@ namespace EDDMobile
 			// aapt resource value: 0x7f0a004b
 			public const int snapMargins = 2131361867;
 			
-			// aapt resource value: 0x7f0a008b
-			public const int spacer = 2131361931;
+			// aapt resource value: 0x7f0a0073
+			public const int spacer = 2131361907;
 			
 			// aapt resource value: 0x7f0a0008
 			public const int split_action_bar = 2131361800;
@@ -4177,20 +3697,17 @@ namespace EDDMobile
 			// aapt resource value: 0x7f0a0033
 			public const int src_over = 2131361843;
 			
-			// aapt resource value: 0x7f0a007e
-			public const int star = 2131361918;
-			
 			// aapt resource value: 0x7f0a0056
 			public const int start = 2131361878;
 			
 			// aapt resource value: 0x7f0a005b
 			public const int stretch = 2131361883;
 			
-			// aapt resource value: 0x7f0a009c
-			public const int submenuarrow = 2131361948;
+			// aapt resource value: 0x7f0a0084
+			public const int submenuarrow = 2131361924;
 			
-			// aapt resource value: 0x7f0a00b0
-			public const int submit_area = 2131361968;
+			// aapt resource value: 0x7f0a0098
+			public const int submit_area = 2131361944;
 			
 			// aapt resource value: 0x7f0a0026
 			public const int tabMode = 2131361830;
@@ -4210,17 +3727,17 @@ namespace EDDMobile
 			// aapt resource value: 0x7f0a0022
 			public const int text2 = 2131361826;
 			
-			// aapt resource value: 0x7f0a0091
-			public const int textSpacerNoButtons = 2131361937;
+			// aapt resource value: 0x7f0a0079
+			public const int textSpacerNoButtons = 2131361913;
 			
-			// aapt resource value: 0x7f0a0090
-			public const int textSpacerNoTitle = 2131361936;
+			// aapt resource value: 0x7f0a0078
+			public const int textSpacerNoTitle = 2131361912;
 			
 			// aapt resource value: 0x7f0a005a
 			public const int textStart = 2131361882;
 			
-			// aapt resource value: 0x7f0a00c7
-			public const int text_input_password_toggle = 2131361991;
+			// aapt resource value: 0x7f0a00ae
+			public const int text_input_password_toggle = 2131361966;
 			
 			// aapt resource value: 0x7f0a0018
 			public const int textinput_counter = 2131361816;
@@ -4231,26 +3748,26 @@ namespace EDDMobile
 			// aapt resource value: 0x7f0a001a
 			public const int textinput_helper_text = 2131361818;
 			
-			// aapt resource value: 0x7f0a00d1
-			public const int time = 2131362001;
+			// aapt resource value: 0x7f0a00b8
+			public const int time = 2131361976;
 			
 			// aapt resource value: 0x7f0a0023
 			public const int title = 2131361827;
 			
-			// aapt resource value: 0x7f0a0098
-			public const int titleDividerNoCustom = 2131361944;
+			// aapt resource value: 0x7f0a0080
+			public const int titleDividerNoCustom = 2131361920;
 			
-			// aapt resource value: 0x7f0a0096
-			public const int title_template = 2131361942;
+			// aapt resource value: 0x7f0a007e
+			public const int title_template = 2131361918;
 			
 			// aapt resource value: 0x7f0a0045
 			public const int top = 2131361861;
 			
-			// aapt resource value: 0x7f0a0095
-			public const int topPanel = 2131361941;
+			// aapt resource value: 0x7f0a007d
+			public const int topPanel = 2131361917;
 			
-			// aapt resource value: 0x7f0a00c0
-			public const int touch_outside = 2131361984;
+			// aapt resource value: 0x7f0a00a7
+			public const int touch_outside = 2131361959;
 			
 			// aapt resource value: 0x7f0a000f
 			public const int transition_current_scene = 2131361807;
@@ -4279,17 +3796,11 @@ namespace EDDMobile
 			// aapt resource value: 0x7f0a002d
 			public const int useLogo = 2131361837;
 			
-			// aapt resource value: 0x7f0a006c
-			public const int value = 2131361900;
-			
-			// aapt resource value: 0x7f0a0080
-			public const int vertical = 2131361920;
-			
 			// aapt resource value: 0x7f0a001b
 			public const int view_offset_helper = 2131361819;
 			
-			// aapt resource value: 0x7f0a00d6
-			public const int visible = 2131362006;
+			// aapt resource value: 0x7f0a00bd
+			public const int visible = 2131361981;
 			
 			// aapt resource value: 0x7f0a0043
 			public const int withText = 2131361859;
@@ -4553,19 +4064,16 @@ namespace EDDMobile
 			public const int notification_template_part_time = 2130968628;
 			
 			// aapt resource value: 0x7f040035
-			public const int ScrollViewer = 2130968629;
+			public const int select_dialog_item_material = 2130968629;
 			
 			// aapt resource value: 0x7f040036
-			public const int select_dialog_item_material = 2130968630;
+			public const int select_dialog_multichoice_material = 2130968630;
 			
 			// aapt resource value: 0x7f040037
-			public const int select_dialog_multichoice_material = 2130968631;
+			public const int select_dialog_singlechoice_material = 2130968631;
 			
 			// aapt resource value: 0x7f040038
-			public const int select_dialog_singlechoice_material = 2130968632;
-			
-			// aapt resource value: 0x7f040039
-			public const int support_simple_spinner_dropdown_item = 2130968633;
+			public const int support_simple_spinner_dropdown_item = 2130968632;
 			
 			static Layout()
 			{
@@ -4719,11 +4227,11 @@ namespace EDDMobile
 			// aapt resource value: 0x7f0d001a
 			public const int abc_toolbar_collapse_description = 2131558426;
 			
-			// aapt resource value: 0x7f0d0038
-			public const int action_settings = 2131558456;
-			
 			// aapt resource value: 0x7f0d0037
-			public const int app_name = 2131558455;
+			public const int action_settings = 2131558455;
+			
+			// aapt resource value: 0x7f0d0036
+			public const int app_name = 2131558454;
 			
 			// aapt resource value: 0x7f0d0028
 			public const int appbar_scrolling_view_behavior = 2131558440;
@@ -4745,9 +4253,6 @@ namespace EDDMobile
 			
 			// aapt resource value: 0x7f0d002e
 			public const int hide_bottom_view_on_scroll_behavior = 2131558446;
-			
-			// aapt resource value: 0x7f0d0036
-			public const int library_name = 2131558454;
 			
 			// aapt resource value: 0x7f0d002f
 			public const int mtrl_chip_close_icon_content_description = 2131558447;
@@ -8558,236 +8063,6 @@ namespace EDDMobile
 			
 			// aapt resource value: 12
 			public const int SearchView_voiceIcon = 12;
-			
-			public static int[] SfDataGrid = new int[] {
-					2130772459,
-					2130772460,
-					2130772461,
-					2130772462,
-					2130772463,
-					2130772464,
-					2130772465,
-					2130772466,
-					2130772467,
-					2130772468,
-					2130772469,
-					2130772470,
-					2130772471,
-					2130772472,
-					2130772473,
-					2130772474,
-					2130772475,
-					2130772476,
-					2130772477,
-					2130772478,
-					2130772479,
-					2130772480,
-					2130772481,
-					2130772482,
-					2130772483,
-					2130772484,
-					2130772485,
-					2130772486,
-					2130772487,
-					2130772488,
-					2130772489,
-					2130772490,
-					2130772491,
-					2130772492,
-					2130772493};
-			
-			// aapt resource value: 26
-			public const int SfDataGrid_allowDraggingColumn = 26;
-			
-			// aapt resource value: 28
-			public const int SfDataGrid_allowDraggingRow = 28;
-			
-			// aapt resource value: 13
-			public const int SfDataGrid_allowEditing = 13;
-			
-			// aapt resource value: 12
-			public const int SfDataGrid_allowGroupExpandCollapse = 12;
-			
-			// aapt resource value: 21
-			public const int SfDataGrid_allowLoadMore = 21;
-			
-			// aapt resource value: 8
-			public const int SfDataGrid_allowMultiSorting = 8;
-			
-			// aapt resource value: 24
-			public const int SfDataGrid_allowPullToRefresh = 24;
-			
-			// aapt resource value: 2
-			public const int SfDataGrid_allowResizingColumn = 2;
-			
-			// aapt resource value: 6
-			public const int SfDataGrid_allowSorting = 6;
-			
-			// aapt resource value: 30
-			public const int SfDataGrid_allowSwiping = 30;
-			
-			// aapt resource value: 7
-			public const int SfDataGrid_allowTriStateSorting = 7;
-			
-			// aapt resource value: 20
-			public const int SfDataGrid_alternationCount = 20;
-			
-			// aapt resource value: 11
-			public const int SfDataGrid_autoExpandGroups = 11;
-			
-			// aapt resource value: 0
-			public const int SfDataGrid_autoGenerateColumns = 0;
-			
-			// aapt resource value: 32
-			public const int SfDataGrid_columnSizer = 32;
-			
-			// aapt resource value: 14
-			public const int SfDataGrid_editTapAction = 14;
-			
-			// aapt resource value: 15
-			public const int SfDataGrid_editorSelectionBehavior = 15;
-			
-			// aapt resource value: 27
-			public const int SfDataGrid_frozenColumnsCount = 27;
-			
-			// aapt resource value: 29
-			public const int SfDataGrid_frozenRowsCount = 29;
-			
-			// aapt resource value: 33
-			public const int SfDataGrid_gridRowHeight = 33;
-			
-			// aapt resource value: 16
-			public const int SfDataGrid_gridSelectionMode = 16;
-			
-			// aapt resource value: 10
-			public const int SfDataGrid_groupingMode = 10;
-			
-			// aapt resource value: 34
-			public const int SfDataGrid_headerRowHeight = 34;
-			
-			// aapt resource value: 1
-			public const int SfDataGrid_indentColumnWidth = 1;
-			
-			// aapt resource value: 25
-			public const int SfDataGrid_isBusy = 25;
-			
-			// aapt resource value: 23
-			public const int SfDataGrid_loadMorePosition = 23;
-			
-			// aapt resource value: 22
-			public const int SfDataGrid_loadMoreText = 22;
-			
-			// aapt resource value: 31
-			public const int SfDataGrid_maxSwipeOffset = 31;
-			
-			// aapt resource value: 3
-			public const int SfDataGrid_resizingMode = 3;
-			
-			// aapt resource value: 4
-			public const int SfDataGrid_rowHeaderWidth = 4;
-			
-			// aapt resource value: 18
-			public const int SfDataGrid_scrollingMode = 18;
-			
-			// aapt resource value: 17
-			public const int SfDataGrid_selectedIndex = 17;
-			
-			// aapt resource value: 5
-			public const int SfDataGrid_showRowHeader = 5;
-			
-			// aapt resource value: 9
-			public const int SfDataGrid_sortTapAction = 9;
-			
-			// aapt resource value: 19
-			public const int SfDataGrid_verticalOverScrollMode = 19;
-			
-			public static int[] SfDataPager = new int[] {
-					2130772494,
-					2130772495,
-					2130772496,
-					2130772497,
-					2130772498,
-					2130772499,
-					2130772500};
-			
-			// aapt resource value: 5
-			public const int SfDataPager_numericButtonBackground = 5;
-			
-			// aapt resource value: 0
-			public const int SfDataPager_numericButtonCount = 0;
-			
-			// aapt resource value: 3
-			public const int SfDataPager_orientation = 3;
-			
-			// aapt resource value: 2
-			public const int SfDataPager_pageCount = 2;
-			
-			// aapt resource value: 1
-			public const int SfDataPager_pageSize = 1;
-			
-			// aapt resource value: 6
-			public const int SfDataPager_selectionForeground = 6;
-			
-			// aapt resource value: 4
-			public const int SfDataPager_useOnDemandPaging = 4;
-			
-			public static int[] SfNumericTextBox = new int[] {
-					2130772445,
-					2130772446,
-					2130772447,
-					2130772448,
-					2130772449,
-					2130772450,
-					2130772451,
-					2130772452,
-					2130772453,
-					2130772454,
-					2130772455,
-					2130772456,
-					2130772457,
-					2130772458};
-			
-			// aapt resource value: 9
-			public const int SfNumericTextBox_allowNull = 9;
-			
-			// aapt resource value: 10
-			public const int SfNumericTextBox_borderColor = 10;
-			
-			// aapt resource value: 12
-			public const int SfNumericTextBox_culture = 12;
-			
-			// aapt resource value: 3
-			public const int SfNumericTextBox_enableGroupSeparator = 3;
-			
-			// aapt resource value: 8
-			public const int SfNumericTextBox_fontSize = 8;
-			
-			// aapt resource value: 6
-			public const int SfNumericTextBox_maximumDecimalDigits = 6;
-			
-			// aapt resource value: 4
-			public const int SfNumericTextBox_numberFormat = 4;
-			
-			// aapt resource value: 13
-			public const int SfNumericTextBox_numericTextBoxValue = 13;
-			
-			// aapt resource value: 0
-			public const int SfNumericTextBox_parsingMode = 0;
-			
-			// aapt resource value: 1
-			public const int SfNumericTextBox_percentDisplayMode = 1;
-			
-			// aapt resource value: 7
-			public const int SfNumericTextBox_selectAllOnFocus = 7;
-			
-			// aapt resource value: 2
-			public const int SfNumericTextBox_valueChangeMode = 2;
-			
-			// aapt resource value: 5
-			public const int SfNumericTextBox_watermark = 5;
-			
-			// aapt resource value: 11
-			public const int SfNumericTextBox_watermarkColor = 11;
 			
 			public static int[] Snackbar = new int[] {
 					2130772368,

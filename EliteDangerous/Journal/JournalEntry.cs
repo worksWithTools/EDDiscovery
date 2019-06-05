@@ -85,9 +85,15 @@ namespace EliteDangerousCore
         // the name used to filter it.. and the filter keyword. Its normally the enum of the event.
         public virtual string EventFilterName { get { return EventTypeID.ToString(); } } // text name used in filter
 
-#endregion
+        public override string ToString()
+        {
+            string info,details;
+            this.FillInformation(out info, out details);
+            return info;
+        }
+        #endregion
 
-#region Special Setters - db not updated by them
+        #region Special Setters - db not updated by them
 
         public void SetTLUCommander(long t, int cmdr)         // used during log reading..
         {
