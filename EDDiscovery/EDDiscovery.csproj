@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-  <Import Sdk="Microsoft.NET.Sdk.WindowsDesktop" Project="Sdk.props" Condition="'$(TargetFramework)' == 'netcoreapp3.0'"/>
+  <Import Sdk="Microsoft.NET.Sdk.WindowsDesktop" Project="Sdk.props" Condition="'$(TargetFramework)' == 'netcoreapp3.0'" />
   <PropertyGroup>
     <ProjectGuid>{6EE10D92-E3E4-44D9-8E6B-851801B0B510}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>EDDiscovery</RootNamespace>
     <AssemblyName>EDDiscovery</AssemblyName>
-    <TargetFrameworks>net472;<!--netcoreapp3.0--></TargetFrameworks>
+    <TargetFramework>net472</TargetFramework>
     <Prefer32Bit>false</Prefer32Bit>
     <NoWin32Manifest>true</NoWin32Manifest>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -30,6 +30,7 @@
     <PackageReference Include="OxyPlot.Core" Version="1.0.0" />
     <PackageReference Include="OxyPlot.WindowsForms" Version="1.0.0" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
+    <PackageReference Include="System.Runtime" Version="4.3.1" />
     <PackageReference Include="System.Threading.AccessControl" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
@@ -124,7 +125,7 @@
     <ProjectReference Include="..\BaseUtilities\DirectInput\DirectInput.csproj" />
     <ProjectReference Include="..\BaseUtilities\OpenTKUtils\OpenTKUtils.csproj" />
     <ProjectReference Include="..\BaseUtilities\SQLLite\SQLLite.csproj" />
-    <ProjectReference Include ="..\EDDIcons\EDDIcons.csproj" />
+    <ProjectReference Include="..\EDDIcons\EDDIcons.csproj" />
     <ProjectReference Include="..\EliteDangerous\EliteDangerous.csproj" />
     <ProjectReference Include="..\ExtendedControls\ExtendedControls\ExtendedControls.csproj" />
     <ProjectReference Include="..\ExtendedControls\ExtendedForms\ExtendedForms.csproj" />
@@ -132,6 +133,9 @@
   <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
     <ProjectReference Include="..\BaseUtilities\Audio.CSCore\Audio.CSCore.csproj" />
     <ProjectReference Include="..\BaseUtilities\Audio.WindowsSpeech\Audio.WindowsSpeech.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Windows.Forms.DataVisualization.Design" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
@@ -297,5 +301,5 @@
     </ItemGroup>
     <WriteCodeFragment AssemblyAttributes="@(AssemblyAttribute)" Language="C#" OutputFile="Properties\ExtraVersion.cs" />
   </Target>
-  <Import Sdk="Microsoft.NET.Sdk.WindowsDesktop" Project="Sdk.targets" Condition="'$(TargetFramework)' == 'netcoreapp3.0'"/>
+  <Import Sdk="Microsoft.NET.Sdk.WindowsDesktop" Project="Sdk.targets" Condition="'$(TargetFramework)' == 'netcoreapp3.0'" />
 </Project>
