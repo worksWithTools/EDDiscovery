@@ -1,17 +1,36 @@
 version: 10.6.0.{build}
-image: Visual Studio 2017
+image:
+  - Visual Studio 2017
+  - Visual Studio 2019 Preview
 configuration: Release
 install:
   - git submodule update --init
 before_build:
-  - nuget restore
+  - dotnet restore
 build:
   project: EDDiscovery.sln
 test_script:
-  - nunit3-console EDDiscoveryTests\bin\Release\net461\EDDiscoveryTests.dll --result=myresults.xml;format=AppVeyor
-after_build:
-  - cmd: copy EDDiscovery\bin\Release\net461\EDDiscovery.Portable.zip EDDiscovery.Portable.zip
-artifacts:
-  - path: EDDiscovery.Portable.zip
+  - dotnet test EDDiscoveryTests\Tests.csproj
+for:
+-
+  matrix:
+    only:
+      - image: Visual Studio 2019 Preview
+
+  after_build:
+    - cmd: copy EDDiscovery\bin\Release\net461\EDDiscovery.Portable.zip EDDiscovery.Portable.vs2019.net461.zip
+    - cmd: copy EDDiscovery\bin\Release\netcoreapp3.0\EDDiscovery.Portable.zip EDDiscovery.Portable.vs2019.netcore30.zip
+  artifacts:
+    - path: EDDiscovery.Portable.vs2019.net461.zip
+    - path: EDDiscovery.Portable.vs2019.netcore30.zip
+-
+  matrix:
+    only:
+      - image: Visual Studio 2017
+
+  after_build:
+    - cmd: copy EDDiscovery\bin\Release\net461\EDDiscovery.Portable.zip EDDiscovery.Portable.zip
+  artifacts:
+    - path: EDDiscovery.Portable.zip
 cache:
   - packages -> **\packages.config
