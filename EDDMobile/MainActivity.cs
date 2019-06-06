@@ -21,7 +21,8 @@ namespace EDDMobile
             
             var journalEntries = new JournalEntryRepository().journalCollection;
             var listView = FindViewById<ListView>(Resource.Id.journalListView);
-            listView.Adapter = new ArrayAdapter<JournalEntry>(this, Android.Resource.Layout.SimpleListItem1, journalEntries.ToArray());
+            listView.Adapter = new JournalViewAdapter(this, journalEntries.ToList());
+                //new ArrayAdapter<JournalEntry>(this, Android.Resource.Layout.SimpleListItem1, journalEntries.ToArray());
         }
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {
