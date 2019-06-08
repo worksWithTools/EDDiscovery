@@ -9,7 +9,7 @@ using System.Linq;
 namespace EDDMobile
 {
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme", MainLauncher = true)]
-    public class MainActivity : Activity
+    public class MainActivity : AppCompatActivity
     {
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -22,7 +22,6 @@ namespace EDDMobile
             var journalEntries = new JournalEntryRepository().journalCollection;
             var listView = FindViewById<ListView>(Resource.Id.journalListView);
             listView.Adapter = new JournalViewAdapter(this, journalEntries.ToList());
-                //new ArrayAdapter<JournalEntry>(this, Android.Resource.Layout.SimpleListItem1, journalEntries.ToArray());
         }
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {

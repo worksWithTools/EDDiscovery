@@ -12,26 +12,35 @@
     <LinearLayout
         android:id="@+id/Text"
         android:orientation="vertical"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:paddingLeft="10dp"
         android:layout_marginLeft="48dp">
         <TextView
             android:id="@+id/Text1"
-            android:layout_width="wrap_content"
+            android:text="ActionTitle"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#FF7F3300"
             android:textSize="20dip"
             android:textStyle="italic"
+            android:textColor="@color/material_blue_grey_900" 
          />
         <TextView
-            android:id="@+id/Text2"
-            android:layout_width="wrap_content"
+            android:text="12/34/1234 \n11:22:33"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14dip"
-            android:textColor="#FF267F00"
-            android:paddingLeft="100dip"
-         />
+            android:textColor="@color/material_grey_600"
+            android:textSize="12dip"
+            android:id="@+id/eventTime" />
     </LinearLayout>
+    <TextView
+            android:id="@+id/Text2"
+            android:text="event details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16dip"
+            android:textColor="@color/material_grey_600"
+            android:layout_marginLeft="190dp"
+    />
     
 </RelativeLayout >

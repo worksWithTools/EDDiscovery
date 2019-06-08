@@ -5,6 +5,7 @@ using EliteDangerousCore;
 using SkiaSharp;
 using SkiaSharp.Views.Android;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace EDDMobile
 {
@@ -37,12 +38,11 @@ namespace EDDMobile
             if (view == null) // no view to re-use, create new
                 view = context.LayoutInflater.Inflate(Resource.Layout.custom_view, null);
             view.FindViewById<TextView>(Resource.Id.Text1).Text = item.EventTypeStr;
+            view.FindViewById<TextView>(Resource.Id.eventTime).Text = item.EventTimeLocal.ToString("dd/MM/yyyy \nhh:mm:ss");
             string info, details;
             item.FillInformation(out info, out details);
             view.FindViewById<TextView>(Resource.Id.Text2).Text = info;
-            //TODO: why null??
-            if (item.Icon == null)
-                return view;
+
 
             SkiaSharp.SKImage img = item.Icon;
             
