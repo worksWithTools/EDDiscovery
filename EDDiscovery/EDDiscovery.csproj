@@ -12,6 +12,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <UseWPF>true</UseWPF>
+    <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
   </PropertyGroup>
   <PropertyGroup Condition="'$(OS)' == 'Windows_NT' and '$(NETCoreSdkVersion)' != '' and '$(NETCoreSdkVersion.Substring(0, 1))' == '3'">
     <TargetFrameworks>net472;netcoreapp3.0</TargetFrameworks>
@@ -93,6 +94,11 @@
     <Compile Update="UserControls\Helpers\*.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Update="UserControls\Helpers\FindSystemsUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -108,6 +114,195 @@
     <Compile Update="UserControls\Helpers\SurfaceBookmarksUC.cs">
       <SubType>UserControl</SubType>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Forms\CommanderForm.resx">
+      <DependentUpon>CommanderForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AddOnManagerForm.resx">
+      <DependentUpon>AddOnManagerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DraggableFormPos.resx">
+      <DependentUpon>DraggableFormPos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ExportForm.resx">
+      <DependentUpon>ExportForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\GalaxySectorSelect.resx">
+      <DependentUpon>GalaxySectorSelect.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ProfileEditor.resx">
+      <DependentUpon>ProfileEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SafeModeForm.resx">
+      <DependentUpon>SafeModeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SetNoteForm.resx">
+      <DependentUpon>SetNoteForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\UserControlForm.resx">
+      <DependentUpon>UserControlForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  <EmbeddedResource Include="ScreenShots\ScreenShotConfigureForm.resx">
+      <DependentUpon>ScreenShotConfigureForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Helpers\TagsForm.resx">
+      <DependentUpon>TagsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\History\UserControlStarList.resx">
+      <DependentUpon>UserControlStarList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\LogsBookmarks\CaptainsLogDiary.resx">
+      <DependentUpon>CaptainsLogDiary.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\LogsBookmarks\CaptainsLogEntries.resx">
+      <DependentUpon>CaptainsLogEntries.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Overlays\UserControlCombatPanel.resx">
+      <DependentUpon>UserControlCombatPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\CurrentState\UserControlLedger.resx">
+      <DependentUpon>UserControlLedger.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\CurrentState\UserControlMaterialCommodities.resx">
+      <DependentUpon>UserControlMaterialCommodities.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\CurrentState\UserControlMissions.resx">
+      <DependentUpon>UserControlMissions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\CurrentState\UserControlModules.resx">
+      <DependentUpon>UserControlModules.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\CurrentState\UserControlStats.resx">
+      <DependentUpon>UserControlStats.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\EngineeringSynthesis\UserControlEngineering.resx">
+      <DependentUpon>UserControlEngineering.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\EngineeringSynthesis\UserControlShoppingList.resx">
+      <DependentUpon>UserControlShoppingList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\EngineeringSynthesis\UserControlSynthesis.resx">
+      <DependentUpon>UserControlSynthesis.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\GridsSplitters\UserControlContainerGrid.resx">
+      <DependentUpon>UserControlContainerGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\GridsSplitters\UserControlContainerResizable.resx">
+      <DependentUpon>UserControlContainerResizable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\GridsSplitters\UserControlContainerSplitter.resx">
+      <DependentUpon>UserControlContainerSplitter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\GridsSplitters\UserControlPanelSelector.resx">
+      <DependentUpon>UserControlPanelSelector.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Helpers\FindSystemsUserControl.resx">
+      <DependentUpon>FindSystemsUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\History\UserControlJournalGrid.resx">
+      <DependentUpon>UserControlJournalGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\History\UserControlTravelGrid.resx">
+      <DependentUpon>UserControlTravelGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Overlays\UserControlCompass.resx">
+      <DependentUpon>UserControlCompass.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Overlays\UserControlNotePanel.resx">
+      <DependentUpon>UserControlNotePanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Overlays\UserControlMissionOverlay.resx">
+      <DependentUpon>UserControlMissionOverlay.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Overlays\UserControlRouteTracker.resx">
+      <DependentUpon>UserControlRouteTracker.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Overlays\UserControlSpanel.resx">
+      <DependentUpon>UserControlSpanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Overlays\UserControlSurveyor.resx">
+      <DependentUpon>UserControlSurveyor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Overlays\UserControlSysInfo.resx">
+      <DependentUpon>UserControlSysInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Overlays\UserControlTrippanel.resx">
+      <DependentUpon>UserControlTrippanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\RoutesExpeditions\UserControlExpedition.resx">
+      <DependentUpon>UserControlExpedition.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\RoutesExpeditions\UserControlExploration.resx">
+      <DependentUpon>UserControlExploration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\RoutesExpeditions\UserControlRoute.resx">
+      <DependentUpon>UserControlRoute.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\LogsBookmarks\UserControlCaptainsLog.resx">
+      <DependentUpon>UserControlCaptainsLog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\LogsBookmarks\UserControlBookmarks.resx">
+      <DependentUpon>UserControlBookmarks.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Search\SearchMaterialsCommodities.resx">
+      <DependentUpon>SearchMaterialsCommodities.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Search\SearchScans.resx">
+      <DependentUpon>SearchScans.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Search\SearchStars.resx">
+      <DependentUpon>SearchStars.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Search\UserControlSearch.resx">
+      <DependentUpon>UserControlSearch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ScansStars\UserControlEstimatedValues.resx">
+      <DependentUpon>UserControlEstimatedValues.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ScansStars\UserControlLocalMap.resx">
+      <DependentUpon>UserControlLocalMap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ScansStars\UserControlPlot.resx">
+      <DependentUpon>UserControlPlot.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ScansStars\UserControlScan.resx">
+      <DependentUpon>UserControlScan.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Helpers\ScanDisplayUserControl.resx">
+      <DependentUpon>ScanDisplayUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ScansStars\UserControlScanGrid.resx">
+      <DependentUpon>UserControlScanGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ScansStars\UserControlStarDistance.resx">
+      <DependentUpon>UserControlStarDistance.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ScansStars\UserControlTrilateration.resx">
+      <DependentUpon>UserControlTrilateration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Screenshots\UserControlScreenshot.resx">
+      <DependentUpon>UserControlScreenshot.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Settings\UserControlSettings.resx">
+      <DependentUpon>UserControlSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\StationData\UserControlMarketData.resx">
+      <DependentUpon>UserControlMarketData.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\StationData\UserControlOutfitting.resx">
+      <DependentUpon>UserControlOutfitting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\StationData\UserControlShipYards.resx">
+      <DependentUpon>UserControlShipYards.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Helpers\StatsTimeUserControl.resx">
+      <DependentUpon>StatsTimeUserControl.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup Label="ScreenShots">
     <Compile Update="ScreenShots\ScreenShotConfigureForm.cs">
@@ -141,22 +336,11 @@
     <Reference Include="System.Windows.Forms.DataVisualization.Design" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Properties\Resources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Update="Properties\Settings.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Update="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Update="Properties\Settings.settings">
