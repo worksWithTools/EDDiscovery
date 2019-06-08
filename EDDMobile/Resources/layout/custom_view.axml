@@ -2,20 +2,20 @@
 <RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
    android:layout_width="fill_parent"
    android:layout_height="wrap_content"
-   android:background="#FFDAFF7F"
+   android:background="#FFFFFFFF"
    android:padding="8dp">
     <SkiaSharp.Views.Android.SKCanvasView
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:id="@+id/Image"
-        android:padding="5dp"/>
+        android:padding="5dp" />
     <LinearLayout
         android:id="@+id/Text"
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="10dip"
-        android:layout_marginLeft="0.0dp">
+        android:paddingLeft="10dp"
+        android:layout_marginLeft="48dp">
         <TextView
             android:id="@+id/Text1"
             android:layout_width="wrap_content"
