@@ -59,6 +59,12 @@ namespace EDDiscovery.Icons
             defaultIcons = new Dictionary<string, Image>(StringComparer.InvariantCultureIgnoreCase);
             string basename = typeof(IconSet).Namespace + ".";
 
+            LoadIcons(asm, resnames, basename);
+
+        }
+
+        private static void LoadIcons(Assembly asm, string[] resnames, string basename)
+        {
             foreach (string resname in resnames)
             {
                 if (resname.StartsWith(basename) && resname.EndsWith(".png", StringComparison.InvariantCultureIgnoreCase))
@@ -69,7 +75,6 @@ namespace EDDiscovery.Icons
                     defaultIcons[name] = img;
                 }
             }
-
         }
 
         public static void ResetIcons()

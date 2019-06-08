@@ -18,7 +18,7 @@ namespace EDDMobile
             //// Set our view from the "main" layout resource
             SetContentView(Resource.Layout.activity_main);
 
-            
+            EDDiscovery.Icons.IconSet.ResetIcons();     // start with a clean slate loaded up from default icons
             var journalEntries = new JournalEntryRepository().journalCollection;
             var listView = FindViewById<ListView>(Resource.Id.journalListView);
             listView.Adapter = new JournalViewAdapter(this, journalEntries.ToList());

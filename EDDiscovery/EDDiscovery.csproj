@@ -80,9 +80,7 @@
     <Compile Update="Forms\*.Designer.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Forms\VersioningManager.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Update="Forms\VersioningManager.cs" />
   </ItemGroup>
   <ItemGroup Label="UserControls">
     <Compile Update="UserControls\*\*.cs">
