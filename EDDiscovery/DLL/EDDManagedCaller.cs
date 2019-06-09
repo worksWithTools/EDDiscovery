@@ -14,21 +14,61 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
+using System;
+using System.Linq;
+using System.Reflection;
+
 namespace EDDiscovery.DLL
 {
     internal class EDDManagedCaller : IEDDDLLCaller
     {
+        Assembly assembly;
+        string _path;
+        IManagedDll caller;
         public EDDManagedCaller(string path)
         {
+            try
+            {
+                _path = path;
+                assembly = Assembly.LoadFile(_path);
+                //TODO: can we loosen this?
+                Type t = assembly.GetTypes()
+                    .Where(x => typeof(IManagedDll).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract)
+                    .FirstOrDefault();
+                if (t != null)
+                {
+                    caller = Activator.CreateInstance(t) as IManagedDll;
 
+                    Name = System.IO.Path.GetFileNameWithoutExtension(_path);
+                }
+            }
+            catch (Exception)
+            {
+                //TODO: do stuff
+            }
         }
-        public bool Loaded => false;
+
+        public bool Loaded => caller != null;
 
         public string Version { get; private set; }
         public string Name { get; private set; }
 
+        public bool Init(string ourversion, string dllfolder, EDDDLLIF.EDDCallBacks callbacks)
+        {
+            try
+            {
+                Version = caller.EDDInitialise(ourversion, dllfolder, callbacks);
+                return !String.IsNullOrEmpty(Version) && Version[0] != '!';
+            }
+            catch(Exception e)
+            {
+                // TODO: logging or summat
+            }
+            return false;
+        }
         public string ActionCommand(string cmd, string[] paras)
         {
+            
             return "Not Implemented";
         }
 
@@ -37,10 +77,7 @@ namespace EDDiscovery.DLL
             return false;
         }
 
-        public bool Init(string ourversion, string dllfolder, EDDDLLIF.EDDCallBacks callbacks)
-        {
-            return false;
-        }
+        
 
         public bool NewJournalEntry(EDDDLLIF.JournalEntry nje)
         {
@@ -54,6 +91,7 @@ namespace EDDiscovery.DLL
 
         public bool UnLoad()
         {
+            //TODO: shutdown the webserver
             return false;
         }
     }
