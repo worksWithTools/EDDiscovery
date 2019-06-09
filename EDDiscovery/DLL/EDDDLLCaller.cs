@@ -16,11 +16,12 @@
 
 using System;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace EDDiscovery.DLL
 {
-    public class EDDDLLCaller
+    public class EDDDLLCaller : IEDDDLLCaller
     {
         public string Version { get; private set; }
         public string Name { get; private set; }
@@ -30,34 +31,39 @@ namespace EDDiscovery.DLL
         private IntPtr pActionJournalEntry = IntPtr.Zero;
         private IntPtr pActionCommand = IntPtr.Zero;
 
-        public bool Load(string path)
+
+        public static IEDDDLLCaller MakeCaller(string path)
         {
-            if (pDll == IntPtr.Zero)
+            if (PortableExecutableHelper.IsDotNetAssembly(path))
+                return new EDDManagedCaller(path);
+
+            return new EDDDLLCaller(path);
+        }
+
+        public EDDDLLCaller(string path)
+        {
+            pDll = BaseUtils.Win32.UnsafeNativeMethods.LoadLibrary(path);
+
+            if (pDll != IntPtr.Zero)
             {
-                pDll = BaseUtils.Win32.UnsafeNativeMethods.LoadLibrary(path);
+                IntPtr peddinit = BaseUtils.Win32.UnsafeNativeMethods.GetProcAddress(pDll, "EDDInitialise");
 
-                if (pDll != IntPtr.Zero)
+                if (peddinit != IntPtr.Zero)        // must have this to be an EDD DLL
                 {
-                    IntPtr peddinit = BaseUtils.Win32.UnsafeNativeMethods.GetProcAddress(pDll, "EDDInitialise");
-
-                    if (peddinit != IntPtr.Zero)        // must have this to be an EDD DLL
-                    {
-                        Name = System.IO.Path.GetFileNameWithoutExtension(path);
-                        pNewJournalEntry = BaseUtils.Win32.UnsafeNativeMethods.GetProcAddress(pDll, "EDDNewJournalEntry");
-                        pActionJournalEntry = BaseUtils.Win32.UnsafeNativeMethods.GetProcAddress(pDll, "EDDActionJournalEntry");
-                        pActionCommand = BaseUtils.Win32.UnsafeNativeMethods.GetProcAddress(pDll, "EDDActionCommand");
-                        return true;
-                    }
-                    else
-                    {
-                        BaseUtils.Win32.UnsafeNativeMethods.FreeLibrary(pDll);
-                        pDll = IntPtr.Zero;
-                    }
+                    Name = System.IO.Path.GetFileNameWithoutExtension(path);
+                    pNewJournalEntry = BaseUtils.Win32.UnsafeNativeMethods.GetProcAddress(pDll, "EDDNewJournalEntry");
+                    pActionJournalEntry = BaseUtils.Win32.UnsafeNativeMethods.GetProcAddress(pDll, "EDDActionJournalEntry");
+                    pActionCommand = BaseUtils.Win32.UnsafeNativeMethods.GetProcAddress(pDll, "EDDActionCommand");
+                }
+                else
+                {
+                    BaseUtils.Win32.UnsafeNativeMethods.FreeLibrary(pDll);
+                    pDll = IntPtr.Zero;
                 }
             }
-
-            return false;
         }
+
+        public bool Loaded => pDll != IntPtr.Zero;
 
         public bool Init(string ourversion, string dllfolder, EDDDLLIF.EDDCallBacks callbacks)
         {

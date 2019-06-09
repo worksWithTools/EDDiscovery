@@ -26,7 +26,7 @@ namespace EDDiscovery.DLL
     {
         public int Count { get { return dlls.Count; } }
 
-        private List<EDDDLLCaller> dlls = new List<EDDDLLCaller>();
+        private List<IEDDDLLCaller> dlls = new List<IEDDDLLCaller>();
 
         // return loaded, failed, notallowed
         public Tuple<string,string,string> Load(string directory, string ourversion, string dllfolder, EDDDLLIF.EDDCallBacks callbacks, string allowed)
@@ -47,9 +47,9 @@ namespace EDDiscovery.DLL
                 {
                     string filename = System.IO.Path.GetFileNameWithoutExtension(f.FullName);
 
-                    EDDDLLCaller caller = new EDDDLLCaller();
+                    IEDDDLLCaller caller = EDDDLLCaller.MakeCaller(f.FullName);
 
-                    if (caller.Load(f.FullName))        // if loaded (meaning it loaded, and its got EDDInitialise)
+                    if (caller.Loaded)        // if loaded (meaning it loaded, and its got EDDInitialise)
                     {
                         if (allowed.Equals("All", StringComparison.InvariantCultureIgnoreCase) || allowedfiles.Contains(filename, StringComparer.InvariantCultureIgnoreCase))    // if allowed..
                         {
@@ -77,7 +77,7 @@ namespace EDDiscovery.DLL
 
         public void UnLoad()
         {
-            foreach (EDDDLLCaller caller in dlls)
+            foreach (IEDDDLLCaller caller in dlls)
             {
                 caller.UnLoad();
             }
@@ -87,7 +87,7 @@ namespace EDDiscovery.DLL
 
         public void Refresh(string cmdr, EDDDLLIF.JournalEntry je)
         {
-            foreach (EDDDLLCaller caller in dlls)
+            foreach (IEDDDLLCaller caller in dlls)
             {
                 caller.Refresh(cmdr, je);
             }
@@ -95,13 +95,13 @@ namespace EDDiscovery.DLL
 
         public void NewJournalEntry(EDDDLLIF.JournalEntry nje)
         {
-            foreach (EDDDLLCaller caller in dlls)
+            foreach (IEDDDLLCaller caller in dlls)
             {
                 caller.NewJournalEntry(nje);
             }
         }
 
-        private EDDDLLCaller FindCaller(string name)
+        private IEDDDLLCaller FindCaller(string name)
         {
             return dlls.Find(x => x.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
         }
@@ -111,14 +111,14 @@ namespace EDDiscovery.DLL
         {
             if (dllname.Equals("All", StringComparison.InvariantCultureIgnoreCase))
             {
-                foreach (EDDDLLCaller caller in dlls)
+                foreach (IEDDDLLCaller caller in dlls)
                     caller.ActionJournalEntry(nje);
 
                 return new Tuple<bool, bool>(true, true);
             }
             else
             {
-                EDDDLLCaller caller = FindCaller(dllname);
+                IEDDDLLCaller caller = FindCaller(dllname);
                 return caller != null ? new Tuple<bool, bool>(true, caller.ActionJournalEntry(nje)) : new Tuple<bool, bool>(false, false);
             }
         }
@@ -131,12 +131,12 @@ namespace EDDiscovery.DLL
 
             if (dllname.Equals("All", StringComparison.InvariantCultureIgnoreCase))
             {
-                foreach (EDDDLLCaller caller in dlls)
+                foreach (IEDDDLLCaller caller in dlls)
                     resultlist.Add(AC(caller, cmd, paras));
             }
             else
             {
-                EDDDLLCaller caller = FindCaller(dllname);
+                IEDDDLLCaller caller = FindCaller(dllname);
                 if ( caller != null )
                     resultlist.Add(AC(caller, cmd, paras));
                 else
@@ -146,7 +146,7 @@ namespace EDDiscovery.DLL
             return resultlist;
         }
 
-        public Tuple<bool,string,string> AC(EDDDLLCaller caller, string cmd, string[] paras)
+        public Tuple<bool,string,string> AC(IEDDDLLCaller caller, string cmd, string[] paras)
         {
             string r = caller.ActionCommand(cmd, paras);
             if (r == null)

@@ -16,6 +16,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using static EDDiscovery.DLL.EDDDLLIF;
 
 namespace EDDiscovery.DLL
 {
@@ -100,6 +101,5 @@ namespace EDDiscovery.DLL
         // Version 1 Ends here
 
     }
-
 
 }
