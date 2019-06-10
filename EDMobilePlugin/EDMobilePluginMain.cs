@@ -6,6 +6,7 @@ namespace EDMobilePlugin
 {
     public class EDMobilePluginMain : EDDiscovery.DLL.IManagedDll
     {
+        readonly WebAPIHost host = new WebAPIHost();
         public string EDDActionCommand(string cmdname, string[] paras)
         {
             throw new NotImplementedException();
@@ -18,6 +19,9 @@ namespace EDMobilePlugin
 
         public string EDDInitialise(string vstr, string dllfolder, EDDDLLIF.EDDCallBacks callbacks)
         {
+            // we'll probs want to be able to stop this task somehow?
+
+            var task = host.StartListeningAsync();
             return Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
 
@@ -33,7 +37,7 @@ namespace EDMobilePlugin
 
         public void EDDTerminate()
         {
-            throw new NotImplementedException();
+            host.StopListening();
         }
     }
 }

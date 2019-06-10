@@ -58,6 +58,9 @@ namespace EDDiscovery.DLL
             try
             {
                 Version = caller.EDDInitialise(ourversion, dllfolder, callbacks);
+
+                // TODO: startup the comms that we'll need the android app to connect to..
+
                 return !String.IsNullOrEmpty(Version) && Version[0] != '!';
             }
             catch(Exception e)
