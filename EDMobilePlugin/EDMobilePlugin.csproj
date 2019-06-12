@@ -12,6 +12,7 @@
     <PackageReference Include="Microsoft.AspNet.WebHooks.Common" Version="1.2.1" />
     <PackageReference Include="Microsoft.AspNet.WebHooks.Custom" Version="1.2.1" />
     <PackageReference Include="Microsoft.AspNet.WebHooks.Custom.Api" Version="1.2.1" />
+    <PackageReference Include="Microsoft.Owin.Host.HttpListener" Version="4.0.1" />
     <PackageReference Include="Microsoft.Owin.Host.SystemWeb" Version="4.0.1" />
     <PackageReference Include="Microsoft.Owin.Hosting" Version="4.0.1" />
   </ItemGroup>
@@ -26,7 +27,10 @@
   </ItemGroup>
 
   <Target AfterTargets="Build" Name="Copy to DLL folder">
-    <Message Text="Copying to DLL folder" />
-    <Copy SourceFiles="$(OutDir)EDMobilePlugin.dll" DestinationFolder="D:\sa_up\EDDiscovery\DLL" />
+    <Message Importance="high" Text="Copying to DLL folder" />
+    <ItemGroup>
+      <ItemsToCopy Include="$(OutDir)*.dll"/>
+    </ItemGroup>
+    <Copy SourceFiles="@(ItemsToCopy)" DestinationFolder="D:\sa_up\EDDiscovery\DLL" />
   </Target>
 </Project>

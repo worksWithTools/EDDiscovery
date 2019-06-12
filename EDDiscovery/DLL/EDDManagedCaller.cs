@@ -15,6 +15,8 @@
  */
 
 using System;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 
@@ -30,8 +32,10 @@ namespace EDDiscovery.DLL
             try
             {
                 _path = path;
-                assembly = Assembly.LoadFile(_path);
-                //TODO: can we loosen this?
+                Name = Path.GetFileNameWithoutExtension(_path);
+                var pluginPath = Path.GetDirectoryName(_path); 
+                AppDomain.CurrentDomain.AppendPrivatePath(pluginPath);
+                assembly = Assembly.LoadFrom(_path);
                 Type t = assembly.GetTypes()
                     .Where(x => typeof(IManagedDll).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract)
                     .FirstOrDefault();
@@ -39,12 +43,11 @@ namespace EDDiscovery.DLL
                 {
                     caller = Activator.CreateInstance(t) as IManagedDll;
 
-                    Name = System.IO.Path.GetFileNameWithoutExtension(_path);
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                //TODO: do stuff
+                Debug.WriteLine(e);
             }
         }
 

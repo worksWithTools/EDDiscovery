@@ -39,7 +39,7 @@ namespace EDDiscovery.DLL
                 failed = "DLL Folder does not exist";
             else
             {
-                FileInfo[] allFiles = Directory.EnumerateFiles(directory, "*.dll", SearchOption.TopDirectoryOnly).Select(f => new FileInfo(f)).OrderBy(p => p.LastWriteTime).ToArray();
+                FileInfo[] allFiles = Directory.EnumerateFiles(directory, "ED*.dll", SearchOption.TopDirectoryOnly).Select(f => new FileInfo(f)).OrderBy(p => p.LastWriteTime).ToArray();
 
                 string[] allowedfiles = allowed.Split(',');
 
