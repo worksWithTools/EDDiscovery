@@ -5,13 +5,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.Memory" Version="4.5.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\BaseUtilities\BaseUtilities\BaseUtils.csproj" />
   </ItemGroup>
 
   <Target AfterTargets="Build" Name="Copy to DLL folder">
     <Message Importance="high" Text="Copying to DLL folder" />
     <ItemGroup>
-      <ItemsToCopy Include="$(OutDir)*.dll"/>
+      <ItemsToCopy Include="$(OutDir)*.dll" />
     </ItemGroup>
     <Copy SourceFiles="@(ItemsToCopy)" DestinationFolder="D:\sa_up\EDDiscovery\DLL" />
   </Target>

@@ -2,10 +2,12 @@
 using System.Reflection;
 using EDDiscovery.DLL;
 
+
 namespace EDMobilePlugin
 {
     public class EDMobilePluginMain : EDDiscovery.DLL.IManagedDll
     {
+
         public string EDDActionCommand(string cmdname, string[] paras)
         {
             throw new NotImplementedException();
@@ -16,9 +18,9 @@ namespace EDMobilePlugin
             throw new NotImplementedException();
         }
 
-        public string EDDInitialise(string vstr, string dllfolder, EDDDLLIF.EDDCallBacks callbacks)
+        public string EDDInitialise(string vstr, EDDDLLIF.EDDCallBacks callbacks)
         {
-            // we'll probs want to be able to stop this task somehow?
+            WebSocketServer.Start("http://+:80/eddmobile/");
 
             return Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
@@ -35,6 +37,7 @@ namespace EDMobilePlugin
 
         public void EDDTerminate()
         {
-       }
+            WebSocketServer.Stop();
+        }
     }
 }
