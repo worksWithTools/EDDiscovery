@@ -46,8 +46,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ActionLanguage.WinForms", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDMobilePlugin", "EDMobilePlugin\EDMobilePlugin.csproj", "{1DAEB74D-778D-4E04-BD28-8D8ED9349939}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EchoCLient", "EchoCLient\EchoCLient.csproj", "{474B6AA4-2781-4521-B285-9813A1CC6382}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -431,26 +429,6 @@ Global
 		{1DAEB74D-778D-4E04-BD28-8D8ED9349939}.Release|x64.Build.0 = Release|Any CPU
 		{1DAEB74D-778D-4E04-BD28-8D8ED9349939}.Release|x86.ActiveCfg = Release|Any CPU
 		{1DAEB74D-778D-4E04-BD28-8D8ED9349939}.Release|x86.Build.0 = Release|Any CPU
-		{474B6AA4-2781-4521-B285-9813A1CC6382}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{474B6AA4-2781-4521-B285-9813A1CC6382}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{474B6AA4-2781-4521-B285-9813A1CC6382}.Debug|iPhone.ActiveCfg = Debug|Any CPU
-		{474B6AA4-2781-4521-B285-9813A1CC6382}.Debug|iPhone.Build.0 = Debug|Any CPU
-		{474B6AA4-2781-4521-B285-9813A1CC6382}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
-		{474B6AA4-2781-4521-B285-9813A1CC6382}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
-		{474B6AA4-2781-4521-B285-9813A1CC6382}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{474B6AA4-2781-4521-B285-9813A1CC6382}.Debug|x64.Build.0 = Debug|Any CPU
-		{474B6AA4-2781-4521-B285-9813A1CC6382}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{474B6AA4-2781-4521-B285-9813A1CC6382}.Debug|x86.Build.0 = Debug|Any CPU
-		{474B6AA4-2781-4521-B285-9813A1CC6382}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{474B6AA4-2781-4521-B285-9813A1CC6382}.Release|Any CPU.Build.0 = Release|Any CPU
-		{474B6AA4-2781-4521-B285-9813A1CC6382}.Release|iPhone.ActiveCfg = Release|Any CPU
-		{474B6AA4-2781-4521-B285-9813A1CC6382}.Release|iPhone.Build.0 = Release|Any CPU
-		{474B6AA4-2781-4521-B285-9813A1CC6382}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
-		{474B6AA4-2781-4521-B285-9813A1CC6382}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
-		{474B6AA4-2781-4521-B285-9813A1CC6382}.Release|x64.ActiveCfg = Release|Any CPU
-		{474B6AA4-2781-4521-B285-9813A1CC6382}.Release|x64.Build.0 = Release|Any CPU
-		{474B6AA4-2781-4521-B285-9813A1CC6382}.Release|x86.ActiveCfg = Release|Any CPU
-		{474B6AA4-2781-4521-B285-9813A1CC6382}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

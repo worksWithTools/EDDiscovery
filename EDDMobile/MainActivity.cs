@@ -1,11 +1,11 @@
 ﻿using Android.App;
+using Android.Database;
 using Android.OS;
 using Android.Runtime;
 using Android.Support.V7.App;
 using Android.Widget;
-using EliteDangerousCore;
 using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.WebSockets;
 using System.Text;
@@ -20,9 +20,8 @@ namespace EDDMobile
         private JournalEntryRepository journalEntries = new JournalEntryRepository();
         private ClientWebSocket webSocket;
         private EditText edduri;
-        private TextView comms;
         private Button connect;
-
+        
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -33,19 +32,17 @@ namespace EDDMobile
             EDDiscovery.Icons.IconSet.ResetIcons();     // start with a clean slate loaded up from default icons
             
             var listView = FindViewById<ListView>(Resource.Id.journalListView);
-            listView.Adapter = new JournalViewAdapter(this, journalEntries);
-
+            
+            listView.Adapter = new JournalViewAdapter(this, journalEntries.journalCollection);
+    
             connect = FindViewById<Button>(Resource.Id.connectBtn);
             connect.Click += Connect_Click;
             edduri = FindViewById<EditText>(Resource.Id.eddUri);
-            comms = FindViewById<TextView>(Resource.Id.comms);
         }
 
         private async void Connect_Click(object sender, EventArgs e)
         {
             await Connect(edduri.Text);
-            if (webSocket.State == WebSocketState.Open)
-                comms.Text = "Connected";
 
             //TODO: we'll probably want a better handshake than this!
             await Send(".ready");
@@ -88,24 +85,37 @@ namespace EDDMobile
         }
         private async Task Listen()
         {
-            const int buffer_1mb = 16 * 1024;
-            byte[] buffer = new byte[buffer_1mb];
             while (webSocket.State == WebSocketState.Open)
             {
-                var result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-                if (result.MessageType == WebSocketMessageType.Close)
+                var result = await ReceiveFullMessage(CancellationToken.None);
+                if (result.Item1.MessageType == WebSocketMessageType.Close)
                 {
                     await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
                     edduri.Text = "Done";
                 }
                 else
                 {
-                    string message = Encoding.ASCII.GetString(buffer);
-                    comms.Text += $"\n{message}";
+                    string message = Encoding.ASCII.GetString(result.Item2.ToArray());
                     //LogStatus(true, buffer, result.Count);
                     journalEntries.AddEntry(message);
                 }
             }
         }
+
+        async Task<(WebSocketReceiveResult, IEnumerable<byte>)> ReceiveFullMessage(CancellationToken cancelToken)
+        {
+            WebSocketReceiveResult response;
+            var message = new List<byte>();
+            var buffer = new byte[4096];
+            do
+            {
+                response = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), cancelToken);
+                message.AddRange(new ArraySegment<byte>(buffer, 0, response.Count));
+            } while (!response.EndOfMessage);
+            return (response, message);
+        }
+
     }
+
+
 }
