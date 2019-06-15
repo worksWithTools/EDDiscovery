@@ -53,31 +53,9 @@ namespace EDDMobile
 
 
             SkiaSharp.SKImage img = item.Icon;
-            var canvasvw = view.FindViewById<SKCanvasView>(Resource.Id.Image);
+            var canvasvw = view.FindViewById<ImageView>(Resource.Id.Image);
             
-            //TODO: Something isn't right...
-            // The images drawn do not match with the text..
-            // possible side effect of reuse?
-            canvasvw.PaintSurface += (sender, e) => {
-                var surface = e.Surface;
-                var pictureFrame = SKRect.Create(0, 0, 96, 96);
-                var imageSize = new SKSize(img.Width, img.Height); // eg: 100x200
-                var dest = pictureFrame.AspectFit(imageSize); // fit the size inside the rect
-
-                // draw the image
-                var paint = new SKPaint
-                {
-                    FilterQuality = SKFilterQuality.High // high quality scaling
-                };
-                // get the canvas from the view
-                var canvas = surface.Canvas;
-
-                // draw the bitmap on the canvas
-                canvas.Clear();
-                canvas.DrawImage(img, dest, paint);
-
-                // draw other stuff
-            };
+            canvasvw.SetImageBitmap(img.ToBitmap());            
             return view;
         }
 

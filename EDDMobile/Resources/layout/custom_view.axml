@@ -4,7 +4,7 @@
    android:layout_height="wrap_content"
    android:background="#FFFFFFFF"
    android:padding="8dp">
-    <SkiaSharp.Views.Android.SKCanvasView
+    <ImageView
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:id="@+id/Image"

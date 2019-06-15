@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <EditText
-            android:text="ws://10.0.2.2/eddmobile"
+            android:text="ws://192.168.0.32/eddmobile"
             android:minHeight="25px"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
