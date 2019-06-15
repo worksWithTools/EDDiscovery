@@ -33,6 +33,7 @@ namespace Client
             try
             {
                 webSocket = new ClientWebSocket();
+               
                 await webSocket.ConnectAsync(new Uri(uri), CancellationToken.None);
                 await Task.WhenAll(Receive(webSocket), Send(webSocket));
             }

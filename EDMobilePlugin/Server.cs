@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.WebSockets;
@@ -30,14 +31,14 @@ namespace EDMobilePlugin
             Listener.Start();
             if (Listener.IsListening)
             {
-                Console.WriteLine("Connect browser for a basic echo-back web page.");
-                Console.WriteLine($"Server listening: {uriPrefix}");
+                Debug.WriteLine("Connect browser for a basic echo-back web page.");
+                Debug.WriteLine($"Server listening: {uriPrefix}");
                 // listen on a separate thread so that Listener.Stop can interrupt GetContextAsync
                 Task.Run(() => Listen().ConfigureAwait(false));
             }
             else
             {
-                Console.WriteLine("Server failed to start.");
+                Debug.WriteLine("Server failed to start.");
             }
         }
 
@@ -46,7 +47,7 @@ namespace EDMobilePlugin
             if (Listener?.IsListening ?? false)
             {
                 TokenSource.Cancel();
-                Console.WriteLine("\nServer is stopping.");
+                Debug.WriteLine("\nServer is stopping.");
                 Listener.Stop();
                 Listener.Close();
                 TokenSource.Dispose();
@@ -55,7 +56,7 @@ namespace EDMobilePlugin
 
         public static void Broadcast(string message)
         {
-            Console.WriteLine($"Broadcast: {message}");
+            Debug.WriteLine($"Broadcast: {message}");
             foreach (var kvp in BroadcastQueues)
                 kvp.Value.Add(message);
         }
@@ -73,7 +74,7 @@ namespace EDMobilePlugin
                     {
                         wsContext = await context.AcceptWebSocketAsync(subProtocol: null);
                         int socketId = Interlocked.Increment(ref SocketCounter);
-                        Console.WriteLine($"Socket {socketId}: New connection.");
+                        Debug.WriteLine($"Socket {socketId}: New connection.");
                         _ = Task.Run(() => ProcessWebSocket(wsContext, socketId).ConfigureAwait(false));
                     }
                     catch (Exception)
@@ -108,18 +109,18 @@ namespace EDMobilePlugin
                 while (socket.State == WebSocketState.Open && !Token.IsCancellationRequested)
                 {
                     var receiveResult = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), Token);
-                    Console.WriteLine($"Socket {socketId}: Received {receiveResult.MessageType} frame ({receiveResult.Count} bytes).");
+                    Debug.WriteLine($"Socket {socketId}: Received {receiveResult.MessageType} frame ({receiveResult.Count} bytes).");
                     if (receiveResult.MessageType == WebSocketMessageType.Close)
                     {
-                        Console.WriteLine($"Socket {socketId}: Closing websocket.");
+                        Debug.WriteLine($"Socket {socketId}: Closing websocket.");
                         broadcastTokenSource.Cancel();
                         BroadcastQueues.TryRemove(socketId, out _);
                         await socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "", Token);
                     }
                     else
                     {
-                        Console.WriteLine($"Socket {socketId}: Echoing data to queue.");
-                        string message = Encoding.UTF8.GetString(buffer, 0, receiveResult.Count);
+                        Debug.WriteLine($"Socket {socketId}: Echoing data to queue.");
+                        string message = Encoding.ASCII.GetString(buffer, 0, receiveResult.Count);
                         BroadcastQueues[socketId].Add(message);
                     }
                 }
@@ -130,8 +131,8 @@ namespace EDMobilePlugin
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"\nSocket {socketId}:\n  Exception {ex.GetType().Name}: {ex.Message}");
-                if (ex.InnerException != null) Console.WriteLine($"  Inner Exception {ex.InnerException.GetType().Name}: {ex.InnerException.Message}");
+                Debug.WriteLine($"\nSocket {socketId}:\n  Exception {ex.GetType().Name}: {ex.Message}");
+                if (ex.InnerException != null) Debug.WriteLine($"  Inner Exception {ex.InnerException.GetType().Name}: {ex.InnerException.Message}");
             }
             finally
             {
@@ -153,8 +154,8 @@ namespace EDMobilePlugin
                     await Task.Delay(BROADCAST_WAKEUP_INTERVAL, socketToken);
                     if (!socketToken.IsCancellationRequested && BroadcastQueues[socketId].TryTake(out var message))
                     {
-                        Console.WriteLine($"Socket {socketId}: Sending from queue.");
-                        var msgbuf = new ArraySegment<byte>(Encoding.UTF8.GetBytes(message));
+                        Debug.WriteLine($"Socket {socketId}: Sending from queue.");
+                        var msgbuf = new ArraySegment<byte>(Encoding.ASCII.GetBytes(message));
                         await socket.SendAsync(msgbuf, WebSocketMessageType.Text, endOfMessage: true, socketToken);
                     }
                 }
@@ -164,8 +165,8 @@ namespace EDMobilePlugin
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"\nSocket {socketId} broadcast task:\n  Exception {ex.GetType().Name}: {ex.Message}");
-                    if (ex.InnerException != null) Console.WriteLine($"  Inner Exception {ex.InnerException.GetType().Name}: {ex.InnerException.Message}");
+                    Debug.WriteLine($"\nSocket {socketId} broadcast task:\n  Exception {ex.GetType().Name}: {ex.Message}");
+                    if (ex.InnerException != null) Debug.WriteLine($"  Inner Exception {ex.InnerException.GetType().Name}: {ex.InnerException.Message}");
                 }
             }
         }
