@@ -5,25 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNet.WebApi" Version="5.2.7" />
-    <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.7" />
-    <PackageReference Include="Microsoft.AspNet.WebApi.Owin" Version="5.2.7" />
-    <PackageReference Include="Microsoft.AspNet.WebApi.Tracing" Version="5.2.7" />
-    <PackageReference Include="Microsoft.AspNet.WebHooks.Common" Version="1.2.1" />
-    <PackageReference Include="Microsoft.AspNet.WebHooks.Custom" Version="1.2.1" />
-    <PackageReference Include="Microsoft.AspNet.WebHooks.Custom.Api" Version="1.2.1" />
-    <PackageReference Include="Microsoft.Owin.Host.HttpListener" Version="4.0.1" />
-    <PackageReference Include="Microsoft.Owin.Host.SystemWeb" Version="4.0.1" />
-    <PackageReference Include="Microsoft.Owin.Hosting" Version="4.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\BaseUtilities\BaseUtilities\BaseUtils.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Web" />
   </ItemGroup>
 
   <Target AfterTargets="Build" Name="Copy to DLL folder">
