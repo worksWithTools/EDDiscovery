@@ -5,19 +5,19 @@ using EliteDangerousCore;
 using SkiaSharp;
 using SkiaSharp.Views.Android;
 using System.Collections.Generic;
-using System.Globalization;
 
 namespace EDDMobile
 {
     public class JournalViewAdapter : BaseAdapter<JournalEntry>
     {
-        List<JournalEntry> items;
         Activity context;
-        public JournalViewAdapter(Activity context, List<JournalEntry> items)
+        private JournalEntryRepository items;
+
+        public JournalViewAdapter(Activity context, JournalEntryRepository journalrepo)
             : base()
         {
             this.context = context;
-            this.items = items;
+            items = journalrepo;
         }
         public override long GetItemId(int position)
         {
@@ -25,15 +25,15 @@ namespace EDDMobile
         }
         public override JournalEntry this[int position]
         {
-            get { return items[position]; }
+            get { return items.journalCollection[position]; }
         }
         public override int Count
         {
-            get { return items.Count; }
+            get { return items.journalCollection.Count; }
         }
         public override View GetView(int position, View convertView, ViewGroup parent)
         {
-            var item = items[position];
+            var item = items.journalCollection[position];
             View view = convertView;
             if (view == null) // no view to re-use, create new
                 view = context.LayoutInflater.Inflate(Resource.Layout.custom_view, null);
