@@ -322,6 +322,7 @@
     <ProjectReference Include="..\BaseUtilities\OpenTKUtils\OpenTKUtils.csproj" />
     <ProjectReference Include="..\BaseUtilities\SQLLite\SQLLite.csproj" />
     <ProjectReference Include="..\EDDIcons\EDDIcons.csproj" />
+    <ProjectReference Include="..\EDPlugin\EDPlugin.csproj" />
     <ProjectReference Include="..\EliteDangerous\EliteDangerous.csproj" />
     <ProjectReference Include="..\ExtendedControls\ExtendedControls\ExtendedControls.csproj" />
     <ProjectReference Include="..\ExtendedControls\ExtendedForms\ExtendedForms.csproj" />

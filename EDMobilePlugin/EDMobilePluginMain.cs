@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Reflection;
-using EDDiscovery.DLL;
+using EDPlugin;
 
 
 namespace EDMobilePlugin
 {
-    public class EDMobilePluginMain : EDDiscovery.DLL.IManagedDll
+    public class EDMobilePluginMain : IManagedDll
     {
         
         public string EDDActionCommand(string cmdname, string[] paras)

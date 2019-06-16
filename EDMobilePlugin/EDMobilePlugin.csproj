@@ -9,13 +9,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BaseUtilities\BaseUtilities\BaseUtils.csproj" />
+    <ProjectReference Include="..\EDPlugin\EDPlugin.csproj" />
   </ItemGroup>
 
   <Target AfterTargets="Build" Name="Copy to DLL folder">
     <Message Importance="high" Text="Copying to DLL folder" />
     <ItemGroup>
       <ItemsToCopy Include="$(OutDir)*.dll" />
+      <ItemsToCopy Remove="$(OutDir)EDPlugin.dll"/>
     </ItemGroup>
     <Copy SourceFiles="@(ItemsToCopy)" DestinationFolder="D:\sa_up\EDDiscovery\DLL" />
   </Target>

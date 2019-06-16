@@ -15,6 +15,7 @@
  */
 
 
+using EDPlugin;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -31,7 +32,7 @@ namespace EDDiscovery.DLL
         private List<IEDDDLLCaller> dlls = new List<IEDDDLLCaller>();
 
         // return loaded, failed, notallowed
-        public Tuple<string,string,string> Load(string directory, string ourversion, string dllfolder, EDDDLLIF.EDDCallBacks callbacks, string allowed, DLL.ManagedCallbacks managedCalls = null)
+        public Tuple<string,string,string> Load(string directory, string ourversion, string dllfolder, EDDDLLIF.EDDCallBacks callbacks, string allowed, EDPlugin.ManagedCallbacks managedCalls = null)
         {
             string loaded = "";
             string failed = "";

@@ -44,8 +44,8 @@ namespace EDDiscovery
         private Actions.ActionController actioncontroller;
 
         public EDDiscovery.DLL.EDDDLLManager DLLManager;
-        public EDDiscovery.DLL.EDDDLLIF.EDDCallBacks DLLCallBacks;
-        public EDDiscovery.DLL.ManagedCallbacks DLLManagedCallbacks;
+        public EDPlugin.EDDDLLIF.EDDCallBacks DLLCallBacks;
+        public EDPlugin.ManagedCallbacks DLLManagedCallbacks;
 
         public Actions.ActionController DEBUGGETAC { get { return actioncontroller; } }
 
@@ -304,7 +304,7 @@ namespace EDDiscovery
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Finish ED Init");
 
             DLLManager = new DLL.EDDDLLManager();
-            DLLCallBacks = new EDDiscovery.DLL.EDDDLLIF.EDDCallBacks();
+            DLLCallBacks = new EDPlugin.EDDDLLIF.EDDCallBacks();
              
 
             UpdateProfileComboBox();
@@ -380,7 +380,7 @@ namespace EDDiscovery
 
             DLLCallBacks.RequestHistory = DLLRequestHistory;
             DLLCallBacks.RunAction = DLLRunAction;
-            DLLManagedCallbacks = new DLL.ManagedCallbacks();
+            DLLManagedCallbacks = new EDPlugin.ManagedCallbacks();
         
             
             bool retry = false;
@@ -502,7 +502,7 @@ namespace EDDiscovery
             return true;
         }
 
-        public bool DLLRequestHistory(long index, bool isjid, out EDDiscovery.DLL.EDDDLLIF.JournalEntry f)
+        public bool DLLRequestHistory(long index, bool isjid, out EDPlugin.EDDDLLIF.JournalEntry f)
         {
             HistoryEntry he = isjid ? history.GetByJID(index) : history.GetByIndex((int)index);
             f = EDDiscovery.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(he);

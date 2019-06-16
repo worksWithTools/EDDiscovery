@@ -1,4 +1,4 @@
-﻿using EDDiscovery.DLL;
+﻿using EDPlugin;
 using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;

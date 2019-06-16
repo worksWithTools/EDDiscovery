@@ -14,6 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
+using EDPlugin;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -27,19 +28,19 @@ namespace EDDiscovery.DLL
         Assembly assembly;
         string _path;
         IManagedDll caller;
-        DLL.ManagedCallbacks managedCallbacks;
-        public EDDManagedCaller(string path, DLL.ManagedCallbacks managedCallbacks)
+        ManagedCallbacks managedCallbacks;
+        public EDDManagedCaller(string path, ManagedCallbacks managedCallbacks)
         {
             try
             {
                 _path = path;
                 this.managedCallbacks = managedCallbacks;
                 Name = Path.GetFileNameWithoutExtension(_path);
-                var pluginPath = Path.GetDirectoryName(_path); 
-                //AppDomain.CurrentDomain.AppendPrivatePath(pluginPath);
+                var pluginPath = Path.GetDirectoryName(_path);
+                AppDomain.CurrentDomain.AppendPrivatePath(pluginPath);
                 assembly = Assembly.LoadFrom(_path);
                 Type t = assembly.GetTypes()
-                    .Where(x => typeof(IManagedDll).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract)
+                    .Where(x => IsManagedPlugin(x))
                     .FirstOrDefault();
                 if (t != null)
                 {
@@ -51,6 +52,11 @@ namespace EDDiscovery.DLL
             {
                 Debug.WriteLine(e);
             }
+        }
+
+        private static bool IsManagedPlugin(Type x)
+        {
+            return typeof(IManagedDll).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract;
         }
 
         public bool Loaded => caller != null;
