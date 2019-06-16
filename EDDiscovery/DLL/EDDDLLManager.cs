@@ -26,10 +26,12 @@ namespace EDDiscovery.DLL
     {
         public int Count { get { return dlls.Count; } }
 
+        public bool HasManaged => dlls.Exists(dll => dll.GetType() == typeof(EDDManagedCaller));  
+
         private List<IEDDDLLCaller> dlls = new List<IEDDDLLCaller>();
 
         // return loaded, failed, notallowed
-        public Tuple<string,string,string> Load(string directory, string ourversion, string dllfolder, EDDDLLIF.EDDCallBacks callbacks, string allowed)
+        public Tuple<string,string,string> Load(string directory, string ourversion, string dllfolder, EDDDLLIF.EDDCallBacks callbacks, string allowed, DLL.ManagedCallbacks managedCalls = null)
         {
             string loaded = "";
             string failed = "";
@@ -47,7 +49,7 @@ namespace EDDiscovery.DLL
                 {
                     string filename = System.IO.Path.GetFileNameWithoutExtension(f.FullName);
 
-                    IEDDDLLCaller caller = EDDDLLCaller.MakeCaller(f.FullName);
+                    IEDDDLLCaller caller = EDDDLLCaller.MakeCaller(f.FullName, managedCalls);
 
                     if (caller.Loaded)        // if loaded (meaning it loaded, and its got EDDInitialise)
                     {

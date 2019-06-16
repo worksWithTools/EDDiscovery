@@ -27,14 +27,16 @@ namespace EDDiscovery.DLL
         Assembly assembly;
         string _path;
         IManagedDll caller;
-        public EDDManagedCaller(string path)
+        DLL.ManagedCallbacks managedCallbacks;
+        public EDDManagedCaller(string path, DLL.ManagedCallbacks managedCallbacks)
         {
             try
             {
                 _path = path;
+                this.managedCallbacks = managedCallbacks;
                 Name = Path.GetFileNameWithoutExtension(_path);
                 var pluginPath = Path.GetDirectoryName(_path); 
-                AppDomain.CurrentDomain.AppendPrivatePath(pluginPath);
+                //AppDomain.CurrentDomain.AppendPrivatePath(pluginPath);
                 assembly = Assembly.LoadFrom(_path);
                 Type t = assembly.GetTypes()
                     .Where(x => typeof(IManagedDll).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract)
@@ -60,7 +62,7 @@ namespace EDDiscovery.DLL
         {
             try
             {
-                Version = caller.EDDInitialise(ourversion, callbacks);
+                Version = caller.EDDInitialise(ourversion, callbacks, managedCallbacks);
 
                 return !String.IsNullOrEmpty(Version) && Version[0] != '!';
             }
@@ -72,31 +74,33 @@ namespace EDDiscovery.DLL
         }
         public string ActionCommand(string cmd, string[] paras)
         {
-            
-            return "Not Implemented";
+            return caller.EDDActionCommand(cmd, paras);
         }
 
         public bool ActionJournalEntry(EDDDLLIF.JournalEntry je)
         {
-            return false;
+            caller.EDDActionJournalEntry(je);
+            return true;
         }
 
         
 
         public bool NewJournalEntry(EDDDLLIF.JournalEntry nje)
         {
-            return false;
+            caller.EDDNewJournalEntry(nje);
+            return true;
         }
 
         public bool Refresh(string cmdr, EDDDLLIF.JournalEntry je)
         {
-            return false;
+            caller.EDDRefresh(cmdr, je);
+            return true;
         }
 
         public bool UnLoad()
         {
-            //TODO: shutdown the webserver
-            return false;
+            caller.EDDTerminate();
+            return true;
         }
     }
 }

@@ -45,6 +45,7 @@ namespace EDDiscovery
 
         public EDDiscovery.DLL.EDDDLLManager DLLManager;
         public EDDiscovery.DLL.EDDDLLIF.EDDCallBacks DLLCallBacks;
+        public EDDiscovery.DLL.ManagedCallbacks DLLManagedCallbacks;
 
         public Actions.ActionController DEBUGGETAC { get { return actioncontroller; } }
 
@@ -304,6 +305,7 @@ namespace EDDiscovery
 
             DLLManager = new DLL.EDDDLLManager();
             DLLCallBacks = new EDDiscovery.DLL.EDDDLLIF.EDDCallBacks();
+             
 
             UpdateProfileComboBox();
             comboBoxCustomProfiles.SelectedIndexChanged += ComboBoxCustomProfiles_SelectedIndexChanged;
@@ -378,25 +380,38 @@ namespace EDDiscovery
 
             DLLCallBacks.RequestHistory = DLLRequestHistory;
             DLLCallBacks.RunAction = DLLRunAction;
-
-            Tuple<string, string, string> res = DLLManager.Load(EDDOptions.Instance.DLLAppDirectory(), EDDApplicationContext.AppVersion, EDDOptions.Instance.DLLAppDirectory(), DLLCallBacks, alloweddlls);
-
-            if (res.Item3.HasChars())
+            DLLManagedCallbacks = new DLL.ManagedCallbacks();
+        
+            
+            bool retry = false;
+            Tuple<string, string, string> res;
+            do
             {
-                if (ExtendedControls.MessageBoxTheme.Show(this,
-                                string.Format(("The following application extension DLLs have been found" + Environment.NewLine +
-                                "Do you wish to allow these to be used?" + Environment.NewLine +
-                                "{0} " + Environment.NewLine +
-                                "If you do not, either remove the DLLs from the DLL folder in ED Appdata" + Environment.NewLine +
-                                "or deinstall the action pack which introduced the DLL" + Environment.NewLine +
-                                "or hold down shift when launching and use the Remove all Extensions DLL option").Tx(this, "DLLW"), res.Item3),
-                                "Warning".Tx(),
-                                MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                res = DLLManager.Load(EDDOptions.Instance.DLLAppDirectory(), EDDApplicationContext.AppVersion, EDDOptions.Instance.DLLAppDirectory(), DLLCallBacks, alloweddlls, DLLManagedCallbacks);
+
+
+                if (res.Item3.HasChars())
                 {
-                    SQLiteConnectionUser.PutSettingString("DLLAllowed", alloweddlls.AppendPrePad(res.Item3, ","));
-                    DLLManager.UnLoad();
-                    res = DLLManager.Load(EDDOptions.Instance.DLLAppDirectory(), EDDApplicationContext.AppVersion, EDDOptions.Instance.DLLAppDirectory(), DLLCallBacks, alloweddlls);
+                    retry = (ExtendedControls.MessageBoxTheme.Show(this,
+                                    string.Format(("The following application extension DLLs have been found" + Environment.NewLine +
+                                    "Do you wish to allow these to be used?" + Environment.NewLine +
+                                    "{0} " + Environment.NewLine +
+                                    "If you do not, either remove the DLLs from the DLL folder in ED Appdata" + Environment.NewLine +
+                                    "or deinstall the action pack which introduced the DLL" + Environment.NewLine +
+                                    "or hold down shift when launching and use the Remove all Extensions DLL option").Tx(this, "DLLW"), res.Item3),
+                                    "Warning".Tx(),
+                                    MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes);
+                    if (retry)
+                    {
+                        SQLiteConnectionUser.PutSettingString("DLLAllowed", alloweddlls.AppendPrePad(res.Item3, ","));
+                        DLLManager.UnLoad();
+                    }
                 }
+            } while (retry);
+
+            if (DLLManager.HasManaged)
+            {
+                DLLManagedCallbacks.RequestRefresh = () => RefreshHistoryAsync();
             }
 
             if (res.Item1.HasChars())

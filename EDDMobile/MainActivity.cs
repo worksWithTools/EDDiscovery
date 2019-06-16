@@ -45,7 +45,7 @@ namespace EDDMobile
             await Connect(edduri.Text);
 
             //TODO: we'll probably want a better handshake than this!
-            await Send(".ready");
+            await Send("refresh");
 
             await Listen();
         }

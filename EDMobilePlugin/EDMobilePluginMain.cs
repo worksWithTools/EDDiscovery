@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Reflection;
 using EDDiscovery.DLL;
 
@@ -7,32 +8,34 @@ namespace EDMobilePlugin
 {
     public class EDMobilePluginMain : EDDiscovery.DLL.IManagedDll
     {
-
+        
         public string EDDActionCommand(string cmdname, string[] paras)
         {
-            throw new NotImplementedException();
+            Debug.WriteLine($"EDDActionCommand: {cmdname}, {paras}");
+            return "Done";
         }
 
         public void EDDActionJournalEntry(EDDDLLIF.JournalEntry lastje)
         {
-            throw new NotImplementedException();
+            Debug.WriteLine($"EDDActionJournalEntry: {lastje.ToNullSafeString()}");
         }
 
-        public string EDDInitialise(string vstr, EDDDLLIF.EDDCallBacks callbacks)
+        public string EDDInitialise(string vstr, EDDDLLIF.EDDCallBacks callbacks, ManagedCallbacks managedCallbacks)
         {
-            WebSocketServer.Start("http://+:80/eddmobile/");
-
+            WebSocketServer.Start("http://+:80/eddmobile/", callbacks, managedCallbacks);
+ 
             return Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
 
         public void EDDNewJournalEntry(EDDDLLIF.JournalEntry nje)
         {
-            throw new NotImplementedException();
+            Debug.WriteLine($"EDDNewJournalEntry: {nje.ToNullSafeString()}");
+            
         }
 
         public void EDDRefresh(string cmdname, EDDDLLIF.JournalEntry lastje)
         {
-            throw new NotImplementedException();
+            Debug.WriteLine($"EDDRefresh: {cmdname}, {lastje.ToNullSafeString()}");
         }
 
         public void EDDTerminate()
