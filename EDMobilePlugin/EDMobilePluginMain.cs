@@ -37,6 +37,7 @@ namespace EDMobilePlugin
         {
             string json = lastje.ToJson();
             Debug.WriteLine($"EDDRefresh: {cmdname}, {json}");
+            //Broadcast now, or 
             WebSocketServer.Broadcast(json);
         }
 

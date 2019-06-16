@@ -20,6 +20,7 @@ namespace EDDMobile
         private JournalEntryRepository journalEntries = new JournalEntryRepository();
         private ClientWebSocket webSocket;
         private EditText edduri;
+        private TextView jsonview;
         private Button connect;
         
         protected override void OnCreate(Bundle savedInstanceState)
@@ -31,13 +32,14 @@ namespace EDDMobile
 
             EDDiscovery.Icons.IconSet.ResetIcons();     // start with a clean slate loaded up from default icons
             
-            var listView = FindViewById<ListView>(Resource.Id.journalListView);
+            //var listView = FindViewById<ListView>(Resource.Id.journalListView);
             
-            listView.Adapter = new JournalViewAdapter(this, journalEntries.journalCollection);
+            //listView.Adapter = new JournalViewAdapter(this, journalEntries.journalCollection);
     
             connect = FindViewById<Button>(Resource.Id.connectBtn);
             connect.Click += Connect_Click;
             edduri = FindViewById<EditText>(Resource.Id.eddUri);
+            jsonview = FindViewById<TextView>(Resource.Id.jsonview);
         }
 
         private async void Connect_Click(object sender, EventArgs e)
@@ -96,8 +98,9 @@ namespace EDDMobile
                 else
                 {
                     string message = Encoding.ASCII.GetString(result.Item2.ToArray());
+                    jsonview.Text = message;
                     //LogStatus(true, buffer, result.Count);
-                    journalEntries.AddEntry(message);
+                    //journalEntries.AddEntry(message);
                 }
             }
         }

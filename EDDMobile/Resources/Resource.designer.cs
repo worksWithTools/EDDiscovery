@@ -2223,7 +2223,7 @@ namespace EDDMobile
 			public const int item_touch_helper_previous_elevation = 2131230720;
 			
 			// aapt resource value: 0x7f08006f
-			public const int journalListView = 2131230831;
+			public const int jsonview = 2131230831;
 			
 			// aapt resource value: 0x7f080030
 			public const int left = 2131230768;
