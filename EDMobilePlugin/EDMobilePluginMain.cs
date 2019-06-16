@@ -17,7 +17,7 @@ namespace EDMobilePlugin
 
         public void EDDActionJournalEntry(EDDDLLIF.JournalEntry lastje)
         {
-            Debug.WriteLine($"EDDActionJournalEntry: {lastje.ToNullSafeString()}");
+            Debug.WriteLine($"EDDActionJournalEntry: {lastje.ToJson()}");
         }
 
         public string EDDInitialise(string vstr, EDDDLLIF.EDDCallBacks callbacks, ManagedCallbacks managedCallbacks)
@@ -29,13 +29,15 @@ namespace EDMobilePlugin
 
         public void EDDNewJournalEntry(EDDDLLIF.JournalEntry nje)
         {
-            Debug.WriteLine($"EDDNewJournalEntry: {nje.ToNullSafeString()}");
+            Debug.WriteLine($"EDDNewJournalEntry: {nje.ToJson()}");
             
         }
 
         public void EDDRefresh(string cmdname, EDDDLLIF.JournalEntry lastje)
         {
-            Debug.WriteLine($"EDDRefresh: {cmdname}, {lastje.ToNullSafeString()}");
+            string json = lastje.ToJson();
+            Debug.WriteLine($"EDDRefresh: {cmdname}, {json}");
+            WebSocketServer.Broadcast(json);
         }
 
         public void EDDTerminate()

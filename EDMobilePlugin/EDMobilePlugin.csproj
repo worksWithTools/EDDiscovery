@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="System.Memory" Version="4.5.3" />
   </ItemGroup>
 
@@ -16,7 +17,7 @@
     <Message Importance="high" Text="Copying to DLL folder" />
     <ItemGroup>
       <ItemsToCopy Include="$(OutDir)*.dll" />
-      <ItemsToCopy Remove="$(OutDir)EDPlugin.dll"/>
+      <ItemsToCopy Remove="$(OutDir)EDPlugin.dll" />
     </ItemGroup>
     <Copy SourceFiles="@(ItemsToCopy)" DestinationFolder="D:\sa_up\EDDiscovery\DLL" />
   </Target>

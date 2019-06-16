@@ -124,7 +124,7 @@ namespace EDMobilePlugin
                     else
                     {
                         string message = Encoding.ASCII.GetString(buffer, 0, receiveResult.Count);
-                        
+
                         // if message is "ready" then send back some data..
                         if (message == "refresh")
                         {
