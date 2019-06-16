@@ -1,4 +1,5 @@
-﻿using EDPlugin;
+﻿using BaseUtils.Misc;
+using EDPlugin;
 using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
@@ -19,6 +20,7 @@ namespace EDMobilePlugin
         private static EDDDLLIF.EDDCallBacks _callbacks;
         private static ManagedCallbacks _managedCallbacks;
         private static int SocketCounter = 0;
+        private static ConcurrentDictionary<int, AutoResetEvent> broadcastAvailable = new ConcurrentDictionary<int, AutoResetEvent>();
 
         // The dictionary key corresponds to active socket IDs, and the BlockingCollection wraps
         // the default ConcurrentQueue to store broadcast messages for each active socket.
@@ -62,7 +64,10 @@ namespace EDMobilePlugin
         {
             Debug.WriteLine($"Broadcast: {message}");
             foreach (var kvp in BroadcastQueues)
+            {
                 kvp.Value.Add(message);
+                broadcastAvailable[kvp.Key].Set();
+            }
         }
 
         private static async Task Listen()
@@ -104,6 +109,7 @@ namespace EDMobilePlugin
             var socket = context.WebSocket;
 
             BroadcastQueues.TryAdd(socketId, new BlockingCollection<string>());
+            broadcastAvailable.TryAdd(socketId, new AutoResetEvent(false));
             var broadcastTokenSource = new CancellationTokenSource();
             _ = Task.Run(() => WatchForBroadcasts(socketId, socket, broadcastTokenSource.Token));
 
@@ -119,6 +125,7 @@ namespace EDMobilePlugin
                         Debug.WriteLine($"Socket {socketId}: Closing websocket.");
                         broadcastTokenSource.Cancel();
                         BroadcastQueues.TryRemove(socketId, out _);
+                        broadcastAvailable.TryRemove(socketId, out _);
                         await socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "", Token);
                     }
                     else
@@ -148,6 +155,7 @@ namespace EDMobilePlugin
                 broadcastTokenSource?.Cancel();
                 broadcastTokenSource?.Dispose();
                 BroadcastQueues?.TryRemove(socketId, out _);
+                broadcastAvailable?.TryRemove(socketId, out _);
             }
         }
 
@@ -155,16 +163,21 @@ namespace EDMobilePlugin
 
         private static async Task WatchForBroadcasts(int socketId, WebSocket socket, CancellationToken socketToken)
         {
+            var waitHandles = new[] { broadcastAvailable[socketId], socketToken.WaitHandle };
             while (!socketToken.IsCancellationRequested)
             {
                 try
                 {
-                    await Task.Delay(BROADCAST_WAKEUP_INTERVAL, socketToken);
-                    if (!socketToken.IsCancellationRequested && BroadcastQueues[socketId].TryTake(out var message))
+                    // use async waiting
+                    var waitEvent = broadcastAvailable[socketId];
+                    if (await waitEvent.WaitOneAsync(socketToken))
                     {
-                        Debug.WriteLine($"Socket {socketId}: Sending from queue.");
-                        var msgbuf = new ArraySegment<byte>(Encoding.ASCII.GetBytes(message));
-                        await socket.SendAsync(msgbuf, WebSocketMessageType.Text, endOfMessage: true, socketToken);
+                        if (BroadcastQueues[socketId].TryTake(out var message))
+                        {
+                            Debug.WriteLine($"Socket {socketId}: Sending from queue.");
+                            var msgbuf = new ArraySegment<byte>(Encoding.ASCII.GetBytes(message));
+                            await socket.SendAsync(msgbuf, WebSocketMessageType.Text, endOfMessage: true, socketToken);
+                        }
                     }
                 }
                 catch (OperationCanceledException)
