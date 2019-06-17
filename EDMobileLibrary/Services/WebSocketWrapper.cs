@@ -10,26 +10,30 @@ using System.Threading.Tasks;
 
 namespace EDDMobile.Comms
 {
+    //TODO: extract an interface and make this work in the DependencyService
     public class WebSocketWrapper
     {
+        public WebSocketWrapper(){
+            webSocket = new ClientWebSocket();
+
+        }
         private ClientWebSocket webSocket;
         private ConcurrentQueue<string> messages = new ConcurrentQueue<string>();
 
         public delegate void OnMessageHandler();
-
         //Note: we're not passing the actual message out of the delegate
         // because its possible the queue could get swamped.
         public event OnMessageHandler OnMessage;
 
         public async Task Connect(string uri)
         {
-            webSocket = null;
-
-            try
+           try
             {
-                webSocket = new ClientWebSocket();
+                if (webSocket.State == WebSocketState.Open)
+                    return;
 
                 await webSocket.ConnectAsync(new Uri(uri), CancellationToken.None);
+
             }
             catch (Exception ex)
             {
@@ -38,8 +42,39 @@ namespace EDDMobile.Comms
 
         }
 
+       
+        public bool TryGetMessage(out string msg)
+        {
+            return messages.TryDequeue(out msg);
+        }
+
+        public async Task Send(string message)
+        {
+            var random = new Random();
+            var bytes = Encoding.ASCII.GetBytes(message);
+
+            var arraySegment = new ArraySegment<byte>(bytes);
+
+            await webSocket.SendAsync(arraySegment, WebSocketMessageType.Text, true, CancellationToken.None);
+        }
+
+        async Task<(WebSocketReceiveResult, IEnumerable<byte>)> ReceiveFullMessage(CancellationToken cancelToken)
+        {
+            WebSocketReceiveResult response;
+            var message = new List<byte>();
+            var buffer = new byte[4096];
+            do
+            {
+                response = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), cancelToken);
+                message.AddRange(new ArraySegment<byte>(buffer, 0, response.Count));
+            } while (!response.EndOfMessage);
+            return (response, message);
+        }
+
+
         public async Task Listen()
         {
+            // TODO: put a CancelToken in here...
             while (webSocket.State == WebSocketState.Open)
             {
                 var result = await ReceiveFullMessage(CancellationToken.None);
@@ -58,35 +93,6 @@ namespace EDDMobile.Comms
                 }
             }
         }
-
-        public bool TryGetMessage(out string msg)
-        {
-            return messages.TryDequeue(out msg);
-        }
-
-        async Task<(WebSocketReceiveResult, IEnumerable<byte>)> ReceiveFullMessage(CancellationToken cancelToken)
-        {
-            WebSocketReceiveResult response;
-            var message = new List<byte>();
-            var buffer = new byte[4096];
-            do
-            {
-                response = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), cancelToken);
-                message.AddRange(new ArraySegment<byte>(buffer, 0, response.Count));
-            } while (!response.EndOfMessage);
-            return (response, message);
-        }
-
-        public async Task Send(string message)
-        {
-            var random = new Random();
-            var bytes = Encoding.ASCII.GetBytes(message);
-
-            var arraySegment = new ArraySegment<byte>(bytes);
-
-            await webSocket.SendAsync(arraySegment, WebSocketMessageType.Text, true, CancellationToken.None);
-        }
-
 
     }
 

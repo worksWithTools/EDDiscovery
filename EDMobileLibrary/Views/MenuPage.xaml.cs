@@ -20,7 +20,8 @@ namespace EDDMobileImpl.Views
 
             menuItems = new List<HomeMenuItem>
             {
-                new HomeMenuItem {Id = MenuItemType.Browse, Title="Browse" },
+                new HomeMenuItem {Id = MenuItemType.Main, Title="Main" },
+                new HomeMenuItem {Id = MenuItemType.History, Title="History" },
                 new HomeMenuItem {Id = MenuItemType.About, Title="About" }
             };
 

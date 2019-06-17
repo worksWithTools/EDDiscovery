@@ -6,7 +6,8 @@ namespace EDDMobileImpl.Models
 {
     public enum MenuItemType
     {
-        Browse,
+        Main,
+        History,
         About
     }
     public class HomeMenuItem

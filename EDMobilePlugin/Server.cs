@@ -14,6 +14,7 @@ namespace EDMobilePlugin
 {
     public static class WebSocketServer
     {
+        private const int PREVIEW_LENGTH = 50;
         private static HttpListener Listener;
         private static CancellationTokenSource TokenSource;
         private static CancellationToken Token;
@@ -62,7 +63,7 @@ namespace EDMobilePlugin
 
         public static void Broadcast(string message)
         {
-            Debug.WriteLine($"Broadcast: {message}");
+            Debug.WriteLine($"Broadcast request received: {message.Left(PREVIEW_LENGTH)}...");
             foreach (var kvp in BroadcastQueues)
             {
                 kvp.Value.Add(message);
@@ -159,8 +160,6 @@ namespace EDMobilePlugin
             }
         }
 
-        private const int BROADCAST_WAKEUP_INTERVAL = 250; // milliseconds
-
         private static async Task WatchForBroadcasts(int socketId, WebSocket socket, CancellationToken socketToken)
         {
             var waitHandles = new[] { broadcastAvailable[socketId], socketToken.WaitHandle };
@@ -172,9 +171,10 @@ namespace EDMobilePlugin
                     var waitEvent = broadcastAvailable[socketId];
                     if (await waitEvent.WaitOneAsync(socketToken))
                     {
+                        Debug.WriteLine($"Broadcast received by socket {socketId}");
                         if (BroadcastQueues[socketId].TryTake(out var message))
                         {
-                            Debug.WriteLine($"Socket {socketId}: Sending from queue.");
+                            Debug.WriteLine($"Socket {socketId}: Sending next broadcast from queue: [{message.Left(PREVIEW_LENGTH)}...]");
                             var msgbuf = new ArraySegment<byte>(Encoding.ASCII.GetBytes(message));
                             await socket.SendAsync(msgbuf, WebSocketMessageType.Text, endOfMessage: true, socketToken);
                         }
