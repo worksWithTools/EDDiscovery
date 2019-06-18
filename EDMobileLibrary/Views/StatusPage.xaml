@@ -4,11 +4,12 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
+             xmlns:local="clr-namespace:EDDMobileImpl.ViewModels"
              x:Class="EDDMobileImpl.Views.StatusPage">
     <ContentPage.Content>
         <StackLayout>
-            <Button Text="Connect" Clicked="Button_Clicked"/>
-            <Label x:Name="lblJson" d:Text="Welcome to Xamarin.Forms!"
+            <Button Text="Refresh" Clicked="Button_Clicked"/>
+            <Label Text="{Binding LastJournalEntry}" d:Text="Welcome to Xamarin.Forms!"
                 VerticalOptions="StartAndExpand" 
                 HorizontalOptions="StartAndExpand"/>
         </StackLayout>

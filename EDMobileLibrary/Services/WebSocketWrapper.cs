@@ -29,9 +29,6 @@ namespace EDDMobile.Comms
         {
            try
             {
-                if (webSocket.State == WebSocketState.Open)
-                    return;
-
                 await webSocket.ConnectAsync(new Uri(uri), CancellationToken.None);
 
             }
@@ -42,6 +39,18 @@ namespace EDDMobile.Comms
 
         }
 
+        public async Task Disconnect()
+        {
+            try
+            {
+                await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closing socket", CancellationToken.None);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception: {0}", ex);
+            }
+        }
+
        
         public bool TryGetMessage(out string msg)
         {
@@ -50,7 +59,6 @@ namespace EDDMobile.Comms
 
         public async Task Send(string message)
         {
-            var random = new Random();
             var bytes = Encoding.ASCII.GetBytes(message);
 
             var arraySegment = new ArraySegment<byte>(bytes);
@@ -77,6 +85,17 @@ namespace EDDMobile.Comms
             // TODO: put a CancelToken in here...
             while (webSocket.State == WebSocketState.Open)
             {
+                var msg = await ListenForMessage();
+                messages.Enqueue(msg);
+                OnMessage?.Invoke();
+
+            }
+        }
+
+        public async Task<string> ListenForMessage()
+        {
+            if (webSocket.State == WebSocketState.Open)
+            {
                 var result = await ReceiveFullMessage(CancellationToken.None);
                 if (result.Item1.MessageType == WebSocketMessageType.Close)
                 {
@@ -85,15 +104,11 @@ namespace EDDMobile.Comms
                 else
                 {
                     string message = Encoding.ASCII.GetString(result.Item2.ToArray());
-                    messages.Enqueue(message);
-                    OnMessage?.Invoke();
-
-                    //LogStatus(true, buffer, result.Count);
-                    //journalEntries.AddEntry(message);
+                    return message;
                 }
             }
+            return "";
         }
-
     }
 
 }

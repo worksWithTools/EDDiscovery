@@ -1,18 +1,22 @@
-﻿using System;
+﻿using EDDMobile.Comms;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-
-using Xamarin.Forms;
-
-using EDDMobileImpl.Models;
-using EDDMobileImpl.Services;
+using System.Threading.Tasks;
 
 namespace EDDMobileImpl.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
-        public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>() ?? new MockDataStore();
+        public WebSocketWrapper WebSocket { get; private set; }
+
+        public BaseViewModel()
+        {
+            WebSocket = new WebSocketWrapper();
+            // TODO: config
+            Task.Run(async () => await WebSocket.Connect("ws://192.168.0.32/eddmobile")); // TODO: SORT OUT SYNC
+        }
 
         bool isBusy = false;
         public bool IsBusy

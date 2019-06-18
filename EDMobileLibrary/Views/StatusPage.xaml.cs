@@ -1,4 +1,5 @@
 ﻿using EDDMobile.Comms;
+using EDDMobileImpl.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,36 +14,21 @@ namespace EDDMobileImpl.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class StatusPage : ContentPage
     {
-        
+        JournalEntryViewModel viewModel;
 
-        WebSocketWrapper socket;
         public StatusPage()
         {
             InitializeComponent();
 
-           
-            lblJson.Text = "Click Connect...";
-            socket = new WebSocketWrapper();
-            socket.OnMessage += Instance_OnMessage;
 
+            BindingContext = viewModel = new JournalEntryViewModel();
         }
 
   
 
-        private void Instance_OnMessage()
+        private void Button_Clicked(object sender, EventArgs e)
         {
-
-            if (socket.TryGetMessage(out string msg))
-                lblJson.Text = msg;
-
-        }
-
-        private async void Button_Clicked(object sender, EventArgs e)
-        {
-           
-            await socket.Connect("ws://192.168.0.32/eddmobile");
-            await socket.Send("refresh");
-            await socket.Listen();
+            viewModel.LoadItemsCommand.Execute(null);
         }
     }
 }

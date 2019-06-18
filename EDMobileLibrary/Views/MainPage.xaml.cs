@@ -1,11 +1,8 @@
-﻿using System;
+﻿using EDDMobileImpl.Models;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
-
-using EDDMobileImpl.Models;
 
 namespace EDDMobileImpl.Views
 {
