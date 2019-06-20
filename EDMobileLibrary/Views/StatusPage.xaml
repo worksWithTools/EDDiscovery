@@ -6,10 +6,19 @@
              mc:Ignorable="d"
              xmlns:local="clr-namespace:EDDMobileImpl.ViewModels"
              x:Class="EDDMobileImpl.Views.StatusPage">
-    <ContentPage.Content>
+        <ContentPage.Content>
         <StackLayout>
             <Button Text="Refresh" Clicked="Button_Clicked"/>
-            <Label Text="{Binding LastJournalEntry}" d:Text="Welcome to Xamarin.Forms!"
+            <Label Text='{Binding Status.WhereAmI}' d:Text="Welcome to Xamarin.Forms!"
+                VerticalOptions="StartAndExpand" 
+                HorizontalOptions="StartAndExpand"/>
+            <Label  d:Text="Welcome to Xamarin.Forms!"
+                VerticalOptions="StartAndExpand" 
+                HorizontalOptions="StartAndExpand"/>
+            <Label d:Text="Welcome to Xamarin.Forms!"
+                VerticalOptions="StartAndExpand" 
+                HorizontalOptions="StartAndExpand"/>
+            <Label  d:Text="Welcome to Xamarin.Forms!"
                 VerticalOptions="StartAndExpand" 
                 HorizontalOptions="StartAndExpand"/>
         </StackLayout>

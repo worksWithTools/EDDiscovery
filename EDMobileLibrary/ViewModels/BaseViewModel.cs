@@ -14,7 +14,7 @@ namespace EDDMobileImpl.ViewModels
         public BaseViewModel()
         {
             WebSocket = new WebSocketWrapper();
-            // TODO: config
+            // TODO: config - is this really where we want to do this?
             Task.Run(async () => await WebSocket.Connect("ws://192.168.0.32/eddmobile")); // TODO: SORT OUT SYNC
         }
 

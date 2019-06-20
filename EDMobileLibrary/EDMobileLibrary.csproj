@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EDPlugin\EDPlugin.csproj" />
     <ProjectReference Include="..\EliteDangerous\EliteDangerous.csproj" />
   </ItemGroup>
 
