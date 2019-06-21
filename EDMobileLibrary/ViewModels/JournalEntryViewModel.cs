@@ -1,4 +1,5 @@
-﻿using EDPlugin;
+﻿using EDDMobileImpl.Services;
+using EDPlugin;
 using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
@@ -11,14 +12,23 @@ namespace EDDMobileImpl.ViewModels
 {
     public class JournalEntryViewModel : BaseViewModel
     {
-        JournalEntry lastJournalEntry;
         public Command LoadItemsCommand { get; set; }
+        
         public string WhereAmI { get => lastJournalEntry.whereami; set => SetProperty(ref lastJournalEntry.whereami, value); }
+        public string SystemName { get => lastJournalEntry.systemname; set => SetProperty(ref lastJournalEntry.systemname, value); }
+        public string ShipType { get => lastJournalEntry.shiptype; set => SetProperty(ref lastJournalEntry.shiptype, value); }
+        public long Credits { get => lastJournalEntry.credits; set => SetProperty(ref lastJournalEntry.credits, value); }
 
         public JournalEntryViewModel()
         {
-            Title = "Browse";
+            Title = "Status";
             LoadItemsCommand = new Command(async () => await ExecuteLoadJournalEntriesCommand());
+        }
+
+        protected override void WebSocket_OnMessage()
+        {
+            WebSocket.TryGetMessage(out string msg);
+            RefreshStatus(msg);
         }
 
         async Task ExecuteLoadJournalEntriesCommand()
@@ -32,9 +42,8 @@ namespace EDDMobileImpl.ViewModels
             {
                 await WebSocket.Send("refresh");
                 var msg = await WebSocket.ListenForMessage();
-                
-                var lastEntry = JsonConvert.DeserializeObject<JournalEntry>(msg);
-                PropertyCopier<JournalEntry, JournalEntryViewModel>.Copy(lastEntry, this);
+
+                RefreshStatus(msg);
 
             }
             catch (Exception ex)
@@ -46,27 +55,13 @@ namespace EDDMobileImpl.ViewModels
                 IsBusy = false;
             }
         }
-    }
 
-    public class PropertyCopier<TSource, TTarget> where TSource : struct
-                                            where TTarget : class
-    {
-        public static void Copy(TSource source, TTarget target)
+        private void RefreshStatus(string msg)
         {
-            var sourceFields = source.GetType().GetFields();
-            var targetProps = target.GetType().GetProperties();
-
-            foreach (var sourceField in sourceFields)
-            {
-                foreach (var targetProp in targetProps)
-                {
-                    if (sourceField.Name.EqualsAlphaNumOnlyNoCase(targetProp.Name) && sourceField.FieldType == targetProp.PropertyType)
-                    {
-                        targetProp.SetValue(target, sourceField.GetValue(source));
-                        break;
-                    }
-                }
-            }
+            var lastEntry = JsonConvert.DeserializeObject<JournalEntry>(msg);
+            PropertyCopier<JournalEntry, JournalEntryViewModel>.Copy(lastEntry, this);
         }
+
+        JournalEntry lastJournalEntry;
     }
 }

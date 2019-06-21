@@ -5,21 +5,26 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              xmlns:local="clr-namespace:EDDMobileImpl.ViewModels"
-             x:Class="EDDMobileImpl.Views.StatusPage">
+             x:Class="EDDMobileImpl.Views.StatusPage"
+             Title="{Binding Status.Title}">
         <ContentPage.Content>
         <StackLayout>
             <Button Text="Refresh" Clicked="Button_Clicked"/>
-            <Label Text='{Binding Status.WhereAmI}' d:Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="StartAndExpand" 
+            <Label Text="Current system:"/>
+            <Label Text='{Binding Status.SystemName}' d:Text="(SYSTEMNAME)"
+                VerticalOptions="Start" 
                 HorizontalOptions="StartAndExpand"/>
-            <Label  d:Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="StartAndExpand" 
+            <Label Text="Current location:"/>
+            <Label Text='{Binding Status.WhereAmI}' d:Text="(WHEREAMI)"
+                VerticalOptions="Start" 
                 HorizontalOptions="StartAndExpand"/>
-            <Label d:Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="StartAndExpand" 
+            <Label Text="Current ship:"/>
+            <Label Text="{Binding Status.ShipType}" d:Text="(SHIP)"
+                VerticalOptions="Start" 
                 HorizontalOptions="StartAndExpand"/>
-            <Label  d:Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="StartAndExpand" 
+            <Label Text="Credits:"/>
+            <Label  Text="{Binding Status.Credits}" d:Text="CREDITS"
+                VerticalOptions="Start" 
                 HorizontalOptions="StartAndExpand"/>
         </StackLayout>
     </ContentPage.Content>
