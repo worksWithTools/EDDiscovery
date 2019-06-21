@@ -112,6 +112,12 @@ namespace EDDiscovery
         {
             return Controller.RefreshHistoryAsync();
         }
+
+        public List<HistoryEntry> GetHistory(int max)
+        {
+            return Controller.history.FilterByNumber(max);
+        }
+
         public void RefreshDisplays() { Controller.RefreshDisplays(); }
         public void RecalculateHistoryDBs() { Controller.RecalculateHistoryDBs(); }
 
@@ -412,6 +418,7 @@ namespace EDDiscovery
             if (DLLManager.HasManaged)
             {
                 DLLManagedCallbacks.RequestRefresh = () => RefreshHistoryAsync();
+                DLLManagedCallbacks.GetHistory = (i) => GetHistory(i);
             }
 
             if (res.Item1.HasChars())

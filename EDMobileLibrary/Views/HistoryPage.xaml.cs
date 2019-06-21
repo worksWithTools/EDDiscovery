@@ -1,4 +1,5 @@
 ﻿using EDDMobileImpl.ViewModels;
+using EDMobileLibrary.ViewModels;
 using System.ComponentModel;
 using Xamarin.Forms;
 
@@ -15,7 +16,7 @@ namespace EDDMobileImpl.Views
         {
             InitializeComponent();
 
-            BindingContext = viewModel = new JournalEntryViewModel();
+            BindingContext = viewModel = new JournalEntryViewModel(); 
         }
 
         //async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
@@ -39,8 +40,22 @@ namespace EDDMobileImpl.Views
         {
             base.OnAppearing();
 
-            //if (viewModel.Items.Count == 0)
-            //    viewModel.LoadItemsCommand.Execute(null);
+            viewModel.StartListening();
+
+            //if (viewModel?.Items.Count == 0)
+            //    viewModel?.LoadItemsCommand.Execute(null);
         }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            viewModel.StopListening();
+        }
+
+        private void Refresh_Clicked(object sender, System.EventArgs e)
+        {
+            viewModel?.LoadItemsCommand.Execute(null);
+        }
+
     }
 }

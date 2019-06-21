@@ -1,5 +1,7 @@
 ﻿using BaseUtils.Misc;
 using EDPlugin;
+using EliteDangerousCore;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
@@ -66,9 +68,14 @@ namespace EDMobilePlugin
             Debug.WriteLine($"Broadcast request received: {message.Left(PREVIEW_LENGTH)}...");
             foreach (var kvp in BroadcastQueues)
             {
-                kvp.Value.Add(message);
-                broadcastAvailable[kvp.Key].Set();
+                SendToQueue(kvp.Key, message);
             }
+        }
+
+        public static void SendToQueue(int socketId, string message)
+        {
+            BroadcastQueues[socketId].Add(message);
+            broadcastAvailable[socketId].Set();
         }
 
         private static async Task Listen()
@@ -133,11 +140,24 @@ namespace EDMobilePlugin
                     {
                         string message = Encoding.ASCII.GetString(buffer, 0, receiveResult.Count);
 
+                        // TODO: Apply a command pattern?
                         // if message is "ready" then send back some data..
-                        if (message == "refresh")
-                        {
+                        if (message == WebSocketMessage.REFRESH_STATUS)
+                            //TODO: replace this with the last HISTORY 
                             _managedCallbacks?.RequestRefresh();
+                        else if (message.StartsWith(WebSocketMessage.GET_JOURNAL))
+                        {
+                            //TODO: add number to get...
+                            var history = _managedCallbacks?.GetHistory(10);
+                            foreach (var entry in history)
+                            {
+                                var msg = JsonConvert.SerializeObject(entry.journalEntry);
+                                SendToQueue(socketId, msg);
+                                
+                                Debug.WriteLine($"INFO: msg size queued to socket {socketId} : {msg.Length}");
+                            }
                         }
+
                     }
                 }
             }
@@ -176,7 +196,8 @@ namespace EDMobilePlugin
                         {
                             Debug.WriteLine($"Socket {socketId}: Sending next broadcast from queue: [{message.Left(PREVIEW_LENGTH)}...]");
                             var msgbuf = new ArraySegment<byte>(Encoding.ASCII.GetBytes(message));
-                            await socket.SendAsync(msgbuf, WebSocketMessageType.Text, endOfMessage: true, socketToken);
+                            Debug.WriteLine($"Socket {socketId}: Sending {msgbuf.Count} bytes");
+                            await sendMessageInChunkAsync(msgbuf, socket, socketToken);
                         }
                     }
                 }
@@ -190,6 +211,24 @@ namespace EDMobilePlugin
                     if (ex.InnerException != null) Debug.WriteLine($"  Inner Exception {ex.InnerException.GetType().Name}: {ex.InnerException.Message}");
                 }
             }
+        }
+
+        private static async Task sendMessageInChunkAsync(ArraySegment<byte> msgbuf, WebSocket socket, CancellationToken socketToken)
+        {
+            const int bufferSize = 4096;
+            int bytesToSend = msgbuf.Count;
+            int offset = 0;
+            do
+            {
+                int chunkSize = Math.Min(bufferSize, bytesToSend);
+                ArraySegment<byte> chunk = new ArraySegment<byte>(msgbuf.Array, offset, chunkSize);
+
+                bool lastChunk = chunkSize <= bytesToSend;
+                await socket.SendAsync(msgbuf, WebSocketMessageType.Binary, endOfMessage: lastChunk, socketToken);
+
+                bytesToSend -= chunkSize;
+                offset += chunkSize;
+            } while (bytesToSend > 0);
         }
     }
 }

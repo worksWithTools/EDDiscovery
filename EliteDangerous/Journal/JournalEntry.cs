@@ -29,12 +29,13 @@ using Image = EDDiscovery.Icons.Image;
 #endif
 using System.Globalization;
 using System.Linq;
-
-
+using Newtonsoft.Json;
+using EliteDangerous.JSON;
 
 namespace EliteDangerousCore
 {
     [DebuggerDisplay("Event {EventTypeStr} {EventTimeUTC} EdsmID {EdsmID} JID {Id} C {CommanderId}")]
+    [JsonConverter(typeof(JournalEntryConverter))]
     public abstract partial class JournalEntry
     {
 #region Public Instance properties and fields
@@ -46,6 +47,7 @@ namespace EliteDangerousCore
         public JournalTypeEnum EventTypeID { get; private set; }
         public string EventTypeStr { get { return EventTypeID.ToString(); } }             // name of event. these two duplicate each other, string if for debuggin in the db view of a browser
 
+        [JsonIgnore]
         public Image Icon { get { return JournalTypeIcons.ContainsKey(this.IconEventType) ? JournalTypeIcons[this.IconEventType] : JournalTypeIcons[JournalTypeEnum.Unknown]; } }   // Icon to paint for this
 
         public DateTime EventTimeUTC { get; set; }
@@ -85,10 +87,12 @@ namespace EliteDangerousCore
         // the name used to filter it.. and the filter keyword. Its normally the enum of the event.
         public virtual string EventFilterName { get { return EventTypeID.ToString(); } } // text name used in filter
 
+        [JsonIgnore]
+        public virtual string Summary { get { return this.ToString(); } }
         public override string ToString()
         {
-            string info,details;
-            this.FillInformation(out info, out details);
+            string info;
+            this.FillInformation(out info, out _);
             return info;
         }
         #endregion

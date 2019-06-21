@@ -16,12 +16,7 @@ namespace EDDMobileImpl.ViewModels
         public BaseViewModel()
         {
             WebSocket = new WebSocketWrapper();
-            // TODO: config - is this really where we want to do this?
-            WebSocket.OnMessage += WebSocket_OnMessage;
-            _listeningTask = Task.Run(async () => {
-                await WebSocket.Connect("ws://192.168.0.32/eddmobile");
-                await WebSocket.Listen();
-                });
+            Task.Run(async () => await WebSocket.Connect("ws://192.168.0.32/eddmobile"));
 
         }
 
@@ -67,6 +62,22 @@ namespace EDDMobileImpl.ViewModels
 
             changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        public void StartListening()
+        {
+            // TODO: config - is this really where we want to do this?
+            WebSocket.OnMessage += WebSocket_OnMessage;
+            _listeningTask = Task.Run(async () => {
+                await WebSocket.Listen();
+            });
+        }
+        public async void StopListening()
+        {
+            WebSocket.OnMessage -= WebSocket_OnMessage;
+            await WebSocket.Disconnect();
+            _listeningTask = null;
+        }
+
         #endregion
     }
 }

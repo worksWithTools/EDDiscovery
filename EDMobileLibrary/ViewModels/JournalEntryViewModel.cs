@@ -1,37 +1,45 @@
-﻿using EDDMobileImpl.Services;
+﻿using EDDMobileImpl.ViewModels;
 using EDPlugin;
+using EliteDangerousCore;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Xamarin.Forms;
-using JournalEntry = EDPlugin.EDDDLLIF.JournalEntry;
 
-namespace EDDMobileImpl.ViewModels
+namespace EDMobileLibrary.ViewModels
 {
     public class JournalEntryViewModel : BaseViewModel
     {
-        public Command LoadItemsCommand { get; set; }
-        
-        public string WhereAmI { get => lastJournalEntry.whereami; set => SetProperty(ref lastJournalEntry.whereami, value); }
-        public string SystemName { get => lastJournalEntry.systemname; set => SetProperty(ref lastJournalEntry.systemname, value); }
-        public string ShipType { get => lastJournalEntry.shiptype; set => SetProperty(ref lastJournalEntry.shiptype, value); }
-        public long Credits { get => lastJournalEntry.credits; set => SetProperty(ref lastJournalEntry.credits, value); }
+        ObservableCollection<JournalEntry> items;
+        public Command LoadItemsCommand { get; private set; }
+        public ObservableCollection<JournalEntry> Items { get => items;  private set => items = value; }
 
-        public JournalEntryViewModel()
+        public JournalEntryViewModel() : base()
         {
-            Title = "Status";
-            LoadItemsCommand = new Command(async () => await ExecuteLoadJournalEntriesCommand());
+            Title = "Log";
+            Items = new ObservableCollection<JournalEntry>();
+            LoadItemsCommand = new Command(async () => await ExecuteLoadHistoryCommand());
         }
-
         protected override void WebSocket_OnMessage()
         {
+            try
+            {
             WebSocket.TryGetMessage(out string msg);
-            RefreshStatus(msg);
+            Debug.WriteLine($"INFO: msg received: {msg.Length}");
+            JournalEntry entry = JsonConvert.DeserializeObject<JournalEntry>(msg);
+            items.Add(entry);
+
+            }
+            catch(Exception e)
+            {
+                Debug.WriteLine(e);
+            }
         }
 
-        async Task ExecuteLoadJournalEntriesCommand()
+        private async Task ExecuteLoadHistoryCommand()
         {
             if (IsBusy)
                 return;
@@ -40,10 +48,7 @@ namespace EDDMobileImpl.ViewModels
 
             try
             {
-                await WebSocket.Send("refresh");
-                var msg = await WebSocket.ListenForMessage();
-
-                RefreshStatus(msg);
+                await WebSocket.Send(WebSocketMessage.GET_JOURNAL);
 
             }
             catch (Exception ex)
@@ -54,14 +59,7 @@ namespace EDDMobileImpl.ViewModels
             {
                 IsBusy = false;
             }
-        }
 
-        private void RefreshStatus(string msg)
-        {
-            var lastEntry = JsonConvert.DeserializeObject<JournalEntry>(msg);
-            PropertyCopier<JournalEntry, JournalEntryViewModel>.Copy(lastEntry, this);
         }
-
-        JournalEntry lastJournalEntry;
     }
 }

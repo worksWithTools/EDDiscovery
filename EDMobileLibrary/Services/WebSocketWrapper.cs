@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.WebSockets;
 using System.Text;
@@ -63,19 +64,28 @@ namespace EDDMobile.Comms
 
             var arraySegment = new ArraySegment<byte>(bytes);
 
-            await webSocket.SendAsync(arraySegment, WebSocketMessageType.Text, true, CancellationToken.None);
+            await webSocket.SendAsync(arraySegment, WebSocketMessageType.Binary, true, CancellationToken.None);
         }
 
         async Task<(WebSocketReceiveResult, IEnumerable<byte>)> ReceiveFullMessage(CancellationToken cancelToken)
         {
-            WebSocketReceiveResult response;
+            WebSocketReceiveResult response = null;
             var message = new List<byte>();
-            var buffer = new byte[4096];
-            do
+            try
             {
-                response = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), cancelToken);
-                message.AddRange(new ArraySegment<byte>(buffer, 0, response.Count));
-            } while (!response.EndOfMessage);
+                do
+                {
+                    var buffer = new byte[4096];
+                    response = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), cancelToken);
+                    message.AddRange(new ArraySegment<byte>(buffer, 0, response.Count));
+                } while (!response.EndOfMessage);
+            
+            }
+            catch(Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                if (e.InnerException != null) Debug.WriteLine(e.InnerException.Message);
+            }
             return (response, message);
         }
 

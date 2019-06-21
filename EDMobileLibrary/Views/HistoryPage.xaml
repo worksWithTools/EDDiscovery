@@ -9,7 +9,7 @@
              x:Name="BrowseItemsPage">
 
     <ContentPage.ToolbarItems>
-      <ToolbarItem Text="Add" /> <!--Clicked="AddItem_Clicked" />-->
+        <ToolbarItem Text="Refresh" Clicked="Refresh_Clicked" />
     </ContentPage.ToolbarItems>
 
     <StackLayout>
@@ -22,26 +22,15 @@
               IsRefreshing="{Binding IsBusy, Mode=OneWay}"
               CachingStrategy="RecycleElement">
         <!--ItemSelected="OnItemSelected">-->
-        <d:ListView.ItemsSource>
-          <x:Array Type="{x:Type x:String}">
-            <x:String>First Item</x:String>
-            <x:String>Second Item</x:String>
-            <x:String>Third Item</x:String>
-            <x:String>Forth Item</x:String>
-            <x:String>Fifth Item</x:String>
-            <x:String>Sixth Item</x:String>
-          </x:Array>
-        </d:ListView.ItemsSource>
         <ListView.ItemTemplate>
           <DataTemplate>
             <ViewCell>
               <StackLayout Padding="10">
-                <Label Text="{Binding Text}"
-                    d:Text="{Binding .}"
+                <Label Text="{Binding EventTimeUTC}"
                     LineBreakMode="NoWrap"
                     Style="{DynamicResource ListItemTextStyle}"
                     FontSize="16" />
-                <Label Text="{Binding Description}"
+                <Label Text="{Binding Summary}"
                     d:Text="Item descripton"
                     LineBreakMode="NoWrap"
                     Style="{DynamicResource ListItemDetailTextStyle}"

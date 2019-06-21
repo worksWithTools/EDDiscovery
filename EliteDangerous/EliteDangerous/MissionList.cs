@@ -14,7 +14,9 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
+using EliteDangerous.JSON;
 using EliteDangerousCore.JournalEvents;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,9 +28,16 @@ namespace EliteDangerousCore
     {
         public enum StateTypes { InProgress, Completed, Abandoned, Failed, Died };
 
+        [JsonConverter(typeof(JournalEntryConverter))]
         public JournalMissionAccepted Mission { get; private set; }                  // never null
+
+        [JsonConverter(typeof(JournalEntryConverter))]
         public JournalMissionCompleted Completed { get; private set; }               // null until complete
+
+        [JsonConverter(typeof(JournalEntryConverter))]
         public JournalMissionRedirected Redirected { get; private set; }             // null unless redirected
+
+        [JsonConverter(typeof(JournalEntryConverter))]
         public JournalCargoDepot CargoDepot { get; private set; }                    // null unless we received a CD on this mission
 
         public StateTypes State { get; private set; }
@@ -88,6 +97,7 @@ namespace EliteDangerousCore
             }
         }
 
+        [JsonConstructor]
         public MissionState(JournalMissionAccepted m, ISystem s, string b)      // Start!
         {
             Mission = m;

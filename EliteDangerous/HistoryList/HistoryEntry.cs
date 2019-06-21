@@ -21,6 +21,8 @@ using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
 using EliteDangerousCore.EDSM;
 using System.Data.Common;
+using Newtonsoft.Json;
+using EliteDangerous.JSON;
 
 namespace EliteDangerousCore
 {
@@ -31,8 +33,10 @@ namespace EliteDangerousCore
 
         public int Indexno;            // for display purposes.  from 1 to number of records
 
+        [JsonConverter(typeof(JournalEntryConverter))]
         public JournalEntry journalEntry;       // MUST be present
 
+        [JsonConverter(typeof(SystemConverter))]
         public ISystem System;         // Must be set! All entries, even if they are not FSD entries.
                                        // The Minimum is name and edsm_id 
                                        // x/y/z can be NANs or position. 
@@ -113,6 +117,8 @@ namespace EliteDangerousCore
         public MaterialCommoditiesList MaterialCommodity { get; private set; }
         public ShipInformation ShipInformation { get; set; }     // may be null if not set up yet
         public ModulesInStore StoredModules { get; set; }
+
+        [JsonIgnore] //TODO: figure out how to serialize this... at the moment I get issues with null 
         public MissionList MissionList { get; set; }
 
         public SystemNoteClass snc;     // system note class found attached to this entry. May be null

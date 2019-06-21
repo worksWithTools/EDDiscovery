@@ -14,21 +14,34 @@ namespace EDDMobileImpl.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class StatusPage : ContentPage
     {
-        JournalEntryViewModel _LastJournalEntry;
+        StatusViewModel _LastJournalEntry;
         
         public StatusPage()
         {
             InitializeComponent();
 
-            Status = new JournalEntryViewModel();
+            Status = new StatusViewModel();
             BindingContext = this;
         }
 
-        public JournalEntryViewModel Status { get => _LastJournalEntry; set => _LastJournalEntry = value; }
+        public StatusViewModel Status { get => _LastJournalEntry; set => _LastJournalEntry = value; }
 
         private void Button_Clicked(object sender, EventArgs e)
         {
             Status.LoadItemsCommand.Execute(null);
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            Status.StartListening();
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            Status.StopListening();
         }
     }
 }
