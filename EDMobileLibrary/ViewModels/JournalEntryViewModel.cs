@@ -1,5 +1,6 @@
 ﻿using EDDMobileImpl.ViewModels;
 using EDPlugin;
+using EliteDangerous.JSON;
 using EliteDangerousCore;
 using Newtonsoft.Json;
 using System;
@@ -29,7 +30,7 @@ namespace EDMobileLibrary.ViewModels
             {
             WebSocket.TryGetMessage(out string msg);
             Debug.WriteLine($"INFO: msg received: {msg.Length}");
-            JournalEntry entry = JsonConvert.DeserializeObject<JournalEntry>(msg);
+            JournalEntry entry = JsonConvert.DeserializeObject<JournalEntry>(msg, new JsonConverter[] { new JournalEntryConverter() });
             items.Add(entry);
 
             }

@@ -151,6 +151,7 @@ namespace EDMobilePlugin
                             var history = _managedCallbacks?.GetHistory(10);
                             foreach (var entry in history)
                             {
+                                Debug.WriteLine($"Socket {socketId} Sending : {entry.journalEntry.ToString()}");
                                 var msg = JsonConvert.SerializeObject(entry.journalEntry);
                                 SendToQueue(socketId, msg);
                                 

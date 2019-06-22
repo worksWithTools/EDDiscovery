@@ -35,31 +35,42 @@ using EliteDangerous.JSON;
 namespace EliteDangerousCore
 {
     [DebuggerDisplay("Event {EventTypeStr} {EventTimeUTC} EdsmID {EdsmID} JID {Id} C {CommanderId}")]
-    [JsonConverter(typeof(JournalEntryConverter))]
     public abstract partial class JournalEntry
     {
-#region Public Instance properties and fields
+        #region Public Instance properties and fields
 
+        [JsonProperty(PropertyName = "ID")] //to be compatible with frontier json
         public long Id { get; private set; }                    // this is the entry ID
+        [JsonIgnore]
         public long TLUId { get; private set; }                 // this ID of the journal tlu (aka TravelLogId)
+        [JsonIgnore]
         public int CommanderId { get; private set; }            // commander Id of entry
 
         public JournalTypeEnum EventTypeID { get; private set; }
+        [JsonProperty(PropertyName="event")] //to be compatible with frontier json
         public string EventTypeStr { get { return EventTypeID.ToString(); } }             // name of event. these two duplicate each other, string if for debuggin in the db view of a browser
 
         [JsonIgnore]
         public Image Icon { get { return JournalTypeIcons.ContainsKey(this.IconEventType) ? JournalTypeIcons[this.IconEventType] : JournalTypeIcons[JournalTypeEnum.Unknown]; } }   // Icon to paint for this
 
+        [JsonProperty(PropertyName ="timestamp")]
         public DateTime EventTimeUTC { get; set; }
 
+        [JsonIgnore]
         public long EdsmID { get; protected set; }                      // 0 = unassigned, >0 = assigned
 
+        [JsonIgnore]
         public DateTime EventTimeLocal { get { return EventTimeUTC.ToLocalTime(); } }
 
+        [JsonIgnore]
         public bool SyncedEDSM { get { return (Synced & (int)SyncFlags.EDSM) != 0; } }
+        [JsonIgnore]
         public bool SyncedEDDN { get { return (Synced & (int)SyncFlags.EDDN) != 0; } }
+        [JsonIgnore]
         public bool SyncedEGO { get { return (Synced & (int)SyncFlags.EGO) != 0; } }
+        [JsonIgnore]
         public bool StartMarker { get { return (Synced & (int)SyncFlags.StartMarker) != 0; } }
+        [JsonIgnore]
         public bool StopMarker { get { return (Synced & (int)SyncFlags.StopMarker) != 0; } }
 
         public virtual bool Beta

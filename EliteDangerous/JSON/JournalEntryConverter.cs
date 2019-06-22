@@ -1,4 +1,5 @@
 ﻿using EliteDangerousCore;
+using EliteDangerousCore.JournalEvents;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -8,8 +9,11 @@ using System.Text;
 
 namespace EliteDangerous.JSON
 {
-    class JournalEntryConverter : JsonConverter
+    public class JournalEntryConverter : JsonConverter
     {
+        public JournalEntryConverter():base()
+        {
+        }
         public override bool CanWrite => false;
         public override bool CanConvert(Type objectType)
         {
@@ -29,7 +33,7 @@ namespace EliteDangerous.JSON
             {
                 Debug.WriteLine(e);
             }
-            return null;
+            return new JournalUnknown(new JObject());
         }
 
 
