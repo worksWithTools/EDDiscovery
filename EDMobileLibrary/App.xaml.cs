@@ -15,7 +15,7 @@ namespace EDDMobileImpl
 
         protected override void OnStart()
         {
-            // Handle when your app starts
+            EDDiscovery.Icons.IconSet.ResetIcons();     // start with a clean slate loaded up from default icons
         }
 
         protected override void OnSleep()

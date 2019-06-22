@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
@@ -66,6 +67,7 @@ namespace EDDMobileImpl.ViewModels
         public void StartListening()
         {
             // TODO: config - is this really where we want to do this?
+            Debug.WriteLine("TRACE: Starting to listen for websocket messages...");
             WebSocket.OnMessage += WebSocket_OnMessage;
             _listeningTask = Task.Run(async () => {
                 await WebSocket.Listen();
@@ -73,9 +75,12 @@ namespace EDDMobileImpl.ViewModels
         }
         public async void StopListening()
         {
+           
             WebSocket.OnMessage -= WebSocket_OnMessage;
             await WebSocket.Disconnect();
+            await _listeningTask;
             _listeningTask = null;
+            Debug.WriteLine("TRACE: Stopping listening for websocket messages...");
         }
 
         #endregion

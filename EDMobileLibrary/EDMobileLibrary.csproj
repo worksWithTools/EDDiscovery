@@ -11,12 +11,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="SkiaSharp" Version="1.68.0" />
+    <PackageReference Include="SkiaSharp.Views.Forms" Version="1.68.0" />
     <PackageReference Include="Xamarin.Forms" Version="4.0.0.497661" />
     <PackageReference Include="Xamarin.Essentials" Version="1.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EDDIcons\EDDIcons.csproj" />
     <ProjectReference Include="..\EDPlugin\EDPlugin.csproj" />
     <ProjectReference Include="..\EliteDangerous\EliteDangerous.csproj" />
   </ItemGroup>
