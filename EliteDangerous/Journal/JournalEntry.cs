@@ -51,6 +51,11 @@ namespace EliteDangerousCore
         public string EventTypeStr { get { return EventTypeID.ToString(); } }             // name of event. these two duplicate each other, string if for debuggin in the db view of a browser
 
         [JsonIgnore]
+        public string EventName { get { return TranslatedEventNames.ContainsKey(EventTypeID) ? TranslatedEventNames[EventTypeID] : EventTypeID.ToString(); } }
+        [JsonIgnore]
+        public string Details { get { return this.ToString(); } }
+
+        [JsonIgnore]
         public Image Icon { get {
                 if (JournalTypeIcons.ContainsKey(this.IconEventType))
                     return JournalTypeIcons[this.IconEventType];
@@ -98,11 +103,10 @@ namespace EliteDangerousCore
         public abstract void FillInformation(out string info, out string detailed);     // all entries must implement
 
         // the long name of it, such as Approach Body. May be overridden, is translated
-        public virtual string SummaryName(ISystem sys) { return TranslatedEventNames.ContainsKey(EventTypeID) ? TranslatedEventNames[EventTypeID] : EventTypeID.ToString(); }  // entry may be overridden for specialist output
+        public virtual string SummaryName(ISystem sys) { return EventName; }  // entry may be overridden for specialist output
 
         // the name used to filter it.. and the filter keyword. Its normally the enum of the event.
         public virtual string EventFilterName { get { return EventTypeID.ToString(); } } // text name used in filter
-
         public override string ToString()
         {
             string info;

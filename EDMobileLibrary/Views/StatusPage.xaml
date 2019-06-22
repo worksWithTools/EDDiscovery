@@ -7,9 +7,11 @@
              xmlns:local="clr-namespace:EDDMobileImpl.ViewModels"
              x:Class="EDDMobileImpl.Views.StatusPage"
              Title="{Binding Status.Title}">
-        <ContentPage.Content>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Refresh" Clicked="Button_Clicked" />
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
         <StackLayout>
-            <Button Text="Refresh" Clicked="Button_Clicked"/>
             <Label Text="Current system:"/>
             <Label Text='{Binding Status.SystemName}' d:Text="(SYSTEMNAME)"
                 VerticalOptions="Start" 

@@ -48,6 +48,7 @@ namespace EDMobileLibrary.ViewModels
 
             try
             {
+                items.Clear();
                 await WebSocket.Send(WebSocketMessage.GET_JOURNAL);
 
             }

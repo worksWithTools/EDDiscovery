@@ -14,7 +14,7 @@
     </ContentPage.ToolbarItems>
 
     <StackLayout>
-      <ListView x:Name="ItemsListView"
+        <ListView x:Name="ItemsListView"
               ItemsSource="{Binding Items}"
               VerticalOptions="FillAndExpand"
               HasUnevenRows="true"
@@ -22,31 +22,37 @@
               IsPullToRefreshEnabled="true"
               IsRefreshing="{Binding IsBusy, Mode=OneWay}"
               CachingStrategy="RecycleElement">
-        <!--ItemSelected="OnItemSelected">-->
+            <!--ItemSelected="OnItemSelected">-->
             <ListView.ItemTemplate>
-          <DataTemplate>
-            <ViewCell>
-              <StackLayout Padding="10">
-                <Image WidthRequest="100" HeightRequest="100">
-                    <Image.Source>
-                        <skia:SKImageImageSource Image="{Binding Icon}" />
-                    </Image.Source>
-                </Image>
-                <Label Text="{Binding EventTimeUTC}"
-                    d:Text="Time"
-                    LineBreakMode="NoWrap"
-                    Style="{DynamicResource ListItemTextStyle}"
-                    FontSize="16" />
-                <Label Text="{Binding EventTypeStr}"
-                    d:Text="Item descripton"
-                    LineBreakMode="NoWrap"
-                    Style="{DynamicResource ListItemDetailTextStyle}"
-                    FontSize="13" />
-              </StackLayout>
-            </ViewCell>
-          </DataTemplate>
-        </ListView.ItemTemplate>
-      </ListView>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout Orientation="Horizontal">
+                            <StackLayout Padding="10">
+                                <StackLayout Orientation="Horizontal">
+                                    <Image WidthRequest="24" HeightRequest="24" HorizontalOptions="Start" >
+                                        <Image.Source>
+                                            <skia:SKImageImageSource Image="{Binding Icon}" />
+                                        </Image.Source>
+                                    </Image>
+                                    <Label Text="{Binding EventName}"
+                                    d:Text="Item descripton"
+                                    LineBreakMode="NoWrap"
+                                    Style="{DynamicResource ListItemTextStyle}"
+                                    FontSize="13" />
+                                </StackLayout>
+                                <Label Text="{Binding EventTimeUTC}"
+                                    d:Text="Time"
+                                    LineBreakMode="NoWrap"
+                                    Style="{DynamicResource ListItemDetailTextStyle}"
+                                    FontSize="16" />
+
+                            </StackLayout>
+                            <Label Text="{Binding Details}"/>
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </StackLayout>
-    
+
 </ContentPage>

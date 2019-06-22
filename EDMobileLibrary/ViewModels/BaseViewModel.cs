@@ -12,13 +12,14 @@ namespace EDDMobileImpl.ViewModels
     {
         public WebSocketWrapper WebSocket { get; private set; }
 
-        private Task _listeningTask;
-
         public BaseViewModel()
         {
             WebSocket = new WebSocketWrapper();
-            Task.Run(async () => await WebSocket.Connect("ws://192.168.0.32/eddmobile"));
-
+            Task.Run(async () =>
+            {
+                await WebSocket.Connect("ws://192.168.0.32/eddmobile");
+                await WebSocket.Listen();
+            }); 
         }
 
         protected virtual void WebSocket_OnMessage()
@@ -69,17 +70,12 @@ namespace EDDMobileImpl.ViewModels
             // TODO: config - is this really where we want to do this?
             Debug.WriteLine("TRACE: Starting to listen for websocket messages...");
             WebSocket.OnMessage += WebSocket_OnMessage;
-            _listeningTask = Task.Run(async () => {
-                await WebSocket.Listen();
-            });
+
         }
-        public async void StopListening()
+        public void StopListening()
         {
-           
+  
             WebSocket.OnMessage -= WebSocket_OnMessage;
-            await WebSocket.Disconnect();
-            await _listeningTask;
-            _listeningTask = null;
             Debug.WriteLine("TRACE: Stopping listening for websocket messages...");
         }
 
