@@ -197,7 +197,7 @@ namespace EDMobilePlugin
                             Debug.WriteLine($"Socket {socketId}: Sending next broadcast from queue: [{message.Left(PREVIEW_LENGTH)}...]");
                             var msgbuf = new ArraySegment<byte>(Encoding.ASCII.GetBytes(message));
                             Debug.WriteLine($"Socket {socketId}: Sending {msgbuf.Count} bytes");
-                            await sendMessageInChunkAsync(msgbuf, socket, socketToken);
+                            await socket.SendAsync(msgbuf, WebSocketMessageType.Binary, endOfMessage: true, socketToken);
                         }
                     }
                 }
@@ -213,22 +213,5 @@ namespace EDMobilePlugin
             }
         }
 
-        private static async Task sendMessageInChunkAsync(ArraySegment<byte> msgbuf, WebSocket socket, CancellationToken socketToken)
-        {
-            const int bufferSize = 4096;
-            int bytesToSend = msgbuf.Count;
-            int offset = 0;
-            do
-            {
-                int chunkSize = Math.Min(bufferSize, bytesToSend);
-                ArraySegment<byte> chunk = new ArraySegment<byte>(msgbuf.Array, offset, chunkSize);
-
-                bool lastChunk = chunkSize <= bytesToSend;
-                await socket.SendAsync(msgbuf, WebSocketMessageType.Binary, endOfMessage: lastChunk, socketToken);
-
-                bytesToSend -= chunkSize;
-                offset += chunkSize;
-            } while (bytesToSend > 0);
-        }
     }
 }

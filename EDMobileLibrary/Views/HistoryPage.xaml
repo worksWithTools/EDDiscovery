@@ -30,7 +30,7 @@
                     LineBreakMode="NoWrap"
                     Style="{DynamicResource ListItemTextStyle}"
                     FontSize="16" />
-                <Label Text="{Binding Summary}"
+                <Label Text="{Binding EventTypeStr}"
                     d:Text="Item descripton"
                     LineBreakMode="NoWrap"
                     Style="{DynamicResource ListItemDetailTextStyle}"

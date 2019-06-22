@@ -87,8 +87,6 @@ namespace EliteDangerousCore
         // the name used to filter it.. and the filter keyword. Its normally the enum of the event.
         public virtual string EventFilterName { get { return EventTypeID.ToString(); } } // text name used in filter
 
-        [JsonIgnore]
-        public virtual string Summary { get { return this.ToString(); } }
         public override string ToString()
         {
             string info;
