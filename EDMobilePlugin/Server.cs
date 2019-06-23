@@ -127,7 +127,6 @@ namespace EDMobilePlugin
                 while (socket.State == WebSocketState.Open && !Token.IsCancellationRequested)
                 {
                     var receiveResult = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), Token);
-                    Debug.WriteLine($"Socket {socketId}: Received {receiveResult.MessageType} frame ({receiveResult.Count} bytes).");
                     if (receiveResult.MessageType == WebSocketMessageType.Close)
                     {
                         Debug.WriteLine($"Socket {socketId}: Closing websocket.");
@@ -139,6 +138,7 @@ namespace EDMobilePlugin
                     else
                     {
                         string message = Encoding.ASCII.GetString(buffer, 0, receiveResult.Count);
+                        Debug.WriteLine($"Socket {socketId}: Received [{message.Left(PREVIEW_LENGTH)}]).");
 
                         // TODO: Apply a command pattern?
                         // if message is "ready" then send back some data..
@@ -151,11 +151,9 @@ namespace EDMobilePlugin
                             var history = _managedCallbacks?.GetHistory(10);
                             foreach (var entry in history)
                             {
-                                Debug.WriteLine($"Socket {socketId} Sending : {entry.journalEntry.ToString()}");
+                                Debug.WriteLine($"Socket {socketId} Queueing : {entry.journalEntry.ToString()}");
                                 var msg = JsonConvert.SerializeObject(entry.journalEntry);
                                 SendToQueue(socketId, msg);
-                                
-                                Debug.WriteLine($"INFO: msg size queued to socket {socketId} : {msg.Length}");
                             }
                         }
 
@@ -197,8 +195,7 @@ namespace EDMobilePlugin
                         {
                             Debug.WriteLine($"Socket {socketId}: Sending next broadcast from queue: [{message.Left(PREVIEW_LENGTH)}...]");
                             var msgbuf = new ArraySegment<byte>(Encoding.ASCII.GetBytes(message));
-                            Debug.WriteLine($"Socket {socketId}: Sending {msgbuf.Count} bytes");
-                            await socket.SendAsync(msgbuf, WebSocketMessageType.Binary, endOfMessage: true, socketToken);
+                            await socket.SendAsync(msgbuf, WebSocketMessageType.Text, endOfMessage: true, socketToken);
                         }
                     }
                 }

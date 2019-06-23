@@ -14,7 +14,8 @@ namespace EDDMobile.Comms
     //TODO: extract an interface and make this work in the DependencyService
     public class WebSocketWrapper
     {
-        public WebSocketWrapper(){
+        public WebSocketWrapper()
+        {
             webSocket = new ClientWebSocket();
 
         }
@@ -25,19 +26,32 @@ namespace EDDMobile.Comms
         //Note: we're not passing the actual message out of the delegate
         // because its possible the queue could get swamped.
         public event OnMessageHandler OnMessage;
-
+        //TODO: add cancelation tokens...
         public async Task Connect(string uri)
         {
-           try
+            do
             {
-                await webSocket.ConnectAsync(new Uri(uri), CancellationToken.None);
+                try
+                {
+                    Debug.WriteLine($"MOBILE: connecting to {uri}...");
 
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Exception: {0}", ex);
-            }
-
+                    await webSocket.ConnectAsync(new Uri(uri), CancellationToken.None);
+                }
+                catch (WebSocketException)
+                {
+                    if (webSocket.State != WebSocketState.Open)
+                    {
+                        Debug.WriteLine($"MOBILE: could not connect to {uri} - will retrying in 5 seconds...");
+                        await Task.Delay(5000);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Unexpected exception: {ex.Message}");
+                    return;
+                }
+            } while (webSocket.State != WebSocketState.Open);
+            Debug.WriteLine($"MOBILE: Connected to {uri}.");
         }
 
         public async Task Disconnect()
@@ -52,7 +66,7 @@ namespace EDDMobile.Comms
             }
         }
 
-       
+
         public bool TryGetMessage(out string msg)
         {
             return messages.TryDequeue(out msg);
@@ -60,11 +74,13 @@ namespace EDDMobile.Comms
 
         public async Task Send(string message)
         {
+            if (webSocket.State != WebSocketState.Open)
+                throw new InvalidOperationException("The websocket is closed");
             var bytes = Encoding.ASCII.GetBytes(message);
 
             var arraySegment = new ArraySegment<byte>(bytes);
 
-            await webSocket.SendAsync(arraySegment, WebSocketMessageType.Binary, true, CancellationToken.None);
+            await webSocket.SendAsync(arraySegment, WebSocketMessageType.Text, true, CancellationToken.None);
         }
 
         async Task<(WebSocketReceiveResult, IEnumerable<byte>)> ReceiveFullMessage(CancellationToken cancelToken)
@@ -79,9 +95,9 @@ namespace EDDMobile.Comms
                     response = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), cancelToken);
                     message.AddRange(new ArraySegment<byte>(buffer, 0, response.Count));
                 } while (!response.EndOfMessage);
-            
+                Debug.WriteLine($"MOBILE: received message {response.MessageType}");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Debug.WriteLine(e.Message);
                 if (e.InnerException != null) Debug.WriteLine(e.InnerException.Message);
@@ -114,6 +130,7 @@ namespace EDDMobile.Comms
                 else
                 {
                     string message = Encoding.ASCII.GetString(result.Item2.ToArray());
+                    Debug.WriteLine($"MOBILE: received message {message.Left(40)}...");
                     return message;
                 }
             }
