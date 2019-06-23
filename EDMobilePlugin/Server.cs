@@ -153,7 +153,7 @@ namespace EDMobilePlugin
                             {
                                 Debug.WriteLine($"Socket {socketId} Queueing : {entry.journalEntry.ToString()}");
                                 var msg = JsonConvert.SerializeObject(entry.journalEntry);
-                                SendToQueue(socketId, msg);
+                                await SendMessageToSocketAsync(socketId, socket, msg, Token);
                             }
                         }
 
@@ -193,9 +193,7 @@ namespace EDMobilePlugin
                         Debug.WriteLine($"Broadcast received by socket {socketId}");
                         if (BroadcastQueues[socketId].TryTake(out var message))
                         {
-                            Debug.WriteLine($"Socket {socketId}: Sending next broadcast from queue: [{message.Left(PREVIEW_LENGTH)}...]");
-                            var msgbuf = new ArraySegment<byte>(Encoding.ASCII.GetBytes(message));
-                            await socket.SendAsync(msgbuf, WebSocketMessageType.Text, endOfMessage: true, socketToken);
+                            await SendMessageToSocketAsync(socketId, socket, message, socketToken);
                         }
                     }
                 }
@@ -211,5 +209,11 @@ namespace EDMobilePlugin
             }
         }
 
+        private static async Task SendMessageToSocketAsync(int socketId, WebSocket socket, string message, CancellationToken socketToken)
+        {
+            Debug.WriteLine($"Socket {socketId}: Sending next broadcast from queue: [{message.Left(PREVIEW_LENGTH)}...]");
+            var msgbuf = new ArraySegment<byte>(Encoding.ASCII.GetBytes(message));
+            await socket.SendAsync(msgbuf, WebSocketMessageType.Text, endOfMessage: true, socketToken);
+        }
     }
 }
