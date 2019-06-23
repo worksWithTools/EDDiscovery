@@ -15,7 +15,7 @@ namespace EDMobileLibrary.ViewModels
     {
         ObservableCollection<JournalEntry> items;
         public Command LoadItemsCommand { get; private set; }
-        public ObservableCollection<JournalEntry> Items { get => items;  private set => items = value; }
+        public ObservableCollection<JournalEntry> Items { get => items;  private set => SetProperty(ref items, value); }
 
         public JournalEntryViewModel() : base()
         {
@@ -50,7 +50,7 @@ namespace EDMobileLibrary.ViewModels
             {
                 items.Clear();
                 await WebSocket.Send(WebSocketMessage.GET_JOURNAL);
-
+                Items = new ObservableCollection<JournalEntry>();
             }
             catch (Exception ex)
             {

@@ -36,6 +36,8 @@ namespace EDDMobileImpl.Views
         //    await Navigation.PushModalAsync(new NavigationPage(new NewItemPage()));
         //}
 
+
+
         protected override void OnAppearing()
         {
             base.OnAppearing();
