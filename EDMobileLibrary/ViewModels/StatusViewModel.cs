@@ -27,7 +27,7 @@ namespace EDDMobileImpl.ViewModels
 
         protected override void WebSocket_OnMessage()
         {
-            WebSocket.TryGetMessage(out string msg);
+            App.WebSocket.TryGetMessage(out string msg);
             RefreshStatus(msg);
         }
 
@@ -41,8 +41,8 @@ namespace EDDMobileImpl.ViewModels
 
             try
             {
-                await WebSocket.Send(WebSocketMessage.REFRESH_STATUS);
-                var msg = await WebSocket.ListenForMessage();
+                await App.WebSocket.Send(WebSocketMessage.REFRESH_STATUS);
+                var msg = await App.WebSocket.ListenForMessage();
 
                 RefreshStatus(msg);
 

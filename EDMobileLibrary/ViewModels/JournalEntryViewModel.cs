@@ -1,4 +1,5 @@
-﻿using EDDMobileImpl.ViewModels;
+﻿using EDDMobileImpl;
+using EDDMobileImpl.ViewModels;
 using EDPlugin;
 using EliteDangerous.JSON;
 using EliteDangerousCore;
@@ -27,7 +28,7 @@ namespace EDMobileLibrary.ViewModels
         {
             try
             {
-            WebSocket.TryGetMessage(out string msg);
+            App.WebSocket.TryGetMessage(out string msg);
             Debug.WriteLine($"INFO: msg received: {msg.Length}");
             JournalEntry entry = JsonConvert.DeserializeObject<JournalEntry>(msg, new JsonConverter[] { new JournalEntryConverter() });
             items.Add(entry);
@@ -49,7 +50,7 @@ namespace EDMobileLibrary.ViewModels
             try
             {
                 items.Clear();
-                await WebSocket.Send(WebSocketMessage.GET_JOURNAL);
+                await App.WebSocket.Send(WebSocketMessage.GET_JOURNAL);
                 Items = new ObservableCollection<JournalEntry>();
             }
             catch (Exception ex)

@@ -10,16 +10,9 @@ namespace EDDMobileImpl.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
-        public WebSocketWrapper WebSocket { get; private set; }
 
         public BaseViewModel()
         {
-            WebSocket = new WebSocketWrapper();
-            Task.Run(async () =>
-            {
-                await WebSocket.Connect("ws://192.168.0.32/eddmobile");
-                await WebSocket.Listen();
-            }); 
         }
 
         protected virtual void WebSocket_OnMessage()
@@ -68,15 +61,15 @@ namespace EDDMobileImpl.ViewModels
         public void StartListening()
         {
             // TODO: config - is this really where we want to do this?
-            Debug.WriteLine("TRACE: Starting to listen for websocket messages...");
-            WebSocket.OnMessage += WebSocket_OnMessage;
+            Debug.WriteLine($"TRACE: [{this.GetType().Name}] Starting to listen for websocket messages...");
+            App.WebSocket.OnMessage += WebSocket_OnMessage;
 
         }
         public void StopListening()
         {
-  
-            WebSocket.OnMessage -= WebSocket_OnMessage;
-            Debug.WriteLine("TRACE: Stopping listening for websocket messages...");
+
+            App.WebSocket.OnMessage -= WebSocket_OnMessage;
+            Debug.WriteLine($"TRACE: [{this.GetType().Name}] Stopping listening for websocket messages...");
         }
 
         #endregion
