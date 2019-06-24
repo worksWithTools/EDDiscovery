@@ -22,7 +22,7 @@ namespace EDMobilePlugin
 
         public string EDDInitialise(string vstr, EDDDLLIF.EDDCallBacks callbacks, ManagedCallbacks managedCallbacks)
         {
-            WebSocketServer.Start("http://+:80/eddmobile/", callbacks, managedCallbacks);
+            WebSocketHttpServer.Start("http://+:80/eddmobile/", callbacks, managedCallbacks);
  
             return Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
@@ -38,12 +38,12 @@ namespace EDMobilePlugin
             string json = lastje.ToJson();
             Debug.WriteLine($"EDDRefresh: {cmdname}, {json}");
             //Broadcast now, or 
-            WebSocketServer.Broadcast(json);
+            WebSocketHttpServer.Broadcast(json);
         }
 
         public void EDDTerminate()
         {
-            WebSocketServer.Stop();
+            WebSocketHttpServer.Stop();
         }
     }
 }
