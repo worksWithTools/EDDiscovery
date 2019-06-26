@@ -50,9 +50,8 @@ namespace EliteDangerousCore
         [JsonProperty(PropertyName="event")] //to be compatible with frontier json
         public string EventTypeStr { get { return EventTypeID.ToString(); } }             // name of event. these two duplicate each other, string if for debuggin in the db view of a browser
 
-        [JsonIgnore]
         public string EventName { get { return TranslatedEventNames.ContainsKey(EventTypeID) ? TranslatedEventNames[EventTypeID] : EventTypeID.ToString(); } }
-        [JsonIgnore]
+        
         public string Details { get { return this.ToString(); } }
 
         [JsonIgnore]
@@ -83,6 +82,7 @@ namespace EliteDangerousCore
         [JsonIgnore]
         public bool StopMarker { get { return (Synced & (int)SyncFlags.StopMarker) != 0; } }
 
+        [JsonIgnore]
         public virtual bool Beta
         {
             get

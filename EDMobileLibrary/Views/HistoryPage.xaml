@@ -29,22 +29,21 @@
                         <StackLayout Orientation="Horizontal">
                             <StackLayout Padding="10">
                                 <StackLayout Orientation="Horizontal">
-                                    <Image WidthRequest="24" HeightRequest="24" HorizontalOptions="Start" >
+                                    <d:Image WidthRequest="24" HeightRequest="24" HorizontalOptions="Start" Source="{Binding Icon}"/>
+                                    <Image WidthRequest="24" HeightRequest="24" HorizontalOptions="Start">
                                         <Image.Source>
                                             <skia:SKImageImageSource Image="{Binding Icon}" />
                                         </Image.Source>
                                     </Image>
-                                    <Label Text="{Binding EventName}"
-                                    d:Text="Item descripton"
+                                    <Label Text="{Binding EventName}" d:Text="{Binding event}"
                                     LineBreakMode="NoWrap"
                                     Style="{DynamicResource ListItemTextStyle}"
-                                    FontSize="13" />
+                                    FontSize="16" />
                                 </StackLayout>
-                                <Label Text="{Binding EventTimeUTC}"
-                                    d:Text="Time"
+                                <Label Text="{Binding EventTimeUTC}" d:Text="{Binding timestamp}"
                                     LineBreakMode="NoWrap"
                                     Style="{DynamicResource ListItemDetailTextStyle}"
-                                    FontSize="16" />
+                                    FontSize="13" />
 
                             </StackLayout>
                             <Label Text="{Binding Details}"/>

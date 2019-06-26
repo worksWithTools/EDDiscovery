@@ -128,7 +128,7 @@ namespace EDMobilePlugin
 
         private static async Task SendMessageToSocketAsync(int socketId, WebSocket socket, string message, CancellationToken socketToken)
         {
-            Debug.WriteLine($"Socket {socketId}: Sending next broadcast from queue: [{message.Left(PREVIEW_LENGTH)}...]");
+            Debug.WriteLine($"Socket {socketId}: Sending next broadcast from queue: [{message}]");
             var msgbuf = new ArraySegment<byte>(Encoding.ASCII.GetBytes(message));
             await socket.SendAsync(msgbuf, WebSocketMessageType.Text, endOfMessage: true, socketToken);
         }
