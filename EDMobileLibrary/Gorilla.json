@@ -3,6 +3,10 @@
     {
       "name": "SkiaSharp.Views.Forms",
       "types": null
+    },
+    {
+      "name": "EDMobileLibrary",
+      "types":  null
     }
   ]
 }

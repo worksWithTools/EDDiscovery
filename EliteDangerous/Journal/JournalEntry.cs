@@ -232,6 +232,13 @@ namespace EliteDangerousCore
             return list;
         }
 
+        static public Tuple<string, string, Image> GetNameImageOfEvent(string eventName)
+        {
+            Enum.TryParse<JournalTypeEnum>(eventName, out JournalTypeEnum ev);
+            return GetNameImageOfEvent(ev);
+        }
+
+
         static public Tuple<string, string, Image> GetNameImageOfEvent(JournalTypeEnum ev)
         {
             return new Tuple<string, string, Image>(ev.ToString(), TranslatedEventNames[ev],

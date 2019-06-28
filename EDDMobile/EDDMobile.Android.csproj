@@ -71,6 +71,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="UXDivers.GorillaPlayer.SDK">
+      <Version>1.5.2</Version>
+    </PackageReference>
     <PackageReference Include="UXDivers.GorillaPlayer.SDK.AutoConfig">
       <Version>1.5.0-Beta4</Version>
     </PackageReference>
@@ -121,6 +124,10 @@
     <Folder Include="Resources\drawable-xxxhdpi\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EDDIcons\EDDIcons.csproj">
+      <Project>{646f71be-f102-444e-9254-818e5a320ab8}</Project>
+      <Name>EDDIcons</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EDMobileLibrary\EDMobileLibrary.csproj">
       <Project>{972d6060-b589-405c-8807-6cad65f70f6a}</Project>
       <Name>EDMobileLibrary</Name>

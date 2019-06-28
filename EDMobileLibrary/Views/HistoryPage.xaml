@@ -5,10 +5,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:skia="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
              mc:Ignorable="d"
+             xmlns:local="clr-namespace:EDMobileLibrary.Converters"
              x:Class="EDDMobileImpl.Views.HistoryPage"
              Title="{Binding Title}"
              x:Name="BrowseItemsPage">
-
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:FileToSKImageConverter x:Key="fileToImage" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Refresh" Clicked="Refresh_Clicked" />
     </ContentPage.ToolbarItems>
@@ -29,10 +34,10 @@
                         <StackLayout Orientation="Horizontal">
                             <StackLayout Padding="10">
                                 <StackLayout Orientation="Horizontal">
-                                    <d:Image WidthRequest="24" HeightRequest="24" HorizontalOptions="Start" Source="{Binding Icon}"/>
                                     <Image WidthRequest="24" HeightRequest="24" HorizontalOptions="Start">
                                         <Image.Source>
-                                            <skia:SKImageImageSource Image="{Binding Icon}" />
+                                            <skia:SKImageImageSource Image="{Binding Icon,
+                                                                                     Converter={StaticResource fileToImage}}" />
                                         </Image.Source>
                                     </Image>
                                     <Label Text="{Binding EventName}" d:Text="{Binding event}"

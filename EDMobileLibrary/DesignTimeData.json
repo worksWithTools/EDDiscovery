@@ -2,7 +2,7 @@
   "HistoryPage.xaml": {
     "Title": "Log",
     "LoadItemsCommand": "",
-    "IsBusy" : 0,
+    "IsBusy": 0,
     "Items": [
       {
         "Combat": 97,
@@ -17,7 +17,7 @@
         "Details": "Combat:97%, Trade:26%, Exploration:58%, Federation:48%, Empire:8%, CQC:46%",
         "timestamp": "2019-05-26T18:00:17Z",
         "EventFilterName": "Progress",
-        "Icon" :  "drawable/xamarin_logo.png"
+        "Icon": "Progress"
       },
       {
         "Federation": 75.0,
@@ -29,7 +29,8 @@
         "event": "Reputation",
         "Details": "Federation:75, Empire:75, Alliance:75",
         "timestamp": "2019-05-26T18:00:17Z",
-        "EventFilterName": "Reputation"
+        "EventFilterName": "Reputation",
+        "Icon": "Reputation"
       },
       {
         "json": "{}",
@@ -39,7 +40,8 @@
         "event": "Unknown",
         "Details": "Unhandled Journal event, Report to EDDiscovery team. \r\n{}",
         "timestamp": "0001-01-01T00:00:00",
-        "EventFilterName": "Unknown"
+        "EventFilterName": "Unknown",
+        "Icon": "Unknown"
       },
       {
         "From": "",
@@ -53,7 +55,8 @@
         "event": "Receive Text",
         "Details": "Info: Entered Channel: BD-15 447",
         "timestamp": "2019-05-26T18:00:26Z",
-        "EventFilterName": "ReceiveText"
+        "EventFilterName": "ReceiveText",
+        "Icon": "ReceiveText"
       },
       {
         "json": "{}",
@@ -63,7 +66,8 @@
         "event": "Unknown",
         "Details": "Unhandled Journal event, Report to EDDiscovery team. \r\n{}",
         "timestamp": "0001-01-01T00:00:00",
-        "EventFilterName": "Unknown"
+        "EventFilterName": "Unknown",
+        "Icon": "Unknown"
       },
       {
         "MusicTrack": "NoTrack",
@@ -73,7 +77,8 @@
         "event": "Music",
         "Details": "Music Track:NoTrack",
         "timestamp": "2019-05-26T18:00:26Z",
-        "EventFilterName": "Music"
+        "EventFilterName": "Music",
+        "Icon": "Music"
       },
       {
         "ActiveMissions": [],
@@ -84,7 +89,8 @@
         "event": "Missions",
         "Details": "Active:0, Failed:0, Completed:0",
         "timestamp": "2019-05-26T18:00:26Z",
-        "EventFilterName": "Missions"
+        "EventFilterName": "Missions",
+        "Icon": "Missions"
       },
       {
         "ShipModules": [
@@ -931,7 +937,8 @@
         "event": "Loadout",
         "Details": "Ship:Asp Explorer, Name:nebula grazer, Ident:WO-03A, Modules:30, Hull Health98.2%, Hull:6,145,793 cr, Modules:21,852,708 cr, Rebuy:1,399,927 cr",
         "timestamp": "2019-05-26T18:00:26Z",
-        "EventFilterName": "Loadout"
+        "EventFilterName": "Loadout",
+        "Icon": "Loadout"
       }
     ]
   }

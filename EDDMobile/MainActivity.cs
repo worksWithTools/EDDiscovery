@@ -1,12 +1,9 @@
-using System;
 
 using Android.App;
 using Android.Content.PM;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using Android.OS;
-using EDDMobileImpl;
+using Android.Runtime;
+using UXDivers.Gorilla.Droid;
 
 namespace EDDMobile.Droid
 {
@@ -22,7 +19,21 @@ namespace EDDMobile.Droid
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
+#if GORILLA
+            // this normally happens in App.OnSTart()
+            EDDiscovery.Icons.IconSet.ResetIcons();     // start with a clean slate loaded up from default icons
+
+            LoadApplication(Player.CreateApplication(
+                this,
+                new UXDivers.Gorilla.Config("worksWithToolsLaptop")
+                .RegisterAssemblyFromType<SkiaSharp.SKImage>()
+                .RegisterAssemblyFromType<EDMobileLibrary.ViewModels.JournalEntryViewModel>()
+                )
+            );
+
+#else
             LoadApplication(new App());
+#endif
         }
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {

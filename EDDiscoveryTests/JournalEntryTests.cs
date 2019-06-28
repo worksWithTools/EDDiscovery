@@ -41,6 +41,15 @@ namespace EDDiscoveryTests
                 Console.WriteLine(json);                    
             }
         }
+
+        [Test]
+        public void testGetImageFromEventType()
+        {
+            EDDiscovery.Icons.IconSet.ResetIcons();     // start with a clean slate loaded up from default icons
+
+            var jes = EliteDangerousCore.JournalEntry.GetNameImageOfEvent("Progress");
+           
+        }
         
     }
 }

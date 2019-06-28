@@ -19,13 +19,16 @@
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="TravelHistoryFilterTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="NFluent" Version="2.3.1" />
     <PackageReference Include="NUnit" Version="3.11.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EDDiscovery\EDDiscovery.csproj" />
+    <ProjectReference Include="..\EDDIcons\EDDIcons.csproj" />
     <ProjectReference Include="..\EliteDangerous\EliteDangerous.csproj" />
   </ItemGroup>
   <ItemGroup>
@@ -33,5 +36,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="TravelHistoryFilterTests.cs" />
   </ItemGroup>
 </Project>
