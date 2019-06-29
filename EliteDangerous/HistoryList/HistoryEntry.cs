@@ -49,6 +49,8 @@ namespace EliteDangerousCore
 
         public JournalTypeEnum EntryType { get { return journalEntry.EventTypeID; } }
         public long Journalid { get { return journalEntry.Id; } }
+
+        [JsonIgnore]
         public EDCommander Commander { get { return EDCommander.GetCommander(journalEntry.CommanderId); } }
         public DateTime EventTimeLocal { get { return EventTimeUTC.ToLocalTime(); } }
         public DateTime EventTimeUTC { get { return journalEntry.EventTimeUTC; } }

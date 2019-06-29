@@ -11,7 +11,7 @@ using Xamarin.Forms.Xaml;
 
 namespace EDDMobileImpl.Views
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
+    
     public partial class StatusPage : ContentPage
     {
         StatusViewModel _LastJournalEntry;
@@ -19,29 +19,27 @@ namespace EDDMobileImpl.Views
         public StatusPage()
         {
             InitializeComponent();
+            _LastJournalEntry = new StatusViewModel();
 
-            Status = new StatusViewModel();
-            BindingContext = this;
+            BindingContext = _LastJournalEntry;
         }
-
-        public StatusViewModel Status { get => _LastJournalEntry; set => _LastJournalEntry = value; }
 
         private void Button_Clicked(object sender, EventArgs e)
         {
-            Status.LoadItemsCommand.Execute(null);
+            _LastJournalEntry.LoadItemsCommand.Execute(null);
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
 
-            Status.StartListening();
+            _LastJournalEntry.StartListening();
         }
 
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            Status.StopListening();
+            _LastJournalEntry.StopListening();
         }
     }
 }

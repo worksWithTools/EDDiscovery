@@ -1,4 +1,5 @@
 ﻿using EDDMobile.Comms;
+using EDMobileLibrary.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EDDMobileImpl.ViewModels
 {
-    public class BaseViewModel : INotifyPropertyChanged
+    public class BaseViewModel : INotifyPropertyChanged, IPropertyChangedNotifier
     {
 
         public BaseViewModel()
@@ -49,13 +50,14 @@ namespace EDDMobileImpl.ViewModels
 
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        public void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             var changed = PropertyChanged;
             if (changed == null)
                 return;
 
             changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            Debug.WriteLine($"DEBUG: Property {propertyName} changed.");
         }
 
         public void StartListening()

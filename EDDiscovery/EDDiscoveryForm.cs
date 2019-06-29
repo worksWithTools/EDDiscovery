@@ -417,7 +417,7 @@ namespace EDDiscovery
 
             if (DLLManager.HasManaged)
             {
-                DLLManagedCallbacks.RequestRefresh = () => RefreshHistoryAsync();
+                DLLManagedCallbacks.GetLastHistory = () => GetLastHistoryEntry();
                 DLLManagedCallbacks.GetHistory = (i) => GetHistory(i);
             }
 
@@ -474,6 +474,11 @@ namespace EDDiscovery
             });
 
             // this.DebugSizePosition(toolTip); // Debug - theme all the tooltips to show info on control - useful
+        }
+
+        private HistoryEntry GetLastHistoryEntry()
+        {
+            return Controller?.history.GetLast;
         }
 
         List<Notifications.Notification> popupnotificationlist = new List<Notifications.Notification>();

@@ -4,30 +4,15 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             xmlns:local="clr-namespace:EDDMobileImpl.ViewModels"
              x:Class="EDDMobileImpl.Views.StatusPage"
-             Title="{Binding Status.Title}">
+             Title="{Binding Title}">
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Refresh" Clicked="Button_Clicked" />
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Current system:"/>
-            <Label Text='{Binding Status.SystemName}' d:Text="(SYSTEMNAME)"
-                VerticalOptions="Start" 
-                HorizontalOptions="StartAndExpand"/>
-            <Label Text="Current location:"/>
-            <Label Text='{Binding Status.WhereAmI}' d:Text="(WHEREAMI)"
-                VerticalOptions="Start" 
-                HorizontalOptions="StartAndExpand"/>
-            <Label Text="Current ship:"/>
-            <Label Text="{Binding Status.ShipType}" d:Text="(SHIP)"
-                VerticalOptions="Start" 
-                HorizontalOptions="StartAndExpand"/>
             <Label Text="Credits:"/>
-            <Label  Text="{Binding Status.Credits}" d:Text="CREDITS"
-                VerticalOptions="Start" 
-                HorizontalOptions="StartAndExpand"/>
+            <Label Text="{Binding Credits}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

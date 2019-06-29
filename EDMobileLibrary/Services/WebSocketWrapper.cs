@@ -123,13 +123,13 @@ namespace EDDMobile.Comms
             if (webSocket.State == WebSocketState.Open)
             {
                 var result = await ReceiveFullMessage(CancellationToken.None);
-                if (result.Item1.MessageType == WebSocketMessageType.Close)
+                if (result.Item1?.MessageType == WebSocketMessageType.Close)
                 {
                     await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
                 }
                 else
                 {
-                    string message = Encoding.ASCII.GetString(result.Item2.ToArray());
+                    string message = Encoding.ASCII.GetString(result.Item2?.ToArray());
                     Debug.WriteLine($"MOBILE: received message {message.Left(40)}...");
                     return message;
                 }

@@ -1,29 +1,24 @@
 ﻿using EDDMobileImpl.Services;
 using EDPlugin;
+using EliteDangerousCore;
 using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Xamarin.Forms;
-using JournalEntry = EDPlugin.EDDDLLIF.JournalEntry;
 
 namespace EDDMobileImpl.ViewModels
 {
     public class StatusViewModel : BaseViewModel
     {
         public Command LoadItemsCommand { get; private set; }
-        
-        public string WhereAmI { get => lastJournalEntry.whereami; set => SetProperty(ref lastJournalEntry.whereami, value); }
-        public string SystemName { get => lastJournalEntry.systemname; set => SetProperty(ref lastJournalEntry.systemname, value); }
-        public string ShipType { get => lastJournalEntry.shiptype; set => SetProperty(ref lastJournalEntry.shiptype, value); }
-        public long Credits { get => lastJournalEntry.credits; set => SetProperty(ref lastJournalEntry.credits, value); }
-
         public StatusViewModel()
         {
             Title = "Status";
             LoadItemsCommand = new Command(async () => await ExecuteLoadJournalEntriesCommand());
         }
+
+        private HistoryEntry LastEntry;
 
         protected override void WebSocket_OnMessage()
         {
@@ -31,7 +26,7 @@ namespace EDDMobileImpl.ViewModels
             RefreshStatus(msg);
         }
 
-
+       
         async Task ExecuteLoadJournalEntriesCommand()
         {
             if (IsBusy)
@@ -42,10 +37,6 @@ namespace EDDMobileImpl.ViewModels
             try
             {
                 await App.WebSocket.Send(WebSocketMessage.REFRESH_STATUS);
-                var msg = await App.WebSocket.ListenForMessage();
-
-                RefreshStatus(msg);
-
             }
             catch (Exception ex)
             {
@@ -59,10 +50,21 @@ namespace EDDMobileImpl.ViewModels
 
         private void RefreshStatus(string msg)
         {
-            var lastEntry = JsonConvert.DeserializeObject<JournalEntry>(msg);
-            PropertyCopier<JournalEntry, StatusViewModel>.Copy(lastEntry, this);
+            //TODO: improve the deserialization.
+            
+            var lastEntry = JsonConvert.DeserializeObject<HistoryEntry>(msg);
+            if (lastEntry != null)
+            {
+                LastEntry = lastEntry;
+                PropertyNotifier<HistoryEntry, StatusViewModel>.NotifyAllChanges(LastEntry, this);
+            }
+
         }
 
-        JournalEntry lastJournalEntry;
+        public long Credits
+        {
+            get => LastEntry?.Credits ?? 0;
+        }
+
     }
 }

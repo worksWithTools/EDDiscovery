@@ -63,8 +63,12 @@ namespace EDMobilePlugin
                         // TODO: Apply a command pattern?
                         // if message is "ready" then send back some data..
                         if (message == WebSocketMessage.REFRESH_STATUS)
-                            //TODO: replace this with the last HISTORY 
-                            managedCallbacks?.RequestRefresh();
+                        {
+                            var lasthistory = managedCallbacks?.GetLastHistory();
+                            Debug.WriteLine($"TRACE: Socket {socketId} Queueing : {lasthistory.ToString()}");
+                            var msg = JsonConvert.SerializeObject(lasthistory);
+                            await SendMessageToSocketAsync(socketId, socket, msg, Token);
+                        }
                         else if (message.StartsWith(WebSocketMessage.GET_JOURNAL))
                         {
                             //TODO: add number to get...

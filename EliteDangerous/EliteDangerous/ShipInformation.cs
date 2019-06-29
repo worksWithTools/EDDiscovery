@@ -22,6 +22,7 @@ using EliteDangerousCore.JournalEvents;
 using Newtonsoft.Json.Linq;
 using System.IO;
 using EliteDangerousCore.DB;
+using Newtonsoft.Json;
 
 namespace EliteDangerousCore
 {
@@ -219,6 +220,7 @@ namespace EliteDangerousCore
             return md != null ? (md as ShipModuleData.ShipInfoDouble).Value : 0;
         }
 
+        [JsonIgnore]
         public double FuelWarningPercent
         {
             get { return SQLiteDBClass.GetSettingDouble("ShipInformation:" + ShipFD + ID + "Warninglevel", 0); }
