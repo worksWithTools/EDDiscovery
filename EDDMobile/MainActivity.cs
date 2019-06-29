@@ -3,6 +3,7 @@ using Android.App;
 using Android.Content.PM;
 using Android.OS;
 using Android.Runtime;
+using EDDMobileImpl;
 using UXDivers.Gorilla.Droid;
 
 namespace EDDMobile.Droid

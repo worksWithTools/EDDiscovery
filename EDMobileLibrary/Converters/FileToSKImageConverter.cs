@@ -9,13 +9,12 @@ namespace EDMobileLibrary.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value.GetType() == typeof(String))
-            {
-                var jes = EliteDangerousCore.JournalEntry.GetNameImageOfEvent(value.ToString());
-                return jes.Item3; // Item3 is the image
-            }
-            
+#if GORILLA
+            var jes = EliteDangerousCore.JournalEntry.GetNameImageOfEvent(value.ToString());
+            return jes.Item3; // Item3 is the image
+#else
             return value;
+#endif           
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
