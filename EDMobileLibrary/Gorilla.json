@@ -6,7 +6,12 @@
     },
     {
       "name": "EDMobileLibrary",
-      "types":  null
+      "types": null
+    },
+    {
+      "name": "ImageCircle.Forms.Plugin",
+      "types": null
     }
+
   ]
 }

@@ -4,6 +4,7 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:skia="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
+             xmlns:controls="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
              mc:Ignorable="d"
              xmlns:local="clr-namespace:EDMobileLibrary.Converters"
              x:Class="EDDMobileImpl.Views.HistoryPage"
@@ -13,6 +14,7 @@
         <ResourceDictionary>
             <local:FileToSKImageConverter x:Key="fileToImage" />
         </ResourceDictionary>
+        
     </ContentPage.Resources>
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Refresh" Clicked="Refresh_Clicked" />
@@ -41,22 +43,34 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="75"/>
                                 </Grid.ColumnDefinitions>
-                                <Image Margin="5,5,10,5"  WidthRequest="36" HeightRequest="36" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2">
-                                    <Image.Source>
+                                <controls:CircleImage
+                                    Margin="5,5,15,5"
+                                    WidthRequest="40" 
+                                    HeightRequest="40"
+                                    BorderColor="Accent"
+                                    FillColor="White"
+                                    Grid.Row="0" 
+                                       Grid.Column="0" 
+                                       Grid.RowSpan="2">
+                                    <controls:CircleImage.Source>
                                         <skia:SKImageImageSource Image="{Binding Icon,
-                                                                                         Converter={StaticResource fileToImage}}" />
-                                    </Image.Source>
-                                </Image>
+                                                                                 Converter={StaticResource fileToImage}}" />
+                                    </controls:CircleImage.Source>
+                                </controls:CircleImage>
+
                                 <Label Text="{Binding EventName}" d:Text="{Binding event}"
                                        Grid.Row="0" Grid.Column="1" 
                                        Style="{DynamicResource ListItemTextStyle}"
                                        FontSize="18"
                                        FontAttributes="Bold"/>
                                 <Label Text="{Binding Details}"
+                                       TextColor="{StaticResource SecondaryText}"
                                        Grid.Row="1" Grid.Column="1"/>
 
-                                <Label Text="{Binding EventTimeUTC}" d:Text="{Binding timestamp}"
-                                        Grid.Row="0"
+                                <Label Text="{Binding EventTimeUTC}" 
+                                       d:Text="{Binding timestamp}"
+                                       TextColor="{StaticResource SecondaryText}"
+                                        Grid.Row="1"
                                         Grid.Column="2"
                                         Style="{DynamicResource ListItemDetailTextStyle}"
                                         FontSize="9" />

@@ -10,9 +10,17 @@
         <ResourceDictionary>
             <!--Global Styles-->
             <Color x:Key="NavigationPrimary">#F77003</Color>
+            <Color x:Key="SecondaryText">#E4A572</Color>
             <Style TargetType="NavigationPage">
                 <Setter Property="BarBackgroundColor" Value="{StaticResource NavigationPrimary}" />
                 <Setter Property="BarTextColor" Value="White" />
+            </Style>
+            <Style TargetType="ListView">
+                <Setter Property="BackgroundColor" Value="#E4000000"/>
+                <Setter Property="SeparatorColor" Value="#78E47A0C"/>
+            </Style>
+            <Style TargetType="Label">
+                <Setter Property="TextColor" Value="#F77003"/>
             </Style>
         </ResourceDictionary>
     </Application.Resources>

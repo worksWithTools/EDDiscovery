@@ -4,6 +4,7 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Runtime;
 using EDDMobileImpl;
+using ImageCircle.Forms.Plugin.Droid;
 using UXDivers.Gorilla.Droid;
 
 namespace EDDMobile.Droid
@@ -20,6 +21,7 @@ namespace EDDMobile.Droid
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
+            ImageCircleRenderer.Init();
 #if GORILLA
             // this normally happens in App.OnSTart()
             EDDiscovery.Icons.IconSet.ResetIcons();     // start with a clean slate loaded up from default icons
@@ -29,6 +31,7 @@ namespace EDDMobile.Droid
                 new UXDivers.Gorilla.Config("worksWithToolsLaptop")
                 .RegisterAssemblyFromType<SkiaSharp.SKImage>()
                 .RegisterAssemblyFromType<EDMobileLibrary.ViewModels.JournalEntryViewModel>()
+                .RegisterAssemblyFromType<ImageCircleRenderer>()
                 )
             );
 
