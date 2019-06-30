@@ -943,8 +943,6 @@
     ]
   },
   "StatusPage.xaml": {
-    "HistoryEntry": [
-      {
         "Indexno": 10017,
         "journalEntry": {
           "ID": 81048,
@@ -960,11 +958,11 @@
           "EDDBID": 0,
           "Population": 0,
           "Faction": "East India Company",
-          "Government": 0,
+          "Government": 4,
           "Allegiance": 3,
           "State": 2,
           "Security": 2,
-          "PrimaryEconomy": 0,
+          "PrimaryEconomy": 3,
           "Power": "",
           "PowerState": "",
           "NeedsPermit": 0,
@@ -5276,8 +5274,6 @@
             }
           ]
         }
-      }
-    ]
   }  
 }
 

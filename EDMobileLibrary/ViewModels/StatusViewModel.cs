@@ -18,7 +18,7 @@ namespace EDDMobileImpl.ViewModels
             LoadItemsCommand = new Command(async () => await ExecuteLoadJournalEntriesCommand());
         }
 
-        private HistoryEntry LastEntry;
+        private HistoryEntry lastEntry;
 
         protected override void WebSocket_OnMessage()
         {
@@ -55,15 +55,14 @@ namespace EDDMobileImpl.ViewModels
             var lastEntry = JsonConvert.DeserializeObject<HistoryEntry>(msg);
             if (lastEntry != null)
             {
-                LastEntry = lastEntry;
-                PropertyNotifier<HistoryEntry, StatusViewModel>.NotifyAllChanges(LastEntry, this);
+                this.lastEntry = lastEntry;
+                PropertyNotifier<HistoryEntry, StatusViewModel>.NotifyAllChanges(this.lastEntry, this);
             }
 
         }
 
-        public long Credits
-        {
-            get => LastEntry?.Credits ?? 0;
+        public long Credits {
+            get => lastEntry?.Credits ?? 0;
         }
 
     }

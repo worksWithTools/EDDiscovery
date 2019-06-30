@@ -4,15 +4,93 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
+             xmlns:local="clr-namespace:EDMobileLibrary.Converters"
              x:Class="EDDMobileImpl.Views.StatusPage"
-             Title="{Binding Title}">
+             Title="{Binding Title}"
+             BackgroundColor="#FF646363">
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Refresh" Clicked="Button_Clicked" />
     </ContentPage.ToolbarItems>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:SystemStateConverter x:Key="systemStatus" />
+            <local:SystemAllegianceConverter x:Key="systemAllegiance"/>
+            <local:SystemGovernmentConverter x:Key="systemGovernment"/>
+            <local:SystemEconomyConverter x:Key="systemEconomy"/>
+            <local:SystemSecurityConverter x:Key="systemSecurity"/>
+        </ResourceDictionary>
+
+    </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Credits:"/>
-            <Label Text="{Binding Credits}"/>
-        </StackLayout>
+            <Frame HasShadow="True" 
+                   Margin="5,5,5,0"
+                   Padding="10" 
+                   BackgroundColor="{StaticResource BackgroundPrimary}"
+                   Grid.Row="0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="100"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Text="System" FontSize="Medium" FontAttributes="Bold" Grid.Row="0" Grid.Column="0"/>
+                    <Label Text="{Binding System.Name}" Grid.Row="0" Grid.Column="1"/>
+                    <Label Text="Visits" FontAttributes="Bold" Grid.Column="0" Grid.Row="1"/>
+                    <Label Text="2" Grid.Column="1" Grid.Row="1"/>
+                    <Label Text="Population" FontAttributes="Bold" Grid.Column="2" Grid.Row="1"/>
+                    <Label Text="{Binding System.Population}" Grid.Column="3" Grid.Row="1"/>
+                    <Label Text="Body" FontAttributes="Bold" Grid.Row="2" Grid.Column="0"/>
+                    <Label Text="{Binding WhereAmI}" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3"/>
+                    <Label Text="Position" FontAttributes="Bold" Grid.Row="3" Grid.Column="0"/>
+                    <StackLayout Orientation="Horizontal" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2">
+                        <Label Text="{Binding System.X, StringFormat='{0},'}"/>
+                        <Label Text="{Binding System.Y, StringFormat='{0},'}"/>
+                        <Label Text="{Binding System.Z}"/>
+                    </StackLayout>
+                    <Label Text="Home" FontAttributes="Bold" Grid.Row="4"/>
+                    <Label Text="???" Grid.Row="4" Grid.Column="1"/>
+                    <Label Text="Sol" FontAttributes="Bold" Grid.Row="4" Grid.Column="2"/>
+                    <Label Text="???" Grid.Row="4" Grid.Column="3"/>
+                    <Label Text="State" FontAttributes="Bold" Grid.Row="5"/>
+                    <Label Text="{Binding System.State, Converter={StaticResource systemStatus}}" Grid.Row="5" Grid.Column="1"/>
+                    <Label Text="Allegiance" FontAttributes="Bold" Grid.Row="5" Grid.Column="2"/>
+                    <Label Text="{Binding System.Allegiance, Converter={StaticResource systemAllegiance}}" Grid.Row="5" Grid.Column="3"/>
+                    <Label Text="Government" FontAttributes="Bold" Grid.Row="6"/>
+                    <Label Text="{Binding System.Government, Converter={StaticResource systemGovernment}}" Grid.Row="6" Grid.Column="1"/>
+                    <Label Text="Economy" FontAttributes="Bold" Grid.Row="6" Grid.Column="2"/>
+                    <Label Text="{Binding System.PrimaryEconomy, Converter={StaticResource systemEconomy}}" Grid.Row="6" Grid.Column="3"/>
+                    <Label Text="Controlling Faction" Grid.Row="7" FontAttributes="Bold"/>
+                    <Label Text="{Binding System.Faction}" Grid.Row="7" Grid.Column="1"/>
+                    <Label Text="Security" Grid.Row="7" Grid.Column="2" FontAttributes="Bold"/>
+                    <Label Text="{Binding System.Security, Converter={StaticResource systemSecurity}}" Grid.Row="7" Grid.Column="3" />
+                    <Label Text="Notes" FontAttributes="Bold" Grid.Row="8"/>
+                    <Label Text="???" Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="3"/>
+
+                </Grid>
+            </Frame>
+            <Frame HasShadow="True" 
+                   Margin="5,0,5,5"
+                   Padding="10" 
+                   BackgroundColor="{StaticResource BackgroundPrimary}"
+                   >
+                <StackLayout>
+                    <Label Text="Summary" FontSize="Large"/>
+                    <Label Text="{Binding Credits, StringFormat='Credits={0}'}"/>
+                </StackLayout>
+            </Frame>
+       </StackLayout>
     </ContentPage.Content>
 </ContentPage>
