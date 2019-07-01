@@ -8,9 +8,11 @@ namespace EDPlugin
         public delegate bool EDDRequestRefresh(/*int lastjid*/);
         public delegate List<HistoryEntry> EDDGetHistory(int entryCount);
         public delegate HistoryEntry EDDGetLastHistory();
+        public delegate HistoryEntry EDDGetHistoryEvent(long eventid);
 
         public EDDGetHistory GetHistory;
         public EDDGetLastHistory GetLastHistory;
+        public EDDGetHistoryEvent GetHistoryEvent;
     }
 
     public static class WebSocketMessage

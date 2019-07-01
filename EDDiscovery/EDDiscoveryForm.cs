@@ -118,6 +118,11 @@ namespace EDDiscovery
             return Controller.history.FilterByNumber(max);
         }
 
+        public HistoryEntry GetHistoryEvent(long eventId)
+        {
+            return Controller.history.Where((h) => h.Indexno == eventId).FirstOrDefault();
+        }
+
         public void RefreshDisplays() { Controller.RefreshDisplays(); }
         public void RecalculateHistoryDBs() { Controller.RecalculateHistoryDBs(); }
 
@@ -419,11 +424,12 @@ namespace EDDiscovery
             {
                 DLLManagedCallbacks.GetLastHistory = () => GetLastHistoryEntry();
                 DLLManagedCallbacks.GetHistory = (i) => GetHistory(i);
+                DLLManagedCallbacks.GetHistoryEvent = (i) => GetHistoryEvent(i);
             }
 
             if (res.Item1.HasChars())
                 LogLine(string.Format("DLLs loaded: {0}".Tx(this, "DLLL"), res.Item1));
-            if (res.Item2.HasChars())
+            if (res.Item2.HasChars()) 
                 LogLineHighlight(string.Format("DLLs failed to load: {0}".Tx(this, "DLLF"), res.Item2));
 
             LogLine(string.Format("Profile {0} Loaded".Tx(this, "PROFL"), EDDProfiles.Instance.Current.Name));

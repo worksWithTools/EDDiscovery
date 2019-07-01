@@ -2,13 +2,14 @@
 using System.Diagnostics;
 using System.Reflection;
 using EDPlugin;
-
+using Newtonsoft.Json;
 
 namespace EDMobilePlugin
 {
     public class EDMobilePluginMain : IManagedDll
     {
-        
+        ManagedCallbacks _managedcallbacks;
+
         public string EDDActionCommand(string cmdname, string[] paras)
         {
             Debug.WriteLine($"EDDActionCommand: {cmdname}, {paras}");
@@ -22,6 +23,7 @@ namespace EDMobilePlugin
 
         public string EDDInitialise(string vstr, EDDDLLIF.EDDCallBacks callbacks, ManagedCallbacks managedCallbacks)
         {
+            _managedcallbacks = managedCallbacks;
             WebSocketHttpServer.Start("http://+:80/eddmobile/", callbacks, managedCallbacks);
  
             return Assembly.GetExecutingAssembly().GetName().Version.ToString();
@@ -35,9 +37,11 @@ namespace EDMobilePlugin
 
         public void EDDRefresh(string cmdname, EDDDLLIF.JournalEntry lastje)
         {
-            string json = lastje.ToJson();
-            Debug.WriteLine($"EDDRefresh: {cmdname}, {json}");
-            //Broadcast now, or 
+            Debug.WriteLine($"EDDRefresh: {cmdname}, Journal Entry {lastje.indexno}");
+
+            var he = _managedcallbacks.GetHistoryEvent(lastje.indexno);
+
+            var json = JsonConvert.SerializeObject(he);
             WebSocketHttpServer.Broadcast(json);
         }
 

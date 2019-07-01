@@ -1,5 +1,4 @@
-﻿using EDDMobileImpl.Services;
-using EDPlugin;
+﻿using EDPlugin;
 using EliteDangerousCore;
 using Newtonsoft.Json;
 using System;
@@ -62,7 +61,7 @@ namespace EDDMobileImpl.ViewModels
         }
         //TODO: why does this crash (only on first message... which perhaps isn't a complete system?)
         public String WhereAmI {
-            get => "Unknown";   //lastEntry?.WhereAmI ?? "Dunno";
+            get => lastEntry?.WhereAmI ?? "Dunno";
         }
         public ISystem System { get ; private set ; }
 
