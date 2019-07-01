@@ -18,7 +18,6 @@ namespace EDDMobileImpl.ViewModels
             LoadItemsCommand = new Command(async () => await ExecuteLoadJournalEntriesCommand());
         }
 
-        private HistoryEntry lastEntry;
 
         protected override void WebSocket_OnMessage()
         {
@@ -56,14 +55,17 @@ namespace EDDMobileImpl.ViewModels
             if (lastEntry != null)
             {
                 this.lastEntry = lastEntry;
-                PropertyNotifier<HistoryEntry, StatusViewModel>.NotifyAllChanges(this.lastEntry, this);
+                this.System = lastEntry.System;
+                OnPropertyChanged(null); // should result in all props being refreshed.
             }
 
         }
-
-        public long Credits {
-            get => lastEntry?.Credits ?? 0;
+        //TODO: why does this crash (only on first message... which perhaps isn't a complete system?)
+        public String WhereAmI {
+            get => "Unknown";   //lastEntry?.WhereAmI ?? "Dunno";
         }
+        public ISystem System { get ; private set ; }
 
+        private HistoryEntry lastEntry;
     }
 }
