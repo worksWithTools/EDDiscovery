@@ -123,7 +123,7 @@ namespace EliteDangerousCore
         [JsonIgnore] //TODO: figure out how to serialize this... at the moment I get issues with null 
         public MissionList MissionList { get; set; }
 
-        public SystemNoteClass snc;     // system note class found attached to this entry. May be null
+        public SystemNoteClass snc;     // system note class found attached to this entry. May be null 
 
         #endregion
 

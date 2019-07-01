@@ -62,6 +62,10 @@ namespace EDDMobileImpl.ViewModels
         public String WhereAmI {
             get => lastEntry?.WhereAmI ?? "Unknown";
         }
+        public String Note
+        {
+            get => lastEntry?.snc?.Note ?? "";
+        }
         public ISystem System { get => lastEntry?.System; }
 
         private HistoryEntry lastEntry;
