@@ -49,21 +49,20 @@ namespace EDDMobileImpl.ViewModels
         private void RefreshStatus(string msg)
         {
             //TODO: improve the deserialization.
+            var lastEntry = HistoryEntry.FromJSON(msg);
             
-            var lastEntry = JsonConvert.DeserializeObject<HistoryEntry>(msg);
             if (lastEntry != null)
             {
                 this.lastEntry = lastEntry;
-                this.System = lastEntry.System;
                 OnPropertyChanged(null); // should result in all props being refreshed.
             }
 
         }
         //TODO: why does this crash (only on first message... which perhaps isn't a complete system?)
         public String WhereAmI {
-            get => lastEntry?.WhereAmI ?? "Dunno";
+            get => lastEntry?.WhereAmI ?? "Unknown";
         }
-        public ISystem System { get ; private set ; }
+        public ISystem System { get => lastEntry?.System; }
 
         private HistoryEntry lastEntry;
     }

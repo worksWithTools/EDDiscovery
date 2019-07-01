@@ -60,10 +60,10 @@
                         <Label Text="{Binding System.Y, StringFormat='{0},'}"/>
                         <Label Text="{Binding System.Z}"/>
                     </StackLayout>
-                    <Label Text="Home" FontAttributes="Bold" Grid.Row="4"/>
+                    <!--<Label Text="Home" FontAttributes="Bold" Grid.Row="4"/>
                     <Label Text="???" Grid.Row="4" Grid.Column="1"/>
                     <Label Text="Sol" FontAttributes="Bold" Grid.Row="4" Grid.Column="2"/>
-                    <Label Text="???" Grid.Row="4" Grid.Column="3"/>
+                    <Label Text="???" Grid.Row="4" Grid.Column="3"/>-->
                     <Label Text="State" FontAttributes="Bold" Grid.Row="5"/>
                     <Label Text="{Binding System.State, Converter={StaticResource systemStatus}}" Grid.Row="5" Grid.Column="1"/>
                     <Label Text="Allegiance" FontAttributes="Bold" Grid.Row="5" Grid.Column="2"/>
@@ -76,8 +76,8 @@
                     <Label Text="{Binding System.Faction}" Grid.Row="7" Grid.Column="1"/>
                     <Label Text="Security" Grid.Row="7" Grid.Column="2" FontAttributes="Bold"/>
                     <Label Text="{Binding System.Security, Converter={StaticResource systemSecurity}}" Grid.Row="7" Grid.Column="3" />
-                    <Label Text="Notes" FontAttributes="Bold" Grid.Row="8"/>
-                    <Label Text="???" Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="3"/>
+                    <!--<Label Text="Notes" FontAttributes="Bold" Grid.Row="8"/>
+                    <Label Text="???" Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="3"/>-->
 
                 </Grid>
             </Frame>

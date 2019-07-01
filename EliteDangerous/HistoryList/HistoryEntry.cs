@@ -140,6 +140,16 @@ namespace EliteDangerousCore
         {
         }
 
+        public static HistoryEntry FromJSON(string jsonEntry)
+        {
+            var entry = JsonConvert.DeserializeObject<HistoryEntry>(jsonEntry);
+
+            //TODO: prev...
+            HistoryEntry prev = null;
+            entry.EntryStatus = HistoryEntryStatus.Update(prev?.EntryStatus, entry.journalEntry, entry.System.Name);
+            entry.TravelStatus = HistoryTravelStatus.Update(prev?.TravelStatus, prev , entry);
+            return entry;
+        }
         public static HistoryEntry FromJournalEntry(JournalEntry je, HistoryEntry prev, out bool journalupdate, SQLiteConnectionSystem conn = null)
         {
             ISystem isys = prev == null ? new SystemClass("Unknown") : prev.System;
