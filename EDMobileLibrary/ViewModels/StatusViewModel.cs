@@ -1,6 +1,5 @@
 ﻿using EDPlugin;
 using EliteDangerousCore;
-using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -24,7 +23,7 @@ namespace EDDMobileImpl.ViewModels
             RefreshStatus(msg);
         }
 
-       
+
         async Task ExecuteLoadJournalEntriesCommand()
         {
             if (IsBusy)
@@ -50,7 +49,7 @@ namespace EDDMobileImpl.ViewModels
         {
             //TODO: improve the deserialization.
             var lastEntry = HistoryEntry.FromJSON(msg);
-            
+
             if (lastEntry != null)
             {
                 this.lastEntry = lastEntry;
@@ -58,7 +57,7 @@ namespace EDDMobileImpl.ViewModels
             }
 
         }
-        //TODO: why does this crash (only on first message... which perhaps isn't a complete system?)
+
         public String WhereAmI {
             get => lastEntry?.WhereAmI ?? "Unknown";
         }
@@ -67,6 +66,13 @@ namespace EDDMobileImpl.ViewModels
             get => lastEntry?.snc?.Note ?? "";
         }
         public ISystem System { get => lastEntry?.System; }
+        public ShipInformation ShipInformation { get => lastEntry?.ShipInformation; }
+
+        public String Fuel { get => String.Format($"{ShipInformation.FuelLevel}/{ShipInformation.FuelCapacity}"); }
+        public int MaterialsCount { get => lastEntry?.MaterialCommodity.MaterialsCount ?? 0; }
+        public int CargoCount { get => lastEntry?.MaterialCommodity.CargoCount ?? 0; }
+        
+        public int DataCount { get => lastEntry?.MaterialCommodity.DataCount ?? 0; }
 
         private HistoryEntry lastEntry;
     }

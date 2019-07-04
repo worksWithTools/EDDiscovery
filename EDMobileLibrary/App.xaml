@@ -10,8 +10,8 @@
         <ResourceDictionary>
             <!--Global Styles-->
             <Color x:Key="NavigationPrimary">#F77003</Color>
-            <Color x:Key="SecondaryText">#E4A572</Color>
-            <Color x:Key="BackgroundPrimary">#E4000000</Color>
+            <Color x:Key="SecondaryText">#FF8200</Color>
+            <Color x:Key="BackgroundPrimary">#FF4C4A4A</Color>
             <Color x:Key="BorderColor">#78E47A0C</Color>
             <Style TargetType="ContentPage">
                 <Setter Property="BackgroundColor" Value="{StaticResource BackgroundPrimary}"/>
@@ -25,6 +25,7 @@
             </Style>
             <Style TargetType="Label">
                 <Setter Property="TextColor" Value="#F77003"/>
+                <Setter Property="FontSize" Value="20"/>
             </Style>
         </ResourceDictionary>
     </Application.Resources>

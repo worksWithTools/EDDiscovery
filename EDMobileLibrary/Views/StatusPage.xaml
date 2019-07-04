@@ -7,7 +7,7 @@
              xmlns:local="clr-namespace:EDMobileLibrary.Converters"
              x:Class="EDDMobileImpl.Views.StatusPage"
              Title="{Binding Title}"
-             BackgroundColor="#FF646363">
+             BackgroundColor="#E6000000">
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Refresh" Clicked="Button_Clicked" />
     </ContentPage.ToolbarItems>
@@ -25,10 +25,79 @@
         <StackLayout>
             <Frame HasShadow="True" 
                    Margin="5,5,5,0"
-                   Padding="10" 
+                   Padding="10"
+                   CornerRadius="10"
                    BackgroundColor="{StaticResource BackgroundPrimary}"
                    Grid.Row="0">
-                <Grid>
+                <StackLayout Orientation="Vertical">
+                    <Label Text="System" FontSize="24" FontAttributes="Bold"/>
+                    <BoxView HeightRequest="1" BackgroundColor="{StaticResource BorderColor}"/>
+                    <Grid Margin="10,0,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="100"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Text="Name" FontAttributes="Bold" Grid.Row="0" Grid.Column="0"/>
+                        <Label Text="{Binding System.Name}" Grid.Row="0" Grid.Column="1" TextColor="{StaticResource SecondaryText}"/>
+                        <Label Text="Visits" FontAttributes="Bold" Grid.Column="0" Grid.Row="1"/>
+                        <Label Text="{Binding Visits}" Grid.Column="1" Grid.Row="1" TextColor="{StaticResource SecondaryText}"/>
+                        <Label Text="Population" FontAttributes="Bold" Grid.Column="2" Grid.Row="1"/>
+                        <Label Text="{Binding System.Population}" Grid.Column="3" Grid.Row="1" TextColor="{StaticResource SecondaryText}"/>
+                        <Label Text="Body" FontAttributes="Bold" Grid.Row="2" Grid.Column="0"/>
+                        <Label Text="{Binding WhereAmI}" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" TextColor="{StaticResource SecondaryText}"/>
+                        <Label Text="Position" FontAttributes="Bold" Grid.Row="3" Grid.Column="0"/>
+                        <StackLayout Orientation="Horizontal" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2">
+                            <Label Text="{Binding System.X, StringFormat='{0},'}" TextColor="{StaticResource SecondaryText}"/>
+                            <Label Text="{Binding System.Y, StringFormat='{0},'}" TextColor="{StaticResource SecondaryText}"/>
+                            <Label Text="{Binding System.Z}" TextColor="{StaticResource SecondaryText}"/>
+                        </StackLayout>
+                        <!--
+                        TODO: port the home-system stuff...
+                        <Label Text="Home" FontAttributes="Bold" Grid.Row="4"/>
+                        <Label Text="???" Grid.Row="4" Grid.Column="1"/>
+                        <Label Text="Sol" FontAttributes="Bold" Grid.Row="4" Grid.Column="2"/>
+                        <Label Text="???" Grid.Row="4" Grid.Column="3"/>-->
+                        <Label Text="State" FontAttributes="Bold" Grid.Row="5"/>
+                        <Label Text="{Binding System.State, Converter={StaticResource systemStatus}}" Grid.Row="5" Grid.Column="1"  TextColor="{StaticResource SecondaryText}"/>
+                        <Label Text="Allegiance" FontAttributes="Bold" Grid.Row="5" Grid.Column="2"/>
+                        <Label Text="{Binding System.Allegiance, Converter={StaticResource systemAllegiance}}" Grid.Row="5" Grid.Column="3"  TextColor="{StaticResource SecondaryText}"/>
+                        <Label Text="Government" FontAttributes="Bold" Grid.Row="6"/>
+                        <Label Text="{Binding System.Government, Converter={StaticResource systemGovernment}}" Grid.Row="6" Grid.Column="1"  TextColor="{StaticResource SecondaryText}"/>
+                        <Label Text="Economy" FontAttributes="Bold" Grid.Row="6" Grid.Column="2"/>
+                        <Label Text="{Binding System.PrimaryEconomy, Converter={StaticResource systemEconomy}}" Grid.Row="6" Grid.Column="3" TextColor="{StaticResource SecondaryText}"/>
+                        <Label Text="Controlling Faction" Grid.Row="7" FontAttributes="Bold"/>
+                        <Label Text="{Binding System.Faction}" Grid.Row="7" Grid.Column="1" TextColor="{StaticResource SecondaryText}"/>
+                        <Label Text="Security" Grid.Row="7" Grid.Column="2" FontAttributes="Bold"/>
+                        <Label Text="{Binding System.Security, Converter={StaticResource systemSecurity}}" Grid.Row="7" Grid.Column="3"  TextColor="{StaticResource SecondaryText}"/>
+                        <Label Text="Notes" FontAttributes="Bold" Grid.Row="8"/>
+                        <Label Text="{Binding Note}" Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="3" TextColor="{StaticResource SecondaryText}"/>
+
+                    </Grid>
+                </StackLayout>
+            </Frame>
+            <Frame HasShadow="True" 
+                   Margin="5,0,5,5"
+                   Padding="10"
+                   CornerRadius="10"
+                   BackgroundColor="{StaticResource BackgroundPrimary}"
+                   >
+                <StackLayout>
+                    <Label Text="Ship Information" FontSize="24" FontAttributes="Bold"/>
+                    <BoxView HeightRequest="1" BackgroundColor="{StaticResource BorderColor}"/>
+                    <Grid Margin="10,0,0,0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
@@ -43,54 +112,34 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="120"/>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="150"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Label Text="System" FontSize="Medium" FontAttributes="Bold" Grid.Row="0" Grid.Column="0"/>
-                    <Label Text="{Binding System.Name}" Grid.Row="0" Grid.Column="1"/>
-                    <Label Text="Visits" FontAttributes="Bold" Grid.Column="0" Grid.Row="1"/>
-                    <Label Text="TODO" Grid.Column="1" Grid.Row="1"/>
-                    <Label Text="Population" FontAttributes="Bold" Grid.Column="2" Grid.Row="1"/>
-                    <Label Text="{Binding System.Population}" Grid.Column="3" Grid.Row="1"/>
-                    <Label Text="Body" FontAttributes="Bold" Grid.Row="2" Grid.Column="0"/>
-                    <Label Text="{Binding WhereAmI}" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3"/>
-                    <Label Text="Position" FontAttributes="Bold" Grid.Row="3" Grid.Column="0"/>
-                    <StackLayout Orientation="Horizontal" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2">
-                        <Label Text="{Binding System.X, StringFormat='{0},'}"/>
-                        <Label Text="{Binding System.Y, StringFormat='{0},'}"/>
-                        <Label Text="{Binding System.Z}"/>
-                    </StackLayout>
-                    <!--
-                    TODO: port the home-system stuff...
-                    <Label Text="Home" FontAttributes="Bold" Grid.Row="4"/>
-                    <Label Text="???" Grid.Row="4" Grid.Column="1"/>
-                    <Label Text="Sol" FontAttributes="Bold" Grid.Row="4" Grid.Column="2"/>
-                    <Label Text="???" Grid.Row="4" Grid.Column="3"/>-->
-                    <Label Text="State" FontAttributes="Bold" Grid.Row="5"/>
-                    <Label Text="{Binding System.State, Converter={StaticResource systemStatus}}" Grid.Row="5" Grid.Column="1"/>
-                    <Label Text="Allegiance" FontAttributes="Bold" Grid.Row="5" Grid.Column="2"/>
-                    <Label Text="{Binding System.Allegiance, Converter={StaticResource systemAllegiance}}" Grid.Row="5" Grid.Column="3"/>
-                    <Label Text="Government" FontAttributes="Bold" Grid.Row="6"/>
-                    <Label Text="{Binding System.Government, Converter={StaticResource systemGovernment}}" Grid.Row="6" Grid.Column="1"/>
-                    <Label Text="Economy" FontAttributes="Bold" Grid.Row="6" Grid.Column="2"/>
-                    <Label Text="{Binding System.PrimaryEconomy, Converter={StaticResource systemEconomy}}" Grid.Row="6" Grid.Column="3"/>
-                    <Label Text="Controlling Faction" Grid.Row="7" FontAttributes="Bold"/>
-                    <Label Text="{Binding System.Faction}" Grid.Row="7" Grid.Column="1"/>
-                    <Label Text="Security" Grid.Row="7" Grid.Column="2" FontAttributes="Bold"/>
-                    <Label Text="{Binding System.Security, Converter={StaticResource systemSecurity}}" Grid.Row="7" Grid.Column="3" />
-                    <Label Text="Notes" FontAttributes="Bold" Grid.Row="8"/>
-                    <Label Text="{Binding Note}" Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="3"/>
+                    <Label Text="Type" FontAttributes="Bold" Grid.Row="0" Grid.Column="0"/>
+                    <Label Text="{Binding ShipInformation.ShipType}" Grid.Row="0" Grid.Column="1" TextColor="{StaticResource SecondaryText}"/>
+                        <Label Text="Manufacturer" FontAttributes="Bold" Grid.Row="0" Grid.Column="2"/>
+                        <Label Text="{Binding ShipInformation.Manufacturer}" Grid.Row="0" Grid.Column="3" TextColor="{StaticResource SecondaryText}"/>
+                        <Label Text="Name" FontAttributes="Bold" Grid.Row="1" Grid.Column="0"/>
+                    <Label Text="{Binding ShipInformation.ShipUserName}" Grid.Row="1" Grid.Column="1" TextColor="{StaticResource SecondaryText}"/>
+                    <Label Text="I.D." FontAttributes="Bold" Grid.Row="1" Grid.Column="2"/>
+                    <Label Text="{Binding ShipInformation.ShipUserIdent}" Grid.Row="1" Grid.Column="3" TextColor="{StaticResource SecondaryText}"/>
+                    <Label Text="Value" Grid.Row="2" Grid.Column="0" FontAttributes="Bold"/>
+                    <Label Text="{Binding ShipInformation.HullValue, StringFormat='{0:#,#} cr'}" Grid.Row="2" Grid.Column="1" TextColor="{StaticResource SecondaryText}"/>
+                    <Label Text="Modules Value" Grid.Row="2" Grid.Column="2" FontAttributes="Bold"/>
+                    <Label Text="{Binding ShipInformation.ModulesValue, StringFormat='{0:#,#} cr'}" Grid.Row="2" Grid.Column="3" TextColor="{StaticResource SecondaryText}"/>
+                    <Label Text="Rebuy" Grid.Row="3" Grid.Column="0" FontAttributes="Bold"/>
+                    <Label Text="{Binding ShipInformation.Rebuy, StringFormat='{0:#,#} cr'}" Grid.Row="3" Grid.Column="1" TextColor="{StaticResource SecondaryText}"/>
+                    <Label Text="Fuel" Grid.Row="4" Grid.Column="0" FontAttributes="Bold"/>
+                    <Label Text="{Binding Fuel}" Grid.Row="4" Grid.Column="1" TextColor="{StaticResource SecondaryText}"/>
+                    <Label Text="Cargo" Grid.Row="4" Grid.Column="2" FontAttributes="Bold"/>
+                    <Label Text="{Binding CargoCount}" Grid.Row="4" Grid.Column="3" TextColor="{StaticResource SecondaryText}"/>
+                    <Label Text="Material" Grid.Row="5" Grid.Column="0" FontAttributes="Bold"/>
+                    <Label Text="{Binding MaterialsCount}" Grid.Row="5" Grid.Column="1" TextColor="{StaticResource SecondaryText}"/>
+                    <Label Text="Data" Grid.Row="5" Grid.Column="2" FontAttributes="Bold"/>
+                    <Label Text="{Binding DataCount}" Grid.Row="5" Grid.Column="3" TextColor="{StaticResource SecondaryText}"/>
+
 
                 </Grid>
-            </Frame>
-            <Frame HasShadow="True" 
-                   Margin="5,0,5,5"
-                   Padding="10" 
-                   BackgroundColor="{StaticResource BackgroundPrimary}"
-                   >
-                <StackLayout>
-                    <Label Text="Summary" FontSize="Large"/>
-                    <Label Text="{Binding Credits, StringFormat='Credits={0}'}"/>
                 </StackLayout>
             </Frame>
        </StackLayout>

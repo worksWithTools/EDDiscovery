@@ -31,6 +31,9 @@
     <ApplicationIcon>Resources\edlogo_3mo_icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Properties\ExtraVersion.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="OxyPlot.Core" Version="1.0.0" />
     <PackageReference Include="OxyPlot.WindowsForms" Version="1.0.0" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
@@ -333,6 +336,9 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Windows.Forms.DataVisualization.Design" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\ExtraVersion.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Settings.Designer.cs">
