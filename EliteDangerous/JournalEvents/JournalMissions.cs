@@ -14,6 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EliteDangerousCore.DB;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -102,6 +103,11 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.MissionAccepted)]
     public class JournalMissionAccepted : JournalEntry, IMissions, ICommodityJournalEntry
     {
+        [JsonConstructor]
+        private JournalMissionAccepted()
+        {
+        }
+
         public JournalMissionAccepted(JObject evt) : base(evt, JournalTypeEnum.MissionAccepted)
         {
             Faction = evt["Faction"].Str();
@@ -265,6 +271,11 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.MissionCompleted)]
     public class JournalMissionCompleted : JournalEntry, ICommodityJournalEntry, IMaterialJournalEntry, ILedgerJournalEntry, IMissions
     {
+        [JsonConstructor]
+        private JournalMissionCompleted()
+        {
+        }
+
         public JournalMissionCompleted(JObject evt) : base(evt, JournalTypeEnum.MissionCompleted)
         {
             FDName = evt["Name"].Str();
@@ -538,6 +549,11 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.MissionFailed)]
     public class JournalMissionFailed : JournalEntry, IMissions
     {
+        [JsonConstructor]
+        private JournalMissionFailed()
+        {
+        }
+
         public JournalMissionFailed(JObject evt) : base(evt, JournalTypeEnum.MissionFailed)
         {
             FDName = evt["Name"].Str();
@@ -569,6 +585,11 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.MissionRedirected)]
     public class JournalMissionRedirected : JournalEntry, IMissions
     {
+        [JsonConstructor]
+        private JournalMissionRedirected()
+        {
+        }
+
         public JournalMissionRedirected(JObject evt) : base(evt, JournalTypeEnum.MissionRedirected)
         {
             FDName = evt["Name"].Str();
@@ -612,6 +633,11 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.MissionAbandoned)]
     public class JournalMissionAbandoned : JournalEntry, IMissions
     {
+        [JsonConstructor]
+        private JournalMissionAbandoned()
+        {
+        }
+
         public JournalMissionAbandoned(JObject evt) : base(evt, JournalTypeEnum.MissionAbandoned)
         {
             FDName = evt["Name"].Str();

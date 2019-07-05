@@ -14,6 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
@@ -23,6 +24,11 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.Cargo)]
     public class JournalCargo : JournalEntry, ICommodityJournalEntry, IAdditionalFiles
     {
+        [JsonConstructor]
+        private JournalCargo()
+        {
+        }
+
         public class Cargo
         {
             public string Name { get; set; }            // FDNAME
@@ -130,6 +136,11 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.EjectCargo)]
     public class JournalEjectCargo : JournalEntry, ICommodityJournalEntry, ILedgerNoCashJournalEntry
     {
+        [JsonConstructor]
+        private JournalEjectCargo()
+        {
+        }
+
         public JournalEjectCargo(JObject evt) : base(evt, JournalTypeEnum.EjectCargo)
         {
             Type = evt["Type"].Str();       // fdname
@@ -174,6 +185,11 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.CargoDepot)]
     public class JournalCargoDepot : JournalEntry, ICommodityJournalEntry, IMissions
     {
+        [JsonConstructor]
+        private JournalCargoDepot()
+        {
+        }
+
         public JournalCargoDepot(JObject evt) : base(evt, JournalTypeEnum.CargoDepot)
         {
             MissionId = evt["MissionID"].Int();
@@ -255,6 +271,11 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.CollectCargo)]
     public class JournalCollectCargo : JournalEntry, ICommodityJournalEntry, ILedgerNoCashJournalEntry
     {
+        [JsonConstructor]
+        private JournalCollectCargo()
+        {
+        }
+
         public JournalCollectCargo(JObject evt) : base(evt, JournalTypeEnum.CollectCargo)
         {
             Type = evt["Type"].Str();                               //FDNAME

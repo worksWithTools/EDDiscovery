@@ -19,6 +19,7 @@ using EliteDangerousCore.DB;
 using System.Linq;
 using System.Text;
 using System.Data.Common;
+using Newtonsoft.Json;
 
 namespace EliteDangerousCore.JournalEvents
 {
@@ -186,6 +187,10 @@ namespace EliteDangerousCore.JournalEvents
             }
         }
 
+        [JsonConstructor]
+        protected JournalLocOrJump()
+        { }
+
         public EDGovernment EDGovernment
         {
             get
@@ -275,6 +280,11 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.Location)]
     public class JournalLocation : JournalLocOrJump, ISystemStationEntry, IBodyNameAndID
     {
+        [JsonConstructor]
+        private JournalLocation()
+        {
+
+        }
         public JournalLocation(JObject evt) : base(evt, JournalTypeEnum.Location)      // all have evidence 16/3/2017
         {
             // base class does StarSystem/StarPos/Faction/Powerplay
@@ -411,6 +421,11 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.FSDJump)]
     public class JournalFSDJump : JournalLocOrJump, IShipInformation, ISystemStationEntry
     {
+        [JsonConstructor]
+        private JournalFSDJump()
+        {
+
+        }
         public JournalFSDJump(JObject evt) : base(evt, JournalTypeEnum.FSDJump)
         {
             RealJournalEvent = evt["FuelUsed"].Empty(); // Old pre ED 2.2 messages has no Fuel used fields
@@ -572,6 +587,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.FSDTarget)]
     public class JournalFSDTarget : JournalEntry
     {
+        [JsonConstructor]
+        private JournalFSDTarget() { }
         public JournalFSDTarget(JObject evt) : base(evt, JournalTypeEnum.FSDTarget)
         {
             StarSystem = evt["Name"].Str();
@@ -593,6 +610,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.StartJump)]
     public class JournalStartJump : JournalEntry
     {
+        [JsonConstructor]
+        private JournalStartJump() { }
         public JournalStartJump(JObject evt) : base(evt, JournalTypeEnum.StartJump)
         {
             JumpType = evt["JumpType"].Str();

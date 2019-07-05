@@ -27,17 +27,12 @@ namespace EliteDangerousCore
     public class MissionState
     {
         public enum StateTypes { InProgress, Completed, Abandoned, Failed, Died };
-
-        [JsonConverter(typeof(JournalEntryConverter))]
         public JournalMissionAccepted Mission { get; private set; }                  // never null
 
-        [JsonConverter(typeof(JournalEntryConverter))]
         public JournalMissionCompleted Completed { get; private set; }               // null until complete
 
-        [JsonConverter(typeof(JournalEntryConverter))]
         public JournalMissionRedirected Redirected { get; private set; }             // null unless redirected
 
-        [JsonConverter(typeof(JournalEntryConverter))]
         public JournalCargoDepot CargoDepot { get; private set; }                    // null unless we received a CD on this mission
 
         public StateTypes State { get; private set; }
@@ -98,6 +93,10 @@ namespace EliteDangerousCore
         }
 
         [JsonConstructor]
+        private MissionState()
+        {
+            //Only used for deserialization
+        }
         public MissionState(JournalMissionAccepted m, ISystem s, string b)      // Start!
         {
             Mission = m;

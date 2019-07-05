@@ -66,8 +66,13 @@ namespace EDMobilePlugin
                         {
                             var lasthistory = managedCallbacks?.GetLastHistory();
                             Debug.WriteLine($"TRACE: Socket {socketId} Queueing : {lasthistory.ToString()}");
-                            var msg = JsonConvert.SerializeObject(lasthistory);
-                            await SendMessageToSocketAsync(socketId, socket, msg, Token);
+                            var lastSystem = managedCallbacks?.GetLastHistoryEntry(x => x.journalEntry is EliteDangerousCore.JournalEvents.JournalFSDJump, lasthistory)?.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump;
+
+                            var response = new MobileWebResponse(message);
+                            response.Add(lasthistory);
+                            response.Add(lastSystem);
+                            
+                            await SendMessageToSocketAsync(socketId, socket, response, Token);
                         }
                         else if (message.StartsWith(WebSocketMessage.GET_JOURNAL))
                         {
@@ -76,8 +81,9 @@ namespace EDMobilePlugin
                             foreach (var entry in history)
                             {
                                 Debug.WriteLine($"Socket {socketId} Queueing : {entry.journalEntry.ToString()}");
-                                var msg = JsonConvert.SerializeObject(entry.journalEntry);
-                                await SendMessageToSocketAsync(socketId, socket, msg, Token);
+                                MobileWebResponse response = new MobileWebResponse(message);
+                                response.Add(entry.journalEntry);
+                                await SendMessageToSocketAsync(socketId, socket, response, Token);
                             }
                         }
 
@@ -114,7 +120,9 @@ namespace EDMobilePlugin
                         Debug.WriteLine($"Broadcast received by socket {socketId}");
                         if (broadCastMessages.TryDequeue(out string message))
                         {
-                            await SendMessageToSocketAsync(socketId, socket, message, token);
+                            MobileWebResponse response = new MobileWebResponse(WebSocketMessage.BROADCAST);
+                            response.Responses.Add(message);
+                            await SendMessageToSocketAsync(socketId, socket, response, token);
                         }
                     }
                 }
@@ -130,10 +138,11 @@ namespace EDMobilePlugin
             }
         }
 
-        private static async Task SendMessageToSocketAsync(int socketId, WebSocket socket, string message, CancellationToken socketToken)
+        private static async Task SendMessageToSocketAsync(int socketId, WebSocket socket, MobileWebResponse response, CancellationToken socketToken)
         {
-            Debug.WriteLine($"Socket {socketId}: Sending next broadcast from queue: [{message}]");
-            var msgbuf = new ArraySegment<byte>(Encoding.ASCII.GetBytes(message));
+            Debug.WriteLine($"Socket {socketId}: Sending next message: [{response.RequestType}]");
+            //System.IO.File.WriteAllText(@"D:\Source\worksWithTools\EDDiscovery\EDDiscoveryTests\historyentry.json", message);
+            var msgbuf = new ArraySegment<byte>(Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(response)));
             await socket.SendAsync(msgbuf, WebSocketMessageType.Text, endOfMessage: true, socketToken);
         }
 

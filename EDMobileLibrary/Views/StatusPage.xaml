@@ -11,16 +11,7 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Refresh" Clicked="Button_Clicked" />
     </ContentPage.ToolbarItems>
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <local:SystemStateConverter x:Key="systemStatus" />
-            <local:SystemAllegianceConverter x:Key="systemAllegiance"/>
-            <local:SystemGovernmentConverter x:Key="systemGovernment"/>
-            <local:SystemEconomyConverter x:Key="systemEconomy"/>
-            <local:SystemSecurityConverter x:Key="systemSecurity"/>
-        </ResourceDictionary>
-
-    </ContentPage.Resources>
+   
     <ContentPage.Content>
         <StackLayout>
             <Frame HasShadow="True" 
@@ -71,17 +62,17 @@
                         <Label Text="Sol" FontAttributes="Bold" Grid.Row="4" Grid.Column="2"/>
                         <Label Text="???" Grid.Row="4" Grid.Column="3"/>-->
                         <Label Text="State" FontAttributes="Bold" Grid.Row="5"/>
-                        <Label Text="{Binding System.State, Converter={StaticResource systemStatus}}" Grid.Row="5" Grid.Column="1"  TextColor="{StaticResource SecondaryText}"/>
+                        <Label Text="{Binding State}" Grid.Row="5" Grid.Column="1"  TextColor="{StaticResource SecondaryText}"/>
                         <Label Text="Allegiance" FontAttributes="Bold" Grid.Row="5" Grid.Column="2"/>
-                        <Label Text="{Binding System.Allegiance, Converter={StaticResource systemAllegiance}}" Grid.Row="5" Grid.Column="3"  TextColor="{StaticResource SecondaryText}"/>
+                        <Label Text="{Binding Allegiance}" Grid.Row="5" Grid.Column="3"  TextColor="{StaticResource SecondaryText}"/>
                         <Label Text="Government" FontAttributes="Bold" Grid.Row="6"/>
-                        <Label Text="{Binding System.Government, Converter={StaticResource systemGovernment}}" Grid.Row="6" Grid.Column="1"  TextColor="{StaticResource SecondaryText}"/>
+                        <Label Text="{Binding Government}" Grid.Row="6" Grid.Column="1"  TextColor="{StaticResource SecondaryText}"/>
                         <Label Text="Economy" FontAttributes="Bold" Grid.Row="6" Grid.Column="2"/>
-                        <Label Text="{Binding System.PrimaryEconomy, Converter={StaticResource systemEconomy}}" Grid.Row="6" Grid.Column="3" TextColor="{StaticResource SecondaryText}"/>
+                        <Label Text="{Binding PrimaryEconomy}" Grid.Row="6" Grid.Column="3" TextColor="{StaticResource SecondaryText}"/>
                         <Label Text="Controlling Faction" Grid.Row="7" FontAttributes="Bold"/>
                         <Label Text="{Binding System.Faction}" Grid.Row="7" Grid.Column="1" TextColor="{StaticResource SecondaryText}"/>
                         <Label Text="Security" Grid.Row="7" Grid.Column="2" FontAttributes="Bold"/>
-                        <Label Text="{Binding System.Security, Converter={StaticResource systemSecurity}}" Grid.Row="7" Grid.Column="3"  TextColor="{StaticResource SecondaryText}"/>
+                        <Label Text="{Binding Security}" Grid.Row="7" Grid.Column="3"  TextColor="{StaticResource SecondaryText}"/>
                         <Label Text="Notes" FontAttributes="Bold" Grid.Row="8"/>
                         <Label Text="{Binding Note}" Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="3" TextColor="{StaticResource SecondaryText}"/>
 

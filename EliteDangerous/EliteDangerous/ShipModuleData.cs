@@ -46,6 +46,7 @@ namespace EliteDangerousCore
 
         public Dictionary<ShipPropID, ShipInfo> GetShipProperties(string fdshipname)        // get properties of a ship, case insensitive, may be null
         {
+            if (fdshipname == null) return null;
             fdshipname = fdshipname.ToLowerInvariant();
             if (ships.ContainsKey(fdshipname))
                 return ships[fdshipname];

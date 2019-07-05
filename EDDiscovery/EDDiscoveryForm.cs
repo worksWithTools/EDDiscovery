@@ -123,6 +123,11 @@ namespace EDDiscovery
             return Controller.history.Where((h) => h.Indexno == eventId).FirstOrDefault();
         }
 
+        public HistoryEntry GetLastHistoryEvent(Predicate<HistoryEntry> where, HistoryEntry frominclusive)
+        {
+            return Controller.history.GetLastHistoryEntry(where, frominclusive);
+        }
+
         public void RefreshDisplays() { Controller.RefreshDisplays(); }
         public void RecalculateHistoryDBs() { Controller.RecalculateHistoryDBs(); }
 
@@ -425,6 +430,7 @@ namespace EDDiscovery
                 DLLManagedCallbacks.GetLastHistory = () => GetLastHistoryEntry();
                 DLLManagedCallbacks.GetHistory = (i) => GetHistory(i);
                 DLLManagedCallbacks.GetHistoryEvent = (i) => GetHistoryEvent(i);
+                DLLManagedCallbacks.GetLastHistoryEntry = (p,i) => GetLastHistoryEvent(p,i);
             }
 
             if (res.Item1.HasChars())

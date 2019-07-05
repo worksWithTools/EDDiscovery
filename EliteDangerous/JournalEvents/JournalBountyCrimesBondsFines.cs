@@ -13,6 +13,7 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
@@ -23,6 +24,11 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.Bounty)]
     public class JournalBounty : JournalEntry, ILedgerNoCashJournalEntry
     {
+        [JsonConstructor]
+        private JournalBounty()
+        {
+        }
+
         public class BountyReward
         {
             public string Faction;
@@ -89,6 +95,11 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.CapShipBond)]
     public class JournalCapShipBond : JournalEntry, ILedgerNoCashJournalEntry
     {
+        [JsonConstructor]
+        private JournalCapShipBond()
+        {
+        }
+
         public JournalCapShipBond(JObject evt) : base(evt, JournalTypeEnum.CapShipBond)
         {
             AwardingFaction = evt["AwardingFaction"].Str();
@@ -121,6 +132,11 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.CommitCrime)]
     public class JournalCommitCrime : JournalEntry, ILedgerNoCashJournalEntry
     {
+        [JsonConstructor]
+        private JournalCommitCrime()
+        {
+        }
+
         public JournalCommitCrime(JObject evt) : base(evt, JournalTypeEnum.CommitCrime)
         {
             CrimeType = evt["CrimeType"].Str().SplitCapsWordFull();
@@ -165,6 +181,10 @@ namespace EliteDangerousCore.JournalEvents
     public class JournalCrimeVictim : JournalEntry      
     {
         // presuming its co-incident with commit crime so don't double count bounties
+        [JsonConstructor]
+        private JournalCrimeVictim()
+        {
+        }
 
         public JournalCrimeVictim(JObject evt) : base(evt, JournalTypeEnum.CrimeVictim)
         {
@@ -186,6 +206,11 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.FactionKillBond)]
     public class JournalFactionKillBond : JournalEntry, ILedgerNoCashJournalEntry
     {
+        [JsonConstructor]
+        private JournalFactionKillBond()
+        {
+        }
+
         public JournalFactionKillBond(JObject evt) : base(evt, JournalTypeEnum.FactionKillBond)
         {
             AwardingFaction = evt["AwardingFaction"].Str();
@@ -219,6 +244,11 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.PayBounties)]
     public class JournalPayBounties : JournalEntry, ILedgerJournalEntry
     {
+        [JsonConstructor]
+        private JournalPayBounties()
+        {
+        }
+
         public JournalPayBounties(JObject evt) : base(evt, JournalTypeEnum.PayBounties)
         {
             Amount = evt["Amount"].Long();
@@ -254,6 +284,11 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.PayFines)]
     public class JournalPayFines : JournalEntry, ILedgerJournalEntry
     {
+        [JsonConstructor]
+        private JournalPayFines()
+        {
+        }
+
         public JournalPayFines(JObject evt) : base(evt, JournalTypeEnum.PayFines)
         {
             Amount = evt["Amount"].Long();
@@ -289,6 +324,11 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.PayLegacyFines)]
     public class JournalPayLegacyFines : JournalEntry, ILedgerJournalEntry
     {
+        [JsonConstructor]
+        private JournalPayLegacyFines()
+        {
+        }
+
         public JournalPayLegacyFines(JObject evt) : base(evt, JournalTypeEnum.PayLegacyFines)
         {
             Amount = evt["Amount"].Long();
@@ -314,6 +354,11 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.RedeemVoucher)]
     public class JournalRedeemVoucher : JournalEntry, ILedgerJournalEntry
     {
+        [JsonConstructor]
+        private JournalRedeemVoucher()
+        {
+        }
+
         public JournalRedeemVoucher(JObject evt) : base(evt, JournalTypeEnum.RedeemVoucher)
         {
             Type = evt["Type"].Str().SplitCapsWordFull();

@@ -15,6 +15,7 @@
  */
 
  using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using System;
 
 namespace EliteDangerousCore
@@ -208,6 +209,9 @@ namespace EliteDangerousCore
                         v.FriendlyLabel = v.Label.SplitCapsWord();
                 }
             }
+
+            [JsonConstructor]
+            private EngineeringData() { }
 
             public override string ToString()
             {

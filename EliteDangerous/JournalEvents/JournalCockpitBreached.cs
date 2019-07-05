@@ -13,6 +13,7 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 
@@ -21,6 +22,11 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.CockpitBreached)]
     public class JournalCockpitBreached : JournalEntry
     {
+        [JsonConstructor]
+        private JournalCockpitBreached()
+        {
+        }
+
         public JournalCockpitBreached(JObject evt ) : base(evt, JournalTypeEnum.CockpitBreached)
         {
         }

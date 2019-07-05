@@ -334,9 +334,13 @@ namespace EliteDangerousCore
 
         protected virtual JournalTypeEnum IconEventType { get { return EventTypeID; } }  // entry may be overridden to dynamically change icon event for an event
 
-#endregion
+        #endregion
 
-#region Constructors
+        #region Constructors
+        [JsonConstructor]
+        protected JournalEntry()
+        {
+        }
 
         protected JournalEntry(DateTime utc, JournalTypeEnum jtype, bool edsmsynced)       // manual creation via NEW
         {

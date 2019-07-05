@@ -13,6 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 
@@ -21,6 +22,11 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.ApproachBody)]
     public class JournalApproachBody : JournalEntry, IBodyNameAndID
     {
+        [JsonConstructor]
+        private JournalApproachBody()
+        {
+        }
+
         public JournalApproachBody(JObject evt) : base(evt, JournalTypeEnum.ApproachBody)
         {
             StarSystem = evt["StarSystem"].Str();
@@ -53,6 +59,11 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.LeaveBody)]
     public class JournalLeaveBody : JournalEntry, IBodyNameAndID
     {
+        [JsonConstructor]
+        private JournalLeaveBody()
+        {
+        }
+
         public JournalLeaveBody(JObject evt) : base(evt, JournalTypeEnum.LeaveBody)
         {
             StarSystem = evt["StarSystem"].Str();
@@ -85,6 +96,11 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.ApproachSettlement)]
     public class JournalApproachSettlement : JournalEntry
     {
+        [JsonConstructor]
+        private JournalApproachSettlement()
+        {
+        }
+
         public JournalApproachSettlement(JObject evt) : base(evt, JournalTypeEnum.ApproachSettlement)
         {
             Name = evt["Name"].Str();

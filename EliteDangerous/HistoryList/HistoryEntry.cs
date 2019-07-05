@@ -23,6 +23,8 @@ using EliteDangerousCore.EDSM;
 using System.Data.Common;
 using Newtonsoft.Json;
 using EliteDangerous.JSON;
+using Newtonsoft.Json.Serialization;
+using System.Reflection;
 
 namespace EliteDangerousCore
 {
@@ -47,66 +49,103 @@ namespace EliteDangerousCore
                                        //       if edsm_id=-1 a load from SystemTable will occur with the name used
                                        // SO the journal reader can just read data in that table only, does not need to do a system match
 
+
+        [JsonIgnore]
         public JournalTypeEnum EntryType { get { return journalEntry.EventTypeID; } }
+
+        [JsonIgnore]
         public long Journalid { get { return journalEntry.Id; } }
 
         [JsonIgnore]
         public EDCommander Commander { get { return EDCommander.GetCommander(journalEntry.CommanderId); } }
+        [JsonIgnore]
         public DateTime EventTimeLocal { get { return EventTimeUTC.ToLocalTime(); } }
+        [JsonIgnore]
         public DateTime EventTimeUTC { get { return journalEntry.EventTimeUTC; } }
         public TimeSpan AgeOfEntry() { return DateTime.Now - EventTimeUTC; }
 
-        public string EventSummary { get { return journalEntry.SummaryName(System);} }
+        [JsonIgnore]
+        public string EventSummary { get { return journalEntry.SummaryName(System); } }
 
+        [JsonIgnore]
         public bool EdsmSync { get { return journalEntry.SyncedEDSM; } }           // flag populated from journal entry when HE is made. Have we synced?
+        [JsonIgnore]
         public bool EDDNSync { get { return journalEntry.SyncedEDDN; } }
+        [JsonIgnore]
         public bool EGOSync { get { return journalEntry.SyncedEGO; } }
+        [JsonIgnore]
         public bool StartMarker { get { return journalEntry.StartMarker; } }
+        [JsonIgnore]
         public bool StopMarker { get { return journalEntry.StopMarker; } }
+        [JsonIgnore]
         public bool IsFSDJump { get { return EntryType == JournalTypeEnum.FSDJump; } }
+        [JsonIgnore]
         public bool IsLocOrJump { get { return EntryType == JournalTypeEnum.FSDJump || EntryType == JournalTypeEnum.Location; } }
+        [JsonIgnore]
         public bool IsFuelScoop { get { return EntryType == JournalTypeEnum.FuelScoop; } }
+        [JsonIgnore]
         public bool IsShipChange { get { return (EntryType == JournalTypeEnum.LoadGame || EntryType == JournalTypeEnum.Docked) && ShipInformation != null; } }
+        [JsonIgnore]
         public bool IsBetaMessage { get { return journalEntry?.Beta ?? false; } }
 
+        [JsonIgnore]
         public double TravelledDistance { get { return TravelStatus.TravelledDistance; } }
+        [JsonIgnore]
         public TimeSpan TravelledSeconds { get { return TravelStatus.TravelledSeconds; } }
+        [JsonIgnore]
         public bool isTravelling { get { return TravelStatus.IsTravelling; } }
+        [JsonIgnore]
         public int TravelledMissingjump { get { return TravelStatus.TravelledMissingjump; } }
+        [JsonIgnore]
         public int Travelledjumps { get { return TravelStatus.Travelledjumps; } }
         public string TravelInfo() { return TravelStatus.ToString(StopMarker ? "Travelled" : "Travelling "); }
+        [JsonIgnore]
         public string TravelledJumpsAndMisses { get { return TravelStatus.TravelledJumpsAndMisses; } }
 
+        [JsonIgnore]
         public bool IsLanded { get { return EntryStatus.TravelState == HistoryEntryStatus.TravelStateType.Landed; } }
+        [JsonIgnore]
         public bool IsDocked { get { return EntryStatus.TravelState == HistoryEntryStatus.TravelStateType.Docked; } }
+        [JsonIgnore]
         public bool IsInHyperSpace { get { return EntryStatus.TravelState == HistoryEntryStatus.TravelStateType.Hyperspace; } }
+        [JsonIgnore]
         public string WhereAmI { get { return EntryStatus.StationName ?? EntryStatus.BodyName ?? "Unknown"; } }
+        [JsonIgnore]
         public string BodyType { get { return EntryStatus.BodyType ?? "Unknown"; } }
+        [JsonIgnore]
         public string ShipType { get { return EntryStatus.ShipType ?? "Unknown"; } }         // NOT FD - translated name
-        public string ShipTypeFD {  get { return EntryStatus.ShipTypeFD ?? "unknown";  } }
+        [JsonIgnore]
+        public string ShipTypeFD { get { return EntryStatus.ShipTypeFD ?? "unknown"; } }
+        [JsonIgnore]
         public int ShipId { get { return EntryStatus.ShipID; } }
+        [JsonIgnore]
         public bool MultiPlayer { get { return EntryStatus.OnCrewWithCaptain != null; } }
+        [JsonIgnore]
         public string GameMode { get { return EntryStatus.GameMode ?? ""; } }
+        [JsonIgnore]
         public string Group { get { return EntryStatus.Group ?? ""; } }
+        [JsonIgnore]
         public string GameModeGroup { get { return GameMode + (String.IsNullOrEmpty(Group) ? "" : (":" + Group)); } }
+        [JsonIgnore]
         public bool Wanted { get { return EntryStatus.Wanted; } }
+        [JsonIgnore]
         public long? MarketID { get { return EntryStatus.MarketId; } }
 
         public string DebugStatus { get {      // Use as a replacement for note in travel grid to debug
                 return
                      WhereAmI
-                     + ", " +  (EntryStatus.BodyType ?? "Null")
+                     + ", " + (EntryStatus.BodyType ?? "Null")
                      + "," + (EntryStatus.BodyName ?? "Null")
-                     + " SN:" + (EntryStatus.StationName ?? "Null") 
+                     + " SN:" + (EntryStatus.StationName ?? "Null")
                      + " ST:" + (EntryStatus.StationType ?? "Null")
                      + " T:" + EntryStatus.TravelState
                      + " S:" + EntryStatus.ShipID + "," + EntryStatus.ShipType
                      + " GM:" + EntryStatus.GameMode
                      + " W:" + EntryStatus.Wanted
-                     + " BA:" + EntryStatus.BodyApproached 
+                     + " BA:" + EntryStatus.BodyApproached
                      ;
             } }
-  
+
         public long Credits { get; set; }       // set up by Historylist during ledger accumulation
 
         public bool ContainsRares() // function due to debugger and cost of working out
@@ -120,7 +159,6 @@ namespace EliteDangerousCore
         public ShipInformation ShipInformation { get; set; }     // may be null if not set up yet
         public ModulesInStore StoredModules { get; set; }
 
-        [JsonIgnore] //TODO: figure out how to serialize this... at the moment I get issues with null 
         public MissionList MissionList { get; set; }
 
         public SystemNoteClass snc;     // system note class found attached to this entry. May be null 
@@ -129,7 +167,7 @@ namespace EliteDangerousCore
 
         #region Private Variables
 
-        private HistoryEntryStatus EntryStatus { get;  set; }
+        private HistoryEntryStatus EntryStatus { get; set; }
         private HistoryTravelStatus TravelStatus { get; set; }
 
         #endregion
@@ -142,14 +180,17 @@ namespace EliteDangerousCore
 
         public static HistoryEntry FromJSON(string jsonEntry)
         {
-            var entry = JsonConvert.DeserializeObject<HistoryEntry>(jsonEntry);
-
+            var entry = jsonEntry.Deserialize<HistoryEntry>();
+            //TODO: better way to handle this please
+            if (entry == null) return null;
             //TODO: prev...
             HistoryEntry prev = null;
             entry.EntryStatus = HistoryEntryStatus.Update(prev?.EntryStatus, entry.journalEntry, entry.System.Name);
-            entry.TravelStatus = HistoryTravelStatus.Update(prev?.TravelStatus, prev , entry);
+            entry.TravelStatus = HistoryTravelStatus.Update(prev?.TravelStatus, prev, entry);
             return entry;
         }
+
+
         public static HistoryEntry FromJournalEntry(JournalEntry je, HistoryEntry prev, out bool journalupdate, SQLiteConnectionSystem conn = null)
         {
             ISystem isys = prev == null ? new SystemClass("Unknown") : prev.System;
