@@ -120,9 +120,12 @@ namespace EliteDangerousCore.JournalEvents
             if (!evt["StarPos"].Empty())            // if its an old VS entry, may not have co-ords
             {
                 JArray coords = evt["StarPos"] as JArray;
-                pos.X = coords[0].Float();
-                pos.Y = coords[1].Float();
-                pos.Z = coords[2].Float();
+                if (coords != null)
+                {
+                    pos.X = coords[0].Float();
+                    pos.Y = coords[1].Float();
+                    pos.Z = coords[2].Float();
+                }
             }
             else
             {
@@ -189,7 +192,8 @@ namespace EliteDangerousCore.JournalEvents
 
         [JsonConstructor]
         protected JournalLocOrJump()
-        { }
+        {
+        }
 
         public EDGovernment EDGovernment
         {
@@ -281,9 +285,8 @@ namespace EliteDangerousCore.JournalEvents
     public class JournalLocation : JournalLocOrJump, ISystemStationEntry, IBodyNameAndID
     {
         [JsonConstructor]
-        private JournalLocation()
+        private JournalLocation() : base()
         {
-
         }
         public JournalLocation(JObject evt) : base(evt, JournalTypeEnum.Location)      // all have evidence 16/3/2017
         {
