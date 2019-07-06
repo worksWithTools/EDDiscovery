@@ -28,10 +28,12 @@ namespace EDMobileLibrary.ViewModels
         {
             try
             {
-            App.WebSocket.TryGetMessage(out string msg);
-            Debug.WriteLine($"INFO: msg received: {msg.Length}");
-            JournalEntry entry = JsonConvert.DeserializeObject<JournalEntry>(msg, new JsonConverter[] { new JournalEntryConverter() });
-            items.Add(entry);
+                App.WebSocket.TryGetMessage(out string msg);
+                MobileWebResponse response = msg.Deserialize<MobileWebResponse>();
+                Debug.WriteLine($"INFO: msg received: {response.RequestType}");
+
+                JournalEntry entry = JsonConvert.DeserializeObject<JournalEntry>(response.Responses[0], new JsonConverter[] { new JournalEntryConverter() });
+                items.Add(entry);
 
             }
             catch(Exception e)
