@@ -65,6 +65,7 @@
                                        FontAttributes="Bold"/>
                                 <Label Text="{Binding Details}"
                                        TextColor="{StaticResource SecondaryText}"
+                                       FontSize="13 "
                                        Grid.Row="1" Grid.Column="1"/>
 
                                 <Label Text="{Binding EventTimeUTC}" 
