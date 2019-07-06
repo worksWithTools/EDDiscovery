@@ -31,9 +31,16 @@ namespace EDMobileLibrary.ViewModels
                 App.WebSocket.TryGetMessage(out string msg);
                 MobileWebResponse response = msg.Deserialize<MobileWebResponse>();
                 Debug.WriteLine($"INFO: msg received: {response.RequestType}");
-
-                JournalEntry entry = JsonConvert.DeserializeObject<JournalEntry>(response.Responses[0], new JsonConverter[] { new JournalEntryConverter() });
-                items.Add(entry);
+                if (response.RequestType == WebSocketMessage.GET_JOURNAL)
+                {
+                    JournalEntry entry = JsonConvert.DeserializeObject<JournalEntry>(response.Responses[0], new JsonConverter[] { new JournalEntryConverter() });
+                    items.Add(entry);
+                }
+                else if (response.RequestType == WebSocketMessage.BROADCAST)
+                {
+                    JournalEntry entry = JsonConvert.DeserializeObject<JournalEntry>(response.Responses[0], new JsonConverter[] { new JournalEntryConverter() });
+                    items.Insert(0, entry);
+                }
 
             }
             catch(Exception e)

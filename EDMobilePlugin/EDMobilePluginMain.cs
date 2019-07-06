@@ -32,6 +32,10 @@ namespace EDMobilePlugin
         public void EDDNewJournalEntry(EDDDLLIF.JournalEntry nje)
         {
             Debug.WriteLine($"EDDNewJournalEntry: {nje.ToJson()}");
+
+            var he = _managedcallbacks.GetHistoryEvent(nje.indexno);
+            var json = JsonConvert.SerializeObject(he.journalEntry);
+            WebSocketHttpServer.Broadcast(json);
             
         }
 
