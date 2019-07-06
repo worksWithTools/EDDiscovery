@@ -13,6 +13,7 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
@@ -21,7 +22,9 @@ namespace EliteDangerousCore.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.Shipyard)]
     public class JournalShipyard : JournalEntry, IAdditionalFiles
-    {
+	{
+		[JsonConstructor]
+		private JournalShipyard(){}
         public JournalShipyard(JObject evt) : base(evt, JournalTypeEnum.Shipyard)
         {
             Rescan(evt);
@@ -76,7 +79,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.ShipyardBuy)]
     public class JournalShipyardBuy : JournalEntry, ILedgerJournalEntry, IShipInformation
-    {
+	{
+		[JsonConstructor]
+		private JournalShipyardBuy(){}
         public JournalShipyardBuy(JObject evt) : base(evt, JournalTypeEnum.ShipyardBuy)
         {
             ShipTypeFD = JournalFieldNaming.NormaliseFDShipName(evt["ShipType"].Str());
@@ -150,7 +155,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.ShipyardNew)]
     public class JournalShipyardNew : JournalEntry, IShipInformation
-    {
+	{
+		[JsonConstructor]
+		private JournalShipyardNew(){}
         public JournalShipyardNew(JObject evt) : base(evt, JournalTypeEnum.ShipyardNew)
         {
             ShipFD = JournalFieldNaming.NormaliseFDShipName(evt["ShipType"].Str());
@@ -177,7 +184,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.ShipyardSell)]
     public class JournalShipyardSell : JournalEntry, ILedgerJournalEntry, IShipInformation
-    {
+	{
+		[JsonConstructor]
+		private JournalShipyardSell(){}
         public JournalShipyardSell(JObject evt) : base(evt, JournalTypeEnum.ShipyardSell)
         {
             MarketID = evt["MarketID"].LongNull();
@@ -216,7 +225,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.ShipyardSwap)]
     public class JournalShipyardSwap : JournalEntry, IShipInformation
-    {
+	{
+		[JsonConstructor]
+		private JournalShipyardSwap(){}
         public JournalShipyardSwap(JObject evt) : base(evt, JournalTypeEnum.ShipyardSwap)
         {
             ShipFD = JournalFieldNaming.NormaliseFDShipName(evt["ShipType"].Str());
@@ -257,7 +268,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.ShipyardTransfer)]
     public class JournalShipyardTransfer : JournalEntry, ILedgerJournalEntry, IShipInformation
-    {
+	{
+		[JsonConstructor]
+		private JournalShipyardTransfer(){}
         public JournalShipyardTransfer(JObject evt) : base(evt, JournalTypeEnum.ShipyardTransfer)
         {
             ShipTypeFD = JournalFieldNaming.NormaliseFDShipName(evt["ShipType"].Str());
@@ -312,7 +325,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.StoredShips)]
     public class JournalStoredShips : JournalEntry, IShipInformation
-    {
+	{
+		[JsonConstructor]
+		private JournalStoredShips(){}
         public JournalStoredShips(JObject evt) : base(evt, JournalTypeEnum.StoredShips)
         {
             StationName = evt["StationName"].Str();
@@ -401,7 +416,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.SellShipOnRebuy)]
     public class JournalSellShipOnRebuy : JournalEntry, ILedgerJournalEntry, IShipInformation
-    {
+	{
+		[JsonConstructor]
+		private JournalSellShipOnRebuy(){}
         public JournalSellShipOnRebuy(JObject evt) : base(evt, JournalTypeEnum.SellShipOnRebuy)
         {
             ShipTypeFD = JournalFieldNaming.NormaliseFDShipName(evt["ShipType"].Str());

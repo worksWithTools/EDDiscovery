@@ -15,6 +15,7 @@
  */
 
 using EliteDangerousCore;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 
@@ -22,7 +23,9 @@ namespace EliteDangerousCore.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.Outfitting)]
     public class JournalOutfitting : JournalEntry, IAdditionalFiles
-    {
+	{
+		[JsonConstructor]
+		private JournalOutfitting(){}
         public JournalOutfitting(JObject evt) : base(evt, JournalTypeEnum.Outfitting)
         {
             Rescan(evt);

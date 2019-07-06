@@ -13,6 +13,7 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 
@@ -21,6 +22,9 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.CrewAssign)]
     public class JournalCrewAssign : JournalEntry
     {
+
+        [JsonConstructor]
+        private JournalCrewAssign() { }
         public JournalCrewAssign(JObject evt) : base(evt, JournalTypeEnum.CrewAssign)
         {
             Name = evt["Name"].Str();
@@ -43,6 +47,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.CrewFire)]
     public class JournalCrewFire : JournalEntry
     {
+        [JsonConstructor]
+        private JournalCrewFire() { }
         public JournalCrewFire(JObject evt) : base(evt, JournalTypeEnum.CrewFire)
         {
             Name = evt["Name"].Str();
@@ -62,6 +68,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.CrewHire)]
     public class JournalCrewHire : JournalEntry, ILedgerJournalEntry
     {
+        [JsonConstructor]
+        private JournalCrewHire() { }
         public JournalCrewHire(JObject evt) : base(evt, JournalTypeEnum.CrewHire)
         {
             Name = evt["Name"].Str();
@@ -92,6 +100,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.CrewLaunchFighter)]
     public class JournalCrewLaunchFighter : JournalEntry
     {
+        [JsonConstructor]
+        private JournalCrewLaunchFighter() { }
         public JournalCrewLaunchFighter(JObject evt) : base(evt, JournalTypeEnum.CrewLaunchFighter)
         {
             Crew = evt["Crew"].Str();
@@ -111,6 +121,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.CrewMemberJoins)]
     public class JournalCrewMemberJoins : JournalEntry
     {
+        [JsonConstructor]
+        private JournalCrewMemberJoins() { }
         public JournalCrewMemberJoins(JObject evt) : base(evt, JournalTypeEnum.CrewMemberJoins)
         {
             Crew = evt["Crew"].Str();
@@ -128,6 +140,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.CrewMemberQuits)]
     public class JournalCrewMemberQuits : JournalEntry
     {
+        [JsonConstructor]
+        private JournalCrewMemberQuits() { }
         public JournalCrewMemberQuits(JObject evt) : base(evt, JournalTypeEnum.CrewMemberQuits)
         {
             Crew = evt["Crew"].Str();
@@ -145,6 +159,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.CrewMemberRoleChange)]
     public class JournalCrewMemberRoleChange : JournalEntry
     {
+        [JsonConstructor]
+        private JournalCrewMemberRoleChange() { }
         public JournalCrewMemberRoleChange(JObject evt) : base(evt, JournalTypeEnum.CrewMemberRoleChange)
         {
             Crew = evt["Crew"].Str();
@@ -164,6 +180,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.KickCrewMember)]
     public class JournalKickCrewMember : JournalEntry
     {
+        [JsonConstructor]
+        private JournalKickCrewMember() { }
         public JournalKickCrewMember(JObject evt) : base(evt, JournalTypeEnum.KickCrewMember)
         {
             Crew = evt["Crew"].Str();
@@ -183,6 +201,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.JoinACrew)]
     public class JournalJoinACrew : JournalEntry
     {
+        [JsonConstructor]
+        private JournalJoinACrew() { }
         public JournalJoinACrew(JObject evt) : base(evt, JournalTypeEnum.JoinACrew)
         {
             Captain = evt["Captain"].Str();
@@ -202,6 +222,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.ChangeCrewRole)]
     public class JournalChangeCrewRole : JournalEntry
     {
+        [JsonConstructor]
+        private JournalChangeCrewRole() { }
         public JournalChangeCrewRole(JObject evt) : base(evt, JournalTypeEnum.ChangeCrewRole)
         {
             Role = evt["Role"].Str().SplitCapsWordFull();
@@ -220,6 +242,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.EndCrewSession)]
     public class JournalEndCrewSession : JournalEntry
     {
+        [JsonConstructor]
+        private JournalEndCrewSession() { }
         public JournalEndCrewSession(JObject evt) : base(evt, JournalTypeEnum.EndCrewSession)
         {
             OnCrime = evt["OnCrime"].Bool();
@@ -238,6 +262,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.QuitACrew)]
     public class JournalQuitACrew : JournalEntry
     {
+        [JsonConstructor]
+        private JournalQuitACrew() { }
         public JournalQuitACrew(JObject evt) : base(evt, JournalTypeEnum.QuitACrew)
         {
             Captain = evt["Captain"].Str();

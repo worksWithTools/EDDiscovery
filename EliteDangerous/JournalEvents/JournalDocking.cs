@@ -13,6 +13,7 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.Docked)]
     public class JournalDocked : JournalEntry, ISystemStationEntry
     {
+        [JsonConstructor]
+        private JournalDocked() { }
         public JournalDocked(JObject evt ) : base(evt, JournalTypeEnum.Docked)
         {
             StationName = evt["StationName"].Str();
@@ -125,6 +128,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.DockingCancelled)]
     public class JournalDockingCancelled : JournalEntry
     {
+        [JsonConstructor]
+        private JournalDockingCancelled() { }
         public JournalDockingCancelled(JObject evt) : base(evt, JournalTypeEnum.DockingCancelled)
         {
             StationName = evt["StationName"].Str();
@@ -146,6 +151,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.DockingDenied)]
     public class JournalDockingDenied : JournalEntry
     {
+        [JsonConstructor]
+        private JournalDockingDenied() { }
         public JournalDockingDenied(JObject evt) : base(evt, JournalTypeEnum.DockingDenied)
         {
             StationName = evt["StationName"].Str();
@@ -169,6 +176,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.DockingGranted)]
     public class JournalDockingGranted : JournalEntry
     {
+        [JsonConstructor]
+        private JournalDockingGranted() { }
         public JournalDockingGranted(JObject evt) : base(evt, JournalTypeEnum.DockingGranted)
         {
             StationName = evt["StationName"].Str();
@@ -192,6 +201,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.DockingRequested)]
     public class JournalDockingRequested : JournalEntry
     {
+        [JsonConstructor]
+        private JournalDockingRequested() { }
         public JournalDockingRequested(JObject evt) : base(evt, JournalTypeEnum.DockingRequested)
         {
             StationName = evt["StationName"].Str();
@@ -213,6 +224,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.DockingTimeout)]
     public class JournalDockingTimeout : JournalEntry
     {
+        [JsonConstructor]
+        private JournalDockingTimeout() { }
         public JournalDockingTimeout(JObject evt) : base(evt, JournalTypeEnum.DockingTimeout)
         {
             StationName = evt["StationName"].Str();
@@ -235,6 +248,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.Undocked)]
     public class JournalUndocked : JournalEntry
     {
+        [JsonConstructor]
+        private JournalUndocked() { }
         public JournalUndocked(JObject evt) : base(evt, JournalTypeEnum.Undocked)
         {
             StationName = evt["StationName"].Str();

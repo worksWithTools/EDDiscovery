@@ -14,13 +14,16 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.USSDrop)]
     public class JournalUSSDrop : JournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalUSSDrop(){}
         public JournalUSSDrop(JObject evt ) : base(evt, JournalTypeEnum.USSDrop)
         {
             USSType = evt["USSType"].Str();

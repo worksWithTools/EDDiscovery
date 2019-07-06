@@ -13,6 +13,7 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 
@@ -21,6 +22,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.DockFighter)]
     public class JournalDockFighter : JournalEntry,  IShipInformation
     {
+        [JsonConstructor]
+        private JournalDockFighter() { }
         public int? ID { get; set; }
 
         public JournalDockFighter(JObject evt ) : base(evt, JournalTypeEnum.DockFighter)
@@ -44,6 +47,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.FighterDestroyed)]
     public class JournalFighterDestroyed : JournalEntry, IShipInformation
     {
+        [JsonConstructor]
+        private JournalFighterDestroyed() { }
         public int? ID { get; set; }
 
         public JournalFighterDestroyed(JObject evt) : base(evt, JournalTypeEnum.FighterDestroyed)
@@ -66,6 +71,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.FighterRebuilt)]
     public class JournalFighterRebuilt : JournalEntry
     {
+        [JsonConstructor]
+        private JournalFighterRebuilt() { }
         public JournalFighterRebuilt(JObject evt) : base(evt, JournalTypeEnum.FighterRebuilt)
         {
             Loadout = evt["Loadout"].Str();
@@ -85,6 +92,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.LaunchFighter)]
     public class JournalLaunchFighter : JournalEntry, IShipInformation
     {
+        [JsonConstructor]
+        private JournalLaunchFighter() { }
         public JournalLaunchFighter(JObject evt) : base(evt, JournalTypeEnum.LaunchFighter)
         {
             Loadout = evt["Loadout"].Str();

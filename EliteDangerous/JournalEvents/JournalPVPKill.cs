@@ -13,6 +13,7 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 
@@ -20,7 +21,9 @@ namespace EliteDangerousCore.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.PVPKill)]
     public class JournalPVPKill : JournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalPVPKill(){}
         public JournalPVPKill(JObject evt) : base(evt, JournalTypeEnum.PVPKill)
         {
             Victim = evt["Victim"].Str();

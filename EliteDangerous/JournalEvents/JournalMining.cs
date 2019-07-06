@@ -13,6 +13,7 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 
@@ -20,7 +21,9 @@ namespace EliteDangerousCore.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.MiningRefined)]
     public class JournalMiningRefined : JournalEntry, ICommodityJournalEntry, ILedgerNoCashJournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalMiningRefined(){}
         public JournalMiningRefined(JObject evt) : base(evt, JournalTypeEnum.MiningRefined)
         {
             Type = JournalFieldNaming.FixCommodityName(evt["Type"].Str());          // instances of $.._name, translate to FDNAME
@@ -52,7 +55,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.AsteroidCracked)]
     public class JournalAsteroidCracked : JournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalAsteroidCracked(){}
         public JournalAsteroidCracked(JObject evt) : base(evt, JournalTypeEnum.AsteroidCracked)
         {
             Body = evt["Body"].Str();
@@ -69,7 +74,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.ProspectedAsteroid)]
     public class JournalProspectedAsteroid : JournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalProspectedAsteroid(){}
         public class Material
         {
             public string Name { get; set; }        //FDNAME

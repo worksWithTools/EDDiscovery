@@ -13,6 +13,7 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 
@@ -20,7 +21,9 @@ namespace EliteDangerousCore.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.RefuelAll)]
     public class JournalRefuelAll : JournalEntry, ILedgerJournalEntry, IShipInformation
-    {
+	{
+		[JsonConstructor]
+		private JournalRefuelAll(){}
         public JournalRefuelAll(JObject evt ) : base(evt, JournalTypeEnum.RefuelAll)
         {
             Cost = evt["Cost"].Long();
@@ -49,7 +52,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.RefuelPartial)]
     public class JournalRefuelPartial : JournalEntry, ILedgerJournalEntry, IShipInformation
-    {
+	{
+		[JsonConstructor]
+		private JournalRefuelPartial(){}
         public JournalRefuelPartial(JObject evt) : base(evt, JournalTypeEnum.RefuelPartial)
         {
             Cost = evt["Cost"].Long();
@@ -79,7 +84,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.FuelScoop)]
     public class JournalFuelScoop : JournalEntry, IShipInformation
-    {
+	{
+		[JsonConstructor]
+		private JournalFuelScoop(){}
         public JournalFuelScoop(JObject evt) : base(evt, JournalTypeEnum.FuelScoop)
         {
             Scooped = evt["Scooped"].Double();
@@ -102,7 +109,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.ReservoirReplenished)]
     public class JournalReservoirReplenished : JournalEntry, IShipInformation
-    {
+	{
+		[JsonConstructor]
+		private JournalReservoirReplenished(){}
         public JournalReservoirReplenished(JObject evt) : base(evt, JournalTypeEnum.ReservoirReplenished)
         {
             FuelMain = evt["FuelMain"].Double();

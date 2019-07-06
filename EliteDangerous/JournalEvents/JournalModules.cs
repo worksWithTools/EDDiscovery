@@ -13,6 +13,7 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,9 @@ namespace EliteDangerousCore.JournalEvents
     [System.Diagnostics.DebuggerDisplay("{ShipId} {Ship} {ShipModules.Count}")]
     [JournalEntryType(JournalTypeEnum.Loadout)]
     public class JournalLoadout : JournalEntry, IShipInformation
-    {
+	{
+		[JsonConstructor]
+		private JournalLoadout(){}
         public JournalLoadout(JObject evt) : base(evt, JournalTypeEnum.Loadout)
         {
             ShipFD = JournalFieldNaming.NormaliseFDShipName(evt["Ship"].Str());
@@ -129,7 +132,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.ModuleBuy)]
     public class JournalModuleBuy : JournalEntry, ILedgerJournalEntry, IShipInformation
-    {
+	{
+		[JsonConstructor]
+		private JournalModuleBuy(){}
         public JournalModuleBuy(JObject evt ) : base(evt, JournalTypeEnum.ModuleBuy)
         {
             SlotFD = JournalFieldNaming.NormaliseFDSlotName(evt["Slot"].Str());
@@ -207,7 +212,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.ModuleSell)]
     public class JournalModuleSell : JournalEntry, ILedgerJournalEntry, IShipInformation
-    {
+	{
+		[JsonConstructor]
+		private JournalModuleSell(){}
         public JournalModuleSell(JObject evt) : base(evt, JournalTypeEnum.ModuleSell)
         {
             SlotFD = JournalFieldNaming.NormaliseFDSlotName(evt["Slot"].Str());
@@ -259,7 +266,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.ModuleSellRemote)]
     public class JournalModuleSellRemote : JournalEntry, ILedgerJournalEntry, IShipInformation
-    {
+	{
+		[JsonConstructor]
+		private JournalModuleSellRemote(){}
         public JournalModuleSellRemote(JObject evt) : base(evt, JournalTypeEnum.ModuleSellRemote)
         {
             Slot = evt["StorageSlot"].Str();         // this is NOT a ship slot name, just a index
@@ -309,7 +318,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.ModuleRetrieve)]
     public class JournalModuleRetrieve : JournalEntry, ILedgerJournalEntry, IShipInformation
-    {
+	{
+		[JsonConstructor]
+		private JournalModuleRetrieve(){}
         public JournalModuleRetrieve(JObject evt) : base(evt, JournalTypeEnum.ModuleRetrieve)
         {
             SlotFD = JournalFieldNaming.NormaliseFDSlotName(evt["Slot"].Str());
@@ -386,7 +397,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.ModuleStore)]
     public class JournalModuleStore : JournalEntry, ILedgerJournalEntry, IShipInformation
-    {
+	{
+		[JsonConstructor]
+		private JournalModuleStore(){}
         public JournalModuleStore(JObject evt) : base(evt, JournalTypeEnum.ModuleStore)
         {
             SlotFD = JournalFieldNaming.NormaliseFDSlotName(evt["Slot"].Str());
@@ -457,7 +470,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.ModuleSwap)]
     public class JournalModuleSwap : JournalEntry, IShipInformation
-    {
+	{
+		[JsonConstructor]
+		private JournalModuleSwap(){}
         public JournalModuleSwap(JObject evt) : base(evt, JournalTypeEnum.ModuleSwap)
         {
             FromSlotFD = JournalFieldNaming.NormaliseFDSlotName(evt["FromSlot"].Str());
@@ -518,7 +533,9 @@ namespace EliteDangerousCore.JournalEvents
     [System.Diagnostics.DebuggerDisplay("{ShipId} {Ship} {ShipModules.Count}")]
     [JournalEntryType(JournalTypeEnum.ModuleInfo)]
     public class JournalModuleInfo : JournalEntry, IAdditionalFiles
-    {
+	{
+		[JsonConstructor]
+		private JournalModuleInfo(){}
         public JournalModuleInfo(JObject evt) : base(evt, JournalTypeEnum.ModuleInfo)
         {
             Rescan(evt);
@@ -588,7 +605,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.StoredModules)]
     public class JournalStoredModules : JournalEntry, IShipInformation
-    {
+	{
+		[JsonConstructor]
+		private JournalStoredModules(){}
         public JournalStoredModules(JObject evt) : base(evt, JournalTypeEnum.StoredModules)
         {
             StationName = evt["StationName"].Str();
@@ -636,7 +655,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.MassModuleStore)]
     public class JournalMassModuleStore : JournalEntry, IShipInformation
-    {
+	{
+		[JsonConstructor]
+		private JournalMassModuleStore(){}
         public JournalMassModuleStore(JObject evt) : base(evt, JournalTypeEnum.MassModuleStore)
         {
             ShipFD = JournalFieldNaming.NormaliseFDShipName(evt["Ship"].Str());
@@ -696,7 +717,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.FetchRemoteModule)]
     public class JournalFetchRemoteModule : JournalEntry, ILedgerJournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalFetchRemoteModule(){}
         public JournalFetchRemoteModule(JObject evt) : base(evt, JournalTypeEnum.FetchRemoteModule)
         {
             StorageSlot = evt["StorageSlot"].Str();          // Slot number, not a slot on our ship

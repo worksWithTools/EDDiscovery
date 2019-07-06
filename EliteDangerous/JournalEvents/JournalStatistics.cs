@@ -13,6 +13,7 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
@@ -21,7 +22,9 @@ namespace EliteDangerousCore.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.Statistics)]
     public class JournalStatistics : JournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalStatistics(){}
         public JournalStatistics(JObject evt ) : base(evt, JournalTypeEnum.Statistics)
         {
             BankAccount = evt["Bank_Account"].RemoveKeyUnderscores()?.ToObjectProtected<BankAccountClass>() ?? new BankAccountClass();

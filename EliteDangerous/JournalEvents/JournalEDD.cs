@@ -17,12 +17,15 @@ using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using EliteDangerousCore;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace EliteDangerousCore.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.EDDCommodityPrices)]
     public class JournalEDDCommodityPrices : JournalCommodityPricesBase
     {
+        [JsonConstructor]
+        private JournalEDDCommodityPrices() { }
         public JournalEDDCommodityPrices(JObject evt) : base(evt, JournalTypeEnum.EDDCommodityPrices)
         {
             Station = evt["station"].Str();
@@ -48,6 +51,8 @@ namespace EliteDangerousCore.JournalEvents
 
     public class JournalCommodityPricesBase : JournalEntry
     {
+        [JsonConstructor]
+        protected JournalCommodityPricesBase() { }
         public JournalCommodityPricesBase(JObject evt, JournalTypeEnum en) : base(evt,en)
         {
         }
@@ -126,6 +131,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.EDDItemSet)]
     public class JournalEDDItemSet : JournalEntry, ICommodityJournalEntry, IMaterialJournalEntry
     {
+        [JsonConstructor]
+        private JournalEDDItemSet() { }
         public JournalEDDItemSet(JObject evt) : base(evt, JournalTypeEnum.EDDItemSet)
         {
             Materials = new MaterialListClass(evt["Materials"]?.ToObjectProtected<MaterialItem[]>().ToList());

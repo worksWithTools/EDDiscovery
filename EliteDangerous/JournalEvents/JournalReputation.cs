@@ -13,6 +13,7 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 
@@ -20,7 +21,9 @@ namespace EliteDangerousCore.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.Reputation)]
     public class JournalReputation : JournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalReputation(){}
         public JournalReputation(JObject evt ) : base(evt, JournalTypeEnum.Reputation)
         {
             Federation = evt["Federation"].DoubleNull();

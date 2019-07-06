@@ -13,6 +13,7 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.CommunityGoal)]
     public class JournalCommunityGoal : JournalEntry
     {
+        [JsonConstructor]
+        private JournalCommunityGoal() { }
         public class CommunityGoal
         {
             public int CGID { get; set; }
@@ -137,6 +140,10 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.CommunityGoalDiscard)]
     public class JournalCommunityGoalDiscard : JournalEntry
     {
+
+        [JsonConstructor]
+        private JournalCommunityGoalDiscard() { }
+
         public JournalCommunityGoalDiscard(JObject evt) : base(evt, JournalTypeEnum.CommunityGoalDiscard)
         {
             CGID = evt["CGID"].Int();
@@ -158,6 +165,9 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.CommunityGoalJoin)]
     public class JournalCommunityGoalJoin : JournalEntry
     {
+
+        [JsonConstructor]
+        private JournalCommunityGoalJoin() { }
         public JournalCommunityGoalJoin(JObject evt) : base(evt, JournalTypeEnum.CommunityGoalJoin)
         {
             CGID = evt["CGID"].Int();
@@ -179,6 +189,9 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.CommunityGoalReward)]
     public class JournalCommunityGoalReward : JournalEntry, ILedgerJournalEntry
     {
+
+        [JsonConstructor]
+        private JournalCommunityGoalReward() { }
         public JournalCommunityGoalReward(JObject evt) : base(evt, JournalTypeEnum.CommunityGoalReward)
         {
             CGID = evt["CGID"].Int();

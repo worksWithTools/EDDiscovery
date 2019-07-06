@@ -13,6 +13,7 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.Fileheader)]
     public class JournalFileheader : JournalEntry
     {
+        [JsonConstructor]
+        private JournalFileheader() { }
         public JournalFileheader(JObject evt ) : base(evt, JournalTypeEnum.Fileheader)
         {
             GameVersion = evt["gameversion"].Str();
@@ -66,6 +69,8 @@ namespace EliteDangerousCore.JournalEvents
     [System.Diagnostics.DebuggerDisplay("LoadGame {LoadGameCommander} {ShipId} {Ship} {GameMode}")]
     public class JournalLoadGame : JournalEntry, ILedgerJournalEntry, IShipInformation
     {
+        [JsonConstructor]
+        private JournalLoadGame() { }
         public JournalLoadGame(JObject evt) : base(evt, JournalTypeEnum.LoadGame)
         {
             LoadGameCommander = evt["Commander"].Str();
@@ -143,6 +148,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.Shutdown)]
     public class JournalShutdown : JournalEntry
     {
+        [JsonConstructor]
+        private JournalShutdown() { }
         public JournalShutdown(JObject evt) : base(evt, JournalTypeEnum.Shutdown)
         {
         }
@@ -158,6 +165,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.Continued)]
     public class JournalContinued : JournalEntry
     {
+        [JsonConstructor]
+        private JournalContinued() { }
         public JournalContinued(JObject evt) : base(evt, JournalTypeEnum.Continued)
         {
             Part = evt["Part"].Int();

@@ -13,6 +13,7 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 
@@ -20,7 +21,9 @@ namespace EliteDangerousCore.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.SetUserShipName)]
     public class JournalSetUserShipName : JournalEntry , IShipInformation
-    {
+	{
+		[JsonConstructor]
+		private JournalSetUserShipName(){}
         public JournalSetUserShipName(JObject evt) : base(evt, JournalTypeEnum.SetUserShipName)
         {
             ShipFD = JournalFieldNaming.NormaliseFDShipName(evt["Ship"].Str());

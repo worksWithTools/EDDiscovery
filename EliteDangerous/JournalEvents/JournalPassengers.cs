@@ -13,6 +13,7 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,9 @@ namespace EliteDangerousCore.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.Passengers)]
     public class JournalPassengers : JournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalPassengers(){}
         public class Passengers
         {
             public int MissionID { get; set; }

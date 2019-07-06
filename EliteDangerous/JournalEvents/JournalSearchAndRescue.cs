@@ -13,6 +13,7 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 
@@ -20,7 +21,9 @@ namespace EliteDangerousCore.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.SearchAndRescue)]
     public class JournalSearchAndRescue : JournalEntry, ICommodityJournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalSearchAndRescue(){}
         public JournalSearchAndRescue(JObject evt) : base(evt, JournalTypeEnum.SearchAndRescue)
         {
             FDName = evt["Name"].Str();

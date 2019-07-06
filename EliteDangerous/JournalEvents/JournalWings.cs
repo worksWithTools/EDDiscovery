@@ -14,13 +14,16 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.WingAdd)]
     public class JournalWingAdd : JournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalWingAdd(){}
         public JournalWingAdd(JObject evt ) : base(evt, JournalTypeEnum.WingAdd)
         {
             Name = evt["Name"].Str();
@@ -38,7 +41,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.WingLeave)]
     public class JournalWingLeave : JournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalWingLeave(){}
         public JournalWingLeave(JObject evt) : base(evt, JournalTypeEnum.WingLeave)
         {
         }
@@ -53,7 +58,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.WingJoin)]
     public class JournalWingJoin : JournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalWingJoin(){}
         public JournalWingJoin(JObject evt) : base(evt, JournalTypeEnum.WingJoin)
         {
             Others = evt["Others"]?.ToObjectProtected<string[]>();
@@ -77,7 +84,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.WingInvite)]
     public class JournalWingInvite : JournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalWingInvite(){}
         public JournalWingInvite(JObject evt) : base(evt, JournalTypeEnum.WingInvite)
         {
             Name = evt["Name"].Str();

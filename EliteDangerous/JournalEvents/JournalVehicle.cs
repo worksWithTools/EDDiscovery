@@ -14,13 +14,16 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.RestockVehicle)]
     public class JournalRestockVehicle : JournalEntry, ILedgerJournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalRestockVehicle(){}
         public JournalRestockVehicle(JObject evt ) : base(evt, JournalTypeEnum.RestockVehicle)
         {
             Type = JournalFieldNaming.GetBetterShipName(evt["Type"].Str());
@@ -51,7 +54,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.VehicleSwitch)]
     public class JournalVehicleSwitch : JournalEntry, IShipInformation
-    {
+	{
+		[JsonConstructor]
+		private JournalVehicleSwitch(){}
         public JournalVehicleSwitch(JObject evt) : base(evt, JournalTypeEnum.VehicleSwitch)
         {
             To = evt["To"].Str();

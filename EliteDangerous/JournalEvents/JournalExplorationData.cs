@@ -16,12 +16,15 @@
 using System;
 using Newtonsoft.Json.Linq;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace EliteDangerousCore.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.BuyExplorationData)]
     public class JournalBuyExplorationData : JournalEntry, ILedgerJournalEntry
     {
+        [JsonConstructor]
+        private JournalBuyExplorationData() { }
         public JournalBuyExplorationData(JObject evt ) : base(evt, JournalTypeEnum.BuyExplorationData)
         {
             System = evt["System"].Str();
@@ -46,6 +49,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.SellExplorationData)]
     public class JournalSellExplorationData : JournalEntry, ILedgerJournalEntry
     {
+        [JsonConstructor]
+        private JournalSellExplorationData() { }
         private static DateTime TotalEarningsCorrectDate = new DateTime(2018, 5, 1, 0, 0, 0, DateTimeKind.Utc);
 
         public JournalSellExplorationData(JObject evt) : base(evt, JournalTypeEnum.SellExplorationData)
@@ -95,6 +100,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.MultiSellExplorationData)]
     public class JournalMultiSellExplorationData : JournalEntry, ILedgerJournalEntry
     {
+        [JsonConstructor]
+        private JournalMultiSellExplorationData() { }
         public JournalMultiSellExplorationData(JObject evt) : base(evt, JournalTypeEnum.MultiSellExplorationData)   // 3.3
         {
             Systems = evt["Discovered"]?.ToObjectProtected<Discovered[]>();

@@ -13,6 +13,7 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
@@ -21,7 +22,9 @@ namespace EliteDangerousCore.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.Screenshot)]
     public class JournalScreenshot : JournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalScreenshot(){}
         public JournalScreenshot(JObject evt ) : base(evt, JournalTypeEnum.Screenshot)
         {
             Filename = evt["Filename"].Str();

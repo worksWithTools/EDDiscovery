@@ -13,6 +13,7 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
@@ -32,7 +33,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.Music)]
     public class JournalMusic : JournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalMusic(){}
         public JournalMusic(JObject evt ) : base(evt, JournalTypeEnum.Music)
         {
             MusicTrack = evt["MusicTrack"].Str();

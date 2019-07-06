@@ -13,6 +13,7 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 
@@ -20,7 +21,9 @@ namespace EliteDangerousCore.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.NpcCrewPaidWage)]
     public class JournalNpcCrewPaidWage : JournalEntry, ILedgerJournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalNpcCrewPaidWage(){}
         public JournalNpcCrewPaidWage(JObject evt ) : base(evt, JournalTypeEnum.NpcCrewPaidWage)
         {
             NpcCrewID = evt["NpcCrewId"].Long();
@@ -46,7 +49,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.NpcCrewRank)]
     public class JournalNpcCrewRank : JournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalNpcCrewRank(){}
         public JournalNpcCrewRank(JObject evt) : base(evt, JournalTypeEnum.NpcCrewRank)
         {
             NpcCrewID = evt["NpcCrewId"].Long();

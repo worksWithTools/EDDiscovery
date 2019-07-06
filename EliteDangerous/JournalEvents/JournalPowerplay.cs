@@ -13,6 +13,7 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 
@@ -20,7 +21,9 @@ namespace EliteDangerousCore.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.Powerplay)]
     public class JournalPowerplay : JournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalPowerplay(){}
         public JournalPowerplay(JObject evt) : base(evt, JournalTypeEnum.Powerplay)
         {
             Power = evt["Power"].Str();
@@ -49,7 +52,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.PowerplayCollect)]
     public class JournalPowerplayCollect : JournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalPowerplayCollect(){}
         public JournalPowerplayCollect(JObject evt) : base(evt, JournalTypeEnum.PowerplayCollect)
         {
             Power = evt["Power"].Str();
@@ -72,7 +77,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.PowerplayDefect)]
     public class JournalPowerplayDefect : JournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalPowerplayDefect(){}
         public JournalPowerplayDefect(JObject evt) : base(evt, JournalTypeEnum.PowerplayDefect)
         {
             FromPower = evt["FromPower"].Str();
@@ -91,7 +98,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.PowerplayDeliver)]
     public class JournalPowerplayDeliver : JournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalPowerplayDeliver(){}
         public JournalPowerplayDeliver(JObject evt) : base(evt, JournalTypeEnum.PowerplayDeliver)
         {
             Power = evt["Power"].Str();
@@ -114,7 +123,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.PowerplayFastTrack)]
     public class JournalPowerplayFastTrack : JournalEntry, ILedgerJournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalPowerplayFastTrack(){}
         public JournalPowerplayFastTrack(JObject evt) : base(evt, JournalTypeEnum.PowerplayFastTrack)
         {
             Power = evt["Power"].Str();
@@ -138,7 +149,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.PowerplayJoin)]
     public class JournalPowerplayJoin : JournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalPowerplayJoin(){}
         public JournalPowerplayJoin(JObject evt) : base(evt, JournalTypeEnum.PowerplayJoin)
         {
             Power = evt["Power"].Str();
@@ -155,7 +168,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.PowerplayLeave)]
     public class JournalPowerplayLeave : JournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalPowerplayLeave(){}
         public JournalPowerplayLeave(JObject evt) : base(evt, JournalTypeEnum.PowerplayLeave)
         {
             Power = evt["Power"].Str();
@@ -172,7 +187,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.PowerplaySalary)]
     public class JournalPowerplaySalary : JournalEntry, ILedgerJournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalPowerplaySalary(){}
         public JournalPowerplaySalary(JObject evt) : base(evt, JournalTypeEnum.PowerplaySalary)
         {
             Power = evt["Power"].Str();
@@ -196,7 +213,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.PowerplayVote)]
     public class JournalPowerplayVote : JournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalPowerplayVote(){}
         public JournalPowerplayVote(JObject evt) : base(evt, JournalTypeEnum.PowerplayVote)
         {
             Power = evt["Power"].Str();
@@ -217,7 +236,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.PowerplayVoucher)]
     public class JournalPowerplayVoucher : JournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalPowerplayVoucher(){}
         public JournalPowerplayVoucher(JObject evt) : base(evt, JournalTypeEnum.PowerplayVoucher)
         {
             Power = evt["Power"].Str();

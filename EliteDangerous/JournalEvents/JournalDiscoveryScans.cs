@@ -13,6 +13,7 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.DiscoveryScan)]
     public class JournalDiscoveryScan : JournalEntry
     {
+        [JsonConstructor]
+        private JournalDiscoveryScan() { }
         public JournalDiscoveryScan(JObject evt) : base(evt, JournalTypeEnum.DiscoveryScan)
         {
             SystemAddress = evt["SystemAddress"].Long();
@@ -41,6 +44,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.FSSDiscoveryScan)]
     public class JournalFSSDiscoveryScan : JournalEntry
     {
+        [JsonConstructor]
+        private JournalFSSDiscoveryScan() { }
         public JournalFSSDiscoveryScan(JObject evt) : base(evt, JournalTypeEnum.FSSDiscoveryScan)
         {
             Progress = evt["Progress"].Double() * 100.0;
@@ -62,6 +67,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.FSSSignalDiscovered)]
     public class JournalFSSSignalDiscovered : JournalEntry
     {
+        [JsonConstructor]
+        private JournalFSSSignalDiscovered() { }
         public class FSSSignal
         {
             public string SignalName { get; set; }
@@ -81,6 +88,8 @@ namespace EliteDangerousCore.JournalEvents
             public System.DateTime ExpiryUTC { get; set; }
             public System.DateTime ExpiryLocal { get; set; }
 
+            [JsonConstructor]
+            private FSSSignal() { }
             public FSSSignal(JObject evt , System.DateTime EventTimeUTC)
             {
                 SignalName = evt["SignalName"].Str();
@@ -156,6 +165,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.NavBeaconScan)]
     public class JournalNavBeaconScan : JournalEntry
     {
+        [JsonConstructor]
+        private JournalNavBeaconScan() { }
         public JournalNavBeaconScan(JObject evt) : base(evt, JournalTypeEnum.NavBeaconScan)
         {
             NumBodies = evt["NumBodies"].Int();
@@ -175,6 +186,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.SAAScanComplete)]
     public class JournalSAAScanComplete : JournalEntry
     {
+        [JsonConstructor]
+        private JournalSAAScanComplete() { }
         public JournalSAAScanComplete(JObject evt) : base(evt, JournalTypeEnum.SAAScanComplete)
         {
             BodyName = evt["BodyName"].Str();
@@ -202,6 +215,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.FSSAllBodiesFound)]
     public class JournalFSSAllBodiesFound : JournalEntry
     {
+        [JsonConstructor]
+        private JournalFSSAllBodiesFound() { }
         public JournalFSSAllBodiesFound(JObject evt) : base(evt, JournalTypeEnum.FSSAllBodiesFound)
         {
             SystemName = evt["SystemName"].Str();

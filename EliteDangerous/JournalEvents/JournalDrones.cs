@@ -13,6 +13,7 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 
@@ -21,6 +22,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.RepairDrone)]
     public class JournalRepairDrone : JournalEntry
     {
+        [JsonConstructor]
+        private JournalRepairDrone() { }
         public JournalRepairDrone(JObject evt ) : base(evt, JournalTypeEnum.RepairDrone)
         {
             HullRepaired = evt["HullRepaired"].Double();
@@ -40,10 +43,11 @@ namespace EliteDangerousCore.JournalEvents
         }
     }
 
-
     [JournalEntryType(JournalTypeEnum.BuyDrones)]
     public class JournalBuyDrones : JournalEntry, ILedgerJournalEntry, ICommodityJournalEntry
     {
+        [JsonConstructor]
+        private JournalBuyDrones() { }
         public JournalBuyDrones(JObject evt) : base(evt, JournalTypeEnum.BuyDrones)
         {
             Type = evt["Type"].Str();
@@ -78,6 +82,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.SellDrones)]
     public class JournalSellDrones : JournalEntry, ILedgerJournalEntry, ICommodityJournalEntry
     {
+        [JsonConstructor]
+        private JournalSellDrones() { }
         public JournalSellDrones(JObject evt) : base(evt, JournalTypeEnum.SellDrones)
         {
             Type = evt["Type"].Str();
@@ -110,6 +116,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.LaunchDrone)]
     public class JournalLaunchDrone : JournalEntry, ICommodityJournalEntry
     {
+        [JsonConstructor]
+        private JournalLaunchDrone() { }
         public JournalLaunchDrone(JObject evt) : base(evt, JournalTypeEnum.LaunchDrone)
         {
             Type = evt["Type"].Str();

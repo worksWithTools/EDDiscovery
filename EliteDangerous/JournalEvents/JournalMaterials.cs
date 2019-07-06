@@ -13,6 +13,7 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,9 @@ namespace EliteDangerousCore.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.Materials)]
     public class JournalMaterials : JournalEntry, IMaterialJournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalMaterials(){}
         public class Material
         {
             public string Name { get; set; }        //FDNAME
@@ -120,7 +123,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.MaterialCollected)]
     public class JournalMaterialCollected : JournalEntry, IMaterialJournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalMaterialCollected(){}
         public JournalMaterialCollected(JObject evt) : base(evt, JournalTypeEnum.MaterialCollected)
         {
             Category = JournalFieldNaming.NormaliseMaterialCategory(evt["Category"].Str());
@@ -147,7 +152,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.MaterialDiscarded)]
     public class JournalMaterialDiscarded : JournalEntry, IMaterialJournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalMaterialDiscarded(){}
         public JournalMaterialDiscarded(JObject evt) : base(evt, JournalTypeEnum.MaterialDiscarded)
         {
             Category = JournalFieldNaming.NormaliseMaterialCategory(evt["Category"].Str());
@@ -175,7 +182,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.MaterialDiscovered)]
     public class JournalMaterialDiscovered : JournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalMaterialDiscovered(){}
         public JournalMaterialDiscovered(JObject evt) : base(evt, JournalTypeEnum.MaterialDiscovered)
         {
             Category = JournalFieldNaming.NormaliseMaterialCategory(evt["Category"].Str());
@@ -201,7 +210,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.MaterialTrade)]
     public class JournalMaterialTrade : JournalEntry, IMaterialJournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalMaterialTrade(){}
         public JournalMaterialTrade(JObject evt) : base(evt, JournalTypeEnum.MaterialTrade)
         {
             MarketID = evt["MarketID"].LongNull();
@@ -268,7 +279,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.Synthesis)]
     public class JournalSynthesis : JournalEntry, IMaterialJournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalSynthesis(){}
         public JournalSynthesis(JObject evt) : base(evt, JournalTypeEnum.Synthesis)
         {
             Materials = null;

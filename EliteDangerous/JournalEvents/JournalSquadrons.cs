@@ -13,6 +13,7 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
@@ -21,7 +22,9 @@ using System.Text;
 namespace EliteDangerousCore.JournalEvents
 {
     public class JournalSquadronBase : JournalEntry
-    {
+	{
+		[JsonConstructor]
+		protected JournalSquadronBase(){}
         public JournalSquadronBase(JObject evt, JournalTypeEnum e) : base(evt, e)
         {
             Name = evt["SquadronName"].Str();
@@ -38,7 +41,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.AppliedToSquadron)]
     public class JournalAppliedToSquadron : JournalSquadronBase
-    {
+	{
+		[JsonConstructor]
+		private JournalAppliedToSquadron(){}
         public JournalAppliedToSquadron(JObject evt) : base(evt, JournalTypeEnum.AppliedToSquadron)
         {
         }
@@ -46,7 +51,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.DisbandedSquadron)]
     public class JournalDisbandedSquadron : JournalSquadronBase
-    {
+	{
+		[JsonConstructor]
+		private JournalDisbandedSquadron(){}
         public JournalDisbandedSquadron(JObject evt) : base(evt, JournalTypeEnum.DisbandedSquadron)
         {
         }
@@ -54,7 +61,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.InvitedToSquadron)]
     public class JournalInvitedToSquadron : JournalSquadronBase
-    {
+	{
+		[JsonConstructor]
+		private JournalInvitedToSquadron(){}
         public JournalInvitedToSquadron(JObject evt) : base(evt, JournalTypeEnum.InvitedToSquadron)
         {
         }
@@ -62,7 +71,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.JoinedSquadron)]
     public class JournalJoinedSquadron : JournalSquadronBase
-    {
+	{
+		[JsonConstructor]
+		private JournalJoinedSquadron(){}
         public JournalJoinedSquadron(JObject evt) : base(evt, JournalTypeEnum.JoinedSquadron)
         {
         }
@@ -70,7 +81,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.KickedFromSquadron)]
     public class JournalKickedFromSquadron : JournalSquadronBase
-    {
+	{
+		[JsonConstructor]
+		private JournalKickedFromSquadron(){}
         public JournalKickedFromSquadron(JObject evt) : base(evt, JournalTypeEnum.KickedFromSquadron)
         {
         }
@@ -78,7 +91,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.LeftSquadron)]
     public class JournalLeftSquadron : JournalSquadronBase
-    {
+	{
+		[JsonConstructor]
+		private JournalLeftSquadron(){}
         public JournalLeftSquadron(JObject evt) : base(evt, JournalTypeEnum.LeftSquadron)
         {
         }
@@ -86,7 +101,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.SharedBookmarkToSquadron)]
     public class JournalSharedBookmarkToSquadron : JournalSquadronBase
-    {
+	{
+		[JsonConstructor]
+		private JournalSharedBookmarkToSquadron(){}
         public JournalSharedBookmarkToSquadron(JObject evt) : base(evt, JournalTypeEnum.SharedBookmarkToSquadron)
         {
         }
@@ -94,14 +111,18 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.SquadronCreated)]
     public class JournalSquadronCreated : JournalSquadronBase
-    {
+	{
+		[JsonConstructor]
+		private JournalSquadronCreated(){}
         public JournalSquadronCreated(JObject evt) : base(evt, JournalTypeEnum.SquadronCreated)
         {
         }
     }
 
     public class JournalSquadronRankBase : JournalSquadronBase
-    {
+	{
+		[JsonConstructor]
+		protected JournalSquadronRankBase(){}
         public JournalSquadronRankBase(JObject evt, JournalTypeEnum e) : base(evt, e)
         {
             OldRank = (SquadronRank)evt["OldRank"].Int();
@@ -121,7 +142,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.SquadronDemotion)]
     public class JournalSquadronDemotion : JournalSquadronRankBase
-    {
+	{
+		[JsonConstructor]
+		private JournalSquadronDemotion(){}
         public JournalSquadronDemotion(JObject evt) : base(evt, JournalTypeEnum.SquadronDemotion)
         {
         }
@@ -129,7 +152,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.SquadronPromotion)]
     public class JournalSquadronPromotion : JournalSquadronRankBase
-    {
+	{
+		[JsonConstructor]
+		private JournalSquadronPromotion(){}
         public JournalSquadronPromotion(JObject evt) : base(evt, JournalTypeEnum.SquadronPromotion)
         {
         }
@@ -137,7 +162,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.WonATrophyForSquadron)]
     public class JournalWonATrophyForSquadron : JournalSquadronBase
-    {
+	{
+		[JsonConstructor]
+		private JournalWonATrophyForSquadron(){}
         public JournalWonATrophyForSquadron(JObject evt) : base(evt, JournalTypeEnum.WonATrophyForSquadron)
         {
         }
@@ -145,7 +172,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.SquadronStartup)]
     public class JournalSquadronStartup : JournalSquadronBase
-    {
+	{
+		[JsonConstructor]
+		private JournalSquadronStartup(){}
         public JournalSquadronStartup(JObject evt) : base(evt, JournalTypeEnum.SquadronStartup)
         {
             CurrentRank = (SquadronRank)evt["CurrentRank"].Int();

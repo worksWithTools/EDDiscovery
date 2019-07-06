@@ -13,6 +13,7 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,9 @@ namespace EliteDangerousCore.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.Scanned)]
     public class JournalScanned : JournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalScanned(){}
         public JournalScanned(JObject evt) : base(evt, JournalTypeEnum.Scanned)
         {
             ScanType = evt["ScanType"].Str().SplitCapsWordFull();
@@ -38,7 +41,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.ShipTargeted)]
     public class JournalShipTargeted : JournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalShipTargeted(){}
         public JournalShipTargeted(JObject evt) : base(evt, JournalTypeEnum.ShipTargeted)
         {
             TargetLocked = evt["TargetLocked"].Bool();
@@ -154,7 +159,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.UnderAttack)]
     public class JournalUnderAttack : JournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalUnderAttack(){}
         public JournalUnderAttack(JObject evt) : base(evt, JournalTypeEnum.UnderAttack)
         {
             Target = evt["Target"].Str();
@@ -191,7 +198,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.ShieldState)]
     public class JournalShieldState : JournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalShieldState(){}
         public JournalShieldState(JObject evt) : base(evt, JournalTypeEnum.ShieldState)
         {
             ShieldsUp = evt["ShieldsUp"].Bool();

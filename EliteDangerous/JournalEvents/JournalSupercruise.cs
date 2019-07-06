@@ -15,13 +15,16 @@
  */
 using EliteDangerousCore.DB;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.SupercruiseEntry)]
     public class JournalSupercruiseEntry : JournalEntry, IShipInformation
-    {
+	{
+		[JsonConstructor]
+		private JournalSupercruiseEntry(){}
         public JournalSupercruiseEntry(JObject evt ) : base(evt, JournalTypeEnum.SupercruiseEntry)
         {
             StarSystem = evt["StarSystem"].Str();
@@ -45,7 +48,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.SupercruiseExit)]
     public class JournalSupercruiseExit : JournalEntry, IBodyNameAndID
-    {
+	{
+		[JsonConstructor]
+		private JournalSupercruiseExit(){}
         public JournalSupercruiseExit(JObject evt) : base(evt, JournalTypeEnum.SupercruiseExit)
         {
             StarSystem = evt["StarSystem"].Str();

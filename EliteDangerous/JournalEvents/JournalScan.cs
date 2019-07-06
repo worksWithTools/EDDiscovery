@@ -14,6 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 #if NET472
@@ -29,7 +30,9 @@ namespace EliteDangerousCore.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.Scan)]
     public class JournalScan : JournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalScan(){}
         public bool IsStar { get { return !String.IsNullOrEmpty(StarType); } }
         public string BodyDesignation { get; set; }
 

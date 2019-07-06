@@ -13,6 +13,7 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,9 @@ namespace EliteDangerousCore.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.Market)]
     public class JournalMarket : JournalCommodityPricesBase, IAdditionalFiles
-    {
+	{
+		[JsonConstructor]
+		private JournalMarket(){}
         public JournalMarket(JObject evt) : base(evt, JournalTypeEnum.Market)
         {
             Rescan(evt);
@@ -68,7 +71,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.MarketBuy)]
     public class JournalMarketBuy : JournalEntry, ICommodityJournalEntry, ILedgerJournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalMarketBuy(){}
         public JournalMarketBuy(JObject evt) : base(evt, JournalTypeEnum.MarketBuy)
         {
             MarketID = evt["MarketID"].LongNull();
@@ -109,7 +114,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.MarketSell)]
     public class JournalMarketSell : JournalEntry, ICommodityJournalEntry, ILedgerJournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalMarketSell(){}
         public JournalMarketSell(JObject evt) : base(evt, JournalTypeEnum.MarketSell)
         {
             MarketID = evt["MarketID"].LongNull();

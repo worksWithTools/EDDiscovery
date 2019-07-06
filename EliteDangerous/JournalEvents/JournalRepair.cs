@@ -13,6 +13,7 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 
@@ -20,7 +21,9 @@ namespace EliteDangerousCore.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.Repair)]
     public class JournalRepair : JournalEntry, ILedgerJournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalRepair(){}
         public JournalRepair(JObject evt ) : base(evt, JournalTypeEnum.Repair)
         {
             ItemFD = JournalFieldNaming.NormaliseFDItemName(evt["Item"].Str());
@@ -49,7 +52,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.RepairAll)]
     public class JournalRepairAll : JournalEntry, ILedgerJournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalRepairAll(){}
         public JournalRepairAll(JObject evt) : base(evt, JournalTypeEnum.RepairAll)
         {
             Cost = evt["Cost"].Long();
@@ -72,7 +77,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.AfmuRepairs)]
     public class JournalAfmuRepairs : JournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalAfmuRepairs(){}
         public JournalAfmuRepairs(JObject evt) : base(evt, JournalTypeEnum.AfmuRepairs)
         {
             ModuleFD = JournalFieldNaming.NormaliseFDItemName(evt["Module"].Str());
@@ -97,7 +104,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.RebootRepair)]
     public class JournalRebootRepair : JournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalRebootRepair(){}
         public JournalRebootRepair(JObject evt) : base(evt, JournalTypeEnum.RebootRepair)
         {
             Slots = evt["Modules"]?.ToObjectProtected<string[]>();
@@ -125,7 +134,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.SystemsShutdown)]
     public class JournalSystemsShutdown : JournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalSystemsShutdown(){}
         public JournalSystemsShutdown(JObject evt) : base(evt, JournalTypeEnum.SystemsShutdown) { }
 
         public override void FillInformation(out string info, out string detailed)

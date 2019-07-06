@@ -13,6 +13,7 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 
@@ -20,7 +21,9 @@ namespace EliteDangerousCore.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.HeatDamage)]
     public class JournalHeatDamage : JournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalHeatDamage(){}
         public int? ID { get; set; }
 
         public JournalHeatDamage(JObject evt ) : base(evt, JournalTypeEnum.HeatDamage)
@@ -37,7 +40,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.HeatWarning)]
     public class JournalHeatWarning : JournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalHeatWarning(){}
         public JournalHeatWarning(JObject evt) : base(evt, JournalTypeEnum.HeatWarning)
         {
         }
@@ -52,7 +57,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.HullDamage)]
     public class JournalHullDamage : JournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalHullDamage(){}
         public JournalHullDamage(JObject evt) : base(evt, JournalTypeEnum.HullDamage)
         {
             Health = evt["Health"].Double();

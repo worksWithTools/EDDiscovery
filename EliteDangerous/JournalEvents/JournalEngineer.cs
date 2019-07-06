@@ -13,6 +13,7 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.EngineerApply)]
     public class JournalEngineerApply : JournalEntry
     {
+        [JsonConstructor]
+        private JournalEngineerApply() { }
         public JournalEngineerApply(JObject evt ) : base(evt, JournalTypeEnum.EngineerApply)
         {
             Engineer = evt["Engineer"].Str();
@@ -46,6 +49,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.EngineerContribution)]
     public class JournalEngineerContribution : JournalEntry, ILedgerJournalEntry, ICommodityJournalEntry, IMaterialJournalEntry
     {
+        [JsonConstructor]
+        private JournalEngineerContribution() { }
         public JournalEngineerContribution(JObject evt) : base(evt, JournalTypeEnum.EngineerContribution)
         {
             Engineer = evt["Engineer"].Str();
@@ -113,6 +118,8 @@ namespace EliteDangerousCore.JournalEvents
 
     public class JournalEngineerCraftBase : JournalEntry, IMaterialJournalEntry, IShipInformation
     {
+        [JsonConstructor]
+        protected JournalEngineerCraftBase() { }
         public JournalEngineerCraftBase(JObject evt, JournalTypeEnum en) : base(evt, en)
         {
             SlotFD = JournalFieldNaming.NormaliseFDSlotName(evt["Slot"].Str());
@@ -198,6 +205,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.EngineerCraft)]
     public class JournalEngineerCraft : JournalEngineerCraftBase
     {
+        [JsonConstructor]
+        private JournalEngineerCraft() { }
         public JournalEngineerCraft(JObject evt) : base(evt, JournalTypeEnum.EngineerCraft)
         {
         }
@@ -207,6 +216,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.EngineerLegacyConvert)]
     public class JournalLegacyConvert : JournalEngineerCraftBase
     {
+        [JsonConstructor]
+        private JournalLegacyConvert() { }
         public JournalLegacyConvert(JObject evt) : base(evt, JournalTypeEnum.EngineerLegacyConvert)     // same as craft.
         {
         }
@@ -225,6 +236,8 @@ namespace EliteDangerousCore.JournalEvents
             public int? RankProgress { get; set; }  // newish 3.x only when unlocked
         }
 
+        [JsonConstructor]
+        private JournalEngineerProgress() { }
         public JournalEngineerProgress(JObject evt) : base(evt, JournalTypeEnum.EngineerProgress)
         {
             Engineers = evt["Engineers"]?.ToObjectProtected<ProgressInformation[]>().OrderBy(x => x.Engineer)?.ToArray();       // 3.3 introduced this at startup

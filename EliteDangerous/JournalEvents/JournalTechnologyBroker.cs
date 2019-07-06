@@ -14,13 +14,16 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.TechnologyBroker)]
     public class JournalTechnologyBroker : JournalEntry
-    {
+	{
+		[JsonConstructor]
+		private JournalTechnologyBroker(){}
         public JournalTechnologyBroker(JObject evt) : base(evt, JournalTypeEnum.TechnologyBroker)
         {
             BrokerType = evt["BrokerType"].Str("Unknown");

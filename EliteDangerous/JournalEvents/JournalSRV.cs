@@ -13,6 +13,7 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 
@@ -20,7 +21,9 @@ namespace EliteDangerousCore.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.DockSRV)]
     public class JournalDockSRV : JournalEntry, IShipInformation
-    {
+	{
+		[JsonConstructor]
+		private JournalDockSRV(){}
         public int? ID { get; set; }
 
         public JournalDockSRV(JObject evt ) : base(evt, JournalTypeEnum.DockSRV)
@@ -42,7 +45,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.LaunchSRV)]
     public class JournalLaunchSRV : JournalEntry, IShipInformation
-    {
+	{
+		[JsonConstructor]
+		private JournalLaunchSRV(){}
         public JournalLaunchSRV(JObject evt) : base(evt, JournalTypeEnum.LaunchSRV)
         {
             Loadout = evt["Loadout"].Str();
@@ -68,7 +73,9 @@ namespace EliteDangerousCore.JournalEvents
 
     [JournalEntryType(JournalTypeEnum.SRVDestroyed)]
     public class JournalSRVDestroyed : JournalEntry, IShipInformation
-    {
+	{
+		[JsonConstructor]
+		private JournalSRVDestroyed(){}
         public int? ID { get; set; }
 
         public JournalSRVDestroyed(JObject evt) : base(evt, JournalTypeEnum.SRVDestroyed)
