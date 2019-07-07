@@ -28,11 +28,14 @@
                   RefreshCommand="{Binding LoadItemsCommand}"
                   IsPullToRefreshEnabled="true"
                   IsRefreshing="{Binding IsBusy, Mode=OneWay}"
-                  CachingStrategy="RecycleElement">
+                  CachingStrategy="RecycleElement"
+                  BackgroundColor="{StaticResource BackgroundPrimary}"
+                  >
                 <!--ItemSelected="OnItemSelected">-->
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
+                            <Frame Padding="0" BackgroundColor="{StaticResource BackgroundPrimary}" Margin="1" CornerRadius="4">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="*"/>
@@ -45,10 +48,9 @@
                                 </Grid.ColumnDefinitions>
                                 <controls:CircleImage
                                     Margin="5,5,15,5"
-                                    WidthRequest="40" 
-                                    HeightRequest="40"
+                                    WidthRequest="42" 
                                     BorderColor="Accent"
-                                    FillColor="White"
+                                    FillColor="{StaticResource BackgroundPrimary}"
                                     Grid.Row="0" 
                                        Grid.Column="0" 
                                        Grid.RowSpan="2">
@@ -69,14 +71,16 @@
                                        Grid.Row="1" Grid.Column="1"/>
 
                                 <Label Text="{Binding EventTimeUTC}" 
-                                       d:Text="{Binding timestamp}"
+                                       d:Text="{Binding timestamp, StringFormat='{0:yyyy-MM-dd hh:mm:ss}'}"
                                        TextColor="{StaticResource SecondaryText}"
-                                        Grid.Row="1"
+                                        Grid.Row="0"
                                         Grid.Column="2"
                                         Style="{DynamicResource ListItemDetailTextStyle}"
-                                        FontSize="9" />
+                                        FontSize="9"
+                                        Margin="0,5,0,0"/>
 
                             </Grid>
+                            </Frame>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>

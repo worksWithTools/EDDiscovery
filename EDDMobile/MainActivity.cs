@@ -6,6 +6,7 @@ using Android.Runtime;
 using EDDMobileImpl;
 using ImageCircle.Forms.Plugin.Droid;
 using UXDivers.Gorilla.Droid;
+using Xamarin.Forms;
 
 namespace EDDMobile.Droid
 {
@@ -21,6 +22,7 @@ namespace EDDMobile.Droid
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
+            FormsMaterial.Init(this, savedInstanceState);
             ImageCircleRenderer.Init();
 #if GORILLA
             // this normally happens in App.OnSTart()

@@ -943,6 +943,14 @@
     ]
   },
   "StatusPage.xaml": {
+    "Title": "Summary",
+    "Visits": 2,
+    "WhereAmI": "LTT 1349 3a",
+    "Note": "TBD",
+    "Fuel": "32 / 32",
+    "CargoCount": 123,
+    "MaterialsCount": 456,
+    "DataCount":  1234,
     "Indexno": 10017,
     "journalEntry": {
       "ID": 81048,
@@ -984,7 +992,7 @@
     "DebugStatus": "LTT 1349 3 e, Planet,LTT 1349 3 e SN:Null ST:Null T:NormalSpace S:32,Anaconda GM:Solo W:False BA:False",
     "Credits": 203827543,
     "Allegiance": "Empire",
-    "PrimaryEconomy" :  "High Tech",
+    "PrimaryEconomy": "High Tech",
     "Government": "Corporate",
     "State": "Boom",
     "Security": "Medium",
