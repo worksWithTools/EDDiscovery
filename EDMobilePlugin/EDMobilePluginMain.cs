@@ -24,6 +24,7 @@ namespace EDMobilePlugin
         public string EDDInitialise(string vstr, EDDDLLIF.EDDCallBacks callbacks, ManagedCallbacks managedCallbacks)
         {
             _managedcallbacks = managedCallbacks;
+            AutoDiscoveryServer.Start();
             WebSocketHttpServer.Start("http://+:80/eddmobile/", callbacks, managedCallbacks);
  
             return Assembly.GetExecutingAssembly().GetName().Version.ToString();

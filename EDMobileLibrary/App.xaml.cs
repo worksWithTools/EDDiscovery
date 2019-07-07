@@ -1,5 +1,6 @@
 ﻿using EDDMobile.Comms;
 using EDDMobileImpl.Views;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -22,7 +23,8 @@ namespace EDDMobileImpl
             EDDiscovery.Icons.IconSet.ResetIcons();     // start with a clean slate loaded up from default icons
             WebSocket = new WebSocketWrapper();
             //TODO: Configure...
-            await WebSocket.Connect("ws://192.168.0.32/eddmobile");
+            await WebSocket.Connect();
+            Debug.WriteLine($"MOBILE: Starting listening for broadcasts on {WebSocket.Uri}");
             await WebSocket.Listen();
         }
 

@@ -1,4 +1,5 @@
 ﻿
+using EDMobileLibrary.Services;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -8,6 +9,8 @@ using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using ToastMessage;
+using Xamarin.Forms;
 
 namespace EDDMobile.Comms
 {
@@ -19,6 +22,9 @@ namespace EDDMobile.Comms
             webSocket = new ClientWebSocket();
 
         }
+
+        public string Uri { get; private set; }
+
         private ClientWebSocket webSocket;
         private ConcurrentQueue<string> messages = new ConcurrentQueue<string>();
 
@@ -27,21 +33,30 @@ namespace EDDMobile.Comms
         // because its possible the queue could get swamped.
         public event OnMessageHandler OnMessage;
         //TODO: add cancelation tokens...
-        public async Task Connect(string uri)
+        public async Task Connect()
         {
+            AutoDiscoveryClient.EndPointDiscovered += AutoDiscoveryClient_EndPointDiscovered;
+            await AutoDiscoveryClient.StartAutodiscovery();
+
+        }
+
+        private async void AutoDiscoveryClient_EndPointDiscovered(object sender, EndPointDiscoveredEventArgs e)
+        {
+            Uri = $"ws://{e.EndpointAddress.ToString()}/eddmobile";
             do
             {
                 try
                 {
-                    Debug.WriteLine($"MOBILE: connecting to {uri}...");
+                    Debug.WriteLine($"MOBILE: connecting to {Uri}...");
+                    DependencyService.Get<Toast>().Show($"Connecting to {Uri}");
 
-                    await webSocket.ConnectAsync(new Uri(uri), CancellationToken.None);
+                    await webSocket.ConnectAsync(new Uri(Uri), CancellationToken.None);
                 }
                 catch (WebSocketException)
                 {
                     if (webSocket.State != WebSocketState.Open)
                     {
-                        Debug.WriteLine($"MOBILE: could not connect to {uri} - will retrying in 5 seconds...");
+                        Debug.WriteLine($"MOBILE: could not connect to {Uri} - will retrying in 5 seconds...");
                         await Task.Delay(5000);
                     }
                 }
@@ -51,8 +66,8 @@ namespace EDDMobile.Comms
                     return;
                 }
             } while (webSocket.State != WebSocketState.Open);
-            Debug.WriteLine($"MOBILE: Connected to {uri}.");
         }
+
 
         public async Task Disconnect()
         {

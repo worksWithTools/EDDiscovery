@@ -12,7 +12,7 @@ using Xamarin.Forms.Xaml;
 namespace EDDMobileImpl.Views
 {
     
-    public partial class StatusPage : ContentPage
+    public partial class StatusPage : global::Xamarin.Forms.CarouselPage
     {
         StatusViewModel _LastJournalEntry;
         
