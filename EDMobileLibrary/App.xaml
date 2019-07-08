@@ -16,6 +16,7 @@
             <Color x:Key="BorderColor">#78E47A0C</Color>
             <Style TargetType="ContentPage">
                 <Setter Property="BackgroundColor" Value="{StaticResource BackgroundSecondary}"/>
+                <Setter Property="Visual" Value="Material"/>
             </Style>
             <Style TargetType="NavigationPage">
                 <Setter Property="BarBackgroundColor" Value="{StaticResource NavigationPrimary}" />

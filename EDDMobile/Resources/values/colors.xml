@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="launcher_background">#000000</color>
+  <color name="launcher_background">#121212</color>
     <color name="colorPrimary">#F77003</color>
     <color name="colorPrimaryDark">#C65E0B</color>
     <color name="colorAccent">#EF40FF</color>
+  <color name="ListViewSelected">#A3121212</color>
 </resources>

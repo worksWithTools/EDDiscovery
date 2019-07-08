@@ -6,7 +6,7 @@
              mc:Ignorable="d"
              x:Class="EDDMobileImpl.Views.StatusPage"
              Title="Status Summary"
-             BackgroundColor="{StaticResource BackgroundSecondary}">
+             BackgroundColor="{StaticResource BackgroundSecondary}" Visual="Material">
     <CarouselPage.ToolbarItems>
         <ToolbarItem Text="Refresh" Clicked="Button_Clicked" />
     </CarouselPage.ToolbarItems>

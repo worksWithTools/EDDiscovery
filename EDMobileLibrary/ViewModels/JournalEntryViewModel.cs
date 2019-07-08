@@ -30,6 +30,8 @@ namespace EDMobileLibrary.ViewModels
             {
                 App.WebSocket.TryGetMessage(out string msg);
                 MobileWebResponse response = msg.Deserialize<MobileWebResponse>();
+                if (response == null)
+                    return;
                 Debug.WriteLine($"INFO: msg received: {response.RequestType}");
                 if (response.RequestType == WebSocketMessage.GET_JOURNAL)
                 {

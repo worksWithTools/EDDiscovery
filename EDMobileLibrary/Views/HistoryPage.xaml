@@ -9,7 +9,8 @@
              xmlns:local="clr-namespace:EDMobileLibrary.Converters"
              x:Class="EDDMobileImpl.Views.HistoryPage"
              Title="{Binding Title}"
-             x:Name="BrowseItemsPage">
+             x:Name="BrowseItemsPage"
+             BackgroundColor="{StaticResource BackgroundSecondary}" Visual="Material">
     <ContentPage.Resources>
         <ResourceDictionary>
             <local:FileToSKImageConverter x:Key="fileToImage" />
@@ -28,8 +29,7 @@
                   RefreshCommand="{Binding LoadItemsCommand}"
                   IsPullToRefreshEnabled="true"
                   IsRefreshing="{Binding IsBusy, Mode=OneWay}"
-                  CachingStrategy="RecycleElement"
-                  BackgroundColor="{StaticResource BackgroundPrimary}"
+                  CachingStrategy="RecycleElement" Visual="Material"
                   >
                 <!--ItemSelected="OnItemSelected">-->
                 <ListView.ItemTemplate>
@@ -66,13 +66,11 @@
                                        FontSize="18"
                                        FontAttributes="Bold"/>
                                 <Label Text="{Binding Details}"
-                                       TextColor="{StaticResource SecondaryText}"
                                        FontSize="13 "
                                        Grid.Row="1" Grid.Column="1"/>
 
                                 <Label Text="{Binding EventTimeUTC}" 
                                        d:Text="{Binding timestamp, StringFormat='{0:yyyy-MM-dd hh:mm:ss}'}"
-                                       TextColor="{StaticResource SecondaryText}"
                                         Grid.Row="0"
                                         Grid.Column="2"
                                         Style="{DynamicResource ListItemDetailTextStyle}"
