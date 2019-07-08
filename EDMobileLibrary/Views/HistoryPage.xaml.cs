@@ -44,8 +44,8 @@ namespace EDDMobileImpl.Views
 
             viewModel.StartListening();
 
-            //if (viewModel?.Items.Count == 0)
-            //    viewModel?.LoadItemsCommand.Execute(null);
+            if (viewModel?.Items.Count == 0)
+                viewModel?.LoadItemsCommand.Execute(null);
         }
 
         protected override void OnDisappearing()
