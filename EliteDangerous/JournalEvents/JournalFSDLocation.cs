@@ -445,8 +445,8 @@ namespace EliteDangerousCore.JournalEvents
             BodyType = JournalFieldNaming.NormaliseBodyType(evt["BodyType"].Str());
 
             JToken jm = evt["EDDMapColor"];
-            MapColor = jm.Int(EliteDangerousCore.EliteConfigInstance.InstanceConfig.DefaultMapColour);
-            if (jm.Empty())
+            MapColor = jm?.Int(EliteDangerousCore.EliteConfigInstance.InstanceConfig.DefaultMapColour)?? EliteDangerousCore.EliteConfigInstance.InstanceConfig.DefaultMapColour;
+            if (jm?.Empty()??true)
                 evt["EDDMapColor"] = EliteDangerousCore.EliteConfigInstance.InstanceConfig.DefaultMapColour;      // new entries get this default map colour if its not already there
 
             EDSMFirstDiscover = evt["EDD_EDSMFirstDiscover"].Bool(false);
