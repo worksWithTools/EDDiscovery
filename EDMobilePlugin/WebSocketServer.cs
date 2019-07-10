@@ -77,7 +77,7 @@ namespace EDMobilePlugin
                         else if (message.StartsWith(WebSocketMessage.GET_JOURNAL))
                         {
                             //TODO: add number to get...
-                            var history = managedCallbacks?.GetHistory(100);
+                            var history = managedCallbacks?.GetHistory(50);
                             foreach (var entry in history)
                             {
                                 Debug.WriteLine($"Socket {socketId} Queueing : {entry.journalEntry.ToString()}");
