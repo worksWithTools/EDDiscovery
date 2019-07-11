@@ -45,6 +45,7 @@ namespace EliteDangerousCore.JournalEvents
             Json = evt;     // keep for inara purposes..
         }
 
+        [JsonProperty(PropertyName="Bank_Account")]
         public BankAccountClass BankAccount { get; set; }
         public CombatClass Combat { get; set; }
         public CrimeClass Crime { get; set; }
@@ -53,12 +54,16 @@ namespace EliteDangerousCore.JournalEvents
         public MiningClass Mining { get; set; }
         public ExplorationClass Exploration { get; set; }
         public PassengerMissionsClass PassengerMissions { get; set; }
+        [JsonProperty(PropertyName ="Search_and_Rescue")]
         public SearchAndRescueClass SearchAndRescue { get; set; }
         public CraftingClass Crafting { get; set; }
         public CrewClass Crew { get; set; }
         public MulticrewClass Multicrew { get; set; }
+
+        [JsonProperty(PropertyName ="Material_Trader_Stats")]
         public MaterialTraderStatsClass MaterialTraderStats { get; set; }
         public CQCClass CQC { get; set; }
+        [JsonIgnore]
         public JObject Json { get; set; }
 
         public override void FillInformation(out string info, out string detailed) 
