@@ -925,19 +925,21 @@ namespace EliteDangerousCore
         {
             HistoryList hist = new HistoryList();
 
-            if (CurrentCommander >= 0)
+            if (journalmonitor != null) // might we want to move this?
             {
-                journalmonitor.ParseJournalFiles(() => cancelRequested(), (p, s) => reportProgress(p, s), forceReload: ForceJournalReload);   // Parse files stop monitor..
-
-                if (NetLogPath != null)
+                if (CurrentCommander >= 0)
                 {
-                    string errstr = null;
-                    NetLogClass.ParseFiles(NetLogPath, out errstr, EliteConfigInstance.InstanceConfig.DefaultMapColour, () => cancelRequested(), (p, s) => reportProgress(p, s), ForceNetLogReload, currentcmdrid: CurrentCommander);
+                    journalmonitor.ParseJournalFiles(() => cancelRequested(), (p, s) => reportProgress(p, s), forceReload: ForceJournalReload);   // Parse files stop monitor..
+
+                    if (NetLogPath != null)
+                    {
+                        string errstr = null;
+                        NetLogClass.ParseFiles(NetLogPath, out errstr, EliteConfigInstance.InstanceConfig.DefaultMapColour, () => cancelRequested(), (p, s) => reportProgress(p, s), ForceNetLogReload, currentcmdrid: CurrentCommander);
+                    }
                 }
+
+                Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Files read ");
             }
-
-            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Files read " );
-
             reportProgress(-1, "Reading Database");
 
             List<JournalEntry> jlist;

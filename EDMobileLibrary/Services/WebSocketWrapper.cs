@@ -24,6 +24,7 @@ namespace EDDMobile.Comms
         }
 
         public string Uri { get; private set; }
+        public bool Connected => webSocket.State == WebSocketState.Open;
 
         private ClientWebSocket webSocket;
         private ConcurrentQueue<string> messages = new ConcurrentQueue<string>();
@@ -35,9 +36,10 @@ namespace EDDMobile.Comms
         //TODO: add cancelation tokens...
         public async Task Connect()
         {
+            if (Connected) return;
+
             AutoDiscoveryClient.EndPointDiscovered += AutoDiscoveryClient_EndPointDiscovered;
             await AutoDiscoveryClient.StartAutodiscovery();
-
         }
 
         private async void AutoDiscoveryClient_EndPointDiscovered(object sender, EndPointDiscoveredEventArgs e)

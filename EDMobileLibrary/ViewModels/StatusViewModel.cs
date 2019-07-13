@@ -1,9 +1,12 @@
-﻿using EDPlugin;
+﻿using EDMobileLibrary.Services;
+using EDPlugin;
 using EliteDangerous.JSON;
 using EliteDangerousCore;
+using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
 using Newtonsoft.Json;
 using System;
+using System.Data.Common;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -17,22 +20,11 @@ namespace EDDMobileImpl.ViewModels
         public StatusViewModel()
         {
             Title = "Status";
-            LoadItemsCommand = new Command(async () => await ExecuteLoadJournalEntriesCommand());
+            LoadItemsCommand = new Command(ExecuteLoadJournalEntriesCommand);
+            UserDataCache.OnHistoryLoaded += ExecuteLoadJournalEntriesCommand;
         }
 
-
-        protected override void WebSocket_OnMessage()
-        {
-            App.WebSocket.TryGetMessage(out string msg);
-            MobileWebResponse response = msg.Deserialize<MobileWebResponse>();
-            if (response.RequestType == WebSocketMessage.REFRESH_STATUS || response.RequestType == WebSocketMessage.BROADCAST)
-                RefreshStatus(response);
-            else // pass up to base handler
-                base.WebSocket_OnMessage();
-        }
-
-
-        async Task ExecuteLoadJournalEntriesCommand()
+        void ExecuteLoadJournalEntriesCommand()
         {
             if (IsBusy)
                 return;
@@ -41,7 +33,11 @@ namespace EDDMobileImpl.ViewModels
 
             try
             {
-                await App.WebSocket.Send(WebSocketMessage.REFRESH_STATUS);
+                lastEntry = UserDataCache.History?.GetLast;
+                
+                lastSystem = UserDataCache.History?.GetLastFSD?.journalEntry as JournalFSDJump;
+
+                OnPropertyChanged(null); // should result in all props being refreshed.
             }
             catch (Exception ex)
             {
@@ -52,29 +48,7 @@ namespace EDDMobileImpl.ViewModels
                 IsBusy = false;
             }
         }
-
-        private void RefreshStatus(MobileWebResponse msg)
-        {
-            var lastEntry = HistoryEntry.FromJSON(msg.Responses[0]);
-
-            if (msg.RequestType == WebSocketMessage.REFRESH_STATUS)
-            {
-                var lastSystem = msg.Responses[1].Deserialize<JournalFSDJump>();
-
-                Allegiance = lastSystem?.Allegiance;
-                PrimaryEconomy = lastSystem?.Economy_Localised;
-                Government = lastSystem?.Government_Localised;
-                State = lastSystem?.FactionState.SplitCapsWord();
-                Security = lastSystem?.Security_Localised;
-            }
-            if (lastEntry != null)
-            {
-                this.lastEntry = lastEntry;
-            }
-
-            OnPropertyChanged(null); // should result in all props being refreshed.
-
-        }
+        public string Visits { get => UserDataCache.History?.GetVisitsCount(lastSystem.Body).ToString() ?? "Unknown"; }
 
         public String WhereAmI {
             get => lastEntry?.WhereAmI ?? "Unknown";
@@ -87,16 +61,18 @@ namespace EDDMobileImpl.ViewModels
         public ShipInformation ShipInformation { get => lastEntry?.ShipInformation; }
 
         public String Fuel { get => String.Format($"{ShipInformation?.FuelLevel} / {ShipInformation?.FuelCapacity ?? 1}"); }
-        public int MaterialsCount { get => lastEntry?.MaterialCommodity.MaterialsCount ?? 0; }
-        public int CargoCount { get => lastEntry?.MaterialCommodity.CargoCount ?? 0; }
+        public int MaterialsCount { get => lastEntry?.MaterialCommodity?.MaterialsCount ?? 0; }
+        public int CargoCount { get => lastEntry?.MaterialCommodity?.CargoCount ?? 0; }
         
-        public int DataCount { get => lastEntry?.MaterialCommodity.DataCount ?? 0; }
-        public string Allegiance { get; private set; }
-        public string PrimaryEconomy { get; private set; }
-        public string Government { get; private set; }
-        public string State { get; private set; }
-        public string Security { get; private set; }
+        public int DataCount { get => lastEntry?.MaterialCommodity?.DataCount ?? 0; }
+
+        public string Allegiance { get => lastSystem?.Allegiance; }
+        public string PrimaryEconomy { get => lastSystem?.Economy_Localised; }
+        public string Government { get => lastSystem?.Government_Localised; }
+        public string State { get => lastSystem?.FactionState.SplitCapsWord(); }
+        public string Security { get => lastSystem?.Security_Localised; }
 
         private HistoryEntry lastEntry;
+        private JournalFSDJump lastSystem;
     }
 }

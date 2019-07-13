@@ -25,10 +25,9 @@ namespace EDDMobileImpl
 
         protected async override void OnStart()
         {
-            // TODO: allow it to timeout connecting...
-            await WebSocket.Connect();
-
             await UserDataCache.Initialise();
+
+            await WebSocket.Connect();
 
             Debug.WriteLine($"MOBILE: Starting listening for broadcasts on {WebSocket.Uri}");
             await WebSocket.Listen();

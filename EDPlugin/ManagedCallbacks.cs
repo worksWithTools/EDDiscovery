@@ -23,8 +23,6 @@ namespace EDPlugin
     {
         public const string BROADCAST = "broadcast";
         public const string INIT_DB = "initdb";
-        public const string REFRESH_STATUS = "refresh:status";
-        public const string GET_JOURNAL = "refresh:journal:";
     }
 
     // Used to bundle multiple messages into one response

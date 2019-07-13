@@ -60,7 +60,7 @@ namespace EDMobileLibrary.ViewModels
             {
                 Items.Clear();
                 //TODO: add commander filter
-                var yesterday = DateTime.Now.Subtract(TimeSpan.FromDays(1));
+                var yesterday = DateTime.Now.Subtract(TimeSpan.FromHours(12));
                 var newItems = await JournalEntry.GetAllAsync(after:yesterday, order:"DESC");
 
                 do
