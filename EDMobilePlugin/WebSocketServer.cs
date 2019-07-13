@@ -4,7 +4,9 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net.WebSockets;
 using System.Text;
@@ -62,6 +64,10 @@ namespace EDMobilePlugin
 
                         // TODO: Apply a command pattern?
                         // if message is "ready" then send back some data..
+                        if (message == WebSocketMessage.INIT_DB)
+                        {
+                            await PushUserDbToMobile();
+                        }
                         if (message == WebSocketMessage.REFRESH_STATUS)
                         {
                             var lasthistory = managedCallbacks?.GetLastHistory();
@@ -106,6 +112,25 @@ namespace EDMobilePlugin
                 broadcastTokenSource?.Dispose();
             }
         }
+
+        private async Task PushUserDbToMobile()
+        {
+            var backupPath = $"{EliteDangerousCore.EliteConfigInstance.InstanceOptions.UserDatabasePath}.bak";
+            using (var source = new SQLiteConnection($"Data Source={EliteDangerousCore.EliteConfigInstance.InstanceOptions.UserDatabasePath};"))
+            using (var destination = new SQLiteConnection($"Data Source={backupPath};"))
+            {
+                source.Open();
+                destination.Open();
+                source.BackupDatabase(destination, "main", "main", -1, null, 0);
+            }
+            var dbcontent = File.ReadAllBytes(backupPath);
+            Debug.WriteLine($"Socket {socketId}: Sending entire UserDb.");
+            //System.IO.File.WriteAllText(@"D:\Source\worksWithTools\EDDiscovery\EDDiscoveryTests\historyentry.json", message);
+            var msgbuf = new ArraySegment<byte>(dbcontent);
+            await socket.SendAsync(msgbuf, WebSocketMessageType.Binary, endOfMessage: true, Token);
+            File.Delete(backupPath);
+        }
+
         private async Task WatchForBroadcasts(CancellationToken token)
         {
             Debug.WriteLine($"Socket {socketId} starting to listen for broadcasts...");

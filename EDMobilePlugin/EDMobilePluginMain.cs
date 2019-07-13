@@ -43,11 +43,11 @@ namespace EDMobilePlugin
         public void EDDRefresh(string cmdname, EDDDLLIF.JournalEntry lastje)
         {
             Debug.WriteLine($"EDDRefresh: {cmdname}, Journal Entry {lastje.indexno}");
+            //
+            //var he = _managedcallbacks.GetHistoryEvent(lastje.indexno);
 
-            var he = _managedcallbacks.GetHistoryEvent(lastje.indexno);
-
-            var json = JsonConvert.SerializeObject(he);
-            WebSocketHttpServer.Broadcast(json);
+            //var json = JsonConvert.SerializeObject(he);
+            //WebSocketHttpServer.Broadcast(json);
         }
 
         public void EDDTerminate()

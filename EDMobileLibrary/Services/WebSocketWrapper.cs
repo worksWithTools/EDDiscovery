@@ -106,6 +106,7 @@ namespace EDDMobile.Comms
             {
                 do
                 {
+                    //TODO: add an event handler : on package received
                     var buffer = new byte[4096];
                     response = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), cancelToken);
                     message.AddRange(new ArraySegment<byte>(buffer, 0, response.Count));
@@ -133,21 +134,44 @@ namespace EDDMobile.Comms
             }
         }
 
-        public async Task<string> ListenForMessage()
+        public async Task<byte[]> ListenForData()
         {
             if (webSocket.State == WebSocketState.Open)
             {
+                // todo; check for binary messages on queue
                 var result = await ReceiveFullMessage(CancellationToken.None);
                 if (result.Item1?.MessageType == WebSocketMessageType.Close)
                 {
                     await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
                 }
-                else
+                else if (result.Item1?.MessageType == WebSocketMessageType.Binary)
+                {
+                    var data = result.Item2?.ToArray();
+                    Debug.WriteLine($"MOBILE: received message {data.Length} bytes");
+                    return data;
+                }
+                //todo: if text push to message queue
+            }
+            return null;
+        }
+
+        public async Task<string> ListenForMessage()
+        {
+            if (webSocket.State == WebSocketState.Open)
+            {
+                //todo: check for text messages on queue
+                var result = await ReceiveFullMessage(CancellationToken.None);
+                if (result.Item1?.MessageType == WebSocketMessageType.Close)
+                {
+                    await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
+                }
+                else if (result.Item1?.MessageType == WebSocketMessageType.Text)
                 {
                     string message = Encoding.ASCII.GetString(result.Item2?.ToArray());
                     Debug.WriteLine($"MOBILE: received message {message.Left(40)}...");
                     return message;
                 }
+                //if binary push to queue
             }
             return "";
         }
