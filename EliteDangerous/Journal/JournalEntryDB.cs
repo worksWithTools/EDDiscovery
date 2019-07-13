@@ -23,6 +23,7 @@ using System.Data;
 using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace EliteDangerousCore
 {
@@ -408,6 +409,12 @@ namespace EliteDangerousCore
         static public List<JournalEntry> GetAll(int commander = -999, DateTime? after = null, DateTime? before = null,
                             JournalTypeEnum[] ids = null, DateTime? allidsafter = null)
         {
+            return Task.Run(async () => await GetAllAsync(commander, after, before, ids, allidsafter)).Result;
+        }
+
+        static public async Task<List<JournalEntry>> GetAllAsync(int commander = -999, DateTime? after = null, DateTime? before = null,
+                           JournalTypeEnum[] ids = null, DateTime? allidsafter = null, string order = "ASC")
+        {
             Dictionary<long, TravelLogUnit> tlus = TravelLogUnit.GetAll().ToDictionary(t => t.id);
 
             List<JournalEntry> list = new List<JournalEntry>();
@@ -449,11 +456,11 @@ namespace EliteDangerousCore
                     if (cnd.HasChars())
                         cmd.CommandText += " where " + cnd;
 
-                    cmd.CommandText += " Order By EventTime ASC";
+                    cmd.CommandText += $" Order By EventTime {order}";
 
                     using (DbDataReader reader = cmd.ExecuteReader())
                     {
-                        while (reader.Read())
+                        while (await reader.ReadAsync())
                         {
                             JournalEntry sys = JournalEntry.CreateJournalEntry(reader);
                             sys.beta = tlus.ContainsKey(sys.TLUId) ? tlus[sys.TLUId].Beta : false;

@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using System.Linq;
 
 namespace EDMobileLibrary.ViewModels
 {
@@ -33,15 +34,12 @@ namespace EDMobileLibrary.ViewModels
                 if (response == null)
                     return;
                 Debug.WriteLine($"INFO: msg received: {response.RequestType}");
-                if (response.RequestType == WebSocketMessage.GET_JOURNAL)
+                if (response.RequestType == WebSocketMessage.BROADCAST)
                 {
-                    JournalEntry entry = JsonConvert.DeserializeObject<JournalEntry>(response.Responses[0], new JsonConverter[] { new JournalEntryConverter() });
-                    items.Add(entry);
-                }
-                else if (response.RequestType == WebSocketMessage.BROADCAST)
-                {
+                    //TODO: we'll need to push the broadcast to the dbase now
                     JournalEntry entry = JsonConvert.DeserializeObject<JournalEntry>(response.Responses[0], new JsonConverter[] { new JournalEntryConverter() });
                     items.Insert(0, entry);
+
                 }
 
             }
@@ -60,9 +58,24 @@ namespace EDMobileLibrary.ViewModels
 
             try
             {
-                items.Clear();
-                await App.WebSocket.Send(WebSocketMessage.GET_JOURNAL);
-                Items = new ObservableCollection<JournalEntry>();
+                Items.Clear();
+                //TODO: add commander filter
+                var yesterday = DateTime.Now.Subtract(TimeSpan.FromDays(1));
+                var newItems = await JournalEntry.GetAllAsync(after:yesterday, order:"DESC");
+
+                do
+                {
+                    await Task.Run(() =>
+                    {
+                        var chunkSize = Math.Min(10, newItems.Count);
+                        var nextChunk = newItems.Take(chunkSize);
+                        foreach (var i in nextChunk)
+                            Items.Add(i);
+                        newItems.RemoveRange(0, chunkSize);
+                    });
+                } while (newItems.Count > 0);
+
+
             }
             catch (Exception ex)
             {

@@ -25,6 +25,7 @@ namespace EDDMobileImpl
 
         protected async override void OnStart()
         {
+            // TODO: allow it to timeout connecting...
             await WebSocket.Connect();
 
             await UserDataCache.Initialise();
