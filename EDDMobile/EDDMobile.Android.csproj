@@ -147,6 +147,10 @@
       <Project>{972d6060-b589-405c-8807-6cad65f70f6a}</Project>
       <Name>EDMobileLibrary</Name>
     </ProjectReference>
+    <ProjectReference Include="..\EliteDangerous\EliteDangerous.csproj">
+      <Project>{019917a4-7342-4f67-8aaf-9e20c016a935}</Project>
+      <Name>EliteDangerous</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

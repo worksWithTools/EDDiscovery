@@ -407,7 +407,7 @@ namespace EliteDangerousCore
         }
 
         static public List<JournalEntry> GetAll(int commander = -999, DateTime? after = null, DateTime? before = null,
-                            JournalTypeEnum[] ids = null, DateTime? allidsafter = null, int limit = -1)
+                            JournalTypeEnum[] ids = null, DateTime? allidsafter = null, string order = "ASC", int limit = -1)
         {
             return Task.Run(async () => await GetAllAsync(commander, after, before, ids, allidsafter)).Result;
         }
@@ -475,7 +475,6 @@ namespace EliteDangerousCore
             }
         }
 
-
         public static List<JournalEntry> GetByEventType(JournalTypeEnum eventtype, int commanderid, DateTime start, DateTime stop)
         {
             Dictionary<long, TravelLogUnit> tlus = TravelLogUnit.GetAll().ToDictionary(t => t.id);
@@ -526,6 +525,27 @@ namespace EliteDangerousCore
                 }
             }
             return vsc;
+        }
+
+        public static JournalEntry GetLastEvent(int currentCommander)
+        {
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+            {
+                using (DbCommand cmd = cn.CreateCommand("SELECT * FROM JournalEntries WHERE CommanderId = @cmdrid ORDER BY EventTime DESC LIMIT 1"))
+                {
+                    cmd.AddParameterWithValue("@cmdrid", currentCommander);
+                    using (DbDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            JournalEntry ent = CreateJournalEntry(reader);
+                            return ent;
+                        }
+                    }
+                }
+            }
+
+            return null;
         }
 
         public static JournalEntry GetLast(int cmdrid, DateTime before, Func<JournalEntry, bool> filter)

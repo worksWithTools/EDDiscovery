@@ -75,8 +75,14 @@ namespace EliteDangerousCore
             };
         static public JournalTypeEnum[] JumpEssentialEvents = new JournalTypeEnum[]     // 
             {
-                JournalTypeEnum.FSDJump,
+                JournalTypeEnum.FSDJump
             };
+
+        static public JournalTypeEnum[] StatusEssentialEvents = new JournalTypeEnum[]     // 
+            {
+                JournalTypeEnum.FSDJump, JournalTypeEnum.Loadout, JournalTypeEnum.LoadGame
+            };
+        
 
         static public JournalTypeEnum[] NoEssentialEvents = new JournalTypeEnum[]     // 
             {

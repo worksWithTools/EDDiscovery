@@ -1,6 +1,7 @@
 ﻿using EDDMobileImpl;
 using EDPlugin;
 using EliteDangerousCore;
+using EliteDangerousCore.DB;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -33,7 +34,23 @@ namespace EDMobileLibrary.Services
                 File.WriteAllBytes(App.Options.UserDatabasePath, result);
             }
 
+            await InitialiseUserDB();
+
+            await InitialiseSystemDB();
+
             await LoadFSDHistory();
+
+        }
+
+        private static async Task InitialiseUserDB()
+        {
+             await Task.Run(() => SQLiteConnectionUser.Initialize());
+        }
+
+        private static async Task InitialiseSystemDB()
+        {
+            // note: for now won'actually populate this... it's just for backward compatibility...
+            await Task.Run(() => SQLiteConnectionSystem.Initialize());
         }
 
         private static async Task LoadFSDHistory()
@@ -50,8 +67,8 @@ namespace EDMobileLibrary.Services
                     History = HistoryList.LoadHistory(null, () => false,
                         (p, s) => Debug.WriteLine("Processing history entry {0}:{1}", p, s), 
                         CurrentCommander: EDCommander.CurrentCmdrID,
-                        essentialitems: nameof(JournalEssentialEvents.JumpEssentialEvents),
-                        fullhistoryloaddaylimit: 1);
+                        essentialitems: JournalEssentialEvents.StatusEssentialEvents,
+                        fullhistoryloaddaylimit: 1); 
                 });
 
                 Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Load history complete with " + History.Count + " records");

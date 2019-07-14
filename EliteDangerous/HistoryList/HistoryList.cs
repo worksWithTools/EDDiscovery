@@ -245,6 +245,11 @@ namespace EliteDangerousCore
             }
         }
 
+        public HistoryEntry CurrentShipLoadout
+        {
+            get => LastFirst.Where((h) => h.EntryType == JournalTypeEnum.Loadout).First();
+        }
+
         public bool IsCurrentlyLanded { get { HistoryEntry he = GetLast; return (he != null) ? he.IsLanded : false; } }     //safe methods
         public bool IsCurrentlyDocked { get { HistoryEntry he = GetLast; return (he != null) ? he.IsDocked : false; } }
         public ISystem CurrentSystem { get { HistoryEntry he = GetLast; return (he != null) ? he.System : null; } }  // current system
@@ -263,6 +268,7 @@ namespace EliteDangerousCore
                 return historylist.FindLast(x => x.IsFSDJump);
             }
         }
+
 
         public HistoryEntry GetLastHistoryEntry(Predicate<HistoryEntry> where)
         {
@@ -923,6 +929,23 @@ namespace EliteDangerousCore
                                     string essentialitems = ""
                                     )
         {
+            // For backwards compatibility...
+            var list = (essentialitems == nameof(JournalEssentialEvents.JumpScanEssentialEvents)) ? JournalEssentialEvents.JumpScanEssentialEvents :
+                        (essentialitems == nameof(JournalEssentialEvents.JumpEssentialEvents)) ? JournalEssentialEvents.JumpEssentialEvents :
+                        (essentialitems == nameof(JournalEssentialEvents.NoEssentialEvents)) ? JournalEssentialEvents.NoEssentialEvents :
+                        (essentialitems == nameof(JournalEssentialEvents.FullStatsEssentialEvents)) ? JournalEssentialEvents.FullStatsEssentialEvents :
+                        JournalEssentialEvents.EssentialEvents;
+            return LoadHistory(journalmonitor, cancelRequested, reportProgress, NetLogPath, ForceNetLogReload, ForceJournalReload, CurrentCommander, fullhistoryloaddaylimit, list);
+        }
+        public static HistoryList LoadHistory(EDJournalClass journalmonitor, Func<bool> cancelRequested, Action<int, string> reportProgress,
+                                    string NetLogPath = null,
+                                    bool ForceNetLogReload = false,
+                                    bool ForceJournalReload = false,
+                                    int CurrentCommander = Int32.MinValue,
+                                    int fullhistoryloaddaylimit = 0,
+                                    JournalTypeEnum[] essentialitems = null
+                                    )
+        {
             HistoryList hist = new HistoryList();
 
             if (journalmonitor != null) // might we want to move this?
@@ -946,15 +969,11 @@ namespace EliteDangerousCore
             
             if ( fullhistoryloaddaylimit >0 )
             {
-                var list = (essentialitems == nameof(JournalEssentialEvents.JumpScanEssentialEvents)) ? JournalEssentialEvents.JumpScanEssentialEvents :
-                           (essentialitems == nameof(JournalEssentialEvents.JumpEssentialEvents)) ? JournalEssentialEvents.JumpEssentialEvents :
-                           (essentialitems == nameof(JournalEssentialEvents.NoEssentialEvents)) ? JournalEssentialEvents.NoEssentialEvents :
-                           (essentialitems == nameof(JournalEssentialEvents.FullStatsEssentialEvents)) ? JournalEssentialEvents.FullStatsEssentialEvents :
-                            JournalEssentialEvents.EssentialEvents;
+                DateTime lastDate = JournalEntry.GetLastEvent(CurrentCommander).EventTimeUTC;
 
                 jlist = JournalEntry.GetAll(CurrentCommander, 
-                    ids: list,
-                    allidsafter: DateTime.UtcNow.Subtract(new TimeSpan(fullhistoryloaddaylimit, 0, 0, 0))
+                    ids: essentialitems,
+                    allidsafter: lastDate.Subtract(new TimeSpan(fullhistoryloaddaylimit, 0, 0, 0))
                     ).OrderBy(x => x.EventTimeUTC).ThenBy(x => x.Id).ToList();
             }
             else

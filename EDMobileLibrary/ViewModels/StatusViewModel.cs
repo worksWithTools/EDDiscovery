@@ -33,9 +33,9 @@ namespace EDDMobileImpl.ViewModels
 
             try
             {
-                lastEntry = UserDataCache.History?.GetLast;
-                
-                lastSystem = UserDataCache.History?.GetLastFSD?.journalEntry as JournalFSDJump;
+                shipLoadout = UserDataCache.History?.CurrentShipLoadout;
+
+                lastSystem = UserDataCache.History?.GetLastFSD;
 
                 OnPropertyChanged(null); // should result in all props being refreshed.
             }
@@ -48,33 +48,34 @@ namespace EDDMobileImpl.ViewModels
                 IsBusy = false;
             }
         }
-        public string Visits { get => UserDataCache.History?.GetVisitsCount(lastSystem.Body).ToString() ?? "Unknown"; }
+        public string Visits { get => UserDataCache.History?.GetVisitsCount(lastSystem?.System?.Name).ToString() ?? "Unknown"; }
 
         public String WhereAmI {
-            get => lastEntry?.WhereAmI ?? "Unknown";
+            get => lastSystem?.WhereAmI ?? "Unknown";
         }
         public String Note
         {
-            get => lastEntry?.snc?.Note ?? "";
+            get => lastSystem?.snc?.Note ?? "";
         }
-        public ISystem System { get => lastEntry?.System; }
-        public ShipInformation ShipInformation { get => lastEntry?.ShipInformation; }
+        public ISystem System { get => shipLoadout?.System; }
+        public ShipInformation ShipInformation { get => shipLoadout?.ShipInformation; }
 
         public String Fuel { get => String.Format($"{ShipInformation?.FuelLevel} / {ShipInformation?.FuelCapacity ?? 1}"); }
-        public int MaterialsCount { get => lastEntry?.MaterialCommodity?.MaterialsCount ?? 0; }
-        public int CargoCount { get => lastEntry?.MaterialCommodity?.CargoCount ?? 0; }
+        public int MaterialsCount { get => shipLoadout?.MaterialCommodity?.MaterialsCount ?? 0; }
+        public int CargoCount { get => shipLoadout?.MaterialCommodity?.CargoCount ?? 0; }
         
-        public int DataCount { get => lastEntry?.MaterialCommodity?.DataCount ?? 0; }
+        public int DataCount { get => shipLoadout?.MaterialCommodity?.DataCount ?? 0; }
 
-        public string Allegiance { get => lastSystem?.Allegiance; }
-        public string PrimaryEconomy { get => lastSystem?.Economy_Localised; }
-        public string Government { get => lastSystem?.Government_Localised; }
-        public string State { get => lastSystem?.FactionState.SplitCapsWord(); }
-        public string Security { get => lastSystem?.Security_Localised; }
+        private JournalFSDJump lastFSD => lastSystem?.journalEntry as JournalFSDJump;
+        public string Allegiance { get => lastFSD?.Allegiance; }
+        public string PrimaryEconomy { get => lastFSD?.Economy_Localised; }
+        public string Government { get => lastFSD?.Government_Localised; }
+        public string State { get => lastFSD?.FactionState.SplitCapsWord(); }
+        public string Security { get => lastFSD?.Security_Localised; }
 
-        public string Credits { get => lastEntry?.Credits.ToString("N0") ?? "Unknown"; }
+        public string Credits { get => shipLoadout?.Credits.ToString("N0") ?? "Unknown"; }
 
-        private HistoryEntry lastEntry;
-        private JournalFSDJump lastSystem;
+        private HistoryEntry shipLoadout;
+        private HistoryEntry lastSystem;
     }
 }
