@@ -925,7 +925,6 @@ namespace EliteDangerousCore
                                     bool ForceNetLogReload = false,
                                     bool ForceJournalReload = false,
                                     int CurrentCommander = Int32.MinValue,
-                                    int fullhistoryloaddaylimit = 0,
                                     string essentialitems = ""
                                     )
         {
@@ -935,29 +934,19 @@ namespace EliteDangerousCore
                         (essentialitems == nameof(JournalEssentialEvents.NoEssentialEvents)) ? JournalEssentialEvents.NoEssentialEvents :
                         (essentialitems == nameof(JournalEssentialEvents.FullStatsEssentialEvents)) ? JournalEssentialEvents.FullStatsEssentialEvents :
                         JournalEssentialEvents.EssentialEvents;
-            TimeSpan timeLimit = fullhistoryloaddaylimit > 0 ? new TimeSpan(fullhistoryloaddaylimit, 0, 0, 0) : TimeSpan.Zero;
-
+            
             return LoadHistory(journalmonitor, cancelRequested, reportProgress,
                 NetLogPath, ForceNetLogReload, ForceJournalReload, CurrentCommander, list);
         }
-        // Since we can't create a TimeSpan optional parameter, we'll have to go old school and overload...
+        
         public static HistoryList LoadHistory(EDJournalClass journalmonitor, Func<bool> cancelRequested, Action<int, string> reportProgress,
                                     string NetLogPath = null,
                                     bool ForceNetLogReload = false,
                                     bool ForceJournalReload = false,
                                     int CurrentCommander = Int32.MinValue,
-                                    JournalTypeEnum[] essentialitems = null)
-        {
-            return LoadHistory(journalmonitor, cancelRequested, reportProgress, TimeSpan.Zero,
-                NetLogPath, ForceNetLogReload, ForceJournalReload, CurrentCommander, essentialitems);
-        }
-        public static HistoryList LoadHistory(EDJournalClass journalmonitor, Func<bool> cancelRequested, Action<int, string> reportProgress,
-                                    TimeSpan fullhistoryloadtimelimit,
-                                    string NetLogPath = null,
-                                    bool ForceNetLogReload = false,
-                                    bool ForceJournalReload = false,
-                                    int CurrentCommander = Int32.MinValue,
-                                    JournalTypeEnum[] essentialitems = null
+                                    JournalTypeEnum[] essentialitems = null,
+                                    int fullhistoryloadhourslimit = 0,
+                                    JournalTypeEnum startFromLast = JournalTypeEnum.Unknown
                                     )
         {
             HistoryList hist = new HistoryList();
@@ -981,13 +970,22 @@ namespace EliteDangerousCore
 
             List<JournalEntry> jlist;
             
-            if ( fullhistoryloadtimelimit != TimeSpan.Zero)
+            if (fullhistoryloadhourslimit > 0)
             {
                 DateTime lastDate = JournalEntry.GetLastEvent(CurrentCommander).EventTimeUTC;
 
                 jlist = JournalEntry.GetAll(CurrentCommander, 
                     ids: essentialitems,
-                    allidsafter: lastDate.Subtract(fullhistoryloadtimelimit)
+                    allidsafter: lastDate.Subtract(new TimeSpan(fullhistoryloadhourslimit, 0,0))
+                    ).OrderBy(x => x.EventTimeUTC).ThenBy(x => x.Id).ToList();
+            }
+            else if (startFromLast != JournalTypeEnum.Unknown)
+            {
+                DateTime lastDate = JournalEntry.GetLastEvent(CurrentCommander, startFromLast).EventTimeUTC;
+
+                jlist = JournalEntry.GetAll(CurrentCommander,
+                    ids: essentialitems,
+                    after: lastDate
                     ).OrderBy(x => x.EventTimeUTC).ThenBy(x => x.Id).ToList();
             }
             else

@@ -65,9 +65,9 @@ namespace EDMobileLibrary.Services
                     // do we need to rewrite this to be more friendly to the app?
                     History = HistoryList.LoadHistory(null, () => false,
                         (p, s) => Debug.WriteLine("Processing history entry {0}:{1}", p, s),
-                        new TimeSpan(0, 30, 0), // the last 30 mins of play ought to do
                         CurrentCommander: EDCommander.CurrentCmdrID,
-                        essentialitems: JournalEssentialEvents.StatusEssentialEvents) ; 
+                        essentialitems: JournalEssentialEvents.StatusEssentialEvents,
+                        startFromLast: JournalTypeEnum.FSDJump) ; 
                 });
 
                 Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Load history complete with " + History.Count + " records");

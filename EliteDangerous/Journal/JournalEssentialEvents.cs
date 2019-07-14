@@ -78,11 +78,13 @@ namespace EliteDangerousCore
                 JournalTypeEnum.FSDJump
             };
 
-        static public JournalTypeEnum[] StatusEssentialEvents = new JournalTypeEnum[]     // 
+        static public JournalTypeEnum[] StatusEssentialEvents 
+        {
+            get
             {
-                JournalTypeEnum.FSDJump, JournalTypeEnum.Loadout, JournalTypeEnum.LoadGame
-            };
-        
+                return EssentialEvents.Concat(new JournalTypeEnum[] { JournalTypeEnum.LoadGame }).ToArray();
+            }
+        }
 
         static public JournalTypeEnum[] NoEssentialEvents = new JournalTypeEnum[]     // 
             {

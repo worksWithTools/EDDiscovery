@@ -548,6 +548,28 @@ namespace EliteDangerousCore
             return null;
         }
 
+        //TODO: combine with previous...
+        public static JournalEntry GetLastEvent(int currentCommander, JournalTypeEnum eventType)
+        {
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+            {
+                using (DbCommand cmd = cn.CreateCommand("SELECT * FROM JournalEntries WHERE CommanderId = @cmdrid AND EventTypeId = @eventtype ORDER BY EventTime DESC LIMIT 1"))
+                {
+                    cmd.AddParameterWithValue("@cmdrid", currentCommander);
+                    cmd.AddParameterWithValue("@eventtype", eventType);
+                    using (DbDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            JournalEntry ent = CreateJournalEntry(reader);
+                            return ent;
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
         public static JournalEntry GetLast(int cmdrid, DateTime before, Func<JournalEntry, bool> filter)
         {
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))

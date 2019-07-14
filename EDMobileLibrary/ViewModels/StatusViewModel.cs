@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System;
 using System.Data.Common;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using static BaseUtils.CSVRead;
@@ -48,10 +49,15 @@ namespace EDDMobileImpl.ViewModels
                 IsBusy = false;
             }
         }
-        public string Visits { get => UserDataCache.History?.GetVisitsCount(lastSystem?.System?.Name).ToString() ?? "Unknown"; }
+        public string Visits { get {
+                if (lastFSD == null) return "Unknown";
+                var result = Task.Run(async () => await JournalEntry.GetAllAsync(EDCommander.CurrentCmdrID, ids: new JournalTypeEnum[] { JournalTypeEnum.FSDJump })).Result;
+                return result?.Count((s) => (s as JournalFSDJump).BodyID == lastFSD.BodyID).ToString() ?? "Unknown";
+            }
+        }
 
         public String WhereAmI {
-            get => lastSystem?.WhereAmI ?? "Unknown";
+            get => UserDataCache.History?.GetLast?.WhereAmI ?? "Unknown";
         }
         public String Note
         {
@@ -66,7 +72,6 @@ namespace EDDMobileImpl.ViewModels
         
         public int DataCount { get => shipLoadout?.MaterialCommodity?.DataCount ?? 0; }
 
-        private JournalFSDJump lastFSD => lastSystem?.journalEntry as JournalFSDJump;
         public string Allegiance { get => lastFSD?.Allegiance; }
         public string PrimaryEconomy { get => lastFSD?.Economy_Localised; }
         public string Government { get => lastFSD?.Government_Localised; }
@@ -75,6 +80,7 @@ namespace EDDMobileImpl.ViewModels
 
         public string Credits { get => shipLoadout?.Credits.ToString("N0") ?? "Unknown"; }
 
+        private JournalFSDJump lastFSD => lastSystem?.journalEntry as JournalFSDJump;
         private HistoryEntry shipLoadout;
         private HistoryEntry lastSystem;
     }
