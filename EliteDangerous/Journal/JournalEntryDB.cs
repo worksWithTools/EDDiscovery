@@ -407,13 +407,13 @@ namespace EliteDangerousCore
         }
 
         static public List<JournalEntry> GetAll(int commander = -999, DateTime? after = null, DateTime? before = null,
-                            JournalTypeEnum[] ids = null, DateTime? allidsafter = null)
+                            JournalTypeEnum[] ids = null, DateTime? allidsafter = null, int limit = -1)
         {
             return Task.Run(async () => await GetAllAsync(commander, after, before, ids, allidsafter)).Result;
         }
 
         static public async Task<List<JournalEntry>> GetAllAsync(int commander = -999, DateTime? after = null, DateTime? before = null,
-                           JournalTypeEnum[] ids = null, DateTime? allidsafter = null, string order = "ASC")
+                           JournalTypeEnum[] ids = null, DateTime? allidsafter = null, string order = "ASC", int limit = -1)
         {
             Dictionary<long, TravelLogUnit> tlus = TravelLogUnit.GetAll().ToDictionary(t => t.id);
 
@@ -457,6 +457,8 @@ namespace EliteDangerousCore
                         cmd.CommandText += " where " + cnd;
 
                     cmd.CommandText += $" Order By EventTime {order}";
+                    if (limit > 0)
+                        cmd.CommandText += $" LIMIT {limit}";
 
                     using (DbDataReader reader = cmd.ExecuteReader())
                     {

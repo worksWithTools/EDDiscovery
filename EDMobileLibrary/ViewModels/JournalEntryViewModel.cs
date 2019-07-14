@@ -59,9 +59,8 @@ namespace EDMobileLibrary.ViewModels
             try
             {
                 Items.Clear();
-                //TODO: add commander filter
-                var yesterday = DateTime.Now.Subtract(TimeSpan.FromHours(12));
-                var newItems = await JournalEntry.GetAllAsync(after:yesterday, order:"DESC");
+                //TODO: limits / ranges
+                var newItems = await JournalEntry.GetAllAsync(commander:EDCommander.CurrentCmdrID, order:"DESC", limit: 100);
 
                 do
                 {
