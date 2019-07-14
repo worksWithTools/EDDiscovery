@@ -72,6 +72,8 @@ namespace EDDMobileImpl.ViewModels
         public string State { get => lastSystem?.FactionState.SplitCapsWord(); }
         public string Security { get => lastSystem?.Security_Localised; }
 
+        public string Credits { get => lastEntry?.Credits.ToString("N0") ?? "Unknown"; }
+
         private HistoryEntry lastEntry;
         private JournalFSDJump lastSystem;
     }

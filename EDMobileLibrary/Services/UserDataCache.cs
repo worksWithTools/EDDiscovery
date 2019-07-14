@@ -27,16 +27,16 @@ namespace EDMobileLibrary.Services
 
                 Debug.WriteLine("MOBILE::UserDataCache requesting new DB");
                 await App.WebSocket.Send(WebSocketMessage.INIT_DB);
-                // TODO: we'll need a dialog for this...
                 var result = await App.WebSocket.ListenForData();
 
                 Debug.WriteLine($"MOBILE::UserDataCache persisting new DB ({result.Length} bytes)");
                 File.WriteAllBytes(App.Options.UserDatabasePath, result);
             }
-            await LoadHistory();
+
+            await LoadFSDHistory();
         }
 
-        private static async Task LoadHistory()
+        private static async Task LoadFSDHistory()
         {
             
             try
@@ -45,13 +45,12 @@ namespace EDMobileLibrary.Services
 
                 await Task.Run(() =>
                 {
-                    //TODO: implement a cancel handler
-                    
+
                     // do we need to rewrite this to be more friendly to the app?
                     History = HistoryList.LoadHistory(null, () => false,
                         (p, s) => Debug.WriteLine("Processing history entry {0}:{1}", p, s), 
                         CurrentCommander: EDCommander.CurrentCmdrID,
-                        essentialitems: nameof(JournalEssentialEvents.FullStatsEssentialEvents),
+                        essentialitems: nameof(JournalEssentialEvents.JumpEssentialEvents),
                         fullhistoryloaddaylimit: 1);
                 });
 

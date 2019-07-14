@@ -25,6 +25,7 @@ namespace EDDMobileImpl
 
         protected async override void OnStart()
         {
+            // TODO: we'll need a dialog for this...
             await UserDataCache.Initialise();
 
             await WebSocket.Connect();
