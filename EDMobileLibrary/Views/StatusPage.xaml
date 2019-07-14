@@ -44,8 +44,6 @@
                         <Label Text="{Binding System.Name}" Grid.Row="0" Grid.Column="1" TextColor="{StaticResource SecondaryText}"/>
                         <Label Text="Visits" FontAttributes="Bold" Grid.Column="0" Grid.Row="1"/>
                         <Label Text="{Binding Visits}" Grid.Column="1" Grid.Row="1" TextColor="{StaticResource SecondaryText}"/>
-                        <Label Text="Credits" FontAttributes="Bold" Grid.Column="2" Grid.Row="1"/>
-                        <Label Text="{Binding Credits}" Grid.Column="3" Grid.Row="1" TextColor="{StaticResource SecondaryText}"/>
                         <Label Text="Body" FontAttributes="Bold" Grid.Row="2" Grid.Column="0"/>
                         <Label Text="{Binding WhereAmI}" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" TextColor="{StaticResource SecondaryText}"/>
                         <Label Text="Position" FontAttributes="Bold" Grid.Row="3" Grid.Column="0"/>

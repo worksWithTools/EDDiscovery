@@ -78,8 +78,6 @@ namespace EDDMobileImpl.ViewModels
         public string State { get => lastFSD?.FactionState.SplitCapsWord(); }
         public string Security { get => lastFSD?.Security_Localised; }
 
-        public string Credits { get => shipLoadout?.Credits.ToString("N0") ?? "Unknown"; }
-
         private JournalFSDJump lastFSD => lastSystem?.journalEntry as JournalFSDJump;
         private HistoryEntry shipLoadout;
         private HistoryEntry lastSystem;
