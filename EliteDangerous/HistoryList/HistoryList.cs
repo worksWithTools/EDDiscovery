@@ -925,6 +925,7 @@ namespace EliteDangerousCore
                                     bool ForceNetLogReload = false,
                                     bool ForceJournalReload = false,
                                     int CurrentCommander = Int32.MinValue,
+                                    int fullhistoryloaddaylimit = 0,
                                     string essentialitems = ""
                                     )
         {
@@ -945,7 +946,7 @@ namespace EliteDangerousCore
                                     bool ForceJournalReload = false,
                                     int CurrentCommander = Int32.MinValue,
                                     JournalTypeEnum[] essentialitems = null,
-                                    int fullhistoryloadhourslimit = 0,
+                                    int fullhistoryloaddaylimit = 0,
                                     JournalTypeEnum startFromLast = JournalTypeEnum.Unknown
                                     )
         {
@@ -970,13 +971,13 @@ namespace EliteDangerousCore
 
             List<JournalEntry> jlist;
             
-            if (fullhistoryloadhourslimit > 0)
+            if (fullhistoryloaddaylimit > 0)
             {
                 DateTime lastDate = JournalEntry.GetLastEvent(CurrentCommander).EventTimeUTC;
 
                 jlist = JournalEntry.GetAll(CurrentCommander, 
                     ids: essentialitems,
-                    allidsafter: lastDate.Subtract(new TimeSpan(fullhistoryloadhourslimit, 0,0))
+                    allidsafter: lastDate.Subtract(new TimeSpan(fullhistoryloaddaylimit,0, 0,0))
                     ).OrderBy(x => x.EventTimeUTC).ThenBy(x => x.Id).ToList();
             }
             else if (startFromLast != JournalTypeEnum.Unknown)

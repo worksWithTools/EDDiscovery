@@ -5,20 +5,6 @@ using System.Collections.Generic;
 
 namespace EDPlugin
 {
-    public class ManagedCallbacks
-    {
-        public delegate bool EDDRequestRefresh(/*int lastjid*/);
-        public delegate List<HistoryEntry> EDDGetHistory(int entryCount);
-        public delegate HistoryEntry EDDGetLastHistory();
-        public delegate HistoryEntry EDDGetHistoryEvent(long eventid);
-        public delegate HistoryEntry EDDGetLastHistoryEntry(Predicate<HistoryEntry> where, HistoryEntry frominclusive);
-
-        public EDDGetHistory GetHistory;
-        public EDDGetLastHistory GetLastHistory;
-        public EDDGetHistoryEvent GetHistoryEvent;
-        public EDDGetLastHistoryEntry GetLastHistoryEntry;
-    }
-
     public static class WebSocketMessage
     {
         public const string BROADCAST = "broadcast";

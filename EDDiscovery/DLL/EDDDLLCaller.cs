@@ -33,10 +33,10 @@ namespace EDDiscovery.DLL
         private IntPtr pActionCommand = IntPtr.Zero;
 
 
-        public static IEDDDLLCaller MakeCaller(string path, ManagedCallbacks managedCalls)
+        public static IEDDDLLCaller MakeCaller(string path)
         {
             if (PortableExecutableHelper.IsDotNetAssembly(path))
-                return new EDDManagedCaller(path, managedCalls);
+                return new EDDManagedCaller(path);
 
             return new EDDDLLCaller(path);
         }

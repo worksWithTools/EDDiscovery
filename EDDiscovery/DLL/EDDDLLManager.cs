@@ -32,7 +32,7 @@ namespace EDDiscovery.DLL
         private List<IEDDDLLCaller> dlls = new List<IEDDDLLCaller>();
 
         // return loaded, failed, notallowed
-        public Tuple<string,string,string> Load(string directory, string ourversion, string dllfolder, EDDDLLIF.EDDCallBacks callbacks, string allowed, EDPlugin.ManagedCallbacks managedCalls = null)
+        public Tuple<string,string,string> Load(string directory, string ourversion, string dllfolder, EDDDLLIF.EDDCallBacks callbacks, string allowed)
         {
             string loaded = "";
             string failed = "";
@@ -50,7 +50,7 @@ namespace EDDiscovery.DLL
                 {
                     string filename = System.IO.Path.GetFileNameWithoutExtension(f.FullName);
 
-                    IEDDDLLCaller caller = EDDDLLCaller.MakeCaller(f.FullName, managedCalls);
+                    IEDDDLLCaller caller = EDDDLLCaller.MakeCaller(f.FullName);
 
                     if (caller.Loaded)        // if loaded (meaning it loaded, and its got EDDInitialise)
                     {

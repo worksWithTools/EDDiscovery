@@ -8,8 +8,7 @@ namespace EDPlugin
     public interface IManagedDll
     {
         String EDDInitialise(string vstr,
-                             EDDCallBacks callbacks,
-                             ManagedCallbacks managedCallbacks);
+                             EDDCallBacks callbacks);
 
         void EDDRefresh(string cmdname, JournalEntry lastje);
 

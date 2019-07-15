@@ -45,7 +45,6 @@ namespace EDDiscovery
 
         public EDDiscovery.DLL.EDDDLLManager DLLManager;
         public EDPlugin.EDDDLLIF.EDDCallBacks DLLCallBacks;
-        public EDPlugin.ManagedCallbacks DLLManagedCallbacks;
 
         public Actions.ActionController DEBUGGETAC { get { return actioncontroller; } }
 
@@ -396,14 +395,13 @@ namespace EDDiscovery
 
             DLLCallBacks.RequestHistory = DLLRequestHistory;
             DLLCallBacks.RunAction = DLLRunAction;
-            DLLManagedCallbacks = new EDPlugin.ManagedCallbacks();
-        
+            
             
             bool retry = false;
             Tuple<string, string, string> res;
             do
             {
-                res = DLLManager.Load(EDDOptions.Instance.DLLAppDirectory(), EDDApplicationContext.AppVersion, EDDOptions.Instance.DLLAppDirectory(), DLLCallBacks, alloweddlls, DLLManagedCallbacks);
+                res = DLLManager.Load(EDDOptions.Instance.DLLAppDirectory(), EDDApplicationContext.AppVersion, EDDOptions.Instance.DLLAppDirectory(), DLLCallBacks, alloweddlls);
 
 
                 if (res.Item3.HasChars())
@@ -424,14 +422,6 @@ namespace EDDiscovery
                     }
                 }
             } while (retry);
-
-            if (DLLManager.HasManaged)
-            {
-                DLLManagedCallbacks.GetLastHistory = () => GetLastHistoryEntry();
-                DLLManagedCallbacks.GetHistory = (i) => GetHistory(i);
-                DLLManagedCallbacks.GetHistoryEvent = (i) => GetHistoryEvent(i);
-                DLLManagedCallbacks.GetLastHistoryEntry = (p,i) => GetLastHistoryEvent(p,i);
-            }
 
             if (res.Item1.HasChars())
                 LogLine(string.Format("DLLs loaded: {0}".Tx(this, "DLLL"), res.Item1));

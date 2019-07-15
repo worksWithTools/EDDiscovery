@@ -8,8 +8,6 @@ namespace EDMobilePlugin
 {
     public class EDMobilePluginMain : IManagedDll
     {
-        ManagedCallbacks _managedcallbacks;
-
         public string EDDActionCommand(string cmdname, string[] paras)
         {
             Debug.WriteLine($"EDDActionCommand: {cmdname}, {paras}");
@@ -21,11 +19,10 @@ namespace EDMobilePlugin
             Debug.WriteLine($"EDDActionJournalEntry: {lastje.ToJson()}");
         }
 
-        public string EDDInitialise(string vstr, EDDDLLIF.EDDCallBacks callbacks, ManagedCallbacks managedCallbacks)
+        public string EDDInitialise(string vstr, EDDDLLIF.EDDCallBacks callbacks)
         {
-            _managedcallbacks = managedCallbacks;
             AutoDiscoveryServer.Start();
-            WebSocketHttpServer.Start("http://+:80/eddmobile/", callbacks, managedCallbacks);
+            WebSocketHttpServer.Start("http://+:80/eddmobile/", callbacks);
  
             return Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
@@ -34,9 +31,9 @@ namespace EDMobilePlugin
         {
             Debug.WriteLine($"EDDNewJournalEntry: {nje.ToJson()}");
 
-            var he = _managedcallbacks.GetHistoryEvent(nje.indexno);
-            var json = JsonConvert.SerializeObject(he.journalEntry);
-            WebSocketHttpServer.Broadcast(json);
+            //var he = _managedcallbacks.GetHistoryEvent(nje.indexno);
+            //var json = JsonConvert.SerializeObject(he.journalEntry);
+            //WebSocketHttpServer.Broadcast(json);
             
         }
 

@@ -24,14 +24,12 @@ namespace EDMobilePlugin
         private readonly CancellationToken Token;
         private AutoResetEvent broadcastAvailable = new AutoResetEvent(false);
         private ConcurrentQueue<string> broadCastMessages = new ConcurrentQueue<string>();
-        private readonly ManagedCallbacks managedCallbacks;
 
-        public WebSocketServer(int socketId, HttpListenerWebSocketContext context, ManagedCallbacks managedCallbacks, CancellationToken token)
+        public WebSocketServer(int socketId, HttpListenerWebSocketContext context, CancellationToken token)
         {
             this.socketId = socketId;
             socket = context.WebSocket;
             Token = token;
-            this.managedCallbacks = managedCallbacks;
         }
 
         internal void QueueMessage(string message)
@@ -67,30 +65,6 @@ namespace EDMobilePlugin
                         if (message == WebSocketMessage.INIT_DB)
                         {
                             await PushUserDbToMobile();
-                        }
-                        if (message == WebSocketMessage.REFRESH_STATUS)
-                        {
-                            var lasthistory = managedCallbacks?.GetLastHistory();
-                            Debug.WriteLine($"TRACE: Socket {socketId} Queueing : {lasthistory.ToString()}");
-                            var lastSystem = managedCallbacks?.GetLastHistoryEntry(x => x.journalEntry is EliteDangerousCore.JournalEvents.JournalFSDJump, lasthistory)?.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump;
-
-                            var response = new MobileWebResponse(message);
-                            response.Add(lasthistory);
-                            response.Add(lastSystem);
-                            
-                            await SendMessageToSocketAsync(socketId, socket, response, Token);
-                        }
-                        else if (message.StartsWith(WebSocketMessage.GET_JOURNAL))
-                        {
-                            //TODO: add number to get...
-                            var history = managedCallbacks?.GetHistory(25);
-                            foreach (var entry in history)
-                            {
-                                Debug.WriteLine($"Socket {socketId} Queueing : {entry.journalEntry.ToString()}");
-                                MobileWebResponse response = new MobileWebResponse(message);
-                                response.Add(entry.journalEntry);
-                                await SendMessageToSocketAsync(socketId, socket, response, Token);
-                            }
                         }
 
                     }

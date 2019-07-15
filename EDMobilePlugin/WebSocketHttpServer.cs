@@ -22,17 +22,15 @@ namespace EDMobilePlugin
         private static CancellationTokenSource TokenSource;
         private static CancellationToken Token;
         private static EDDDLLIF.EDDCallBacks _callbacks;
-        private static ManagedCallbacks _managedCallbacks;
         private static int SocketCounter = 0;
         
         // The dictionary key corresponds to active socket IDs, and the BlockingCollection wraps
         // the default ConcurrentQueue to store broadcast messages for each active socket.
         private static ConcurrentDictionary<int, WebSocketServer> WebSocketConnections = new ConcurrentDictionary<int, WebSocketServer>();
 
-        public static void Start(string uriPrefix, EDDDLLIF.EDDCallBacks callbacks, ManagedCallbacks managedCallbacks)
+        public static void Start(string uriPrefix, EDDDLLIF.EDDCallBacks callbacks)
         {
             _callbacks = callbacks;
-            _managedCallbacks = managedCallbacks;
             TokenSource = new CancellationTokenSource();
             Token = TokenSource.Token;
             Listener = new HttpListener();
@@ -116,7 +114,7 @@ namespace EDMobilePlugin
             try
             {
                 Debug.WriteLine($"Creating new WebSocketServer for socket {socketId}");
-                WebSocketServer server = new WebSocketServer(socketId, context, _managedCallbacks, Token);
+                WebSocketServer server = new WebSocketServer(socketId, context, Token);
                 WebSocketConnections.TryAdd(socketId, server);
 
                 await server.ReceiveMessagesAsync();

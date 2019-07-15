@@ -28,13 +28,11 @@ namespace EDDiscovery.DLL
         Assembly assembly;
         string _path;
         IManagedDll caller;
-        ManagedCallbacks managedCallbacks;
-        public EDDManagedCaller(string path, ManagedCallbacks managedCallbacks)
+        public EDDManagedCaller(string path)
         {
             try
             {
                 _path = path;
-                this.managedCallbacks = managedCallbacks;
                 Name = Path.GetFileNameWithoutExtension(_path);
                 var pluginPath = Path.GetDirectoryName(_path);
                 AppDomain.CurrentDomain.AppendPrivatePath(pluginPath);
@@ -68,7 +66,7 @@ namespace EDDiscovery.DLL
         {
             try
             {
-                Version = caller.EDDInitialise(ourversion, callbacks, managedCallbacks);
+                Version = caller.EDDInitialise(ourversion, callbacks);
 
                 return !String.IsNullOrEmpty(Version) && Version[0] != '!';
             }
