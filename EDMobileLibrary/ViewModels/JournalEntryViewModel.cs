@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using System.Linq;
+using EDMobileLibrary.Services;
 
 namespace EDMobileLibrary.ViewModels
 {
@@ -25,29 +26,29 @@ namespace EDMobileLibrary.ViewModels
             Items = new ObservableCollection<JournalEntry>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadHistoryCommand());
         }
-        protected override void WebSocket_OnMessage()
+        protected async override void WebSocket_OnMessage()
         {
+            while (IsBusy)
+                await Task.Delay(500);
+
+            IsBusy = true;
+
             try
             {
-                App.WebSocket.TryGetMessage(out string msg);
-                MobileWebResponse response = msg.Deserialize<MobileWebResponse>();
-                if (response == null)
-                    return;
-                Debug.WriteLine($"INFO: msg received: {response.RequestType}");
-                if (response.RequestType == WebSocketMessage.BROADCAST)
-                {
-                    //TODO: we'll need to push the broadcast to the dbase now
-                    JournalEntry entry = JsonConvert.DeserializeObject<JournalEntry>(response.Responses[0], new JsonConverter[] { new JournalEntryConverter() });
-                    items.Insert(0, entry);
-
-                }
-
+                var newItems = JournalEntry.GetNewJournalEntries(LastId);
+                await loadItems(newItems);
             }
-            catch(Exception e)
+            catch (Exception ex)
             {
-                Debug.WriteLine(e);
+                Debug.WriteLine(ex);
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
+
+        private long LastId => items.Last().Id;
 
         private async Task ExecuteLoadHistoryCommand()
         {
@@ -59,21 +60,10 @@ namespace EDMobileLibrary.ViewModels
             try
             {
                 Items.Clear();
-                //TODO: limits / ranges
-                var newItems = await JournalEntry.GetAllAsync(commander:EDCommander.CurrentCmdrID, order:"DESC", limit: 100);
+                //TODO: limits / ranges 
+                var newItems = await JournalEntry.GetAllAsync(commander: EDCommander.CurrentCmdrID, order: "DESC", limit: 100);
 
-                do
-                {
-                    await Task.Run(() =>
-                    {
-                        var chunkSize = Math.Min(10, newItems.Count);
-                        var nextChunk = newItems.Take(chunkSize);
-                        foreach (var i in nextChunk)
-                            Items.Add(i);
-                        newItems.RemoveRange(0, chunkSize);
-                    });
-                } while (newItems.Count > 0);
-
+                await loadItems(newItems);
 
             }
             catch (Exception ex)
@@ -85,6 +75,21 @@ namespace EDMobileLibrary.ViewModels
                 IsBusy = false;
             }
 
+        }
+
+        private async Task loadItems(System.Collections.Generic.List<JournalEntry> newItems)
+        {
+            do
+            {
+                await Task.Run(() =>
+                {
+                    var chunkSize = Math.Min(10, newItems.Count);
+                    var nextChunk = newItems.Take(chunkSize);
+                    foreach (var i in nextChunk)
+                        Items.Add(i);
+                    newItems.RemoveRange(0, chunkSize);
+                });
+            } while (newItems.Count > 0);
         }
     }
 }

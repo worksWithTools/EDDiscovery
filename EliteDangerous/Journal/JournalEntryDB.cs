@@ -570,6 +570,28 @@ namespace EliteDangerousCore
 
             return null;
         }
+
+        public static List<JournalEntry> GetNewJournalEntries(long lastId)
+        {
+            List<JournalEntry> newEntries = new List<JournalEntry>();
+
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+            {
+                using (DbCommand cmd = cn.CreateCommand("SELECT * FROM JournalEntries WHERE Id < @id ORDER BY EventTime DESC"))
+                {
+                    cmd.AddParameterWithValue("@id", lastId);
+                    using (DbDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            JournalEntry je = JournalEntry.CreateJournalEntry(reader);
+                            newEntries.Add(je);
+                        }
+                    }
+                }
+            }
+            return newEntries;
+        }
         public static JournalEntry GetLast(int cmdrid, DateTime before, Func<JournalEntry, bool> filter)
         {
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))

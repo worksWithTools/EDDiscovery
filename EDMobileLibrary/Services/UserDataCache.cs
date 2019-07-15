@@ -4,6 +4,7 @@ using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
@@ -16,6 +17,7 @@ namespace EDMobileLibrary.Services
         public delegate void HistoryLoadedEvent();
         public static event HistoryLoadedEvent OnHistoryLoaded = ()=>{};
         public static HistoryList History { get; private set; } = null;
+        
 
         public async static Task Initialise()
         {
@@ -25,7 +27,7 @@ namespace EDMobileLibrary.Services
             {
                 Debug.WriteLine("MOBILE::UserDataCache !!not found!!");
                 await App.WebSocket.Connect();
-
+               
                 Debug.WriteLine("MOBILE::UserDataCache requesting new DB");
                 await App.WebSocket.Send(WebSocketMessage.INIT_DB);
                 var result = await App.WebSocket.ListenForData();
@@ -39,7 +41,6 @@ namespace EDMobileLibrary.Services
             await InitialiseSystemDB();
 
             await LoadFSDHistory();
-
         }
 
         private static async Task InitialiseUserDB()

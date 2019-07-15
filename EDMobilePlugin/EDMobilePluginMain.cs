@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using System.Reflection;
 using EDPlugin;
+using EliteDangerous.DB;
+using EliteDangerousCore.DB;
 using Newtonsoft.Json;
 
 namespace EDMobilePlugin
@@ -31,10 +33,9 @@ namespace EDMobilePlugin
         {
             Debug.WriteLine($"EDDNewJournalEntry: {nje.ToJson()}");
 
-            //var he = _managedcallbacks.GetHistoryEvent(nje.indexno);
-            //var json = JsonConvert.SerializeObject(he.journalEntry);
-            //WebSocketHttpServer.Broadcast(json);
-            
+            JournalEntryClass je = JournalEntryClass.GetJournalEntry(nje.indexno); 
+            var json = JsonConvert.SerializeObject(je);
+            WebSocketHttpServer.Broadcast(json);
         }
 
         public void EDDRefresh(string cmdname, EDDDLLIF.JournalEntry lastje)

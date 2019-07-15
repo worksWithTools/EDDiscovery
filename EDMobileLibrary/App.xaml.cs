@@ -1,7 +1,12 @@
 ﻿using EDDMobile.Comms;
 using EDDMobileImpl.Views;
 using EDMobileLibrary.Services;
+using EDPlugin;
+using EliteDangerous.DB;
+using EliteDangerous.JSON;
 using EliteDangerousCore;
+using Newtonsoft.Json;
+using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -23,10 +28,32 @@ namespace EDDMobileImpl
             EDDiscovery.Icons.IconSet.ResetIcons();     // start with a clean slate loaded up from default icons
         }
 
+        private void WebSocket_OnMessage()
+        {
+            try
+            {
+                WebSocket.TryGetMessage(out string msg);
+                MobileWebResponse response = msg.Deserialize<MobileWebResponse>();
+                if (response == null)
+                    return;
+                Debug.WriteLine($"INFO: msg received: {response.RequestType}");
+                if (response.RequestType == WebSocketMessage.BROADCAST)
+                {
+                    JournalEntryClass entry = JsonConvert.DeserializeObject<JournalEntryClass>(response.Responses[0]);
+                    entry.Add();
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
+        }
+
         protected async override void OnStart()
         {
             // TODO: we'll need a dialog for this...
             await UserDataCache.Initialise();
+            WebSocket.OnMessage += WebSocket_OnMessage;
 
             await WebSocket.Connect();
 
