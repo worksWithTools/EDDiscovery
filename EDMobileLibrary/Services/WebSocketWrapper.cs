@@ -165,6 +165,7 @@ namespace EDDMobile.Comms
                 var result = await ReceiveFullMessage(CancellationToken.None);
                 if (result.Item1?.MessageType == WebSocketMessageType.Close)
                 {
+                    Debug.WriteLine($"MOBILE: Closing socket");
                     await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
                 }
                 else if (result.Item1?.MessageType == WebSocketMessageType.Text)

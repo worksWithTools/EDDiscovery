@@ -36,12 +36,7 @@ namespace EDDMobileImpl
                 MobileWebResponse response = msg.Deserialize<MobileWebResponse>();
                 if (response == null)
                     return;
-                Debug.WriteLine($"INFO: msg received: {response.RequestType}");
-                if (response.RequestType == WebSocketMessage.BROADCAST)
-                {
-                    JournalEntryClass entry = JsonConvert.DeserializeObject<JournalEntryClass>(response.Responses[0]);
-                    entry.Add();
-                }
+                UserDataCache.StoreMessage(response);
             }
             catch (Exception e)
             {

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace EliteDangerous.DB
 {
@@ -32,17 +33,7 @@ namespace EliteDangerous.DB
                     {
                         if (rdr.Read())
                         {
-                            return new JournalEntryClass {
-                                Id = id,
-                                TravelLogId = (long)rdr["TravelLogId"],
-                                CommanderId = (long)rdr["CommanderId"],
-                                EventTypeId = (long)rdr["EventTypeId"],
-                                EventType = (string)rdr["EventType"],
-                                EventTime = (DateTime)rdr["EventTime"],
-                                EventData = (string)rdr["EventData"],
-                                EdsmId = (long)rdr["EdsmId"],
-                                Synced = (long)rdr["Synced"]
-                            };
+                           return MakeJournalEntryClass(rdr);
                         }
                     }
                 }
@@ -50,15 +41,58 @@ namespace EliteDangerous.DB
             return null;
         }
 
-        public bool Add()
+        public static List<JournalEntryClass> GetJournalEntries(long fromid)
+        {
+            List<JournalEntryClass> results = new List<JournalEntryClass>();
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader))
+            {
+                using (DbCommand cmd = cn.CreateCommand($"select * from JournalEntries where Id>{fromid}"))
+                {
+                    using (DbDataReader rdr = cmd.ExecuteReader())
+                    {
+                        while (rdr.Read())
+                        {
+                            results.Add(MakeJournalEntryClass(rdr));
+                        }
+                    }
+                }
+            }
+            return results;
+        }
+
+        private static JournalEntryClass MakeJournalEntryClass(DbDataReader rdr)
+        {
+            return new JournalEntryClass
+            {
+                Id = (long)rdr["Id"],
+                TravelLogId = (long)rdr["TravelLogId"],
+                CommanderId = (long)rdr["CommanderId"],
+                EventTypeId = (long)rdr["EventTypeId"],
+                EventType = (string)rdr["EventType"],
+                EventTime = (DateTime)rdr["EventTime"],
+                EventData = (string)rdr["EventData"],
+                EdsmId = (long)rdr["EdsmId"],
+                Synced = (long)rdr["Synced"]
+            };
+        }
+
+        public async Task<bool> AddAsync()
         {
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser())      // open connection..
             {
-                return Add(cn);
+                return await AddAsync(cn);
             }
         }
 
-        private bool Add(SQLiteConnectionUser cn)
+        public static void AddEntries(List<JournalEntryClass> newRecords)
+        {
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
+            {
+                newRecords.ForEach(async (r) => await r.AddAsync());
+            }
+        }
+
+        private async Task<bool> AddAsync(SQLiteConnectionUser cn)
         {
             using (DbCommand cmd = cn.CreateCommand("Insert into JournalEntries (TravelLogId, CommanderId, EventTypeId, EventType, EventTime, EventData, EdsmId, Synced) " +
                 "values (@tlid,@cmdid,@etid,@et,@etime,@data,@edsmid,@sync)"))
@@ -75,7 +109,7 @@ namespace EliteDangerous.DB
 
                 using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from JournalEntries"))
                 {
-                    Id = (long)cmd2.ExecuteScalar();
+                    Id = (long)await cmd2.ExecuteScalarAsync();
                 }
 
                 return true;

@@ -9,6 +9,8 @@ namespace EDPlugin
     {
         public const string BROADCAST = "broadcast";
         public const string INIT_DB = "initdb";
+        public static string SYNCLASTEVENT = "syncje";
+        public static string DONE = "DONE";
     }
 
     // Used to bundle multiple messages into one response

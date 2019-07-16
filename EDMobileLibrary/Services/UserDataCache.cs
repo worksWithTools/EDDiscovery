@@ -1,7 +1,10 @@
 ﻿using EDDMobileImpl;
 using EDPlugin;
+using EliteDangerous.DB;
+using EliteDangerous.JSON;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -43,9 +46,39 @@ namespace EDMobileLibrary.Services
             await LoadFSDHistory();
         }
 
+        internal static void StoreMessage(MobileWebResponse response)
+        {
+            Debug.WriteLine($"INFO: msg received: {response.RequestType}");
+            if (response.RequestType == WebSocketMessage.BROADCAST)
+            {
+                JournalEntryClass entry = JsonConvert.DeserializeObject<JournalEntryClass>(response.Responses[0]);
+                Task.Run(async () => await entry.AddAsync());
+            }
+        }
+
         private static async Task InitialiseUserDB()
         {
-             await Task.Run(() => SQLiteConnectionUser.Initialize());
+            await Task.Run(() => SQLiteConnectionUser.Initialize());
+
+            await App.WebSocket.Connect();
+            var localLastEntry = JournalEntry.GetLastEvent(EDCommander.CurrentCmdrID).Id;
+            await App.WebSocket.Send($"{WebSocketMessage.SYNCLASTEVENT}:{localLastEntry}");
+
+            var result = await App.WebSocket.ListenForMessage();
+            MobileWebResponse response = result.Deserialize<MobileWebResponse>();
+            if (response.RequestType == WebSocketMessage.DONE)
+                return;
+
+            List<JournalEntryClass> newRecords = new List<JournalEntryClass>();
+            if (response.RequestType == WebSocketMessage.SYNCLASTEVENT)
+            {
+                foreach(var part in response.Responses)
+                {
+                    var record = part.Deserialize<JournalEntryClass>();
+                    newRecords.Add(record);
+                }
+            }
+            JournalEntryClass.AddEntries(newRecords);
         }
 
         private static async Task InitialiseSystemDB()

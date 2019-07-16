@@ -1,5 +1,7 @@
 ﻿using BaseUtils.Misc;
 using EDPlugin;
+using EliteDangerous.DB;
+using EliteDangerousCore;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
@@ -66,6 +68,10 @@ namespace EDMobilePlugin
                         {
                             await PushUserDbToMobile();
                         }
+                        else if (message.StartsWith(WebSocketMessage.SYNCLASTEVENT))
+                        {
+                            await PushLastEventToMobile(message);
+                        }
 
                     }
                 }
@@ -84,6 +90,31 @@ namespace EDMobilePlugin
                 socket?.Dispose();
                 broadcastTokenSource?.Cancel();
                 broadcastTokenSource?.Dispose();
+            }
+        }
+
+        private async Task PushLastEventToMobile(string message)
+        {
+            //todo: get last event from message
+            var lastIdStr = message.Split(':')[1];
+            long lastId = Int64.Parse(lastIdStr);
+            var lastevent = JournalEntry.GetLastEvent(EDCommander.CurrentCmdrID);
+            if (lastevent.Id > lastId)
+            {
+                var entriesToSend = JournalEntryClass.GetJournalEntries(lastId);
+                int msgToSend = entriesToSend.Count;
+                MobileWebResponse response = new MobileWebResponse(WebSocketMessage.SYNCLASTEVENT);
+                foreach (var entry in entriesToSend)
+                {
+                    response.Responses.Add(JsonConvert.SerializeObject(entry));
+                }
+                await SendMessageToSocketAsync(socketId, socket, response, Token);
+            }
+            else
+            {
+                Debug.WriteLine($"Socket {socketId}: Last Entry Id was: {lastevent.Id}");
+                MobileWebResponse response = new MobileWebResponse(WebSocketMessage.DONE);
+                await SendMessageToSocketAsync(socketId, socket, response, Token);
             }
         }
 
@@ -140,7 +171,7 @@ namespace EDMobilePlugin
         private static async Task SendMessageToSocketAsync(int socketId, WebSocket socket, MobileWebResponse response, CancellationToken socketToken)
         {
             Debug.WriteLine($"Socket {socketId}: Sending next message: [{response.RequestType}]");
-            //System.IO.File.WriteAllText(@"D:\Source\worksWithTools\EDDiscovery\EDDiscoveryTests\historyentry.json", message);
+
             var msgbuf = new ArraySegment<byte>(Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(response)));
             await socket.SendAsync(msgbuf, WebSocketMessageType.Text, endOfMessage: true, socketToken);
         }
