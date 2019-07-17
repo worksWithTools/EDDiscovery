@@ -39,7 +39,14 @@ namespace EDDMobile.Comms
             if (Connected) return;
 
             AutoDiscoveryClient.EndPointDiscovered += AutoDiscoveryClient_EndPointDiscovered;
+            AutoDiscoveryClient.EndPointTimeout += AutoDiscoveryClient_EndPointTimeout;
             await AutoDiscoveryClient.StartAutodiscovery();
+        }
+
+        private void AutoDiscoveryClient_EndPointTimeout()
+        {
+            DependencyService.Get<Toast>().Show("Unable to find EDD Server");
+            //TODO: put system in an "offline" state.. whatever that means...
         }
 
         private async void AutoDiscoveryClient_EndPointDiscovered(object sender, EndPointDiscoveredEventArgs e)

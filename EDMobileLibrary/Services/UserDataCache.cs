@@ -52,6 +52,8 @@ namespace EDMobileLibrary.Services
             await InitialiseSystemDB();
 
             await LoadFSDHistory();
+
+            await UpdateUserDB();
         }
 
         internal static async void StoreMessage(MobileWebResponse response)
@@ -64,6 +66,7 @@ namespace EDMobileLibrary.Services
             }
         }
 
+
         private static async Task InitialiseUserDB()
         {
             await Task.Run(() => SQLiteConnectionUser.Initialize());
@@ -71,26 +74,6 @@ namespace EDMobileLibrary.Services
             {
                 await conn.MobileInit();
             }
-
-            await App.WebSocket.Connect();
-            var localLastEntry = JournalEntry.GetLastEvent(EDCommander.CurrentCmdrID).Id;
-            await App.WebSocket.Send($"{WebSocketMessage.SYNCLASTEVENT}:{localLastEntry}");
-
-            var result = await App.WebSocket.ListenForMessage();
-            MobileWebResponse response = result.Deserialize<MobileWebResponse>();
-            if (response.RequestType == WebSocketMessage.DONE)
-                return;
-
-            List<JournalEntryClass> newRecords = new List<JournalEntryClass>();
-            if (response.RequestType == WebSocketMessage.SYNCLASTEVENT)
-            {
-                foreach(var part in response.Responses)
-                {
-                    var record = part.Deserialize<JournalEntryClass>();
-                    newRecords.Add(record);
-                }
-            }
-            JournalEntryClass.AddEntries(newRecords);
         }
 
         private static async Task InitialiseSystemDB()
@@ -123,6 +106,33 @@ namespace EDMobileLibrary.Services
             catch (Exception ex)
             {
                 Debug.WriteLine("History Refresh Error: " + ex);
+            }
+        }
+
+        private static async Task UpdateUserDB()
+        {
+            Debug.WriteLine("MOBILE:: Check for updates in EDD dbase..");
+            await App.WebSocket.Connect();
+            if (App.WebSocket.Connected)
+            {
+                var localLastEntry = JournalEntry.GetLastEvent(EDCommander.CurrentCmdrID).Id;
+                await App.WebSocket.Send($"{WebSocketMessage.SYNCLASTEVENT}:{localLastEntry}");
+
+                var result = await App.WebSocket.ListenForMessage();
+                MobileWebResponse response = result.Deserialize<MobileWebResponse>();
+                if (response.RequestType == WebSocketMessage.DONE)
+                    return;
+
+                List<JournalEntryClass> newRecords = new List<JournalEntryClass>();
+                if (response.RequestType == WebSocketMessage.SYNCLASTEVENT)
+                {
+                    foreach (var part in response.Responses)
+                    {
+                        var record = part.Deserialize<JournalEntryClass>();
+                        newRecords.Add(record);
+                    }
+                }
+                JournalEntryClass.AddEntries(newRecords);
             }
         }
     }
