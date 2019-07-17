@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Data.SQLite;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
@@ -21,22 +22,29 @@ namespace EDMobileLibrary.Services
         public static event HistoryLoadedEvent OnHistoryLoaded = ()=>{};
         public static HistoryList History { get; private set; } = null;
         
-
         public async static Task Initialise()
         {
             Debug.WriteLine("MOBILE:: Initializing database");
 
             if (!File.Exists(App.Options.UserDatabasePath))
             {
-                Debug.WriteLine("MOBILE::UserDataCache !!not found!!");
-                await App.WebSocket.Connect();
-               
-                Debug.WriteLine("MOBILE::UserDataCache requesting new DB");
-                await App.WebSocket.Send(WebSocketMessage.INIT_DB);
-                var result = await App.WebSocket.ListenForData();
+                try
+                {
+                    Debug.WriteLine("MOBILE::UserDataCache !!not found!!");
+                    await App.WebSocket.Connect();
 
-                Debug.WriteLine($"MOBILE::UserDataCache persisting new DB ({result.Length} bytes)");
-                File.WriteAllBytes(App.Options.UserDatabasePath, result);
+                    Debug.WriteLine("MOBILE::UserDataCache requesting new DB");
+                    await App.WebSocket.Send(WebSocketMessage.INIT_DB);
+                    var result = await App.WebSocket.ListenForData();
+
+                    Debug.WriteLine($"MOBILE::UserDataCache persisting new DB ({result.Length} bytes)");
+                    File.WriteAllBytes(App.Options.UserDatabasePath, result);
+
+                }
+                catch (SQLiteException e)
+                {
+                    Debug.WriteLine(e);
+                }
             }
 
             await InitialiseUserDB();
@@ -46,19 +54,23 @@ namespace EDMobileLibrary.Services
             await LoadFSDHistory();
         }
 
-        internal static void StoreMessage(MobileWebResponse response)
+        internal static async void StoreMessage(MobileWebResponse response)
         {
             Debug.WriteLine($"INFO: msg received: {response.RequestType}");
             if (response.RequestType == WebSocketMessage.BROADCAST)
             {
                 JournalEntryClass entry = JsonConvert.DeserializeObject<JournalEntryClass>(response.Responses[0]);
-                Task.Run(async () => await entry.AddAsync());
+                await entry.AddAsync();
             }
         }
 
         private static async Task InitialiseUserDB()
         {
             await Task.Run(() => SQLiteConnectionUser.Initialize());
+            using (var conn = new SQLiteConnectionUser())
+            {
+                await conn.MobileInit();
+            }
 
             await App.WebSocket.Connect();
             var localLastEntry = JournalEntry.GetLastEvent(EDCommander.CurrentCmdrID).Id;

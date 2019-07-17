@@ -2,10 +2,12 @@
 using EDPlugin;
 using EliteDangerous.DB;
 using EliteDangerousCore;
+using EliteDangerousCore.JournalEvents;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SQLite;
 using System.Diagnostics;
 using System.IO;
@@ -66,7 +68,7 @@ namespace EDMobilePlugin
                         // if message is "ready" then send back some data..
                         if (message == WebSocketMessage.INIT_DB)
                         {
-                            await PushUserDbToMobile();
+                            await SendInitDataToMobile();
                         }
                         else if (message.StartsWith(WebSocketMessage.SYNCLASTEVENT))
                         {
@@ -118,22 +120,61 @@ namespace EDMobilePlugin
             }
         }
 
-        private async Task PushUserDbToMobile()
+        private async Task SendInitDataToMobile()
         {
             var backupPath = $"{EliteDangerousCore.EliteConfigInstance.InstanceOptions.UserDatabasePath}.bak";
-            using (var source = new SQLiteConnection($"Data Source={EliteDangerousCore.EliteConfigInstance.InstanceOptions.UserDatabasePath};"))
-            using (var destination = new SQLiteConnection($"Data Source={backupPath};"))
+            try
             {
-                source.Open();
-                destination.Open();
-                source.BackupDatabase(destination, "main", "main", -1, null, 0);
+                using (var source = new SQLiteConnection($"Data Source={EliteDangerousCore.EliteConfigInstance.InstanceOptions.UserDatabasePath};"))
+                using (var destination = new SQLiteConnection($"Data Source={backupPath};"))
+                {
+                    source.Open();
+                    destination.Open();
+                    source.BackupDatabase(destination, "main", "main", -1, null, 0);
+                }
+                using (var destination = new SQLiteConnection($"Data Source={backupPath};"))
+                {
+                    destination.Open();
+                    //TODO: add configurable range for trimming
+                    await TrimJournalEntries(destination);
+                }
+
+                var dbcontent = File.ReadAllBytes(backupPath);
+                Debug.WriteLine($"Socket {socketId}: Sending trimmed UserDb.");
+                var msgbuf = new ArraySegment<byte>(dbcontent);
+                await socket.SendAsync(msgbuf, WebSocketMessageType.Binary, endOfMessage: true, Token);
+
             }
-            var dbcontent = File.ReadAllBytes(backupPath);
-            Debug.WriteLine($"Socket {socketId}: Sending entire UserDb.");
-            //System.IO.File.WriteAllText(@"D:\Source\worksWithTools\EDDiscovery\EDDiscoveryTests\historyentry.json", message);
-            var msgbuf = new ArraySegment<byte>(dbcontent);
-            await socket.SendAsync(msgbuf, WebSocketMessageType.Binary, endOfMessage: true, Token);
-            File.Delete(backupPath);
+            finally
+            {
+                File.Delete(backupPath);
+            }
+        }
+        //TODO: this really doesn't belong here!
+        private async Task TrimJournalEntries(SQLiteConnection destination)
+        {
+            try
+            {
+                var firstEntry = JournalEntry.GetLast<JournalFSDJump>(EDCommander.CurrentCmdrID, DateTime.UtcNow);
+                string[] commands = new[]
+                {
+                    $"DELETE FROM JournalEntries WHERE Id < {firstEntry.Id}",
+                    "vacuum"
+                };
+                foreach (var command in commands)
+                {
+                    using (DbCommand cmd = destination.CreateCommand())
+                    {
+                        cmd.CommandText = command;
+                        await cmd.ExecuteNonQueryAsync();
+                    }
+                }
+                
+            }
+            catch (InvalidOperationException e)
+            {
+                Debug.WriteLine(e);
+            }
         }
 
         private async Task WatchForBroadcasts(CancellationToken token)
@@ -176,6 +217,6 @@ namespace EDMobilePlugin
             await socket.SendAsync(msgbuf, WebSocketMessageType.Text, endOfMessage: true, socketToken);
         }
 
-        
+
     }
 }

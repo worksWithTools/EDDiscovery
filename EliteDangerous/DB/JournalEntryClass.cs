@@ -94,9 +94,10 @@ namespace EliteDangerous.DB
 
         private async Task<bool> AddAsync(SQLiteConnectionUser cn)
         {
-            using (DbCommand cmd = cn.CreateCommand("Insert into JournalEntries (TravelLogId, CommanderId, EventTypeId, EventType, EventTime, EventData, EdsmId, Synced) " +
-                "values (@tlid,@cmdid,@etid,@et,@etime,@data,@edsmid,@sync)"))
+            using (DbCommand cmd = cn.CreateCommand("Insert into JournalEntries (Id, TravelLogId, CommanderId, EventTypeId, EventType, EventTime, EventData, EdsmId, Synced) " +
+                "values (@id,@tlid,@cmdid,@etid,@et,@etime,@data,@edsmid,@sync)"))
             {
+                cmd.AddParameterWithValue("@id", Id);
                 cmd.AddParameterWithValue("@tlid", TravelLogId);
                 cmd.AddParameterWithValue("@cmdid", CommanderId);
                 cmd.AddParameterWithValue("@etid", EventTypeId);
