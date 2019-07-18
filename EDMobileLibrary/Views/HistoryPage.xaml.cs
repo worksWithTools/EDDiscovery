@@ -42,8 +42,6 @@ namespace EDDMobileImpl.Views
         {
             base.OnAppearing();
 
-            viewModel.StartListening();
-
             if (viewModel?.Items.Count == 0)
                 viewModel?.LoadItemsCommand.Execute(null);
         }
@@ -51,7 +49,6 @@ namespace EDDMobileImpl.Views
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            viewModel.StopListening();
         }
 
         private void Refresh_Clicked(object sender, System.EventArgs e)

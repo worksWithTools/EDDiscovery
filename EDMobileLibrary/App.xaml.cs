@@ -36,6 +36,7 @@ namespace EDDMobileImpl
                 MobileWebResponse response = msg.Deserialize<MobileWebResponse>();
                 if (response == null)
                     return;
+                Debug.WriteLine($"MOBILE:: Received message {response.RequestType} containing {response.Responses.Count} entries.");
                 UserDataCache.StoreMessage(response);
             }
             catch (Exception e)
@@ -50,10 +51,12 @@ namespace EDDMobileImpl
             await UserDataCache.Initialise();
             WebSocket.OnMessage += WebSocket_OnMessage;
 
-            await WebSocket.Connect();
-
-            Debug.WriteLine($"MOBILE: Starting listening for broadcasts on {WebSocket.Uri}");
-            await WebSocket.Listen();
+            if (await WebSocket.Connect())
+            {
+                Debug.WriteLine($"MOBILE: Starting listening for broadcasts on {WebSocket.Uri}");
+                await WebSocket.Listen();
+            }
+            //TODO: implement a reconnect mechanism
         }
 
         protected override void OnSleep()

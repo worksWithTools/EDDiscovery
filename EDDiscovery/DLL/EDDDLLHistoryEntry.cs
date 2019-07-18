@@ -35,6 +35,7 @@ namespace EDDiscovery.DLL
                 EDDDLLIF.JournalEntry je = new EDDDLLIF.JournalEntry()
                 {
                     ver = 1,
+                    jid = he.Journalid,
                     indexno = he.Indexno,
                     utctime = he.EventTimeUTC.ToStringZulu(),
                     name = he.EventSummary,

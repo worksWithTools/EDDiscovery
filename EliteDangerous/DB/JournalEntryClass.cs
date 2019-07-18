@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -94,27 +95,30 @@ namespace EliteDangerous.DB
 
         private async Task<bool> AddAsync(SQLiteConnectionUser cn)
         {
-            using (DbCommand cmd = cn.CreateCommand("Insert into JournalEntries (Id, TravelLogId, CommanderId, EventTypeId, EventType, EventTime, EventData, EdsmId, Synced) " +
-                "values (@id,@tlid,@cmdid,@etid,@et,@etime,@data,@edsmid,@sync)"))
+            try
             {
-                cmd.AddParameterWithValue("@id", Id);
-                cmd.AddParameterWithValue("@tlid", TravelLogId);
-                cmd.AddParameterWithValue("@cmdid", CommanderId);
-                cmd.AddParameterWithValue("@etid", EventTypeId);
-                cmd.AddParameterWithValue("@et", EventType);
-                cmd.AddParameterWithValue("@etime", EventTime);
-                cmd.AddParameterWithValue("@data", EventData);
-                cmd.AddParameterWithValue("@edsmid", EdsmId);
-                cmd.AddParameterWithValue("@sync", Synced);
-                cmd.ExecuteNonQuery();
-
-                using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from JournalEntries"))
+                using (DbCommand cmd = cn.CreateCommand("Insert into JournalEntries (Id, TravelLogId, CommanderId, EventTypeId, EventType, EventTime, EventData, EdsmId, Synced) " +
+                    "values (@id,@tlid,@cmdid,@etid,@et,@etime,@data,@edsmid,@sync)"))
                 {
-                    Id = (long)await cmd2.ExecuteScalarAsync();
-                }
+                    cmd.AddParameterWithValue("@id", Id);
+                    cmd.AddParameterWithValue("@tlid", TravelLogId);
+                    cmd.AddParameterWithValue("@cmdid", CommanderId);
+                    cmd.AddParameterWithValue("@etid", EventTypeId);
+                    cmd.AddParameterWithValue("@et", EventType);
+                    cmd.AddParameterWithValue("@etime", EventTime);
+                    cmd.AddParameterWithValue("@data", EventData);
+                    cmd.AddParameterWithValue("@edsmid", EdsmId);
+                    cmd.AddParameterWithValue("@sync", Synced);
+                    await cmd.ExecuteNonQueryAsync();
 
-                return true;
+                    return true;
+                }
             }
+            catch(Exception e)
+            {
+                Debug.WriteLine(e.ToString());
+            }
+            return false;
         }
 
     }

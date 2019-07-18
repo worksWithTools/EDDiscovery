@@ -25,6 +25,7 @@ namespace EDDMobile.Comms
 
         public string Uri { get; private set; }
         public bool Connected => webSocket.State == WebSocketState.Open;
+        public bool Offline { get; private set; } = false;
 
         private ClientWebSocket webSocket;
         private ConcurrentQueue<string> messages = new ConcurrentQueue<string>();
@@ -34,23 +35,29 @@ namespace EDDMobile.Comms
         // because its possible the queue could get swamped.
         public event OnMessageHandler OnMessage;
         //TODO: add cancelation tokens...
-        public async Task Connect()
+        public async Task<bool> Connect()
         {
-            if (Connected) return;
+            if (Connected) return true;
 
             AutoDiscoveryClient.EndPointDiscovered += AutoDiscoveryClient_EndPointDiscovered;
             AutoDiscoveryClient.EndPointTimeout += AutoDiscoveryClient_EndPointTimeout;
             await AutoDiscoveryClient.StartAutodiscovery();
+
+            while (!Connected && !Offline)
+                await Task.Delay(100);
+
+            return Connected;
         }
 
         private void AutoDiscoveryClient_EndPointTimeout()
         {
             DependencyService.Get<Toast>().Show("Unable to find EDD Server");
-            //TODO: put system in an "offline" state.. whatever that means...
+            Offline = true;
         }
 
         private async void AutoDiscoveryClient_EndPointDiscovered(object sender, EndPointDiscoveredEventArgs e)
         {
+            //TODO: timeout?
             Uri = $"ws://{e.EndpointAddress.ToString()}/eddmobile";
             do
             {
@@ -130,6 +137,10 @@ namespace EDDMobile.Comms
             return (response, message);
         }
 
+        internal Task<bool> WaitForConnection()
+        {
+            throw new NotImplementedException();
+        }
 
         public async Task Listen()
         {
@@ -178,7 +189,6 @@ namespace EDDMobile.Comms
                 else if (result.Item1?.MessageType == WebSocketMessageType.Text)
                 {
                     string message = Encoding.ASCII.GetString(result.Item2?.ToArray());
-                    Debug.WriteLine($"MOBILE: received message {message.Left(40)}...");
                     return message;
                 }
                 //if binary push to queue

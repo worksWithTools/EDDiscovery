@@ -28,18 +28,5 @@ namespace EDDMobileImpl.Views
         {
             _LastJournalEntry.LoadItemsCommand.Execute(null);
         }
-
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-
-            _LastJournalEntry.StartListening();
-        }
-
-        protected override void OnDisappearing()
-        {
-            base.OnDisappearing();
-            _LastJournalEntry.StopListening();
-        }
     }
 }

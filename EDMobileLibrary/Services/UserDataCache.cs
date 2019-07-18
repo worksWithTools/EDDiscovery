@@ -13,6 +13,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using ToastMessage;
+using Xamarin.Forms;
 
 namespace EDMobileLibrary.Services
 {
@@ -20,6 +22,8 @@ namespace EDMobileLibrary.Services
     {
         public delegate void HistoryLoadedEvent();
         public static event HistoryLoadedEvent OnHistoryLoaded = ()=>{};
+        public delegate void CacheUpdatedEvent();
+        public static event CacheUpdatedEvent OnCacheUpdated = () => {};
         public static HistoryList History { get; private set; } = null;
         
         public async static Task Initialise()
@@ -31,15 +35,20 @@ namespace EDMobileLibrary.Services
                 try
                 {
                     Debug.WriteLine("MOBILE::UserDataCache !!not found!!");
-                    await App.WebSocket.Connect();
-
-                    Debug.WriteLine("MOBILE::UserDataCache requesting new DB");
-                    await App.WebSocket.Send(WebSocketMessage.INIT_DB);
-                    var result = await App.WebSocket.ListenForData();
-
-                    Debug.WriteLine($"MOBILE::UserDataCache persisting new DB ({result.Length} bytes)");
-                    File.WriteAllBytes(App.Options.UserDatabasePath, result);
-
+                    if (await App.WebSocket.Connect())
+                    {
+                        Debug.WriteLine("MOBILE::UserDataCache requesting new DB");
+                        await App.WebSocket.Send(WebSocketMessage.INIT_DB);
+                        var result = await App.WebSocket.ListenForData();
+                        Debug.WriteLine($"MOBILE::UserDataCache persisting new DB ({result.Length} bytes)");
+                        File.WriteAllBytes(App.Options.UserDatabasePath, result);
+                    }
+                    else
+                    {
+                        //TODO: make this more prominent
+                        DependencyService.Get<Toast>().Show($"Failed to connect to EDD backend.");
+                        return;
+                    }
                 }
                 catch (SQLiteException e)
                 {
@@ -61,8 +70,10 @@ namespace EDMobileLibrary.Services
             Debug.WriteLine($"INFO: msg received: {response.RequestType}");
             if (response.RequestType == WebSocketMessage.BROADCAST)
             {
-                JournalEntryClass entry = JsonConvert.DeserializeObject<JournalEntryClass>(response.Responses[0]);
-                await entry.AddAsync();
+                JournalEntryClass entry = response.Responses[0].Deserialize<JournalEntryClass>();
+                Debug.WriteLine($"MOBILE::received journal entry type: {entry.EventType}; Id={entry.Id}; [{entry.ToString()}]");
+                if (await entry.AddAsync())
+                    OnCacheUpdated();
             }
         }
 
@@ -111,28 +122,36 @@ namespace EDMobileLibrary.Services
 
         private static async Task UpdateUserDB()
         {
-            Debug.WriteLine("MOBILE:: Check for updates in EDD dbase..");
-            await App.WebSocket.Connect();
-            if (App.WebSocket.Connected)
+            try
             {
-                var localLastEntry = JournalEntry.GetLastEvent(EDCommander.CurrentCmdrID).Id;
-                await App.WebSocket.Send($"{WebSocketMessage.SYNCLASTEVENT}:{localLastEntry}");
-
-                var result = await App.WebSocket.ListenForMessage();
-                MobileWebResponse response = result.Deserialize<MobileWebResponse>();
-                if (response.RequestType == WebSocketMessage.DONE)
-                    return;
-
-                List<JournalEntryClass> newRecords = new List<JournalEntryClass>();
-                if (response.RequestType == WebSocketMessage.SYNCLASTEVENT)
+                Debug.WriteLine("MOBILE:: Check for updates in EDD dbase..");
+                if (await App.WebSocket.Connect())
                 {
-                    foreach (var part in response.Responses)
+                    Debug.WriteLine("MOBILE:: Connected to EDD dbase..");
+                    var localLastEntry = JournalEntry.GetLastEvent(EDCommander.CurrentCmdrID).Id;
+                    await App.WebSocket.Send($"{WebSocketMessage.SYNCLASTEVENT}:{localLastEntry}");
+
+                    var result = await App.WebSocket.ListenForMessage();
+                    MobileWebResponse response = result.Deserialize<MobileWebResponse>();
+                    if (response.RequestType == WebSocketMessage.DONE)
+                        return;
+
+                    List<JournalEntryClass> newRecords = new List<JournalEntryClass>();
+                    if (response.RequestType == WebSocketMessage.SYNCLASTEVENT)
                     {
-                        var record = part.Deserialize<JournalEntryClass>();
-                        newRecords.Add(record);
+                        foreach (var part in response.Responses)
+                        {
+                            var record = part.Deserialize<JournalEntryClass>();
+                            newRecords.Add(record);
+                        }
                     }
+                    JournalEntryClass.AddEntries(newRecords);
+                    OnCacheUpdated();
                 }
-                JournalEntryClass.AddEntries(newRecords);
+            }
+            catch(Exception e)
+            {
+                Debug.WriteLine($"MOBILE:: Error updating user DB {e}");
             }
         }
     }

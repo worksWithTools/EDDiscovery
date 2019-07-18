@@ -25,8 +25,10 @@ namespace EDMobileLibrary.ViewModels
             Title = "Log";
             Items = new ObservableCollection<JournalEntry>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadHistoryCommand());
+            UserDataCache.OnCacheUpdated += UserDataCache_OnCacheUpdated;
         }
-        protected async override void WebSocket_OnMessage()
+
+        private async void UserDataCache_OnCacheUpdated()
         {
             while (IsBusy)
                 await Task.Delay(500);
@@ -36,7 +38,7 @@ namespace EDMobileLibrary.ViewModels
             try
             {
                 var newItems = JournalEntry.GetNewJournalEntries(LastId);
-                await loadItems(newItems);
+                await insertItems(newItems);
             }
             catch (Exception ex)
             {
@@ -87,6 +89,23 @@ namespace EDMobileLibrary.ViewModels
                     var nextChunk = newItems.Take(chunkSize);
                     foreach (var i in nextChunk)
                         Items.Add(i);
+                    newItems.RemoveRange(0, chunkSize);
+                });
+            } while (newItems.Count > 0);
+        }
+
+
+        private async Task insertItems(System.Collections.Generic.List<JournalEntry> newItems)
+        {
+            do
+            {
+                var sortedItems = newItems.OrderByDescending((i) => i.Id);
+                await Task.Run(() =>
+                {
+                    var chunkSize = Math.Min(10, newItems.Count);
+                    var nextChunk = newItems.Take(chunkSize);
+                    foreach (var i in nextChunk)
+                        Items.Insert(0,i);
                     newItems.RemoveRange(0, chunkSize);
                 });
             } while (newItems.Count > 0);

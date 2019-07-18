@@ -16,11 +16,6 @@ namespace EDDMobileImpl.ViewModels
         {
         }
 
-        protected virtual void WebSocket_OnMessage()
-        {
-            // do nothing
-        }
-
         bool isBusy = false;
         public bool IsBusy
         {
@@ -58,20 +53,6 @@ namespace EDDMobileImpl.ViewModels
 
             changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
             Debug.WriteLine($"DEBUG: Property {propertyName} changed.");
-        }
-
-        public void StartListening()
-        {
-            // TODO: config - is this really where we want to do this?
-            Debug.WriteLine($"TRACE: [{this.GetType().Name}] Starting to listen for websocket messages...");
-            App.WebSocket.OnMessage += WebSocket_OnMessage;
-
-        }
-        public void StopListening()
-        {
-
-            App.WebSocket.OnMessage -= WebSocket_OnMessage;
-            Debug.WriteLine($"TRACE: [{this.GetType().Name}] Stopping listening for websocket messages...");
         }
 
         #endregion

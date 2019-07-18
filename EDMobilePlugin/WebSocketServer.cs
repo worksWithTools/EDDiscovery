@@ -106,10 +106,9 @@ namespace EDMobilePlugin
                 var entriesToSend = JournalEntryClass.GetJournalEntries(lastId);
                 int msgToSend = entriesToSend.Count;
                 MobileWebResponse response = new MobileWebResponse(WebSocketMessage.SYNCLASTEVENT);
-                foreach (var entry in entriesToSend)
-                {
-                    response.Responses.Add(JsonConvert.SerializeObject(entry));
-                }
+                response.Responses.AddRange(from e in entriesToSend
+                                            select JsonConvert.SerializeObject(e));
+                
                 await SendMessageToSocketAsync(socketId, socket, response, Token);
             }
             else
