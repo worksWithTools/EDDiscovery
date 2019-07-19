@@ -577,7 +577,7 @@ namespace EliteDangerousCore
 
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
             {
-                using (DbCommand cmd = cn.CreateCommand("SELECT * FROM JournalEntries WHERE Id < @id ORDER BY EventTime DESC"))
+                using (DbCommand cmd = cn.CreateCommand("SELECT * FROM JournalEntries WHERE Id > @id ORDER BY EventTime DESC"))
                 {
                     cmd.AddParameterWithValue("@id", lastId);
                     using (DbDataReader reader = cmd.ExecuteReader())
