@@ -585,11 +585,10 @@ namespace EliteDangerousCore
                         while (reader.Read())
                         {
                             //TODO: why would this come back null??
-                            if (reader["EventData"].GetType() != typeof(DBNull))
-                            {
-                                JournalEntry je = JournalEntry.CreateJournalEntry(reader);
-                                newEntries.Add(je);
-                            }
+                            if (reader["EventData"] as String == null)
+                                continue; 
+                            JournalEntry je = JournalEntry.CreateJournalEntry(reader);
+                            newEntries.Add(je);
                         }
                     }
                 }

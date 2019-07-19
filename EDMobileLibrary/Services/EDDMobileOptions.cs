@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Xamarin.Essentials;
+using Xamarin.Forms;
 
 namespace EDMobileLibrary.Services
 {
@@ -26,8 +27,7 @@ namespace EDMobileLibrary.Services
                 return instance;
             }
         }
-        public string AppDataDirectory => FileSystem.AppDataDirectory;
-
+        public string AppDataDirectory => DependencyService.Get<ContextService>().GetExternalFilesDir(null);
         public string SystemDatabasePath => Path.Combine(AppDataDirectory, "EDDSystem.sqlite");
 
         public string UserDatabasePath => Path.Combine(AppDataDirectory, "EDDUser.sqlite");
