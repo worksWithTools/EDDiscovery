@@ -31,6 +31,7 @@ using System.Globalization;
 using System.Linq;
 using Newtonsoft.Json;
 using SkiaSharp;
+using EliteDangerous.DB;
 
 namespace EliteDangerousCore
 {
@@ -249,7 +250,7 @@ namespace EliteDangerousCore
 
 #region Factory creation
 
-            static public JournalEntry CreateJournalEntry(string text)
+        static public JournalEntry CreateJournalEntry(string text)
         {
             JObject jo;
 
@@ -288,9 +289,26 @@ namespace EliteDangerousCore
             return ret;
         }
 
-#endregion
+        static public JournalEntry CreateJournalEntry(JournalEntryClass jc)
+        {
+            JournalEntry jr = JournalEntry.CreateJournalEntry(jc.EventData);     // this sets EventTypeId, EventTypeStr and UTC via constructor above.. 
 
-#region Types of events
+            jr.Id = jc.Id;
+            jr.TLUId = jc.TravelLogId;
+            jr.CommanderId = (int)jc.CommanderId;
+            if (jr.EventTimeUTC == default(DateTime))
+                jr.EventTimeUTC = jc.EventTime;
+            if (jr.EventTypeID == JournalTypeEnum.Unknown)
+                jr.EventTypeID = (JournalTypeEnum)jc.EventTypeId;
+            jr.EdsmID = jc.EdsmId;
+            jr.Synced = (int)jc.Synced;
+            return jr;
+        }
+
+
+        #endregion
+
+        #region Types of events
 
         static public Type TypeOfJournalEntry(string text)
         {

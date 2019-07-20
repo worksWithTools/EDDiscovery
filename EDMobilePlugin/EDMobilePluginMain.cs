@@ -33,14 +33,14 @@ namespace EDMobilePlugin
         {
             Debug.WriteLine($"EDDNewJournalEntry: {nje.ToJson()}");
 
-            JournalEntryClass je = JournalEntryClass.GetJournalEntry(nje.indexno); 
+            JournalEntryClass je = JournalEntryClass.GetJournalEntry(nje.jid); 
             var json = JsonConvert.SerializeObject(je);
             WebSocketHttpServer.Broadcast(json);
         }
 
         public void EDDRefresh(string cmdname, EDDDLLIF.JournalEntry lastje)
         {
-            Debug.WriteLine($"EDDRefresh: {cmdname}, Journal Entry {lastje.indexno}");
+            Debug.WriteLine($"EDDRefresh: {cmdname}, Journal Entry {lastje.jid}");
             //
             //var he = _managedcallbacks.GetHistoryEvent(lastje.indexno);
 

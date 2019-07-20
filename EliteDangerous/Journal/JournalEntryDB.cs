@@ -14,6 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
+using EliteDangerous.DB;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
 using Newtonsoft.Json.Linq;
@@ -31,24 +32,6 @@ namespace EliteDangerousCore
 
     public abstract partial class JournalEntry
     {
-        static protected JournalEntry CreateJournalEntry(DataRow dr)
-        {
-            string EDataString = (string)dr["EventData"];
-
-            JournalEntry jr = JournalEntry.CreateJournalEntry(EDataString);     // this sets EventTypeId, EventTypeStr and UTC via constructor above.. 
-
-            jr.Id = (int)(long)dr["Id"];
-            jr.TLUId = (int)(long)dr["TravelLogId"];
-            jr.CommanderId = (int)(long)dr["CommanderId"];
-            if (jr.EventTimeUTC == default(DateTime))
-                jr.EventTimeUTC = (DateTime)dr["EventTime"];
-            if (jr.EventTypeID == JournalTypeEnum.Unknown)
-                jr.EventTypeID = (JournalTypeEnum)(long)dr["eventTypeID"];
-            jr.EdsmID = (long)dr["EdsmID"];
-            jr.Synced = (int)(long)dr["Synced"];
-            return jr;
-        }
-
         static protected JournalEntry CreateJournalEntry(DbDataReader dr)
         {
             string EDataString = (string)dr["EventData"];
@@ -571,30 +554,6 @@ namespace EliteDangerousCore
             return null;
         }
 
-        public static List<JournalEntry> GetNewJournalEntries(long lastId)
-        {
-            List<JournalEntry> newEntries = new List<JournalEntry>();
-
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
-            {
-                using (DbCommand cmd = cn.CreateCommand("SELECT * FROM JournalEntries WHERE Id > @id ORDER BY EventTime DESC"))
-                {
-                    cmd.AddParameterWithValue("@id", lastId);
-                    using (DbDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            //TODO: why would this come back null??
-                            if (reader["EventData"] as String == null)
-                                continue; 
-                            JournalEntry je = JournalEntry.CreateJournalEntry(reader);
-                            newEntries.Add(je);
-                        }
-                    }
-                }
-            }
-            return newEntries;
-        }
         public static JournalEntry GetLast(int cmdrid, DateTime before, Func<JournalEntry, bool> filter)
         {
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))

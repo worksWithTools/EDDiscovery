@@ -28,29 +28,22 @@ namespace EDMobileLibrary.ViewModels
             UserDataCache.OnCacheUpdated += UserDataCache_OnCacheUpdated;
         }
 
-        private async void UserDataCache_OnCacheUpdated()
+        private void UserDataCache_OnCacheUpdated(JournalEntry[] entries)
         {
-            while (IsBusy)
-                await Task.Delay(500);
-
-            IsBusy = true;
-
+           
             try
             {
-                var newItems = JournalEntry.GetNewJournalEntries(LastId);
-                await insertItems(newItems);
+                foreach (var e in entries)
+                {
+                    Items.Insert(0, e);
+                }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex);
             }
-            finally
-            {
-                IsBusy = false;
-            }
+            
         }
-
-        private long LastId => items.Last().Id;
 
         private async Task ExecuteLoadHistoryCommand()
         {
@@ -89,23 +82,6 @@ namespace EDMobileLibrary.ViewModels
                     var nextChunk = newItems.Take(chunkSize);
                     foreach (var i in nextChunk)
                         Items.Add(i);
-                    newItems.RemoveRange(0, chunkSize);
-                });
-            } while (newItems.Count > 0);
-        }
-
-
-        private async Task insertItems(System.Collections.Generic.List<JournalEntry> newItems)
-        {
-            do
-            {
-                var sortedItems = newItems.OrderByDescending((i) => i.Id);
-                await Task.Run(() =>
-                {
-                    var chunkSize = Math.Min(10, newItems.Count);
-                    var nextChunk = newItems.Take(chunkSize);
-                    foreach (var i in nextChunk)
-                        Items.Insert(0,i);
                     newItems.RemoveRange(0, chunkSize);
                 });
             } while (newItems.Count > 0);

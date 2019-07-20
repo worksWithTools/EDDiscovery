@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using ToastMessage;
 using Xamarin.Forms;
@@ -19,8 +20,8 @@ namespace EDMobileLibrary.Services
     {
         public delegate void HistoryLoadedEvent();
         public static event HistoryLoadedEvent OnHistoryLoaded = ()=>{};
-        public delegate void CacheUpdatedEvent();
-        public static event CacheUpdatedEvent OnCacheUpdated = () => {};
+        public delegate void CacheUpdatedEvent(JournalEntry[] id);
+        public static event CacheUpdatedEvent OnCacheUpdated = (JournalEntry[] newEntries) => {};
         public static HistoryList History { get; private set; } = null;
         
         public async static Task Initialise()
@@ -70,7 +71,7 @@ namespace EDMobileLibrary.Services
                 JournalEntryClass entry = response.Responses[0].Deserialize<JournalEntryClass>();
                 Debug.WriteLine($"MOBILE::received journal entry type: {entry.EventType}; Id={entry.Id}; [{entry.ToString()}]");
                 if (await entry.AddAsync())
-                    OnCacheUpdated();
+                    OnCacheUpdated(new[] { JournalEntry.CreateJournalEntry(entry) });
             }
         }
 
@@ -143,7 +144,8 @@ namespace EDMobileLibrary.Services
                         }
                     }
                     JournalEntryClass.AddEntries(newRecords);
-                    OnCacheUpdated();
+                    OnCacheUpdated((from r in newRecords
+                                   select JournalEntry.CreateJournalEntry(r)).ToArray());
                 }
             }
             catch(Exception e)
